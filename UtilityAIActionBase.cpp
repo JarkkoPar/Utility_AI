@@ -21,6 +21,7 @@ void UtilityAIActionBase::_bind_methods() {
 // Constructor and destructor.
 
 UtilityAIActionBase::UtilityAIActionBase() {
+    _is_active = true;
 }
 
 
