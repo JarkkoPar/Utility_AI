@@ -1,7 +1,7 @@
-#ifndef AICONSIDERATIONGROUP_H_INCLUDED
-#define AICONSIDERATIONGROUP_H_INCLUDED 
+#ifndef UtilityAIConsiderationGROUP_H_INCLUDED
+#define UtilityAIConsiderationGROUP_H_INCLUDED 
 
-#include "AIConsiderationBase.h"
+#include "UtilityAIConsiderationBase.h"
 
 #include <godot_cpp/classes/node.hpp>
 
@@ -9,8 +9,8 @@
 
 namespace godot {
 
-class AIConsiderationGroup : public AIConsiderationBase {
-    GDCLASS(AIConsiderationGroup, AIConsiderationBase)
+class UtilityAIConsiderationGroup : public UtilityAIConsiderationBase {
+    GDCLASS(UtilityAIConsiderationGroup, UtilityAIConsiderationBase)
 
 private:
 
@@ -20,8 +20,8 @@ protected:
     static void _bind_methods();
 
 public:
-    AIConsiderationGroup();
-    ~AIConsiderationGroup();
+    UtilityAIConsiderationGroup();
+    ~UtilityAIConsiderationGroup();
     
     
     // Getters and setters for attributes.
@@ -30,7 +30,7 @@ public:
     void set_evaluation_method( int evaluation_method );
     int  get_evaluation_method() const;
 
-    enum AIConsiderationGroupEvaluationMethod {
+    enum UtilityAIConsiderationGroupEvaluationMethod {
         Sum = 0,
         Min=1,
         Max=2,

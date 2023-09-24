@@ -1,7 +1,7 @@
-#ifndef AICONSIDERATIONBASE_H_INCLUDED
-#define AICONSIDERATIONBASE_H_INCLUDED 
+#ifndef UtilityAIConsiderationBASE_H_INCLUDED
+#define UtilityAIConsiderationBASE_H_INCLUDED 
 
-//#include "AIConsiderationState.h"
+//#include "UtilityAIConsiderationState.h"
 
 #include <godot_cpp/classes/node.hpp>
 
@@ -9,8 +9,8 @@
 
 namespace godot {
 
-class AIConsiderationBase : public Node {
-    GDCLASS(AIConsiderationBase, Node)
+class UtilityAIConsiderationBase : public Node {
+    GDCLASS(UtilityAIConsiderationBase, Node)
 
 private:
     
@@ -24,8 +24,8 @@ protected:
     bool _has_vetoed;
 
 public:
-    AIConsiderationBase();
-    ~AIConsiderationBase();
+    UtilityAIConsiderationBase();
+    ~UtilityAIConsiderationBase();
     
     
     // Getters and setters for attributes.

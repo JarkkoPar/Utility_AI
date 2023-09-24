@@ -1,15 +1,15 @@
-#ifndef AIBEHAVIOUR_H_INCLUDED
-#define AIBEHAVIOUR_H_INCLUDED 
+#ifndef UtilityAIBehaviour_H_INCLUDED
+#define UtilityAIBehaviour_H_INCLUDED 
 
-//#include "AIBehaviourState.h"
+//#include "UtilityAIBehaviourState.h"
 
 #include <godot_cpp/classes/node.hpp>
 
 
 namespace godot {
 
-class AIBehaviour : public Node {
-    GDCLASS(AIBehaviour, Node)
+class UtilityAIBehaviour : public Node {
+    GDCLASS(UtilityAIBehaviour, Node)
 
 private:
     bool _is_active; 
@@ -21,8 +21,8 @@ protected:
     static void _bind_methods();
 
 public:
-    AIBehaviour();
-    ~AIBehaviour();
+    UtilityAIBehaviour();
+    ~UtilityAIBehaviour();
     
     
     // Getters and setters for attributes.

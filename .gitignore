@@ -7,3 +7,8 @@ AIConsiderationGroup.os
 utility_ai.code-workspace
 .vscode/c_cpp_properties.json
 UtilityAIAgent.os
+UtilityAIAction.os
+UtilityAIBehaviour.os
+UtilityAIConsideration.os
+UtilityAIConsiderationBase.os
+UtilityAIConsiderationGroup.os

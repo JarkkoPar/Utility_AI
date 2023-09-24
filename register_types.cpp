@@ -1,11 +1,11 @@
 #include "register_types.h"
 
 // Classes to include in to the gdextension module.
-#include "AIBehaviour.h"
-#include "AIConsiderationBase.h"
-#include "AIConsiderationGroup.h"
-#include "AIConsideration.h"
-#include "AIAction.h"
+#include "UtilityAIBehaviour.h"
+#include "UtilityAIConsiderationBase.h"
+#include "UtilityAIConsiderationGroup.h"
+#include "UtilityAIConsideration.h"
+#include "UtilityAIAction.h"
 #include "UtilityAIAgent.h"
 
 // Standard headers.
@@ -22,11 +22,11 @@ void initialize_utility_ai_module(ModuleInitializationLevel p_level) {
     }
 
     // Add the classes here.
-    ClassDB::register_class<AIConsiderationBase>(false);
-    ClassDB::register_class<AIConsiderationGroup>();
-    ClassDB::register_class<AIConsideration>();
-    ClassDB::register_class<AIAction>();
-    ClassDB::register_class<AIBehaviour>();
+    ClassDB::register_class<UtilityAIConsiderationBase>(false);
+    ClassDB::register_class<UtilityAIConsiderationGroup>();
+    ClassDB::register_class<UtilityAIConsideration>();
+    ClassDB::register_class<UtilityAIAction>();
+    ClassDB::register_class<UtilityAIBehaviour>();
     ClassDB::register_class<UtilityAIAgent>();
 }
 

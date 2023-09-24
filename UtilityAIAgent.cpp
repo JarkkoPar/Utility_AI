@@ -1,5 +1,5 @@
 #include "UtilityAIAgent.h"
-#include "AIBehaviour.h"
+#include "UtilityAIBehaviour.h"
 
 #include <godot_cpp/core/class_db.hpp>
 #include <godot_cpp/classes/engine.hpp>
@@ -58,7 +58,7 @@ void UtilityAIAgent::evaluate_options() {
     int num_children = get_child_count();
     if( num_children < 1 ) return; // Cannot evaluate without children.
     for( int i = 0; i < num_children; ++i ) {
-        AIBehaviour* behaviourNode = godot::Object::cast_to<AIBehaviour>(get_child(i));
+        UtilityAIBehaviour* behaviourNode = godot::Object::cast_to<UtilityAIBehaviour>(get_child(i));
         if( behaviourNode == nullptr ) continue;
 
         float score = behaviourNode->evaluate();
