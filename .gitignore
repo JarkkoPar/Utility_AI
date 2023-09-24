@@ -12,3 +12,5 @@ UtilityAIBehaviour.os
 UtilityAIConsideration.os
 UtilityAIConsiderationBase.os
 UtilityAIConsiderationGroup.os
+UtilityAIActionBase.os
+UtilityAIActionGroup.os

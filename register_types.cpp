@@ -5,7 +5,9 @@
 #include "UtilityAIConsiderationBase.h"
 #include "UtilityAIConsiderationGroup.h"
 #include "UtilityAIConsideration.h"
+#include "UtilityAIActionBase.h"
 #include "UtilityAIAction.h"
+#include "UtilityAIActionGroup.h"
 #include "UtilityAIAgent.h"
 
 // Standard headers.
@@ -25,6 +27,8 @@ void initialize_utility_ai_module(ModuleInitializationLevel p_level) {
     ClassDB::register_class<UtilityAIConsiderationBase>(false);
     ClassDB::register_class<UtilityAIConsiderationGroup>();
     ClassDB::register_class<UtilityAIConsideration>();
+    ClassDB::register_class<UtilityAIActionBase>();
+    ClassDB::register_class<UtilityAIActionGroup>();
     ClassDB::register_class<UtilityAIAction>();
     ClassDB::register_class<UtilityAIBehaviour>();
     ClassDB::register_class<UtilityAIAgent>();
