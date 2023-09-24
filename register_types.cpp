@@ -6,7 +6,7 @@
 #include "AIConsiderationGroup.h"
 #include "AIConsideration.h"
 #include "AIAction.h"
-//#include "utility_aiStateAction.h"
+#include "UtilityAIAgent.h"
 
 // Standard headers.
 #include <gdextension_interface.h>
@@ -22,12 +22,12 @@ void initialize_utility_ai_module(ModuleInitializationLevel p_level) {
     }
 
     // Add the classes here.
-    ClassDB::register_class<AIConsiderationBase>();
+    ClassDB::register_class<AIConsiderationBase>(false);
     ClassDB::register_class<AIConsiderationGroup>();
     ClassDB::register_class<AIConsideration>();
     ClassDB::register_class<AIAction>();
     ClassDB::register_class<AIBehaviour>();
-    
+    ClassDB::register_class<UtilityAIAgent>();
 }
 
 void uninitialize_utility_ai_module(ModuleInitializationLevel p_level) {
