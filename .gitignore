@@ -1,0 +1,8 @@
+register_types.os
+AIAction.os
+AIBehaviour.os
+AIConsideration.os
+AIConsiderationBase.os
+AIConsiderationGroup.os
+utility_ai.code-workspace
+.vscode/c_cpp_properties.json
