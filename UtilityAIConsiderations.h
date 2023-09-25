@@ -19,7 +19,7 @@ private:
 protected:
     static void _bind_methods();
 
-    float _score;
+    double _score;
     bool _has_vetoed;
 
 public:
@@ -32,8 +32,8 @@ public:
     void  set_has_vetoed( bool has_vetoed );
     bool  get_has_vetoed() const;
 
-    void set_score( float score );
-    float get_score() const;
+    void set_score( double score );
+    double get_score() const;
 
     /**        
     // Godot virtuals.
@@ -46,7 +46,7 @@ public:
 
     // Handling functions.
 
-    virtual float evaluate(UtilityAIAgent* agent, double delta);
+    virtual double evaluate(UtilityAIAgent* agent, double delta);
 };
 
 }

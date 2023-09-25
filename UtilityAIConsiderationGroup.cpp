@@ -92,25 +92,25 @@ void UtilityAIConsiderationGroup::_physics_process(double delta ) {
 
 /**/
 
-float UtilityAIConsiderationGroup::evaluate(UtilityAIAgent* agent, double delta) {
-    if( !get_is_active() ) return 0.0f;
-    if( Engine::get_singleton()->is_editor_hint() ) return 0.0f;
+double UtilityAIConsiderationGroup::evaluate(UtilityAIAgent* agent, double delta) {
+    if( !get_is_active() ) return 0.0;
+    if( Engine::get_singleton()->is_editor_hint() ) return 0.0;
 
-    _score = 0.0f;
+    _score = 0.0;
     
     // Evaluate the children.
     int num_children = get_child_count();
-    if( num_children < 1 ) return 0.0f;
-    float child_score = 0.0f;
-    float one_over_num_children = 1.0f / (float)num_children;
+    if( num_children < 1 ) return 0.0;
+    double child_score = 0.0;
+    double one_over_num_children = 1.0 / (double)num_children;
     for( int i = 0; i < num_children; ++i ) {
         UtilityAIConsiderations* considerationNode = godot::Object::cast_to<UtilityAIConsiderations>(get_child(i));
         if( considerationNode == nullptr ) continue;
         if( !considerationNode->get_is_active() ) continue;
         child_score = considerationNode->evaluate(agent, delta);
         if( considerationNode->get_has_vetoed()) {
-            _score = 0.0f;
-            return _score; // Veto zeroes out the score.
+            _score = 0.0;
+            return _score; // Veto zeroes out the score for the entire group.
         }
 
         switch( _evaluation_method ) {
@@ -139,7 +139,7 @@ float UtilityAIConsiderationGroup::evaluate(UtilityAIAgent* agent, double delta)
             break;
             case UtilityAIConsiderationGroupEvaluationMethod::FirstNonZero: 
             {
-                if( child_score > 0.0f ) {
+                if( child_score > 0.0 ) {
                     _score = child_score;
                     return _score;
                 }
@@ -151,7 +151,7 @@ float UtilityAIConsiderationGroup::evaluate(UtilityAIAgent* agent, double delta)
     }//endfor children
 
     if( _evaluation_method == UtilityAIConsiderationGroupEvaluationMethod::OneMinusScore ) {
-        _score = 1.0f - _score;
+        _score = 1.0 - _score;
     }
 
     return _score;

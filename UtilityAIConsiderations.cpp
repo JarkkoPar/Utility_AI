@@ -50,11 +50,11 @@ bool UtilityAIConsiderations::get_has_vetoed() const {
 }
 
 
-void UtilityAIConsiderations::set_score( float score ) {
+void UtilityAIConsiderations::set_score( double score ) {
     _score = score;
 }
 
-float UtilityAIConsiderations::get_score() const {
+double UtilityAIConsiderations::get_score() const {
     return _score;
 }
 
@@ -105,8 +105,8 @@ void UtilityAIConsiderations::_physics_process(double delta ) {
 /**/
 
 
-float UtilityAIConsiderations::evaluate(UtilityAIAgent* agent, double delta) {
-    return 0.0f;
+double UtilityAIConsiderations::evaluate(UtilityAIAgent* agent, double delta) {
+    return 0.0;
 }
 
 

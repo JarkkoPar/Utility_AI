@@ -50,7 +50,7 @@ public:
 
     // Handling functions.
 
-    virtual float evaluate(UtilityAIAgent* agent, double delta) override;
+    virtual double evaluate(UtilityAIAgent* agent, double delta) override;
     
 };
 
