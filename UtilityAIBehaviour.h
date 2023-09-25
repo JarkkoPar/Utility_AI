@@ -1,20 +1,19 @@
 #ifndef UtilityAIBehaviour_H_INCLUDED
 #define UtilityAIBehaviour_H_INCLUDED 
 
-//#include "UtilityAIBehaviourState.h"
-
+#include "UtilityAI.h"
+#include "UtilityAIAgent.h"
 #include <godot_cpp/classes/node.hpp>
 
 
 namespace godot {
 
-class UtilityAIBehaviour : public Node {
-    GDCLASS(UtilityAIBehaviour, Node)
+class UtilityAIBehaviour : public UtilityAI {
+    GDCLASS(UtilityAIBehaviour, UtilityAI )
 
 private:
-    bool _is_active; 
-    //int  _update_method;
-
+    double _cooldown_seconds;
+    double _current_cooldown_seconds;
     float _score;
     
 protected:
@@ -27,15 +26,15 @@ public:
     
     // Getters and setters for attributes.
     /**/
-    void  set_is_active( bool is_active );
-    bool  get_is_active() const;
+    
     
     void  set_score( float score );
     float get_score() const;
     
-    /**/
-    //void set_update_method( int update_method );
-    //int  get_update_method() const;
+    void  set_cooldown_seconds( double cooldown_seconds );
+    double get_cooldown_seconds() const;
+
+
     /**/
     // Godot virtuals.
     void _ready();
@@ -47,7 +46,9 @@ public:
 
     // Handling functions.
 
-    float evaluate();
+    float evaluate(UtilityAIAgent* agent, double delta);
+    void  start_behaviour();
+    void  end_behaviour();
 };
 
 }

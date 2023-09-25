@@ -1,45 +1,50 @@
-#ifndef UTILITYAIAGENT_H_INCLUDED
-#define UTILITYAIAGENT_H_INCLUDED 
+#ifndef UtilityAIActions_H_INCLUDED
+#define UtilityAIActions_H_INCLUDED 
 
 #include "UtilityAI.h"
-
 #include <godot_cpp/classes/node.hpp>
+
 
 
 namespace godot {
 
-class UtilityAIAgent : public UtilityAI {
-    GDCLASS(UtilityAIAgent, UtilityAI)
+class UtilityAIActions : public UtilityAI {
+    GDCLASS(UtilityAIActions, UtilityAI)
 
 private:
     
-    Node* _chosen_behaviour_node;
+
     
 protected:
     static void _bind_methods();
 
 public:
-    UtilityAIAgent();
-    ~UtilityAIAgent();
+    UtilityAIActions();
+    ~UtilityAIActions();
     
     
     // Getters and setters for attributes.
     
-    void set_current_behaviour( Node* new_behaviour );
-    Node* get_current_behaviour() const;
+    //Node* get_next_action_to_execute();
+
+    //bool execute_action();
+
+ 
+    /**
     
-    
-    /**    
     // Godot virtuals.
     void _ready();
     void _process(double delta);
     void _physics_process(double delta);
 
     void _notification(int p_what);
-    */
+
     // Handling functions.
 
-    void evaluate_options(double delta);
+    bool _change_to_state( String target_state_name );
+
+    void _update_current_state(double delta);
+    */
 };
 
 }

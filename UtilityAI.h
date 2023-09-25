@@ -1,5 +1,5 @@
-#ifndef UtilityAIActionBase_H_INCLUDED
-#define UtilityAIActionBase_H_INCLUDED 
+#ifndef UtilityAI_H_INCLUDED
+#define UtilityAI_H_INCLUDED 
 
 
 #include <godot_cpp/classes/node.hpp>
@@ -8,26 +8,25 @@
 
 namespace godot {
 
-class UtilityAIActionBase : public Node {
-    GDCLASS(UtilityAIActionBase, Node)
+class UtilityAI : public Node {
+    GDCLASS(UtilityAI, Node)
 
 private:
-    bool _is_active; 
-
+    bool _is_active;
     
 protected:
     static void _bind_methods();
 
 public:
-    UtilityAIActionBase();
-    ~UtilityAIActionBase();
+    UtilityAI();
+    ~UtilityAI();
     
     
     // Getters and setters for attributes.
-    
     void  set_is_active( bool is_active );
     bool  get_is_active() const;
-    /**
+
+    /*    
     void set_update_method( int update_method );
     int  get_update_method() const;
         

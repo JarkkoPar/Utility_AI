@@ -2,18 +2,19 @@
 #define UtilityAIActionGroup_H_INCLUDED 
 
 
-#include "UtilityAIActionBase.h"
+#include "UtilityAIActions.h"
 #include <godot_cpp/classes/node.hpp>
 
 
 
 namespace godot {
 
-class UtilityAIActionGroup : public UtilityAIActionBase {
-    GDCLASS(UtilityAIActionGroup, UtilityAIActionBase )
+class UtilityAIActionGroup : public UtilityAIActions {
+    GDCLASS(UtilityAIActionGroup, UtilityAIActions )
 
 private:
-    
+    int _action_execution_rule;
+    int _action_execution_index;
 protected:
     static void _bind_methods();
 
@@ -23,6 +24,15 @@ public:
     
     
     // Getters and setters for attributes.
+
+    void set_action_execution_rule( int action_execution_rule );
+    int get_action_execution_rule() const;
+
+    enum UtilityAIActionGroupExecutionRule {
+        Sequence = 0,
+        PickOneAtRandom=1
+    };
+
     /**
   
     // Godot virtuals.
@@ -34,9 +44,6 @@ public:
 
     // Handling functions.
 
-    bool _change_to_state( String target_state_name );
-
-    void _update_current_state(double delta);
     */
 };
 

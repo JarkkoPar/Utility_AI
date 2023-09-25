@@ -10,13 +10,11 @@ using namespace godot;
 // Method binds.
 
 void UtilityAIActionGroup::_bind_methods() {
-    /*
+    ClassDB::bind_method(D_METHOD("set_action_execution_rule", "action_execution_rule"), &UtilityAIActionGroup::set_action_execution_rule);
+    ClassDB::bind_method(D_METHOD("get_action_execution_rule"), &UtilityAIActionGroup::get_action_execution_rule);
+    ADD_PROPERTY(PropertyInfo(Variant::INT, "action_execution_rule", PROPERTY_HINT_ENUM, "Sequence:0,PickOneAtRandom:1"), "set_action_execution_rule","get_action_execution_rule");
     
-    //ClassDB::bind_method(D_METHOD("set_update_method", "update_method"), &UtilityAIActionGroup::set_update_method);
-    //ClassDB::bind_method(D_METHOD("get_update_method"), &UtilityAIActionGroup::get_update_method);
-    //ADD_PROPERTY(PropertyInfo(Variant::INT, "update_method", PROPERTY_HINT_ENUM, "Process:0,Physics process:1,Manual:2"), "set_update_method","get_update_method");
-    
-
+    /**
     ClassDB::bind_method(D_METHOD("change_to_state", "target_state_name"), &UtilityAIActionGroup::_change_to_state);
     
     ClassDB::bind_method(D_METHOD("update_current_state", "delta"), &UtilityAIActionGroup::_update_current_state);
@@ -27,6 +25,8 @@ void UtilityAIActionGroup::_bind_methods() {
 // Constructor and destructor.
 
 UtilityAIActionGroup::UtilityAIActionGroup() {
+    _action_execution_rule = UtilityAIActionGroupExecutionRule::Sequence;
+    _action_execution_index = 0;
 }
 
 
@@ -38,21 +38,13 @@ UtilityAIActionGroup::~UtilityAIActionGroup() {
 
 
 // Getters and Setters.
-/**
-void UtilityAIActionGroup::set_is_active( bool is_active ) {
-    _is_active = is_active;
+
+void UtilityAIActionGroup::set_action_execution_rule( int action_execution_rule ) {
+    _action_execution_rule = action_execution_rule;
 }
 
-bool UtilityAIActionGroup::get_is_active() const {
-    return _is_active;
-}
-
-void UtilityAIActionGroup::set_update_method( int update_method ) {
-    _update_method = update_method;
-}
-
-int UtilityAIActionGroup::get_update_method() const {
-    return _update_method;
+int UtilityAIActionGroup::get_action_execution_rule() const {
+    return _action_execution_rule;
 }
 /**/
 

@@ -10,13 +10,10 @@ using namespace godot;
 // Method binds.
 
 void UtilityAIConsiderationGroup::_bind_methods() {
-    //ClassDB::bind_method(D_METHOD("set_is_active", "is_active"), &UtilityAIConsiderationGroup::set_is_active);
-    //ClassDB::bind_method(D_METHOD("get_is_active"), &UtilityAIConsiderationGroup::get_is_active);
-    //ADD_PROPERTY(PropertyInfo(Variant::BOOL, "is_active", PROPERTY_HINT_NONE), "set_is_active","get_is_active");
-    
+   
     ClassDB::bind_method(D_METHOD("set_evaluation_method", "evaluation_method"), &UtilityAIConsiderationGroup::set_evaluation_method);
     ClassDB::bind_method(D_METHOD("get_evaluation_method"), &UtilityAIConsiderationGroup::get_evaluation_method);
-    ADD_PROPERTY(PropertyInfo(Variant::INT, "evaluation_method", PROPERTY_HINT_ENUM, "Sum:0,Min:1,Max:2,Mean:3,Multiply:4,FirstNonZero:5"), "set_evaluation_method","get_evaluation_method");
+    ADD_PROPERTY(PropertyInfo(Variant::INT, "evaluation_method", PROPERTY_HINT_ENUM, "Sum:0,Min:1,Max:2,Mean:3,Multiply:4,FirstNonZero:5,OneMinusScore:6"), "set_evaluation_method","get_evaluation_method");
     
     /**
     ClassDB::bind_method(D_METHOD("change_to_state", "target_state_name"), &UtilityAIConsiderationGroup::_change_to_state);
@@ -95,8 +92,8 @@ void UtilityAIConsiderationGroup::_physics_process(double delta ) {
 
 /**/
 
-float UtilityAIConsiderationGroup::evaluate() {
-    if( !_is_active ) return 0.0f;
+float UtilityAIConsiderationGroup::evaluate(UtilityAIAgent* agent, double delta) {
+    if( !get_is_active() ) return 0.0f;
     if( Engine::get_singleton()->is_editor_hint() ) return 0.0f;
 
     _score = 0.0f;
@@ -107,10 +104,10 @@ float UtilityAIConsiderationGroup::evaluate() {
     float child_score = 0.0f;
     float one_over_num_children = 1.0f / (float)num_children;
     for( int i = 0; i < num_children; ++i ) {
-        UtilityAIConsiderationBase* considerationNode = godot::Object::cast_to<UtilityAIConsiderationBase>(get_child(i));
+        UtilityAIConsiderations* considerationNode = godot::Object::cast_to<UtilityAIConsiderations>(get_child(i));
         if( considerationNode == nullptr ) continue;
-        
-        child_score = considerationNode->evaluate();
+        if( !considerationNode->get_is_active() ) continue;
+        child_score = considerationNode->evaluate(agent, delta);
         if( considerationNode->get_has_vetoed()) {
             _score = 0.0f;
             return _score; // Veto zeroes out the score.
@@ -149,9 +146,13 @@ float UtilityAIConsiderationGroup::evaluate() {
             }
             break;
             default: _score += child_score;
-        }
+        }//end switch evaluation method
         
     }//endfor children
+
+    if( _evaluation_method == UtilityAIConsiderationGroupEvaluationMethod::OneMinusScore ) {
+        _score = 1.0f - _score;
+    }
 
     return _score;
 }

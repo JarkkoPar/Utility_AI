@@ -41,13 +41,6 @@ UtilityAIConsideration::~UtilityAIConsideration() {
 
 // Getters and Setters.
 /**
-void UtilityAIConsideration::set_is_active( bool is_active ) {
-    _is_active = is_active;
-}
-
-bool UtilityAIConsideration::get_is_active() const {
-    return _is_active;
-}
 
 void UtilityAIConsideration::set_update_method( int update_method ) {
     _update_method = update_method;
@@ -105,8 +98,8 @@ void UtilityAIConsideration::_physics_process(double delta ) {
 
 
 
-float UtilityAIConsideration::evaluate() {
-    if( !_is_active ) return 0.0f;
+float UtilityAIConsideration::evaluate(UtilityAIAgent* agent, double delta) {
+    if( !get_is_active() ) return 0.0f;
     if( Engine::get_singleton()->is_editor_hint() ) return 0.0f;
 
     _score = 0.0f;

@@ -1,7 +1,7 @@
 #ifndef UtilityAIConsideration_H_INCLUDED
 #define UtilityAIConsideration_H_INCLUDED 
 
-#include "UtilityAIConsiderationBase.h"
+#include "UtilityAIConsiderations.h"
 
 #include <godot_cpp/classes/node.hpp>
 
@@ -9,8 +9,8 @@
 
 namespace godot {
 
-class UtilityAIConsideration : public UtilityAIConsiderationBase {
-    GDCLASS(UtilityAIConsideration, UtilityAIConsiderationBase )
+class UtilityAIConsideration : public UtilityAIConsiderations {
+    GDCLASS(UtilityAIConsideration, UtilityAIConsiderations )
 
 private:
 
@@ -26,8 +26,7 @@ public:
     // Getters and setters for attributes.
     /**
     
-    void set_update_method( int update_method );
-    int  get_update_method() const;
+   
         
     // Godot virtuals.
     void _ready();
@@ -39,7 +38,7 @@ public:
 
     // Handling functions.
 
-    virtual float evaluate() override;
+    virtual float evaluate(UtilityAIAgent* agent, double delta) override;
 };
 
 }

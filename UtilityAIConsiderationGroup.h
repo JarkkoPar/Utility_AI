@@ -1,7 +1,7 @@
 #ifndef UtilityAIConsiderationGROUP_H_INCLUDED
 #define UtilityAIConsiderationGROUP_H_INCLUDED 
 
-#include "UtilityAIConsiderationBase.h"
+#include "UtilityAIConsiderations.h"
 
 #include <godot_cpp/classes/node.hpp>
 
@@ -9,8 +9,8 @@
 
 namespace godot {
 
-class UtilityAIConsiderationGroup : public UtilityAIConsiderationBase {
-    GDCLASS(UtilityAIConsiderationGroup, UtilityAIConsiderationBase)
+class UtilityAIConsiderationGroup : public UtilityAIConsiderations {
+    GDCLASS(UtilityAIConsiderationGroup, UtilityAIConsiderations)
 
 private:
 
@@ -26,7 +26,6 @@ public:
     
     // Getters and setters for attributes.
     
-    
     void set_evaluation_method( int evaluation_method );
     int  get_evaluation_method() const;
 
@@ -36,7 +35,8 @@ public:
         Max=2,
         Mean=3,
         Multiply=4,
-        FirstNonZero=5
+        FirstNonZero=5,
+        OneMinusScore=6
     };
 
     /**    
@@ -50,7 +50,7 @@ public:
 
     // Handling functions.
 
-    virtual float evaluate() override;
+    virtual float evaluate(UtilityAIAgent* agent, double delta) override;
     
 };
 

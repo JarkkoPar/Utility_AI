@@ -13,20 +13,17 @@ using namespace godot;
 // Method binds.
 
 void UtilityAIBehaviour::_bind_methods() {
-    ClassDB::bind_method(D_METHOD("set_is_active", "is_active"), &UtilityAIBehaviour::set_is_active);
-    ClassDB::bind_method(D_METHOD("get_is_active"), &UtilityAIBehaviour::get_is_active);
-    ADD_PROPERTY(PropertyInfo(Variant::BOOL, "is_active", PROPERTY_HINT_NONE), "set_is_active","get_is_active");
     
     ClassDB::bind_method(D_METHOD("set_score", "score"), &UtilityAIBehaviour::set_score);
     ClassDB::bind_method(D_METHOD("get_score"), &UtilityAIBehaviour::get_score);
     ADD_PROPERTY(PropertyInfo(Variant::FLOAT, "score", PROPERTY_HINT_RANGE,"-100.0,100.0"), "set_score","get_score");
     
-    //ClassDB::bind_method(D_METHOD("set_update_method", "update_method"), &UtilityAIBehaviour::set_update_method);
-    //ClassDB::bind_method(D_METHOD("get_update_method"), &UtilityAIBehaviour::get_update_method);
-    //ADD_PROPERTY(PropertyInfo(Variant::INT, "update_method", PROPERTY_HINT_ENUM, "Process:0,Physics process:1,Manual:2"), "set_update_method","get_update_method");
+    ClassDB::bind_method(D_METHOD("set_cooldown_seconds", "cooldown_seconds"), &UtilityAIBehaviour::set_cooldown_seconds);
+    ClassDB::bind_method(D_METHOD("get_cooldown_seconds"), &UtilityAIBehaviour::get_cooldown_seconds);
+    ADD_PROPERTY(PropertyInfo(Variant::FLOAT, "cooldown_seconds", PROPERTY_HINT_RANGE, "0.0,600.0,allow_greater"), "set_cooldown_seconds","get_cooldown_seconds");
     
     
-    ClassDB::bind_method(D_METHOD("evaluate"), &UtilityAIBehaviour::evaluate);
+    //ClassDB::bind_method(D_METHOD("evaluate"), &UtilityAIBehaviour::evaluate);
     /**
     ClassDB::bind_method(D_METHOD("update_current_state", "delta"), &UtilityAIBehaviour::_update_current_state);
     /**/
@@ -36,8 +33,9 @@ void UtilityAIBehaviour::_bind_methods() {
 // Constructor and destructor.
 
 UtilityAIBehaviour::UtilityAIBehaviour() {
-    _is_active = true;
     _score = 0.0f;
+    _cooldown_seconds = 0.0;
+    _current_cooldown_seconds = 0.0;
 }
 
 
@@ -48,15 +46,8 @@ UtilityAIBehaviour::~UtilityAIBehaviour() {
 
 
 
+
 // Getters and Setters.
-
-void UtilityAIBehaviour::set_is_active( bool is_active ) {
-    _is_active = is_active;
-}
-
-bool UtilityAIBehaviour::get_is_active() const {
-    return _is_active;
-}
 
 void UtilityAIBehaviour::set_score( float score ) {
     _score = score;
@@ -64,6 +55,14 @@ void UtilityAIBehaviour::set_score( float score ) {
 
 float UtilityAIBehaviour::get_score() const {
     return _score;
+}
+
+void UtilityAIBehaviour::set_cooldown_seconds( double cooldown_seconds ) {
+    _cooldown_seconds = cooldown_seconds;
+}
+
+double UtilityAIBehaviour::get_cooldown_seconds() const {
+    return _cooldown_seconds;
 }
 
 /**
@@ -90,7 +89,7 @@ void UtilityAIBehaviour::_notification(int p_what) {
 }
 
 void UtilityAIBehaviour::_ready() {
-    if( !_is_active ) return;
+    if( !get_is_active() ) return;
     if( Engine::get_singleton()->is_editor_hint() ) return;
 
     // Get the considerations and actions.    
@@ -121,19 +120,40 @@ void UtilityAIBehaviour::_physics_process(double delta ) {
 
 // Handling functions.
 
-float UtilityAIBehaviour::evaluate() {
-    if( !_is_active ) return 0.0f;
+float UtilityAIBehaviour::evaluate(UtilityAIAgent* agent, double delta) {
+    if( !get_is_active() ) return 0.0f;
     if( Engine::get_singleton()->is_editor_hint() ) return 0.0f;
+
+    // If the behaviour is on cooldown, it cannot be chosen.
+    if( _current_cooldown_seconds > 0.0 ) {
+        _current_cooldown_seconds -= delta;
+        return 0.0f;
+    }
 
     _score = 0.0f;
 
     // Evaluate the children.
     int num_children = get_child_count();
     for( int i = 0; i < num_children; ++i ) {
-        UtilityAIConsiderationBase* considerationNode = godot::Object::cast_to<UtilityAIConsiderationBase>(get_child(i));
+        UtilityAIConsiderations* considerationNode = godot::Object::cast_to<UtilityAIConsiderations>(get_child(i));
         if( considerationNode == nullptr ) continue;
-        _score += considerationNode->evaluate();
+        if( !considerationNode->get_is_active() ) continue;
+        _score += considerationNode->evaluate(agent, delta);
+        if( considerationNode->get_has_vetoed()){
+            _score = 0.0f;
+            return 0.0f; // The consideration vetoed this behaviour.
+        }
     }//endfor children
 
     return _score;
+}
+
+
+void UtilityAIBehaviour::start_behaviour() {
+    _current_cooldown_seconds = _cooldown_seconds;
+}
+
+
+void UtilityAIBehaviour::end_behaviour() {
+    
 }

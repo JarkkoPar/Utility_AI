@@ -29,6 +29,7 @@ void UtilityAIAction::_bind_methods() {
 // Constructor and destructor.
 
 UtilityAIAction::UtilityAIAction() {
+    
 }
 
 
