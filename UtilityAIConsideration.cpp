@@ -11,6 +11,11 @@ using namespace godot;
 
 void UtilityAIConsideration::_bind_methods() {
 
+    ClassDB::bind_method(D_METHOD("set_input_sensor_node_path", "input_sensor_node_path"), &UtilityAIConsideration::set_input_sensor_node_path);
+    ClassDB::bind_method(D_METHOD("get_input_sensor_node_path"), &UtilityAIConsideration::get_input_sensor_node_path);
+    ADD_PROPERTY(PropertyInfo(Variant::NODE_PATH, "input_sensor_node_path", PROPERTY_HINT_NODE_PATH_VALID_TYPES, "UtilityAISensors"), "set_input_sensor_node_path", "get_input_sensor_node_path");
+
+
     ClassDB::bind_method(D_METHOD("set_activation_curve", "activation_curve"), &UtilityAIConsideration::set_activation_curve);
     ClassDB::bind_method(D_METHOD("get_activation_curve"), &UtilityAIConsideration::get_activation_curve);
     ADD_PROPERTY(PropertyInfo(Variant::OBJECT, "activation_curve", PROPERTY_HINT_RESOURCE_TYPE, "Curve"), "set_activation_curve", "get_activation_curve");
@@ -36,10 +41,12 @@ void UtilityAIConsideration::_bind_methods() {
 
 UtilityAIConsideration::UtilityAIConsideration() {
     _activation_input_value = 0.0;
+    _input_sensor = nullptr;
 }
 
 
 UtilityAIConsideration::~UtilityAIConsideration() {
+    _input_sensor = nullptr;
 }
 
 // Handling functions.
@@ -47,6 +54,15 @@ UtilityAIConsideration::~UtilityAIConsideration() {
 
 
 // Getters and Setters.
+
+void UtilityAIConsideration::set_input_sensor_node_path( NodePath input_sensor_node_path ) {
+    _input_sensor_node_path = input_sensor_node_path;
+}
+
+NodePath UtilityAIConsideration::get_input_sensor_node_path() const {
+    return _input_sensor_node_path;
+}
+
 
 void UtilityAIConsideration::set_activation_curve( Ref<Curve> activation_curve ) {
     _activation_curve = activation_curve;
@@ -77,17 +93,18 @@ void UtilityAIConsideration::_notification(int p_what) {
 		} break;
 	}
 }
-
+/**/
 void UtilityAIConsideration::_ready() {
-    if( !_is_active ) return;
+    if( !get_is_active() ) return;
     if( Engine::get_singleton()->is_editor_hint() ) return;
+    Node* node = get_node_or_null(_input_sensor_node_path);
+    ERR_FAIL_COND_MSG( node == nullptr, "UtilityAIConsideration error, invalid nodepath for the sensor in UtilityAIConsideration '" + get_name() + "'.");
     
-    // Get the first state as the first child node and enter it.
-    ERR_FAIL_COND_MSG( get_child_count() < 1, "UtilityAIConsideration error, no child nodes (states) have been added to the UtilityAIConsideration '" + get_name() + "'.");
-    _current_state = Object::cast_to<UtilityAIConsiderationState>(get_child(0));
-    ERR_FAIL_COND_MSG( _current_state == nullptr, "UtilityAIConsideration error, the first child is not a UtilityAIConsiderationState node.");
-    _current_state->_enter_state();
+    _input_sensor = godot::Object::cast_to<UtilityAISensors>(node);
+    ERR_FAIL_COND_MSG( _input_sensor == nullptr, "UtilityAIConsideration error, the assigned node's type was not a UtilityAISensor for UtilityAIConsideration '" + get_name() + "'.");
+    
 }
+/**
 
 void UtilityAIConsideration::_process(double delta ) {
     //if( _update_method != UtilityAIConsideration_UPDATE_METHOD_PROCESS ) return;
@@ -112,15 +129,20 @@ void UtilityAIConsideration::_physics_process(double delta ) {
 
 
 
-double UtilityAIConsideration::evaluate(UtilityAIAgent* agent, double delta) {
+double UtilityAIConsideration::evaluate() { //UtilityAIAgent* agent, double delta) {
     if( !get_is_active() ) return 0.0;
     if( Engine::get_singleton()->is_editor_hint() ) return 0.0;
 
+    if( _input_sensor != nullptr ) {
+        _activation_input_value = _input_sensor->get_sensor_value();
+    } //else ERR_FAIL_COND_V_MSG(true, 0.0, "nO INPUT SENSOR!");
+
     _score = 0.0;
-    //call("update_activation_input_value");
     if (_activation_curve.is_valid()) {
 		_score = _activation_curve->sample( _activation_input_value );
-	}
+	} else {
+        _score = _activation_input_value;
+    }
 
     return _score;
 }

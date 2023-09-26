@@ -1,35 +1,33 @@
-#ifndef UtilityAIConsiderationGROUP_H_INCLUDED
-#define UtilityAIConsiderationGROUP_H_INCLUDED 
+#ifndef UtilityAISensorGroup_H_INCLUDED
+#define UtilityAISensorGroup_H_INCLUDED 
 
-#include "UtilityAIConsiderations.h"
 
+#include "UtilityAISensors.h"
 #include <godot_cpp/classes/node.hpp>
 
 
 
 namespace godot {
 
-class UtilityAIConsiderationGroup : public UtilityAIConsiderations {
-    GDCLASS(UtilityAIConsiderationGroup, UtilityAIConsiderations)
+class UtilityAISensorGroup : public UtilityAISensors {
+    GDCLASS(UtilityAISensorGroup, UtilityAISensors )
 
 private:
-
     int _evaluation_method;
-    
 protected:
     static void _bind_methods();
 
 public:
-    UtilityAIConsiderationGroup();
-    ~UtilityAIConsiderationGroup();
+    UtilityAISensorGroup();
+    ~UtilityAISensorGroup();
     
     
     // Getters and setters for attributes.
-    
-    void set_evaluation_method( int evaluation_method );
-    int  get_evaluation_method() const;
 
-    enum UtilityAIConsiderationGroupEvaluationMethod {
+    void set_evaluation_method( int evaluation_method );
+    int get_evaluation_method() const;
+
+    enum UtilityAISensorGroupEvaluationMethod {
         Sum = 0,
         Min=1,
         Max=2,
@@ -39,7 +37,8 @@ public:
         OneMinusScore=6
     };
 
-    /**    
+    /**
+  
     // Godot virtuals.
     void _ready();
     void _process(double delta);
@@ -47,10 +46,9 @@ public:
 
     void _notification(int p_what);
     */
-
     // Handling functions.
 
-    virtual double evaluate() override; //UtilityAIAgent* agent, double delta) override;
+    virtual double evaluate_sensor_value() override;
     
 };
 

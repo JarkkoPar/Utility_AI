@@ -46,7 +46,7 @@ public:
 
     // Handling functions.
 
-    float evaluate(UtilityAIAgent* agent, double delta);
+    double evaluate();//UtilityAIAgent* agent, double delta);
     void  start_behaviour();
     void  end_behaviour();
 };

@@ -46,7 +46,7 @@ public:
 
     // Handling functions.
 
-    virtual double evaluate(UtilityAIAgent* agent, double delta);
+    virtual double evaluate();//UtilityAIAgent* agent, double delta);
 };
 
 }

@@ -14,6 +14,7 @@ class UtilityAIAgent : public UtilityAI {
 private:
     
     Node* _chosen_behaviour_node;
+    int   _highest_scoring_behaviours_count;
     
 protected:
     static void _bind_methods();
@@ -39,7 +40,7 @@ public:
     */
     // Handling functions.
 
-    void evaluate_options(double delta);
+    void evaluate_options();//double delta);
 };
 
 }

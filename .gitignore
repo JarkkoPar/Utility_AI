@@ -17,3 +17,6 @@ UtilityAIActionGroup.os
 UtilityAI.os
 UtilityAIActions.os
 UtilityAIConsiderations.os
+UtilityAISensor.os
+UtilityAISensorGroup.os
+UtilityAISensors.os

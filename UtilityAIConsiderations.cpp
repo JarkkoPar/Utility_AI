@@ -105,7 +105,7 @@ void UtilityAIConsiderations::_physics_process(double delta ) {
 /**/
 
 
-double UtilityAIConsiderations::evaluate(UtilityAIAgent* agent, double delta) {
+double UtilityAIConsiderations::evaluate() { //UtilityAIAgent* agent, double delta) {
     return 0.0;
 }
 

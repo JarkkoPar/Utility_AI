@@ -9,6 +9,10 @@
 #include "UtilityAIAction.h"
 #include "UtilityAIActionGroup.h"
 #include "UtilityAIAgent.h"
+#include "UtilityAISensors.h"
+#include "UtilityAISensor.h"
+#include "UtilityAISensorGroup.h"
+
 #include "UtilityAI.h"
 
 // Standard headers.
@@ -29,6 +33,9 @@ void initialize_utility_ai_module(ModuleInitializationLevel p_level) {
     ClassDB::register_class<UtilityAIConsiderations>(true);
     ClassDB::register_class<UtilityAIConsiderationGroup>();
     ClassDB::register_class<UtilityAIConsideration>();
+    ClassDB::register_class<UtilityAISensors>(true);
+    ClassDB::register_class<UtilityAISensorGroup>();
+    ClassDB::register_class<UtilityAISensor>();
     ClassDB::register_class<UtilityAIActions>(true);
     ClassDB::register_class<UtilityAIActionGroup>();
     ClassDB::register_class<UtilityAIAction>();

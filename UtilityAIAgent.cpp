@@ -1,5 +1,7 @@
 #include "UtilityAIAgent.h"
+#include "UtilityAISensors.h"
 #include "UtilityAIBehaviour.h"
+
 
 #include <godot_cpp/core/class_db.hpp>
 #include <godot_cpp/classes/engine.hpp>
@@ -37,7 +39,7 @@ UtilityAIAgent::~UtilityAIAgent() {
 
 // Handling functions.
 
-void UtilityAIAgent::evaluate_options(double delta) {
+void UtilityAIAgent::evaluate_options() { //double delta) {
     if( !get_is_active() ) return;
     if( Engine::get_singleton()->is_editor_hint() ) return;
 
@@ -51,11 +53,21 @@ void UtilityAIAgent::evaluate_options(double delta) {
     int num_children = get_child_count();
     if( num_children < 1 ) return; // Cannot evaluate without children.
     for( int i = 0; i < num_children; ++i ) {
-        UtilityAIBehaviour* behaviourNode = godot::Object::cast_to<UtilityAIBehaviour>(get_child(i));
+        Node* node = get_child(i);
+
+        // If it is a sensor, do an evaluation to update any groups.
+        UtilityAISensors* sensorNode = godot::Object::cast_to<UtilityAISensors>(node);
+        if( sensorNode != nullptr ) {
+            sensorNode->evaluate_sensor_value();
+            sensorNode = nullptr;
+        }
+
+        // If it is a behaviour, handle it.
+        UtilityAIBehaviour* behaviourNode = godot::Object::cast_to<UtilityAIBehaviour>(node);
         if( behaviourNode == nullptr ) continue;
 
-        float score = behaviourNode->evaluate(this, delta);
-        if( score > highest_score ) {
+        float score = behaviourNode->evaluate();//this, delta);
+        if( i == 0 || score > highest_score ) {
             highest_score = score;
             chosen_node_index = i;
             new_behaviour = behaviourNode;

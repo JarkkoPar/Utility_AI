@@ -92,11 +92,12 @@ void UtilityAIConsiderationGroup::_physics_process(double delta ) {
 
 /**/
 
-double UtilityAIConsiderationGroup::evaluate(UtilityAIAgent* agent, double delta) {
+double UtilityAIConsiderationGroup::evaluate() { //UtilityAIAgent* agent, double delta) {
     if( !get_is_active() ) return 0.0;
     if( Engine::get_singleton()->is_editor_hint() ) return 0.0;
 
     _score = 0.0;
+    _has_vetoed = false;
     
     // Evaluate the children.
     int num_children = get_child_count();
@@ -107,9 +108,10 @@ double UtilityAIConsiderationGroup::evaluate(UtilityAIAgent* agent, double delta
         UtilityAIConsiderations* considerationNode = godot::Object::cast_to<UtilityAIConsiderations>(get_child(i));
         if( considerationNode == nullptr ) continue;
         if( !considerationNode->get_is_active() ) continue;
-        child_score = considerationNode->evaluate(agent, delta);
+        child_score = considerationNode->evaluate(); //agent, delta);
         if( considerationNode->get_has_vetoed()) {
             _score = 0.0;
+            _has_vetoed = true;
             return _score; // Veto zeroes out the score for the entire group.
         }
 

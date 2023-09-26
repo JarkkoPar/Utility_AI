@@ -120,17 +120,17 @@ void UtilityAIBehaviour::_physics_process(double delta ) {
 
 // Handling functions.
 
-float UtilityAIBehaviour::evaluate(UtilityAIAgent* agent, double delta) {
-    if( !get_is_active() ) return 0.0f;
-    if( Engine::get_singleton()->is_editor_hint() ) return 0.0f;
+double UtilityAIBehaviour::evaluate() { // UtilityAIAgent* agent, double delta) {
+    if( !get_is_active() ) return 0.0;
+    if( Engine::get_singleton()->is_editor_hint() ) return 0.0;
 
     // If the behaviour is on cooldown, it cannot be chosen.
-    if( _current_cooldown_seconds > 0.0 ) {
-        _current_cooldown_seconds -= delta;
-        return 0.0f;
-    }
+    //if( _current_cooldown_seconds > 0.0 ) {
+    //    _current_cooldown_seconds -= delta;
+    //    return 0.0;
+    //}
 
-    _score = 0.0f;
+    _score = 0.0;
 
     // Evaluate the children.
     int num_children = get_child_count();
@@ -138,10 +138,10 @@ float UtilityAIBehaviour::evaluate(UtilityAIAgent* agent, double delta) {
         UtilityAIConsiderations* considerationNode = godot::Object::cast_to<UtilityAIConsiderations>(get_child(i));
         if( considerationNode == nullptr ) continue;
         if( !considerationNode->get_is_active() ) continue;
-        _score += considerationNode->evaluate(agent, delta);
+        _score += considerationNode->evaluate();//agent, delta);
         if( considerationNode->get_has_vetoed()){
-            _score = 0.0f;
-            return 0.0f; // The consideration vetoed this behaviour.
+            _score = 0.0;
+            return 0.0; // The consideration vetoed this behaviour.
         }
     }//endfor children
 
