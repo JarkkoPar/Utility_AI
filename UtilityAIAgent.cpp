@@ -21,6 +21,11 @@ void UtilityAIAgent::_bind_methods() {
     //ClassDB::bind_method(D_METHOD("update_current_state", "delta"), &UtilityAIAgent::_update_current_state);
     /**/
 
+    ClassDB::bind_method(D_METHOD("set_num_behaviours_to_select", "num_behaviours_to_select"), &UtilityAIAgent::set_num_behaviours_to_select);
+    ClassDB::bind_method(D_METHOD("get_num_behaviours_to_select"), &UtilityAIAgent::get_num_behaviours_to_select);
+    ADD_PROPERTY(PropertyInfo(Variant::INT, "num_behaviours_to_select", PROPERTY_HINT_RANGE, "1,16"), "set_num_behaviours_to_select","get_num_behaviours_to_select");
+    
+
     // Add all signals.
 
     ADD_SIGNAL(MethodInfo("behaviour_changed", PropertyInfo(Variant::OBJECT, "behaviour_node")));
@@ -31,6 +36,10 @@ void UtilityAIAgent::_bind_methods() {
 
 UtilityAIAgent::UtilityAIAgent() {
     _chosen_behaviour_node = nullptr;
+    _num_behaviours_to_select = 1;
+    for( int i = 0; i < UTILITYAIAGENT_MAX_TOP_SCORING_BEHAVIOURS; ++i ) {
+        _top_scoring_behaviours[i] = -1;
+    }
 }
 
 
@@ -71,6 +80,8 @@ void UtilityAIAgent::evaluate_options() { //double delta) {
             highest_score = score;
             chosen_node_index = i;
             new_behaviour = behaviourNode;
+
+            // Todo: add to the behaviour node list.
         }
     }//endfor children
 
@@ -103,6 +114,16 @@ void UtilityAIAgent::set_current_behaviour( Node* new_behaviour ) {
 Node* UtilityAIAgent::get_current_behaviour() const {
     return _chosen_behaviour_node;
 }
+
+
+void UtilityAIAgent::set_num_behaviours_to_select( int num_behaviours_to_select ) {
+    _num_behaviours_to_select = num_behaviours_to_select;
+}
+
+int  UtilityAIAgent::get_num_behaviours_to_select() const {
+    return _num_behaviours_to_select;
+}
+    
 
 // Godot virtuals.
 /**

@@ -13,7 +13,7 @@ class UtilityAIActions : public UtilityAI {
 
 private:
     
-
+    //int _current_action_index;
     
 protected:
     static void _bind_methods();
@@ -38,13 +38,10 @@ public:
     void _physics_process(double delta);
 
     void _notification(int p_what);
-
+    */
     // Handling functions.
 
-    bool _change_to_state( String target_state_name );
-
-    void _update_current_state(double delta);
-    */
+    virtual bool start_action();
 };
 
 }

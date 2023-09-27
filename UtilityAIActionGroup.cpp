@@ -14,11 +14,10 @@ void UtilityAIActionGroup::_bind_methods() {
     ClassDB::bind_method(D_METHOD("get_action_execution_rule"), &UtilityAIActionGroup::get_action_execution_rule);
     ADD_PROPERTY(PropertyInfo(Variant::INT, "action_execution_rule", PROPERTY_HINT_ENUM, "Sequence:0,PickOneAtRandom:1"), "set_action_execution_rule","get_action_execution_rule");
     
-    /**
-    ClassDB::bind_method(D_METHOD("change_to_state", "target_state_name"), &UtilityAIActionGroup::_change_to_state);
+    ClassDB::bind_method(D_METHOD("set_current_action_index", "current_action_index"), &UtilityAIActionGroup::set_current_action_index);
+    ClassDB::bind_method(D_METHOD("get_current_action_index"), &UtilityAIActionGroup::get_current_action_index);
+    ADD_PROPERTY(PropertyInfo(Variant::INT, "current_action_index", PROPERTY_HINT_RANGE,"-0,256"), "set_current_action_index","get_current_action_index");
     
-    ClassDB::bind_method(D_METHOD("update_current_state", "delta"), &UtilityAIActionGroup::_update_current_state);
-    /**/
 }
 
 
@@ -35,7 +34,11 @@ UtilityAIActionGroup::~UtilityAIActionGroup() {
 
 // Handling functions.
 
-
+bool UtilityAIActionGroup::start_action() {
+    _action_execution_index = 0;
+    _current_action_index = 0;
+    return true;
+}
 
 // Getters and Setters.
 
@@ -46,6 +49,15 @@ void UtilityAIActionGroup::set_action_execution_rule( int action_execution_rule 
 int UtilityAIActionGroup::get_action_execution_rule() const {
     return _action_execution_rule;
 }
+
+void UtilityAIActionGroup::set_current_action_index( int current_action_index ) {
+    _current_action_index = current_action_index;
+}
+
+int  UtilityAIActionGroup::get_current_action_index() const {
+    return _current_action_index;
+}
+
 /**/
 
 // Godot virtuals.

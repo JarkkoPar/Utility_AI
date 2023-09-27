@@ -33,13 +33,11 @@ public:
     void _physics_process(double delta);
 
     void _notification(int p_what);
+    */
 
     // Handling functions.
 
-    bool _change_to_state( String target_state_name );
-
-    void _update_current_state(double delta);
-    */
+    virtual bool start_action() override;
 };
 
 }

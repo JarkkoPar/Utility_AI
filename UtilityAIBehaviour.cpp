@@ -22,6 +22,10 @@ void UtilityAIBehaviour::_bind_methods() {
     ClassDB::bind_method(D_METHOD("get_cooldown_seconds"), &UtilityAIBehaviour::get_cooldown_seconds);
     ADD_PROPERTY(PropertyInfo(Variant::FLOAT, "cooldown_seconds", PROPERTY_HINT_RANGE, "0.0,600.0,allow_greater"), "set_cooldown_seconds","get_cooldown_seconds");
     
+    ClassDB::bind_method(D_METHOD("set_current_action_index", "current_action_index"), &UtilityAIBehaviour::set_current_action_index);
+    ClassDB::bind_method(D_METHOD("get_current_action_index"), &UtilityAIBehaviour::get_current_action_index);
+    ADD_PROPERTY(PropertyInfo(Variant::INT, "current_action_index", PROPERTY_HINT_RANGE,"-0,256"), "set_current_action_index","get_current_action_index");
+    
     
     //ClassDB::bind_method(D_METHOD("evaluate"), &UtilityAIBehaviour::evaluate);
     /**
@@ -36,6 +40,7 @@ UtilityAIBehaviour::UtilityAIBehaviour() {
     _score = 0.0f;
     _cooldown_seconds = 0.0;
     _current_cooldown_seconds = 0.0;
+    _current_action_index = 0;
 }
 
 
@@ -64,6 +69,15 @@ void UtilityAIBehaviour::set_cooldown_seconds( double cooldown_seconds ) {
 double UtilityAIBehaviour::get_cooldown_seconds() const {
     return _cooldown_seconds;
 }
+
+void UtilityAIBehaviour::set_current_action_index( int current_action_index ) {
+    _current_action_index = current_action_index;
+}
+
+int  UtilityAIBehaviour::get_current_action_index() const {
+    return _current_action_index;
+}
+
 
 /**
 void UtilityAIBehaviour::set_update_method( int update_method ) {
@@ -151,6 +165,7 @@ double UtilityAIBehaviour::evaluate() { // UtilityAIAgent* agent, double delta) 
 
 void UtilityAIBehaviour::start_behaviour() {
     _current_cooldown_seconds = _cooldown_seconds;
+    _current_action_index = 0;
 }
 
 

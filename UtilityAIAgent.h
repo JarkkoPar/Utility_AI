@@ -5,6 +5,7 @@
 
 #include <godot_cpp/classes/node.hpp>
 
+#define UTILITYAIAGENT_MAX_TOP_SCORING_BEHAVIOURS 16
 
 namespace godot {
 
@@ -14,7 +15,9 @@ class UtilityAIAgent : public UtilityAI {
 private:
     
     Node* _chosen_behaviour_node;
-    int   _highest_scoring_behaviours_count;
+
+    int   _num_behaviours_to_select;
+    int   _top_scoring_behaviours[UTILITYAIAGENT_MAX_TOP_SCORING_BEHAVIOURS];
     
 protected:
     static void _bind_methods();
@@ -28,6 +31,9 @@ public:
     
     void set_current_behaviour( Node* new_behaviour );
     Node* get_current_behaviour() const;
+    
+    void set_num_behaviours_to_select( int num_behaviours_to_select );
+    int  get_num_behaviours_to_select() const;
     
     
     /**    

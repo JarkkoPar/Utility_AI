@@ -38,7 +38,9 @@ UtilityAIAction::~UtilityAIAction() {
 
 // Handling functions.
 
-
+bool UtilityAIAction::start_action() {
+    return true;
+}
 
 // Getters and Setters.
 /**

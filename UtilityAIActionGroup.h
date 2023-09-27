@@ -15,6 +15,8 @@ class UtilityAIActionGroup : public UtilityAIActions {
 private:
     int _action_execution_rule;
     int _action_execution_index;
+
+    int _current_action_index;
 protected:
     static void _bind_methods();
 
@@ -33,6 +35,10 @@ public:
         PickOneAtRandom=1
     };
 
+
+    void  set_current_action_index( int current_action_index );
+    int   get_current_action_index() const;
+
     /**
   
     // Godot virtuals.
@@ -41,10 +47,11 @@ public:
     void _physics_process(double delta);
 
     void _notification(int p_what);
+    */
 
     // Handling functions.
 
-    */
+    virtual bool start_action() override; 
 };
 
 }

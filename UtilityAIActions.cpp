@@ -21,7 +21,7 @@ void UtilityAIActions::_bind_methods() {
 // Constructor and destructor.
 
 UtilityAIActions::UtilityAIActions() {
-    //_is_active = true;
+    //_current_action_index = 0;
 }
 
 
@@ -30,7 +30,9 @@ UtilityAIActions::~UtilityAIActions() {
 
 // Handling functions.
 
-
+bool UtilityAIActions::start_action() {
+    return true;
+}
 
 // Getters and Setters.
 

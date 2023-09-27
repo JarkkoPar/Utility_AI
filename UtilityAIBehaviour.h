@@ -14,7 +14,9 @@ class UtilityAIBehaviour : public UtilityAI {
 private:
     double _cooldown_seconds;
     double _current_cooldown_seconds;
-    float _score;
+    float  _score;
+
+    int    _current_action_index;
     
 protected:
     static void _bind_methods();
@@ -34,6 +36,8 @@ public:
     void  set_cooldown_seconds( double cooldown_seconds );
     double get_cooldown_seconds() const;
 
+    void  set_current_action_index( int current_action_index );
+    int   get_current_action_index() const;
 
     /**/
     // Godot virtuals.
