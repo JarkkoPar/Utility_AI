@@ -13,15 +13,23 @@ using namespace godot;
 // Method binds.
 
 void UtilityAIBehaviour::_bind_methods() {
-    
-    ClassDB::bind_method(D_METHOD("set_score", "score"), &UtilityAIBehaviour::set_score);
-    ClassDB::bind_method(D_METHOD("get_score"), &UtilityAIBehaviour::get_score);
-    ADD_PROPERTY(PropertyInfo(Variant::FLOAT, "score", PROPERTY_HINT_RANGE,"-100.0,100.0"), "set_score","get_score");
+
+    ADD_SUBGROUP("Configuration","");
+
+    ClassDB::bind_method(D_METHOD("set_can_be_interrupted", "can_be_interrupted"), &UtilityAIBehaviour::set_can_be_interrupted);
+    ClassDB::bind_method(D_METHOD("get_can_be_interrupted"), &UtilityAIBehaviour::get_can_be_interrupted);
+    ADD_PROPERTY(PropertyInfo(Variant::BOOL, "can_be_interrupted", PROPERTY_HINT_NONE), "set_can_be_interrupted","get_can_be_interrupted");
     
     ClassDB::bind_method(D_METHOD("set_cooldown_seconds", "cooldown_seconds"), &UtilityAIBehaviour::set_cooldown_seconds);
     ClassDB::bind_method(D_METHOD("get_cooldown_seconds"), &UtilityAIBehaviour::get_cooldown_seconds);
     ADD_PROPERTY(PropertyInfo(Variant::FLOAT, "cooldown_seconds", PROPERTY_HINT_RANGE, "0.0,600.0,allow_greater"), "set_cooldown_seconds","get_cooldown_seconds");
-    
+
+    ADD_SUBGROUP("Debugging","");
+
+    ClassDB::bind_method(D_METHOD("set_score", "score"), &UtilityAIBehaviour::set_score);
+    ClassDB::bind_method(D_METHOD("get_score"), &UtilityAIBehaviour::get_score);
+    ADD_PROPERTY(PropertyInfo(Variant::FLOAT, "score", PROPERTY_HINT_RANGE,"-100.0,100.0"), "set_score","get_score");
+
     ClassDB::bind_method(D_METHOD("set_current_action_index", "current_action_index"), &UtilityAIBehaviour::set_current_action_index);
     ClassDB::bind_method(D_METHOD("get_current_action_index"), &UtilityAIBehaviour::get_current_action_index);
     ADD_PROPERTY(PropertyInfo(Variant::INT, "current_action_index", PROPERTY_HINT_RANGE,"-0,256"), "set_current_action_index","get_current_action_index");
@@ -41,6 +49,7 @@ UtilityAIBehaviour::UtilityAIBehaviour() {
     _cooldown_seconds = 0.0;
     _current_cooldown_seconds = 0.0;
     _current_action_index = 0;
+    _can_be_interrupted = false;
 }
 
 
@@ -53,6 +62,14 @@ UtilityAIBehaviour::~UtilityAIBehaviour() {
 
 
 // Getters and Setters.
+
+void  UtilityAIBehaviour::set_can_be_interrupted( bool can_be_interrupted ) {
+    _can_be_interrupted = can_be_interrupted;
+}
+
+bool  UtilityAIBehaviour::get_can_be_interrupted() const {
+    return _can_be_interrupted;
+}
 
 void UtilityAIBehaviour::set_score( float score ) {
     _score = score;
@@ -166,9 +183,10 @@ double UtilityAIBehaviour::evaluate() { // UtilityAIAgent* agent, double delta) 
 void UtilityAIBehaviour::start_behaviour() {
     _current_cooldown_seconds = _cooldown_seconds;
     _current_action_index = 0;
+    //WARN_PRINT("Behaviour started.");
 }
 
 
 void UtilityAIBehaviour::end_behaviour() {
-    
+    //WARN_PRINT("Behaviour ended.");
 }
