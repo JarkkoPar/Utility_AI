@@ -39,6 +39,7 @@ UtilityAIAgent::UtilityAIAgent() {
     _num_behaviours_to_select = 1;
     for( int i = 0; i < UTILITYAIAGENT_MAX_TOP_SCORING_BEHAVIOURS; ++i ) {
         _top_scoring_behaviours[i] = -1;
+        _top_scoring_behaviours_score[i] = 0.0;
     }
 }
 
@@ -54,6 +55,9 @@ void UtilityAIAgent::evaluate_options() { //double delta) {
 
     // Go through the behaviours and check which one seems
     // best to perform.
+    double score = 0.0;
+    int place_in_behaviour_list = 0;
+    int num_possible_behaviours = 0;
     int chosen_node_index = 0;
     float highest_score = -1.0f;
     UtilityAIBehaviour* new_behaviour = nullptr;
@@ -69,25 +73,54 @@ void UtilityAIAgent::evaluate_options() { //double delta) {
         if( sensorNode != nullptr ) {
             sensorNode->evaluate_sensor_value();
             sensorNode = nullptr;
+            continue;
         }
 
         // If it is a behaviour, handle it.
         UtilityAIBehaviour* behaviourNode = godot::Object::cast_to<UtilityAIBehaviour>(node);
         if( behaviourNode == nullptr ) continue;
 
-        float score = behaviourNode->evaluate();//this, delta);
-        if( i == 0 || score > highest_score ) {
-            highest_score = score;
-            chosen_node_index = i;
-            new_behaviour = behaviourNode;
+        score = behaviourNode->evaluate();//this, delta);
+        //if( i == 0 || score > highest_score ) {
+        //    highest_score = score;
+        //    chosen_node_index = i;
+        //    new_behaviour = behaviourNode;
 
-            // Todo: add to the behaviour node list.
+        // get place on the list.
+        for( int b = 0; b < UTILITYAIAGENT_MAX_TOP_SCORING_BEHAVIOURS; ++b ) {
+            if( score > _top_scoring_behaviours_score[b]) {
+                place_in_behaviour_list = b;
+                break;
+            }
         }
+
+        if( place_in_behaviour_list == UTILITYAIAGENT_MAX_TOP_SCORING_BEHAVIOURS-1 ) {
+            _top_scoring_behaviours[UTILITYAIAGENT_MAX_TOP_SCORING_BEHAVIOURS-1] = i;
+            _top_scoring_behaviours_score[UTILITYAIAGENT_MAX_TOP_SCORING_BEHAVIOURS-1] = score;
+            continue;
+        }
+
+        // Todo: add to the behaviour node list. And add to the correct place in the list.
+        for( int b = num_possible_behaviours; b > place_in_behaviour_list; --b ) {
+            _top_scoring_behaviours[b] = _top_scoring_behaviours[b-1];
+            _top_scoring_behaviours_score[b] = _top_scoring_behaviours_score[b-1];
+        }
+        _top_scoring_behaviours[0] = i;
+        _top_scoring_behaviours_score[0] = score;
+        if(num_possible_behaviours < UTILITYAIAGENT_MAX_TOP_SCORING_BEHAVIOURS-1 ) {
+            ++num_possible_behaviours;
+        }
+
     }//endfor children
 
-    if( new_behaviour == nullptr ) {
+    if( new_behaviour == nullptr || num_possible_behaviours < 1 ) {
         return; // No behaviour chosen.
     }
+
+    // Pick a random behaviour.
+    RandomNumberGenerator rnd;
+    int random_behaviour = rnd.randi_range(0, num_possible_behaviours);
+    new_behaviour = godot::Object::cast_to<UtilityAIBehaviour>(get_child(_top_scoring_behaviours[random_behaviour]));
 
     if( _chosen_behaviour_node != nullptr ) {
         ((UtilityAIBehaviour *)_chosen_behaviour_node)->end_behaviour();

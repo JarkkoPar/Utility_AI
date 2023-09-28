@@ -16,8 +16,9 @@ private:
     
     Node* _chosen_behaviour_node;
 
-    int   _num_behaviours_to_select;
-    int   _top_scoring_behaviours[UTILITYAIAGENT_MAX_TOP_SCORING_BEHAVIOURS];
+    int    _num_behaviours_to_select;
+    int    _top_scoring_behaviours[UTILITYAIAGENT_MAX_TOP_SCORING_BEHAVIOURS];
+    double _top_scoring_behaviours_score[UTILITYAIAGENT_MAX_TOP_SCORING_BEHAVIOURS];
     
 protected:
     static void _bind_methods();

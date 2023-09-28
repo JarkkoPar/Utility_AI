@@ -25,7 +25,8 @@ void UtilityAIActionGroup::_bind_methods() {
 
 UtilityAIActionGroup::UtilityAIActionGroup() {
     _action_execution_rule = UtilityAIActionGroupExecutionRule::Sequence;
-    _action_execution_index = 0;
+    //_action_execution_index = 0;
+    _current_action_index = 0;
 }
 
 
@@ -35,7 +36,8 @@ UtilityAIActionGroup::~UtilityAIActionGroup() {
 // Handling functions.
 
 bool UtilityAIActionGroup::start_action() {
-    _action_execution_index = 0;
+    if( get_child_count() <= 0 ) return false;
+    //_action_execution_index = 0;
     _current_action_index = 0;
     return true;
 }

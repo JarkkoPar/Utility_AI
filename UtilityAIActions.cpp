@@ -10,10 +10,6 @@ using namespace godot;
 // Method binds.
 
 void UtilityAIActions::_bind_methods() {
-    //ClassDB::bind_method(D_METHOD("set_is_active", "is_active"), &UtilityAIActions::set_is_active);
-    //ClassDB::bind_method(D_METHOD("get_is_active"), &UtilityAIActions::get_is_active);
-    //ADD_PROPERTY(PropertyInfo(Variant::BOOL, "is_active", PROPERTY_HINT_NONE), "set_is_active","get_is_active");
-    
     
 }
 
@@ -21,11 +17,12 @@ void UtilityAIActions::_bind_methods() {
 // Constructor and destructor.
 
 UtilityAIActions::UtilityAIActions() {
-    //_current_action_index = 0;
+    
 }
 
 
 UtilityAIActions::~UtilityAIActions() {
+
 }
 
 // Handling functions.
@@ -36,7 +33,7 @@ bool UtilityAIActions::start_action() {
 
 // Getters and Setters.
 
-/**
+
 
 
 // Godot virtuals.

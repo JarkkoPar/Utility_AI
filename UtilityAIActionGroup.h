@@ -14,7 +14,7 @@ class UtilityAIActionGroup : public UtilityAIActions {
 
 private:
     int _action_execution_rule;
-    int _action_execution_index;
+    //int _action_execution_index;
 
     int _current_action_index;
 protected:

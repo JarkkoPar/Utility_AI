@@ -13,7 +13,7 @@ class UtilityAIActions : public UtilityAI {
 
 private:
     
-    //int _current_action_index;
+    
     
 protected:
     static void _bind_methods();
@@ -25,9 +25,7 @@ public:
     
     // Getters and setters for attributes.
     
-    //Node* get_next_action_to_execute();
-
-    //bool execute_action();
+    
 
  
     /**
@@ -39,6 +37,7 @@ public:
 
     void _notification(int p_what);
     */
+    
     // Handling functions.
 
     virtual bool start_action();
