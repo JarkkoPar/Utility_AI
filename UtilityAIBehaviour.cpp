@@ -34,11 +34,6 @@ void UtilityAIBehaviour::_bind_methods() {
     ClassDB::bind_method(D_METHOD("get_current_action_index"), &UtilityAIBehaviour::get_current_action_index);
     ADD_PROPERTY(PropertyInfo(Variant::INT, "current_action_index", PROPERTY_HINT_RANGE,"-0,256"), "set_current_action_index","get_current_action_index");
     
-    
-    //ClassDB::bind_method(D_METHOD("evaluate"), &UtilityAIBehaviour::evaluate);
-    /**
-    ClassDB::bind_method(D_METHOD("update_current_state", "delta"), &UtilityAIBehaviour::_update_current_state);
-    /**/
 }
 
 
@@ -97,15 +92,6 @@ int  UtilityAIBehaviour::get_current_action_index() const {
 }
 
 
-/**
-void UtilityAIBehaviour::set_update_method( int update_method ) {
-    _update_method = update_method;
-}
-
-int UtilityAIBehaviour::get_update_method() const {
-    return _update_method;
-}
-/**/
 
 // Godot virtuals.
 
@@ -128,39 +114,25 @@ void UtilityAIBehaviour::_ready() {
     
 }
 
-/*void UtilityAIBehaviour::_process(double delta ) {
-    //if( _update_method != UtilityAIBehaviour_UPDATE_METHOD_PROCESS ) return;
-    if( !_is_active ) return;
+void UtilityAIBehaviour::_process(double delta ) {
+    if( !get_is_active() ) return;
     if( Engine::get_singleton()->is_editor_hint() ) return;
-    if( _current_state == nullptr ) return;
-
-    _current_state->_state_process(delta);
-    //_current_state->_state_execute_Behaviours(delta);
+    if( _current_cooldown_seconds > 0.0 ) {
+        _current_cooldown_seconds -= delta;
+        if(_current_cooldown_seconds < 0.0 ) _current_cooldown_seconds = 0.0;
+    }
 }
 
-void UtilityAIBehaviour::_physics_process(double delta ) {
-    //if( _update_method != UtilityAIBehaviour_UPDATE_METHOD_PHYSICS_PROCESS ) return;
-    if( !_is_active ) return;
-    if( Engine::get_singleton()->is_editor_hint() ) return;
-    if( _current_state == nullptr ) return;
-    _current_state->_state_physics_process(delta);
-    //_current_state->_state_execute_Behaviours(delta);
-}
-
-/**/
 
 
 // Handling functions.
 
-double UtilityAIBehaviour::evaluate() { // UtilityAIAgent* agent, double delta) {
+double UtilityAIBehaviour::evaluate() { 
     if( !get_is_active() ) return 0.0;
     if( Engine::get_singleton()->is_editor_hint() ) return 0.0;
 
     // If the behaviour is on cooldown, it cannot be chosen.
-    //if( _current_cooldown_seconds > 0.0 ) {
-    //    _current_cooldown_seconds -= delta;
-    //    return 0.0;
-    //}
+    if( _current_cooldown_seconds > 0.0 ) return 0.0;
 
     _score = 0.0;
 
@@ -170,7 +142,7 @@ double UtilityAIBehaviour::evaluate() { // UtilityAIAgent* agent, double delta) 
         UtilityAIConsiderations* considerationNode = godot::Object::cast_to<UtilityAIConsiderations>(get_child(i));
         if( considerationNode == nullptr ) continue;
         if( !considerationNode->get_is_active() ) continue;
-        _score += considerationNode->evaluate();//agent, delta);
+        _score += considerationNode->evaluate();
         if( considerationNode->get_has_vetoed()){
             _score = 0.0;
             return 0.0; // The consideration vetoed this behaviour.
@@ -185,13 +157,13 @@ void UtilityAIBehaviour::start_behaviour() {
     _current_cooldown_seconds = _cooldown_seconds;
     _current_action_index = 0;
     _current_action_node = nullptr;
-    //WARN_PRINT("Behaviour started.");
-    //_current_action_node = update_behaviour();
+    //WARN_PRINT("Behaviour started. " + get_name());
+    _current_action_node = update_behaviour();
 }
 
 
 void UtilityAIBehaviour::end_behaviour() {
-    //WARN_PRINT("Behaviour ended.");
+    //WARN_PRINT("Behaviour ended. " + get_name());
     _current_action_index = 0;
     _current_action_node = nullptr;
     
@@ -199,57 +171,57 @@ void UtilityAIBehaviour::end_behaviour() {
 
 
 UtilityAIAction* UtilityAIBehaviour::update_behaviour() {
-    //WARN_PRINT("AIBehaviour::update_behaviour(): stepping actions.");
-    return (UtilityAIAction*) step_actions();
+    //WARN_PRINT("AIBehaviour::update_behaviour(): stepping actions. " + get_name());
+    return godot::Object::cast_to<UtilityAIAction>(step_actions());
 }
 
 
 Node* UtilityAIBehaviour::step_actions() {
-    //WARN_PRINT("UtilityAIBehaviour::step_actions()");
-    if( _current_action_node != nullptr ) {
-        //WARN_PRINT("UtilityAIBehaviour::step_actions(): Has a current action");
-        if( !_current_action_node->get_is_finished() ) return _current_action_node;
-        //WARN_PRINT("UtilityAIBehaviour::step_actions(): Action finished, ending it...");
-        // The action has finished.
-        _current_action_node->end_action();
-        //WARN_PRINT("UtilityAIBehaviour::step_actions(): Done ending action.");
-        _current_action_node = nullptr;
-    }//endif current action node valid
+    //WARN_PRINT("UtilityAIBehaviour::step_actions() " + get_name());
+    if( _current_action_index >= get_child_count()) return nullptr;
 
-    //WARN_PRINT("UtilityAIBehaviour::step_actions(): Checking if the current index is an action group.");
-    // Check if the current index has an action group and if that group has a follow-up action.
+    // Check if the node is an action.
     Node* current_node = get_child(_current_action_index);
-    UtilityAIActionGroup* current_action_group = godot::Object::cast_to<UtilityAIActionGroup>(current_node);
-    if( current_action_group != nullptr ) {
-        //WARN_PRINT("UtilityAIBehaviour::step_actions(): Yes, current action is an action group. Stepping...");
-        _current_action_node = godot::Object::cast_to<UtilityAIAction>(current_action_group->step_actions());
-        //if( _current_action_node == nullptr ) WARN_PRINT("UtilityAIBehaviour::step_actions(): group sent back a NULL action pointer.");
-        if( _current_action_node != nullptr ) return _current_action_node;
-        //WARN_PRINT("UtilityAIBehaviour::step_actions(): Action has completed, endng action for the action group.");
-        current_action_group->end_action();
-        //WARN_PRINT("UtilityAIBehaviour::step_actions(): Action group action ended.");
-    }//endif current node index is action group
+    UtilityAIAction* current_action = godot::Object::cast_to<UtilityAIAction>(current_node);
+    if( current_action != nullptr ) {
+        if( !current_action->get_is_finished() ) return current_node;
+        current_action->end_action();
+    } else {
+
+        //WARN_PRINT("UtilityAIBehaviour::step_actions(): Checking if the current index is an action group.");
+        // Check if the current index has an action group and if that group has a follow-up action.
+        UtilityAIActionGroup* current_action_group = godot::Object::cast_to<UtilityAIActionGroup>(current_node);
+        if( current_action_group != nullptr ) {
+            //WARN_PRINT("UtilityAIBehaviour::step_actions(): Yes, current action is an action group. Stepping...");
+            _current_action_node = godot::Object::cast_to<UtilityAIAction>(current_action_group->step_actions());
+            //if( _current_action_node == nullptr ) WARN_PRINT("UtilityAIBehaviour::step_actions(): group sent back a NULL action pointer.");
+            if( _current_action_node != nullptr ) return _current_action_node;
+            //WARN_PRINT("UtilityAIBehaviour::step_actions(): Action has completed, ending action for the action group.");
+            current_action_group->end_action();
+            //WARN_PRINT("UtilityAIBehaviour::step_actions(): Action group action ended.");
+        }//endif current node index is action group
+    }//endif current node index is an action
     //WARN_PRINT("UtilityAIBehaviour::step_actions(): Finding a new action...");       
     
     ++_current_action_index;
     while( _current_action_index < get_child_count() ) {
-        
-        if( UtilityAIAction* action_node = godot::Object::cast_to<UtilityAIAction>(get_child(_current_action_index)) ) {
+        current_node = get_child(_current_action_index);
+        if( UtilityAIAction* action_node = godot::Object::cast_to<UtilityAIAction>(current_node) ) {
             //WARN_PRINT("UtilityAIBehaviour::step_actions(): Found an action, starting the action...");
             _current_action_node = action_node;
             _current_action_node->start_action();
             //WARN_PRINT("UtilityAIBehaviour::step_actions(): Done, returning action node.");
             return _current_action_node;
-        } else if(UtilityAIActionGroup* action_group = godot::Object::cast_to<UtilityAIActionGroup>(get_child(_current_action_index)) ) {
-            //WARN_PRINT("UtilityAIBehaviour::step_actions(): Found an action group, starting the action group.");
+        } else if( UtilityAIActionGroup* action_group = godot::Object::cast_to<UtilityAIActionGroup>(current_node) ) {
+            //WARN_PRINT("UtilityAIBehaviour::step_actions(): Found an action group, starting the action group." + get_name());
             action_group->start_action();
             //WARN_PRINT("UtilityAIBehaviour::step_actions(): Stepping it to find the sub action...");    
             _current_action_node = godot::Object::cast_to<UtilityAIAction>(action_group->step_actions());
             //if( _current_action_node == nullptr ) {
-            //    WARN_PRINT("UtilityAIBehaviour::step_actions(): Stepping function returned NULL action pointer.");    
+                //WARN_PRINT("UtilityAIBehaviour::step_actions(): Stepping function returned NULL action pointer.");    
             //}
             if( _current_action_node != nullptr ) {
-                //WARN_PRINT("UtilityAIBehaviour::step_actions(): Stepping function returned a valid action pointer.");    
+                //WARN_PRINT("UtilityAIBehaviour::step_actions(): Stepping function returned a valid action pointer." + _current_action_node->get_name());    
                 _current_action_node->start_action();
                 return _current_action_node;
             }
@@ -258,7 +230,7 @@ Node* UtilityAIBehaviour::step_actions() {
         
     }//endwhile action index in bounds
 
-    //WARN_PRINT("UtilityAIBehaviour::step_actions(): NO ACTION FOUND! ");
+    //WARN_PRINT("UtilityAIBehaviour::step_actions(): NO ACTION FOUND! " + get_name());
     return nullptr;
 }
 

@@ -25,6 +25,8 @@ private:
     godot::String _top_scoring_behaviour_name;
     godot::String _current_behaviour_name;
     
+    double _thinking_delay_in_seconds;
+    double _thinking_delay_in_seconds_current_timer;
 protected:
     static void _bind_methods();
 
@@ -35,6 +37,9 @@ public:
     
     // Getters and setters for attributes.
     
+    void set_thinking_delay_in_seconds( double thinking_delay_in_seconds );
+    double get_thinking_delay_in_seconds() const;
+
     void set_current_behaviour_node( Node* new_behaviour_node );
     Node* get_current_behaviour_node() const;
 
@@ -63,7 +68,7 @@ public:
     */
     // Handling functions.
 
-    void evaluate_options();
+    void evaluate_options(double delta);
 
     void update_current_behaviour();
 };

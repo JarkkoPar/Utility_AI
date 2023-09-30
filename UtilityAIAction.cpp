@@ -40,10 +40,12 @@ UtilityAIAction::~UtilityAIAction() {
 
 
 bool UtilityAIAction::start_action() {
+    set_is_finished(false);
     return true;
 }
 
 bool UtilityAIAction::end_action() {
+    set_is_finished(false);
     return true;
 }
 

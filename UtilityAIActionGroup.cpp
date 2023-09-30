@@ -49,16 +49,24 @@ bool UtilityAIActionGroup::end_action() {
 }
 
 Node* UtilityAIActionGroup::step_actions() {
+    if( _current_action_index >= get_child_count () ) return nullptr;
+
+    //WARN_PRINT("UtilityAIActionGroup::step_actions(): Stepping action group " + get_name());
     Node* current_node = get_child(_current_action_index);
     UtilityAIAction* current_action_node = godot::Object::cast_to<UtilityAIAction>(current_node);
     if( current_action_node != nullptr ) {
+        //WARN_PRINT("UtilityAIActionGroup::step_actions(): Current action in group " + get_name() + " is not null, and is named " + current_action_node->get_name());
+
         if( !current_action_node->get_is_finished() ) return current_action_node;
         // The action has finished.
         current_action_node->end_action();
         current_action_node = nullptr;
+        //WARN_PRINT("UtilityAIActionGroup::step_actions(): The action just finished.");
     } else {
         UtilityAIActionGroup* current_action_group = godot::Object::cast_to<UtilityAIActionGroup>(current_node);
         if( current_action_group != nullptr ) {
+            //WARN_PRINT("UtilityAIActionGroup::step_actions(): Stepping action group " + get_name() + " and proceeding to step a subgroup " + current_action_group->get_name());
+    
             current_action_node = godot::Object::cast_to<UtilityAIAction>(current_action_group->step_actions());
             if( current_action_node != nullptr ) return current_action_node;
             current_action_group->end_action();
@@ -74,7 +82,7 @@ Node* UtilityAIActionGroup::step_actions() {
             return current_action_node;
         } else if(UtilityAIActionGroup* action_group = godot::Object::cast_to<UtilityAIActionGroup>(get_child(_current_action_index)) ) {
             action_group->start_action();
-            current_action_node = (UtilityAIAction*)action_group->step_actions();
+            current_action_node = godot::Object::cast_to<UtilityAIAction>(action_group->step_actions());
             if( current_action_node != nullptr ) {
                 current_action_node->start_action();
                 return current_action_node;
