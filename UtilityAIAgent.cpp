@@ -16,7 +16,12 @@ void UtilityAIAgent::_bind_methods() {
     ClassDB::bind_method(D_METHOD("set_current_behaviour_node"), &UtilityAIAgent::set_current_behaviour_node);
     ClassDB::bind_method(D_METHOD("get_current_behaviour_node"), &UtilityAIAgent::get_current_behaviour_node);
 
+    ClassDB::bind_method(D_METHOD("set_current_action_node"), &UtilityAIAgent::set_current_action_node);
+    ClassDB::bind_method(D_METHOD("get_current_action_node"), &UtilityAIAgent::get_current_action_node);
+
+
     ClassDB::bind_method(D_METHOD("evaluate_options"), &UtilityAIAgent::evaluate_options);
+    ClassDB::bind_method(D_METHOD("update_current_behaviour"), &UtilityAIAgent::update_current_behaviour);
     
     //ClassDB::bind_method(D_METHOD("update_current_state", "delta"), &UtilityAIAgent::_update_current_state);
     /**/
@@ -58,11 +63,14 @@ UtilityAIAgent::UtilityAIAgent() {
     }
     _top_scoring_behaviour_name = "";
     _current_behaviour_index = 0;
+
+    _current_action_node = nullptr;
 }
 
 
 UtilityAIAgent::~UtilityAIAgent() {
     _current_behaviour_node = nullptr;
+    _current_action_node = nullptr;
 }
 
 // Handling functions.
@@ -184,7 +192,7 @@ void UtilityAIAgent::evaluate_options() { //double delta) {
     }
     
         
-    WARN_PRINT("evaluate_options(): random behaviour " + godot::String(Variant(_current_behaviour_index)));
+    //WARN_PRINT("evaluate_options(): random behaviour " + godot::String(Variant(_current_behaviour_index)));
     new_behaviour = godot::Object::cast_to<UtilityAIBehaviour>(get_child(_current_behaviour_index));
     ERR_FAIL_COND_MSG( new_behaviour == nullptr, "evaluate_options(): Error, new_behaviour is nullptr.");
 
@@ -198,6 +206,22 @@ void UtilityAIAgent::evaluate_options() { //double delta) {
     _current_behaviour_node = new_behaviour;
     emit_signal("behaviour_changed", _current_behaviour_node);
 }
+
+
+void UtilityAIAgent::update_current_behaviour() {
+    if( _current_behaviour_node == nullptr ) return;
+    //WARN_PRINT("Update behaviour");
+    _current_action_node = ((UtilityAIBehaviour *)_current_behaviour_node)->update_behaviour();
+    if( _current_action_node == nullptr ) {
+        //WARN_PRINT("Update behaviour: No more actions, ending behaviour.");
+        ((UtilityAIBehaviour *)_current_behaviour_node)->end_behaviour();
+        //WARN_PRINT("Update behaviour: Behaviour ended");
+        _current_behaviour_node = nullptr;
+    }
+    //WARN_PRINT("Update behaviour DONE");
+}
+
+
 
 // Getters and Setters.
 
@@ -222,6 +246,14 @@ void UtilityAIAgent::set_current_behaviour_node( Node* new_behaviour ) {
 
 Node* UtilityAIAgent::get_current_behaviour_node() const {
     return _current_behaviour_node;
+}
+
+void  UtilityAIAgent::set_current_action_node( Node* new_action_node ) {
+    _current_action_node = new_action_node;
+}
+
+Node* UtilityAIAgent::get_current_action_node() const {
+    return _current_action_node;
 }
 
 void UtilityAIAgent::set_current_behaviour_index( int current_behaviour_index ) {

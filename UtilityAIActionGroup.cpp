@@ -1,4 +1,5 @@
 #include "UtilityAIActionGroup.h"
+#include "UtilityAIAction.h"
 
 #include <godot_cpp/core/class_db.hpp>
 #include <godot_cpp/classes/engine.hpp>
@@ -40,6 +41,49 @@ bool UtilityAIActionGroup::start_action() {
     //_action_execution_index = 0;
     _current_action_index = 0;
     return true;
+}
+
+
+bool UtilityAIActionGroup::end_action() {
+    return true;
+}
+
+Node* UtilityAIActionGroup::step_actions() {
+    Node* current_node = get_child(_current_action_index);
+    UtilityAIAction* current_action_node = godot::Object::cast_to<UtilityAIAction>(current_node);
+    if( current_action_node != nullptr ) {
+        if( !current_action_node->get_is_finished() ) return current_action_node;
+        // The action has finished.
+        current_action_node->end_action();
+        current_action_node = nullptr;
+    } else {
+        UtilityAIActionGroup* current_action_group = godot::Object::cast_to<UtilityAIActionGroup>(current_node);
+        if( current_action_group != nullptr ) {
+            current_action_node = godot::Object::cast_to<UtilityAIAction>(current_action_group->step_actions());
+            if( current_action_node != nullptr ) return current_action_node;
+            current_action_group->end_action();
+        }
+    }//endif current action node valid
+    
+
+    ++_current_action_index;
+    while( _current_action_index < get_child_count() ) {
+        
+        if( current_action_node = godot::Object::cast_to<UtilityAIAction>(get_child(_current_action_index)) ) {
+            current_action_node->start_action();
+            return current_action_node;
+        } else if(UtilityAIActionGroup* action_group = godot::Object::cast_to<UtilityAIActionGroup>(get_child(_current_action_index)) ) {
+            action_group->start_action();
+            current_action_node = (UtilityAIAction*)action_group->step_actions();
+            if( current_action_node != nullptr ) {
+                current_action_node->start_action();
+                return current_action_node;
+            }
+        }// endif is action or action_group
+        ++_current_action_index;
+    }//endwhile action index in bounds
+
+    return nullptr;
 }
 
 // Getters and Setters.

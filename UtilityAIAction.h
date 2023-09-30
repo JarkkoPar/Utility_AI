@@ -38,6 +38,9 @@ public:
     // Handling functions.
 
     virtual bool start_action() override;
+    virtual bool end_action() override;
+    virtual Node* step_actions() override;
+
 };
 
 }

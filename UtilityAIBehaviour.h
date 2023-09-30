@@ -5,6 +5,10 @@
 #include "UtilityAIAgent.h"
 #include <godot_cpp/classes/node.hpp>
 
+#include "UtilityAIAction.h"
+#include "UtilityAIActionGroup.h"
+
+
 
 namespace godot {
 
@@ -17,6 +21,8 @@ private:
     float  _score;
 
     int    _current_action_index;
+
+    UtilityAIAction*  _current_action_node;
     
     bool   _can_be_interrupted;
 
@@ -54,9 +60,12 @@ public:
 
     // Handling functions.
 
-    double evaluate();//UtilityAIAgent* agent, double delta);
+    double evaluate();
     void  start_behaviour();
     void  end_behaviour();
+    UtilityAIAction* update_behaviour();
+
+    Node* step_actions();
 };
 
 }

@@ -17,6 +17,7 @@ private:
     //int _action_execution_index;
 
     int _current_action_index;
+    
 protected:
     static void _bind_methods();
 
@@ -52,6 +53,8 @@ public:
     // Handling functions.
 
     virtual bool start_action() override; 
+    virtual bool end_action() override;
+    virtual Node* step_actions() override;
 };
 
 }

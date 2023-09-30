@@ -17,6 +17,8 @@ private:
     int   _current_behaviour_index;
     Node* _current_behaviour_node;
 
+    Node* _current_action_node;
+
     int    _num_behaviours_to_select;
     int    _top_scoring_behaviours[UTILITYAIAGENT_MAX_TOP_SCORING_BEHAVIOURS];
     double _top_scoring_behaviours_score[UTILITYAIAGENT_MAX_TOP_SCORING_BEHAVIOURS];
@@ -48,6 +50,9 @@ public:
     void set_top_scoring_behaviour_name( godot::String top_scoring_behaviour_name );
     godot::String get_top_scoring_behaviour_name() const;
 
+    void set_current_action_node( Node* new_action_node );
+    Node* get_current_action_node() const;
+
     /**    
     // Godot virtuals.
     void _ready();
@@ -58,7 +63,9 @@ public:
     */
     // Handling functions.
 
-    void evaluate_options();//double delta);
+    void evaluate_options();
+
+    void update_current_behaviour();
 };
 
 }

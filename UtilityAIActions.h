@@ -13,7 +13,7 @@ class UtilityAIActions : public UtilityAI {
 
 private:
     
-    
+    bool _is_finished;
     
 protected:
     static void _bind_methods();
@@ -25,7 +25,8 @@ public:
     
     // Getters and setters for attributes.
     
-    
+    void set_is_finished( bool is_finished );
+    bool get_is_finished() const;
 
  
     /**
@@ -39,8 +40,10 @@ public:
     */
     
     // Handling functions.
+    virtual Node* step_actions();
 
     virtual bool start_action();
+    virtual bool end_action();
 };
 
 }

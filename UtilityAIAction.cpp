@@ -38,9 +38,23 @@ UtilityAIAction::~UtilityAIAction() {
 
 // Handling functions.
 
+
 bool UtilityAIAction::start_action() {
     return true;
 }
+
+bool UtilityAIAction::end_action() {
+    return true;
+}
+
+Node* UtilityAIAction::step_actions() {
+    if( get_is_finished() ) {
+        set_is_finished(false);
+        return nullptr;
+    }
+    return this;
+}
+
 
 // Getters and Setters.
 /**
