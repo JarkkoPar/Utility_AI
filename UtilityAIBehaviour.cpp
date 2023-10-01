@@ -208,7 +208,7 @@ Node* UtilityAIBehaviour::step_actions() {
         current_node = get_child(_current_action_index);
         if( UtilityAIAction* action_node = godot::Object::cast_to<UtilityAIAction>(current_node) ) {
             //WARN_PRINT("UtilityAIBehaviour::step_actions(): Found an action, starting the action...");
-            if( _current_action_node->get_is_active() ) {
+            if( action_node->get_is_active() ) {
                 _current_action_node = action_node;
                 _current_action_node->start_action();
                 //WARN_PRINT("UtilityAIBehaviour::step_actions(): Done, returning action node.");
