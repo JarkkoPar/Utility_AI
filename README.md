@@ -11,3 +11,12 @@ A Utility AI implementation for the Godot Engine using gdextension.
 * *UtilityAISensorGroup* Several sensors can be grouped for more high-level sensor input to the considerations.
 * *UtilityAIAction* A behaviour, if selected, will run any actions attached to it.
 * *UtilityAIActionGroup* Groups can help organize how a behaviour will run the actions attached to it.
+
+## How to use the nodes
+
+Start by adding a UtilityAIAgent to your scene. Next you can add the Sensors as the childs of the AI agent node. And then add the Behaviours. It is expected that any sensors are before behaviours. 
+
+Then add considerations to the Behaviours you have added. And finally the Actions. 
+
+
+
