@@ -10,19 +10,12 @@ using namespace godot;
 // Method binds.
 
 void UtilityAIAction::_bind_methods() {
-    /*ClassDB::bind_method(D_METHOD("set_is_active", "is_active"), &UtilityAIAction::set_is_active);
-    ClassDB::bind_method(D_METHOD("get_is_active"), &UtilityAIAction::get_is_active);
-    ADD_PROPERTY(PropertyInfo(Variant::BOOL, "is_active", PROPERTY_HINT_NONE), "set_is_active","get_is_active");
     
-    //ClassDB::bind_method(D_METHOD("set_update_method", "update_method"), &UtilityAIAction::set_update_method);
-    //ClassDB::bind_method(D_METHOD("get_update_method"), &UtilityAIAction::get_update_method);
-    //ADD_PROPERTY(PropertyInfo(Variant::INT, "update_method", PROPERTY_HINT_ENUM, "Process:0,Physics process:1,Manual:2"), "set_update_method","get_update_method");
+    ClassDB::bind_method(D_METHOD("set_action_id", "action_id"), &UtilityAIAction::set_action_id);
+    ClassDB::bind_method(D_METHOD("get_action_id"), &UtilityAIAction::get_action_id);
+    ADD_PROPERTY(PropertyInfo(Variant::INT, "action_id", PROPERTY_HINT_NONE), "set_action_id","get_action_id");
     
 
-    ClassDB::bind_method(D_METHOD("change_to_state", "target_state_name"), &UtilityAIAction::_change_to_state);
-    
-    ClassDB::bind_method(D_METHOD("update_current_state", "delta"), &UtilityAIAction::_update_current_state);
-    /**/
 }
 
 
