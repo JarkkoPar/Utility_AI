@@ -13,7 +13,7 @@ class UtilityAIAction : public UtilityAIActions {
     GDCLASS(UtilityAIAction, UtilityAIActions)
 
 private:
-    
+    int _action_id; 
     
 protected:
     static void _bind_methods();
@@ -24,6 +24,10 @@ public:
     
     
     // Getters and setters for attributes.
+
+    void set_action_id( int action_id );
+    int  get_action_id() const;
+
     /**
 
         

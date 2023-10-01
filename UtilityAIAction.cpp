@@ -29,7 +29,7 @@ void UtilityAIAction::_bind_methods() {
 // Constructor and destructor.
 
 UtilityAIAction::UtilityAIAction() {
-    
+    _action_id = 0;
 }
 
 
@@ -59,6 +59,16 @@ Node* UtilityAIAction::step_actions() {
 
 
 // Getters and Setters.
+
+void UtilityAIAction::set_action_id( int action_id ) {
+    _action_id = action_id;
+}
+
+int  UtilityAIAction::get_action_id() const {
+    return _action_id;
+}
+
+
 /**
 void UtilityAIAction::set_is_active( bool is_active ) {
     _is_active = is_active;
