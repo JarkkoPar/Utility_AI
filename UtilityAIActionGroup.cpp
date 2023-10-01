@@ -78,14 +78,18 @@ Node* UtilityAIActionGroup::step_actions() {
     while( _current_action_index < get_child_count() ) {
         
         if( current_action_node = godot::Object::cast_to<UtilityAIAction>(get_child(_current_action_index)) ) {
-            current_action_node->start_action();
-            return current_action_node;
-        } else if(UtilityAIActionGroup* action_group = godot::Object::cast_to<UtilityAIActionGroup>(get_child(_current_action_index)) ) {
-            action_group->start_action();
-            current_action_node = godot::Object::cast_to<UtilityAIAction>(action_group->step_actions());
-            if( current_action_node != nullptr ) {
+            if( current_action_node->get_is_active() ) {
                 current_action_node->start_action();
                 return current_action_node;
+            }
+        } else if(UtilityAIActionGroup* action_group = godot::Object::cast_to<UtilityAIActionGroup>(get_child(_current_action_index)) ) {
+            if( action_group->get_is_active() ) {
+                action_group->start_action();
+                current_action_node = godot::Object::cast_to<UtilityAIAction>(action_group->step_actions());
+                if( current_action_node != nullptr ) {
+                    current_action_node->start_action();
+                    return current_action_node;
+                }
             }
         }// endif is action or action_group
         ++_current_action_index;

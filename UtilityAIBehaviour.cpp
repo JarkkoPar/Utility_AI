@@ -208,23 +208,27 @@ Node* UtilityAIBehaviour::step_actions() {
         current_node = get_child(_current_action_index);
         if( UtilityAIAction* action_node = godot::Object::cast_to<UtilityAIAction>(current_node) ) {
             //WARN_PRINT("UtilityAIBehaviour::step_actions(): Found an action, starting the action...");
-            _current_action_node = action_node;
-            _current_action_node->start_action();
-            //WARN_PRINT("UtilityAIBehaviour::step_actions(): Done, returning action node.");
-            return _current_action_node;
-        } else if( UtilityAIActionGroup* action_group = godot::Object::cast_to<UtilityAIActionGroup>(current_node) ) {
-            //WARN_PRINT("UtilityAIBehaviour::step_actions(): Found an action group, starting the action group." + get_name());
-            action_group->start_action();
-            //WARN_PRINT("UtilityAIBehaviour::step_actions(): Stepping it to find the sub action...");    
-            _current_action_node = godot::Object::cast_to<UtilityAIAction>(action_group->step_actions());
-            //if( _current_action_node == nullptr ) {
-                //WARN_PRINT("UtilityAIBehaviour::step_actions(): Stepping function returned NULL action pointer.");    
-            //}
-            if( _current_action_node != nullptr ) {
-                //WARN_PRINT("UtilityAIBehaviour::step_actions(): Stepping function returned a valid action pointer." + _current_action_node->get_name());    
+            if( _current_action_node->get_is_active() ) {
+                _current_action_node = action_node;
                 _current_action_node->start_action();
+                //WARN_PRINT("UtilityAIBehaviour::step_actions(): Done, returning action node.");
                 return _current_action_node;
-            }
+            }//endif action is active
+        } else if( UtilityAIActionGroup* action_group = godot::Object::cast_to<UtilityAIActionGroup>(current_node) ) {
+            if( action_group->get_is_active() ) {
+                //WARN_PRINT("UtilityAIBehaviour::step_actions(): Found an action group, starting the action group." + get_name());
+                action_group->start_action();
+                //WARN_PRINT("UtilityAIBehaviour::step_actions(): Stepping it to find the sub action...");    
+                _current_action_node = godot::Object::cast_to<UtilityAIAction>(action_group->step_actions());
+                //if( _current_action_node == nullptr ) {
+                    //WARN_PRINT("UtilityAIBehaviour::step_actions(): Stepping function returned NULL action pointer.");    
+                //}
+                if( _current_action_node != nullptr ) {
+                    //WARN_PRINT("UtilityAIBehaviour::step_actions(): Stepping function returned a valid action pointer." + _current_action_node->get_name());    
+                    _current_action_node->start_action();
+                    return _current_action_node;
+                }
+            }//endif action group is active            
         }// endif is action or action_group
         ++_current_action_index;
         

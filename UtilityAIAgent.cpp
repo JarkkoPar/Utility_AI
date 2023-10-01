@@ -124,7 +124,9 @@ void UtilityAIAgent::evaluate_options(double delta) { //double delta) {
         // If it is a sensor, do an evaluation to update any groups.
         UtilityAISensors* sensorNode = godot::Object::cast_to<UtilityAISensors>(node);
         if( sensorNode != nullptr ) {
-            sensorNode->evaluate_sensor_value();
+            if( sensorNode->get_is_active() ) {
+                sensorNode->evaluate_sensor_value();
+            }
             sensorNode = nullptr;
             continue;
         }
@@ -132,6 +134,7 @@ void UtilityAIAgent::evaluate_options(double delta) { //double delta) {
         // If it is a behaviour, handle it.
         UtilityAIBehaviour* behaviourNode = godot::Object::cast_to<UtilityAIBehaviour>(node);
         if( behaviourNode == nullptr ) continue;
+        if( !behaviourNode->get_is_active()) continue;
 
         score = behaviourNode->evaluate();
 
