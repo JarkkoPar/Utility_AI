@@ -21,3 +21,17 @@ android.debug.x86_64 = "res://bin/libutilityai.android.template_debug.x86_64.so"
 android.release.x86_64 = "res://bin/libutilityai.android.template_release.x86_64.so"
 android.debug.arm64 = "res://bin/libutilityai.android.template_debug.arm64.so"
 android.release.arm64 = "res://bin/libutilityai.android.template_release.arm64.so"
+
+[icons]
+UtilityAIAgent = "res://bin/icons/UtilityAIAgent.svg"
+UtilityAIActions = "res://bin/icons/UtilityAIActionGroup.svg"
+UtilityAIAction = "res://bin/icons/UtilityAIAction.svg"
+UtilityAIActionGroup = "res://bin/icons/UtilityAIActionGroup.svg"
+UtilityAISensors = "res://bin/icons/UtilityAISensorGroup.svg"
+UtilityAISensor = "res://bin/icons/UtilityAISensor.svg"
+UtilityAISensorGroup = "res://bin/icons/UtilityAISensorGroup.svg"
+UtilityAIConsiderations = "res://bin/icons/UtilityAIConsiderationGroup.svg"
+UtilityAIConsideration = "res://bin/icons/UtilityAIConsideration.svg"
+UtilityAIConsiderationGroup = "res://bin/icons/UtilityAIConsiderationGroup.svg"
+UtilityAIBehaviour = "res://bin/icons/UtilityAIBehaviour.svg"
+

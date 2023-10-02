@@ -20,7 +20,7 @@ void UtilityAIAgent::_bind_methods() {
     ClassDB::bind_method(D_METHOD("get_current_action_node"), &UtilityAIAgent::get_current_action_node);
 
 
-    ClassDB::bind_method(D_METHOD("evaluate_options"), &UtilityAIAgent::evaluate_options);
+    ClassDB::bind_method(D_METHOD("evaluate_options", "delta"), &UtilityAIAgent::evaluate_options);
     ClassDB::bind_method(D_METHOD("update_current_behaviour"), &UtilityAIAgent::update_current_behaviour);
     
     //ClassDB::bind_method(D_METHOD("update_current_state", "delta"), &UtilityAIAgent::_update_current_state);

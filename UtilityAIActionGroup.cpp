@@ -38,62 +38,96 @@ UtilityAIActionGroup::~UtilityAIActionGroup() {
 
 bool UtilityAIActionGroup::start_action() {
     if( get_child_count() <= 0 ) return false;
-    //_action_execution_index = 0;
-    _current_action_index = 0;
+    if( _action_execution_rule == UtilityAIActionGroupExecutionRule::PickOneAtRandom ) {
+        RandomNumberGenerator rnd;
+        rnd.set_seed(time(0));
+        _current_action_index = rnd.randi_range(0, get_child_count() - 1 );
+    } else {
+        _current_action_index = 0;
+    }
     return true;
 }
 
 
 bool UtilityAIActionGroup::end_action() {
+    _current_action_index = 0;
     return true;
 }
 
 Node* UtilityAIActionGroup::step_actions() {
     if( _current_action_index >= get_child_count () ) return nullptr;
 
-    //WARN_PRINT("UtilityAIActionGroup::step_actions(): Stepping action group " + get_name());
-    Node* current_node = get_child(_current_action_index);
-    UtilityAIAction* current_action_node = godot::Object::cast_to<UtilityAIAction>(current_node);
-    if( current_action_node != nullptr ) {
-        //WARN_PRINT("UtilityAIActionGroup::step_actions(): Current action in group " + get_name() + " is not null, and is named " + current_action_node->get_name());
+    if( _action_execution_rule == UtilityAIActionGroupExecutionRule::PickOneAtRandom ) {
+        // Only one action will be picked at random.
+        if( _current_action_index > -1 ) {
+            // The action has been picked earlier, so check if it has finished.
+            Node* current_node = get_child(_current_action_index);
+            UtilityAIAction* current_action_node = godot::Object::cast_to<UtilityAIAction>(current_node);
+            if( current_action_node != nullptr ) {
+                if( !current_action_node->get_is_finished() ) return current_action_node;
+                // The action has finished.
+                current_action_node->end_action();
+                //current_action_node = nullptr;
+            } else {
+                UtilityAIActionGroup* current_action_group = godot::Object::cast_to<UtilityAIActionGroup>(current_node);
+                if( current_action_group != nullptr ) {
+                    //WARN_PRINT("UtilityAIActionGroup::step_actions(): Stepping action group " + get_name() + " and proceeding to step a subgroup " + current_action_group->get_name());
+            
+                    current_action_node = godot::Object::cast_to<UtilityAIAction>(current_action_group->step_actions());
+                    if( current_action_node != nullptr ) return current_action_node;
+                    current_action_group->end_action();
+                }
+            }        
+        } //endif has valid action index
+        return nullptr;
+    } // endif action group execution rule is pick one at random
+    else if( _action_execution_rule == UtilityAIActionGroupExecutionRule::Sequence ) {
+        // All child nodes are stepped one by one.
 
-        if( !current_action_node->get_is_finished() ) return current_action_node;
-        // The action has finished.
-        current_action_node->end_action();
-        current_action_node = nullptr;
-        //WARN_PRINT("UtilityAIActionGroup::step_actions(): The action just finished.");
-    } else {
-        UtilityAIActionGroup* current_action_group = godot::Object::cast_to<UtilityAIActionGroup>(current_node);
-        if( current_action_group != nullptr ) {
-            //WARN_PRINT("UtilityAIActionGroup::step_actions(): Stepping action group " + get_name() + " and proceeding to step a subgroup " + current_action_group->get_name());
-    
-            current_action_node = godot::Object::cast_to<UtilityAIAction>(current_action_group->step_actions());
-            if( current_action_node != nullptr ) return current_action_node;
-            current_action_group->end_action();
-        }
-    }//endif current action node valid
-    
+        //WARN_PRINT("UtilityAIActionGroup::step_actions(): Stepping action group " + get_name());
+        Node* current_node = get_child(_current_action_index);
+        UtilityAIAction* current_action_node = godot::Object::cast_to<UtilityAIAction>(current_node);
+        if( current_action_node != nullptr ) {
+            //WARN_PRINT("UtilityAIActionGroup::step_actions(): Current action in group " + get_name() + " is not null, and is named " + current_action_node->get_name());
 
-    ++_current_action_index;
-    while( _current_action_index < get_child_count() ) {
+            if( !current_action_node->get_is_finished() ) return current_action_node;
+            // The action has finished.
+            current_action_node->end_action();
+            current_action_node = nullptr;
+            //WARN_PRINT("UtilityAIActionGroup::step_actions(): The action just finished.");
+        } else {
+            UtilityAIActionGroup* current_action_group = godot::Object::cast_to<UtilityAIActionGroup>(current_node);
+            if( current_action_group != nullptr ) {
+                //WARN_PRINT("UtilityAIActionGroup::step_actions(): Stepping action group " + get_name() + " and proceeding to step a subgroup " + current_action_group->get_name());
         
-        if( current_action_node = godot::Object::cast_to<UtilityAIAction>(get_child(_current_action_index)) ) {
-            if( current_action_node->get_is_active() ) {
-                current_action_node->start_action();
-                return current_action_node;
+                current_action_node = godot::Object::cast_to<UtilityAIAction>(current_action_group->step_actions());
+                if( current_action_node != nullptr ) return current_action_node;
+                current_action_group->end_action();
             }
-        } else if(UtilityAIActionGroup* action_group = godot::Object::cast_to<UtilityAIActionGroup>(get_child(_current_action_index)) ) {
-            if( action_group->get_is_active() ) {
-                action_group->start_action();
-                current_action_node = godot::Object::cast_to<UtilityAIAction>(action_group->step_actions());
-                if( current_action_node != nullptr ) {
+        }//endif current action node valid
+        
+
+        ++_current_action_index;
+        while( _current_action_index < get_child_count() ) {
+            
+            if( current_action_node = godot::Object::cast_to<UtilityAIAction>(get_child(_current_action_index)) ) {
+                if( current_action_node->get_is_active() ) {
                     current_action_node->start_action();
                     return current_action_node;
                 }
-            }
-        }// endif is action or action_group
-        ++_current_action_index;
-    }//endwhile action index in bounds
+            } else if(UtilityAIActionGroup* action_group = godot::Object::cast_to<UtilityAIActionGroup>(get_child(_current_action_index)) ) {
+                if( action_group->get_is_active() ) {
+                    action_group->start_action();
+                    current_action_node = godot::Object::cast_to<UtilityAIAction>(action_group->step_actions());
+                    if( current_action_node != nullptr ) {
+                        current_action_node->start_action();
+                        return current_action_node;
+                    }
+                }
+            }// endif is action or action_group
+            ++_current_action_index;
+        }//endwhile action index in bounds
+    }//endif action group execution rule is sequence
 
     return nullptr;
 }
