@@ -18,5 +18,23 @@ Start by adding a UtilityAIAgent to your scene. Next you can add the Sensors as 
 
 Then add considerations to the Behaviours you have added. And finally the Actions. 
 
+In your code update the sensor's `sensor_value` with a floating point value between 0.0 and 1.0. Then run the UtilityAIAgent's `evaluate_options` method and `update_current_behaviour` method to get an `action` to execute. You can then get the action by using the `get_current_action` method.
+Do what ever you need to do for the action selected and once done, mark it as finished using the `set_is_finished(true)` method. This will allow the current behaviour to step to the next action during the `update_current_behaviour` call.
+
+## Nodes in-depth 
+
+### UtilityAIAgent 
+
+This is the main node that is used to manage the UtilityAI. A UtilityAIAgent node represents an AI entity that can reason based in `sensor` input and then choose `behaviours` to react to the sensor input. The UtilityAIAgent has the following methods:
+
+#### Properties
+
+|int|num_behaviours_to_select|Pick a behaviour out of top `num_behaviours_to_select` behaviours found after reasoning.|
+|float|thinking_delay_in_seconds|Delay time forced between calls to the method `evaluate_options`.|
+
+#### Methods 
+
+|void|evaluate_options(float delta)|Gathers input from sensors and evaluates all the available behaviours by calculating a score for each of them and then choosing a random behaviour from the top `num_behaviours_to_select` behaviours.|
+|void|update_current_behaviour()|Updates the currently selected behaviour and if the current `action` has been marked as finished, returns the next action.|
 
 
