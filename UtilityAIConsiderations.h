@@ -35,15 +35,6 @@ public:
     void set_score( double score );
     double get_score() const;
 
-    /**        
-    // Godot virtuals.
-    void _ready();
-    void _process(double delta);
-    void _physics_process(double delta);
-
-    void _notification(int p_what);
-    */
-
     // Handling functions.
 
     virtual double evaluate();//UtilityAIAgent* agent, double delta);

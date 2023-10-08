@@ -40,16 +40,6 @@ public:
     void  set_current_action_index( int current_action_index );
     int   get_current_action_index() const;
 
-    /**
-  
-    // Godot virtuals.
-    void _ready();
-    void _process(double delta);
-    void _physics_process(double delta);
-
-    void _notification(int p_what);
-    */
-
     // Handling functions.
 
     virtual bool start_action() override; 

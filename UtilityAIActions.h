@@ -28,16 +28,6 @@ public:
     void set_is_finished( bool is_finished );
     bool get_is_finished() const;
 
- 
-    /**
-    
-    // Godot virtuals.
-    void _ready();
-    void _process(double delta);
-    void _physics_process(double delta);
-
-    void _notification(int p_what);
-    */
     
     // Handling functions.
     virtual Node* step_actions();

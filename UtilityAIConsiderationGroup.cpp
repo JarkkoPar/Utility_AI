@@ -15,11 +15,6 @@ void UtilityAIConsiderationGroup::_bind_methods() {
     ClassDB::bind_method(D_METHOD("get_evaluation_method"), &UtilityAIConsiderationGroup::get_evaluation_method);
     ADD_PROPERTY(PropertyInfo(Variant::INT, "evaluation_method", PROPERTY_HINT_ENUM, "Sum:0,Min:1,Max:2,Mean:3,Multiply:4,FirstNonZero:5,OneMinusScore:6"), "set_evaluation_method","get_evaluation_method");
     
-    /**
-    ClassDB::bind_method(D_METHOD("change_to_state", "target_state_name"), &UtilityAIConsiderationGroup::_change_to_state);
-    
-    ClassDB::bind_method(D_METHOD("update_current_state", "delta"), &UtilityAIConsiderationGroup::_update_current_state);
-    /**/
 }
 
 
@@ -46,51 +41,6 @@ int UtilityAIConsiderationGroup::get_evaluation_method() const {
     return _evaluation_method;
 }
 
-
-// Godot virtuals.
-/**
-void UtilityAIConsiderationGroup::_notification(int p_what) {
-	switch (p_what) {
-        case NOTIFICATION_ENTER_TREE: {
-            // Entered the tree. 
-        } break;
-		case NOTIFICATION_EXIT_TREE: {
-			
-		} break;
-	}
-}
-
-void UtilityAIConsiderationGroup::_ready() {
-    if( !_is_active ) return;
-    if( Engine::get_singleton()->is_editor_hint() ) return;
-    
-    // Get the first state as the first child node and enter it.
-    ERR_FAIL_COND_MSG( get_child_count() < 1, "UtilityAIConsiderationGroup error, no child nodes (states) have been added to the UtilityAIConsiderationGroup '" + get_name() + "'.");
-    _current_state = Object::cast_to<UtilityAIConsiderationGroupState>(get_child(0));
-    ERR_FAIL_COND_MSG( _current_state == nullptr, "UtilityAIConsiderationGroup error, the first child is not a UtilityAIConsiderationGroupState node.");
-    _current_state->_enter_state();
-}
-
-void UtilityAIConsiderationGroup::_process(double delta ) {
-    //if( _update_method != UtilityAIConsiderationGroup_UPDATE_METHOD_PROCESS ) return;
-    if( !_is_active ) return;
-    if( Engine::get_singleton()->is_editor_hint() ) return;
-    if( _current_state == nullptr ) return;
-
-    _current_state->_state_process(delta);
-    //_current_state->_state_execute_actions(delta);
-}
-
-void UtilityAIConsiderationGroup::_physics_process(double delta ) {
-    //if( _update_method != UtilityAIConsiderationGroup_UPDATE_METHOD_PHYSICS_PROCESS ) return;
-    if( !_is_active ) return;
-    if( Engine::get_singleton()->is_editor_hint() ) return;
-    if( _current_state == nullptr ) return;
-    _current_state->_state_physics_process(delta);
-    //_current_state->_state_execute_actions(delta);
-}
-
-/**/
 
 double UtilityAIConsiderationGroup::evaluate() { //UtilityAIAgent* agent, double delta) {
     if( !get_is_active() ) return 0.0;

@@ -35,7 +35,6 @@ public:
     
     
     // Getters and setters for attributes.
-    /**/
     
     void  set_can_be_interrupted( bool can_be_interrupted );
     bool  get_can_be_interrupted() const;
@@ -51,7 +50,6 @@ public:
 
     UtilityAIAction* get_current_action_node() const { return _current_action_node;};
 
-    /**/
     // Godot virtuals.
     void _ready();
     

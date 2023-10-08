@@ -22,9 +22,6 @@ void UtilityAIAgent::_bind_methods() {
 
     ClassDB::bind_method(D_METHOD("evaluate_options", "delta"), &UtilityAIAgent::evaluate_options);
     ClassDB::bind_method(D_METHOD("update_current_behaviour"), &UtilityAIAgent::update_current_behaviour);
-    
-    //ClassDB::bind_method(D_METHOD("update_current_state", "delta"), &UtilityAIAgent::_update_current_state);
-    /**/
 
     ClassDB::bind_method(D_METHOD("set_num_behaviours_to_select", "num_behaviours_to_select"), &UtilityAIAgent::set_num_behaviours_to_select);
     ClassDB::bind_method(D_METHOD("get_num_behaviours_to_select"), &UtilityAIAgent::get_num_behaviours_to_select);
@@ -315,48 +312,3 @@ godot::String UtilityAIAgent::get_top_scoring_behaviour_name() const {
     return _top_scoring_behaviour_name;
 }
 
-
-// Godot virtuals.
-/**
-void UtilityAIAgent::_notification(int p_what) {
-	switch (p_what) {
-        case NOTIFICATION_ENTER_TREE: {
-            // Entered the tree. 
-        } break;
-		case NOTIFICATION_EXIT_TREE: {
-			
-		} break;
-	}
-}
-
-void UtilityAIAgent::_ready() {
-    if( !_is_active ) return;
-    if( Engine::get_singleton()->is_editor_hint() ) return;
-    
-    // Get the first state as the first child node and enter it.
-    ERR_FAIL_COND_MSG( get_child_count() < 1, "UtilityAIAgent error, no child nodes (states) have been added to the UtilityAIAgent '" + get_name() + "'.");
-    _current_state = Object::cast_to<UtilityAIAgentState>(get_child(0));
-    ERR_FAIL_COND_MSG( _current_state == nullptr, "UtilityAIAgent error, the first child is not a UtilityAIAgentState node.");
-    _current_state->_enter_state();
-}
-
-void UtilityAIAgent::_process(double delta ) {
-    //if( _update_method != UtilityAIAgent_UPDATE_METHOD_PROCESS ) return;
-    if( !_is_active ) return;
-    if( Engine::get_singleton()->is_editor_hint() ) return;
-    if( _current_state == nullptr ) return;
-
-    _current_state->_state_process(delta);
-    //_current_state->_state_execute_UtilityAIAgents(delta);
-}
-
-void UtilityAIAgent::_physics_process(double delta ) {
-    //if( _update_method != UtilityAIAgent_UPDATE_METHOD_PHYSICS_PROCESS ) return;
-    if( !_is_active ) return;
-    if( Engine::get_singleton()->is_editor_hint() ) return;
-    if( _current_state == nullptr ) return;
-    _current_state->_state_physics_process(delta);
-    //_current_state->_state_execute_UtilityAIAgents(delta);
-}
-
-/**/

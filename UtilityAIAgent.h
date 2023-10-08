@@ -58,14 +58,6 @@ public:
     void set_current_action_node( Node* new_action_node );
     Node* get_current_action_node() const;
 
-    /**    
-    // Godot virtuals.
-    void _ready();
-    void _process(double delta);
-    void _physics_process(double delta);
-
-    void _notification(int p_what);
-    */
     // Handling functions.
 
     void evaluate_options(double delta);

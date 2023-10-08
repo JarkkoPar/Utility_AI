@@ -28,17 +28,6 @@ public:
     void set_action_id( int action_id );
     int  get_action_id() const;
 
-    /**
-
-        
-    // Godot virtuals.
-    void _ready();
-    void _process(double delta);
-    void _physics_process(double delta);
-
-    void _notification(int p_what);
-    */
-
     // Handling functions.
 
     virtual bool start_action() override;

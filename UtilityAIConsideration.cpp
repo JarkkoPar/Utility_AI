@@ -23,17 +23,7 @@ void UtilityAIConsideration::_bind_methods() {
     ClassDB::bind_method(D_METHOD("set_activation_input_value", "activation_input_value"), &UtilityAIConsideration::set_activation_input_value);
     ClassDB::bind_method(D_METHOD("get_activation_input_value"), &UtilityAIConsideration::get_activation_input_value);
     ADD_PROPERTY(PropertyInfo(Variant::FLOAT, "activation_input_value", PROPERTY_HINT_RANGE, "0.0,1.0,allow_lower,allow_greater"), "set_activation_input_value","get_activation_input_value");
-    
-    /**
-    //ClassDB::bind_method(D_METHOD("set_update_method", "update_method"), &UtilityAIConsideration::set_update_method);
-    //ClassDB::bind_method(D_METHOD("get_update_method"), &UtilityAIConsideration::get_update_method);
-    //ADD_PROPERTY(PropertyInfo(Variant::INT, "update_method", PROPERTY_HINT_ENUM, "Process:0,Physics process:1,Manual:2"), "set_update_method","get_update_method");
-    
-
-    ClassDB::bind_method(D_METHOD("change_to_state", "target_state_name"), &UtilityAIConsideration::_change_to_state);
-    
-    ClassDB::bind_method(D_METHOD("update_current_state", "delta"), &UtilityAIConsideration::_update_current_state);
-    /**/
+   
 }
 
 
@@ -82,18 +72,7 @@ double UtilityAIConsideration::get_activation_input_value() const {
 }
 
 // Godot virtuals.
-/**
-void UtilityAIConsideration::_notification(int p_what) {
-	switch (p_what) {
-        case NOTIFICATION_ENTER_TREE: {
-            // Entered the tree. 
-        } break;
-		case NOTIFICATION_EXIT_TREE: {
-			
-		} break;
-	}
-}
-/**/
+
 void UtilityAIConsideration::_ready() {
     if( !get_is_active() ) return;
     if( Engine::get_singleton()->is_editor_hint() ) return;
@@ -104,29 +83,6 @@ void UtilityAIConsideration::_ready() {
     ERR_FAIL_COND_MSG( _input_sensor == nullptr, "UtilityAIConsideration error, the assigned node's type was not a UtilityAISensor for UtilityAIConsideration '" + get_name() + "'.");
     
 }
-/**
-
-void UtilityAIConsideration::_process(double delta ) {
-    //if( _update_method != UtilityAIConsideration_UPDATE_METHOD_PROCESS ) return;
-    if( !_is_active ) return;
-    if( Engine::get_singleton()->is_editor_hint() ) return;
-    if( _current_state == nullptr ) return;
-
-    _current_state->_state_process(delta);
-    //_current_state->_state_execute_actions(delta);
-}
-
-void UtilityAIConsideration::_physics_process(double delta ) {
-    //if( _update_method != UtilityAIConsideration_UPDATE_METHOD_PHYSICS_PROCESS ) return;
-    if( !_is_active ) return;
-    if( Engine::get_singleton()->is_editor_hint() ) return;
-    if( _current_state == nullptr ) return;
-    _current_state->_state_physics_process(delta);
-    //_current_state->_state_execute_actions(delta);
-}
-
-/**/
-
 
 
 double UtilityAIConsideration::evaluate() { //UtilityAIAgent* agent, double delta) {
