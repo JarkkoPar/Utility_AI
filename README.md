@@ -5,7 +5,7 @@ A Utility AI implementation for the Godot Engine using gdextension.
 
 * *UtilityAIAgent* This is the main node that is used manage the UtilityAI. It represents an AI entity.
 * *UtilityAIBehaviour* The various things the AI agent can do are called _behaviours_. Each Behaviour consists of _considerations_ and _actions_.
-* *UtilityAIConsideration* The AI agent does it's reasoning on what behaviour to use by going through its considerations and producing a score for each behaviour. This node is used to represent a single thing the AI Agent should consider about a behaviour. A consideration uses a _sensor_ for input data.
+* *UtilityAIConsideration* The AI agent does it's reasoning on what behaviour to use by going through the behaviour's considerations and producing a score for each behaviour. This node is used to represent a single thing the AI Agent should consider about a behaviour. A consideration uses a _sensor_ for input data.
 * *UtilityAIConsiderationGroup* Several considerations can be grouped to create more complex or high-level logic.
 * *UtilityAISensor* The sensor node is used to update input data to the AI Agent's considerations.
 * *UtilityAISensorGroup* Several sensors can be grouped for more high-level sensor input to the considerations.
@@ -33,7 +33,6 @@ This is the main node that is used to manage the UtilityAI. A UtilityAIAgent nod
 |--|--|--|
 |int|num_behaviours_to_select|Pick a behaviour out of top `num_behaviours_to_select` behaviours found after reasoning.|
 |float|thinking_delay_in_seconds|Delay time forced between calls to the method `evaluate_options`.|
-|--|--|--|
 
 #### Methods 
 
@@ -41,7 +40,6 @@ This is the main node that is used to manage the UtilityAI. A UtilityAIAgent nod
 |--|--|--|
 |void|evaluate_options(float delta)|Gathers input from sensors and evaluates all the available behaviours by calculating a score for each of them and then choosing a random behaviour from the top `num_behaviours_to_select` behaviours.|
 |void|update_current_behaviour()|Updates the currently selected behaviour and if the current `action` has been marked as finished, returns the next action.|
-|--|--|--|
 
 ### UtilityAISensor and UtilityAISensorGroup
 
@@ -56,15 +54,12 @@ The `UtilityAISensor` has the following properties:
 |Type|Name|Description|
 |--|--|--|
 |float|sensor_value|A floating point value in the range of 0..1.|
-|--|--|--|
 
 The `UtilityAISensorGroup` has the following properties:
 
 |Type|Name|Description|
 |--|--|--|
 |float|evaluation_method|A choice of how the sensors and sensor groups that are childs of the node are aggregated. Can be one of the following: Sum:0,Min:1,Max:2,Mean:3,Multiply:4,FirstNonZero:5,OneMinusScore:6.|
-|--|--|--|
-
 
 #### Methods 
 
@@ -87,7 +82,6 @@ The `UtilityAIBehaviour` has the following properties:
 |--|--|--|
 |bool|can_be_interrupted|A boolean value to determine if the behaviour can be interrupted or not. If a behaviour cannot be interrupted, the `evaluate_options` method of the `UtilityAIAgent` will not execute until the behaviour has completed all its actions.|
 |float|score|The score for the behaviour after the behaviour has evaluated its considerations.|
-|--|--|--|
 
 #### Methods 
 
@@ -113,7 +107,6 @@ The `UtilityAIConsideration` has the following properties:
 |NodePath|input_sensor_node_path|A nodepath to a sensor or a sensor group node that will set the `activation_input_value`.|
 |Curve|activation_curve|A godot curve property that defines how the `activation_input_value` will be translated to a `score`.|
 |float|score|The resulting score for the consideration after evaluation.|
-|--|--|--|
 
 The `UtilityAIConsiderationGroup` has the following properties:
 
@@ -121,8 +114,6 @@ The `UtilityAIConsiderationGroup` has the following properties:
 |--|--|--|
 |float|evaluation_method|A choice of how the sensors and sensor groups that are childs of the node are aggregated. Can be one of the following: Sum:0,Min:1,Max:2,Mean:3,Multiply:4,FirstNonZero:5,OneMinusScore:6.|
 |float|score|The resulting score for the consideration group after evaluation.|
-|--|--|--|
-
 
 #### Methods 
 
@@ -144,7 +135,6 @@ The `UtilityAIAction` has the following properties:
 |--|--|--|
 |int|action_id|A user-definable numeric ID for the action. Provided as an alternative to using action node names for identifying which is the current action the `AI agent` is currently executing.|
 |bool|is_finished|Use this property only to let the `AI agent` know when the chosen action is finished. The stepper function will immediately set it back to false once it has moved on to the next action.|
-|--|--|--|
 
 The `UtilityAIActionGroup` has the following properties:
 
@@ -152,8 +142,6 @@ The `UtilityAIActionGroup` has the following properties:
 |--|--|--|
 |float|execution_rule|A choice of how the actions that are child nodes are executed: Sequence:0,PickOneAtRandom:1. The Sequence choice will execute the actions from top to bottom and the Pick One At Random does what it says it will.|
 |bool|is_finished|Set internally by the stepper, visible only for debugging purposes.|
-|--|--|--|
-
 
 #### Methods 
 
