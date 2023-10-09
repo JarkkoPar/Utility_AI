@@ -22,11 +22,11 @@ void UtilityAIBehaviour::_bind_methods() {
     
     ClassDB::bind_method(D_METHOD("set_cooldown_seconds", "cooldown_seconds"), &UtilityAIBehaviour::set_cooldown_seconds);
     ClassDB::bind_method(D_METHOD("get_cooldown_seconds"), &UtilityAIBehaviour::get_cooldown_seconds);
-    ADD_PROPERTY(PropertyInfo(Variant::FLOAT, "cooldown_seconds", PROPERTY_HINT_RANGE, "0.0,600.0,allow_greater"), "set_cooldown_seconds","get_cooldown_seconds");
+    ADD_PROPERTY(PropertyInfo(Variant::FLOAT, "cooldown_seconds", PROPERTY_HINT_RANGE, "0.0,600.0,or_greater"), "set_cooldown_seconds","get_cooldown_seconds");
 
     ClassDB::bind_method(D_METHOD("set_cooldown_turns", "cooldown_turns"), &UtilityAIBehaviour::set_cooldown_turns);
     ClassDB::bind_method(D_METHOD("get_cooldown_turns"), &UtilityAIBehaviour::get_cooldown_turns);
-    ADD_PROPERTY(PropertyInfo(Variant::FLOAT, "cooldown_turns", PROPERTY_HINT_RANGE, "0,64,allow_greater"), "set_cooldown_turns","get_cooldown_turns");
+    ADD_PROPERTY(PropertyInfo(Variant::INT, "cooldown_turns", PROPERTY_HINT_RANGE, "0,64,or_greater"), "set_cooldown_turns","get_cooldown_turns");
 
 
     ADD_SUBGROUP("Debugging","");
