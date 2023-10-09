@@ -1,5 +1,11 @@
 # Utility_AI
-A Utility AI implementation for the Godot Engine using gdextension.
+
+A Utility AI implementation for the Godot Engine using gdextension. If you don't know what Utility AI is, Wikipedia defines it as follows:
+
+*"...Utility AI, is a simple but effective way to model behaviours for non-player characters. Using numbers, formulas and scores to rate the relative benefit of possible actions, one can assign utilities to each action. A behaviour can then be selected based on which one scores the highest 'utility'...* - [Wikipedia - Utility system](https://en.wikipedia.org/wiki/Utility_system)
+
+You can download the latest version from the releases. The release contains an example project that shows the usage of these nodes.
+
 
 ## Node listing
 
@@ -147,4 +153,12 @@ The `UtilityAIActionGroup` has the following properties:
 
 None.
 
+
+## Compiling from source
+
+To compile this repository, first setup the GDExample project as described in the Godot documentation. Copy the contents of this repository into the src-folder. Finally, copy the SConstruct file from the src folder to the parent folder.
+ 
+You should now be able to compile the project with the scons commands as noted in the Godot documentation for the GDExample project. 
+
+After compilation, copy the libutilityai.gdextension file and the icons-folder with its contents to the Demo-project bin-folder. If all goes well, you should now be able to use the nodes in the Demo-project and the nodes should have their icons.
 
