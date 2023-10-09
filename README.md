@@ -80,6 +80,8 @@ As you may have guessed from the name, the purpose of the behaviour nodes is to 
 
 The behaviour node will use the  `consideration` nodes that are its childs to determine a `score` for itself. When the behaviour is chosen by the `AI agent` as the one to execute, the `action` nodes are stepped through.
 
+The behaviour has also two properties "cooldown" properties: `cooldown_seconds` and `cooldown_turns`. These can be used to temporarily exclude some behaviours from subsequent `AI agent`'s `evaluate_options` calls once they have been chosen. The `cooldown_seconds` is meant to be used with real-time games and the `cooldown_turns` with turn based games but both can be used even at the same time. The difference in the cooldown countdown is that the `cooldown_seconds` counts down regardless of how many times the `AI agent`'s `evaluate_options` method is called, and the `cooldown_turns` counts down only when the `evaluate_options` method is called. 
+
 #### Properties
 
 The `UtilityAIBehaviour` has the following properties:
@@ -88,6 +90,9 @@ The `UtilityAIBehaviour` has the following properties:
 |--|--|--|
 |bool|can_be_interrupted|A boolean value to determine if the behaviour can be interrupted or not. If a behaviour cannot be interrupted, the `evaluate_options` method of the `UtilityAIAgent` will not execute until the behaviour has completed all its actions.|
 |float|score|The score for the behaviour after the behaviour has evaluated its considerations.|
+|float|cooldown_seconds|If > 0.0, after the behaviour is chosen it will a score of 0.0 during the `evaluate_options` until the time has passed.|
+|int|cooldown_turns|If > 0, after the behaviour is chosen it will a score of 0 during the `evaluate_options` until the given number of calls to the evaluation function has been done.|
+
 
 #### Methods 
 

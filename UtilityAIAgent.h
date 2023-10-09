@@ -63,6 +63,8 @@ public:
     void evaluate_options(double delta);
 
     void update_current_behaviour();
+
+    void set_current_action_is_finished(bool is_finished);
 };
 
 }

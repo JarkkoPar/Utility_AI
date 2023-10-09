@@ -243,7 +243,11 @@ void UtilityAIAgent::update_current_behaviour() {
     //WARN_PRINT("Update behaviour DONE for agent " + get_name() + " will continue behaviour " + _current_behaviour_node->get_name() + " with action " + _current_action_node->get_name() );
 }
 
-
+void UtilityAIAgent::set_current_action_is_finished(bool is_finished) {
+    if( _current_behaviour_node == nullptr ) return;
+    if( _current_action_node == nullptr ) return;
+    ((UtilityAIAction*)_current_action_node)->set_is_finished(is_finished);
+}
 
 // Getters and Setters.
 

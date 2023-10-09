@@ -24,6 +24,11 @@ void UtilityAIBehaviour::_bind_methods() {
     ClassDB::bind_method(D_METHOD("get_cooldown_seconds"), &UtilityAIBehaviour::get_cooldown_seconds);
     ADD_PROPERTY(PropertyInfo(Variant::FLOAT, "cooldown_seconds", PROPERTY_HINT_RANGE, "0.0,600.0,allow_greater"), "set_cooldown_seconds","get_cooldown_seconds");
 
+    ClassDB::bind_method(D_METHOD("set_cooldown_turns", "cooldown_turns"), &UtilityAIBehaviour::set_cooldown_turns);
+    ClassDB::bind_method(D_METHOD("get_cooldown_turns"), &UtilityAIBehaviour::get_cooldown_turns);
+    ADD_PROPERTY(PropertyInfo(Variant::FLOAT, "cooldown_turns", PROPERTY_HINT_RANGE, "0,64,allow_greater"), "set_cooldown_turns","get_cooldown_turns");
+
+
     ADD_SUBGROUP("Debugging","");
 
     ClassDB::bind_method(D_METHOD("set_score", "score"), &UtilityAIBehaviour::set_score);
@@ -44,6 +49,8 @@ UtilityAIBehaviour::UtilityAIBehaviour() {
     _score = 0.0f;
     _cooldown_seconds = 0.0;
     _current_cooldown_seconds = 0.0;
+    _cooldown_turns = 0;
+    _current_cooldown_turns = 0;
     _current_action_index = 0;
     _can_be_interrupted = false;
 }
@@ -81,6 +88,14 @@ void UtilityAIBehaviour::set_cooldown_seconds( double cooldown_seconds ) {
 
 double UtilityAIBehaviour::get_cooldown_seconds() const {
     return _cooldown_seconds;
+}
+
+void UtilityAIBehaviour::set_cooldown_turns( int cooldown_turns ) {
+    _cooldown_turns = cooldown_turns;
+}
+
+int UtilityAIBehaviour::get_cooldown_turns() const {
+    return _cooldown_turns;
 }
 
 void UtilityAIBehaviour::set_current_action_index( int current_action_index ) {
@@ -133,6 +148,10 @@ double UtilityAIBehaviour::evaluate() {
 
     // If the behaviour is on cooldown, it cannot be chosen.
     if( _current_cooldown_seconds > 0.0 ) return 0.0;
+    if( _current_cooldown_turns > 0) {
+        --_current_cooldown_turns;
+        return 0.0;
+    }
 
     _score = 0.0;
 
@@ -155,6 +174,7 @@ double UtilityAIBehaviour::evaluate() {
 
 void UtilityAIBehaviour::start_behaviour() {
     _current_cooldown_seconds = _cooldown_seconds;
+    _current_cooldown_turns = _cooldown_turns;
     _current_action_index = 0;
     _current_action_node = nullptr;
     //WARN_PRINT("Behaviour started. " + get_name());
