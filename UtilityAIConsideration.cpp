@@ -77,7 +77,9 @@ void UtilityAIConsideration::_ready() {
     if( !get_is_active() ) return;
     if( Engine::get_singleton()->is_editor_hint() ) return;
     Node* node = get_node_or_null(_input_sensor_node_path);
-    ERR_FAIL_COND_MSG( node == nullptr, "UtilityAIConsideration error, invalid nodepath for the sensor in UtilityAIConsideration '" + get_name() + "'.");
+    // As this is not always needed, error out without a message.
+    if( node == nullptr ) return;
+    //ERR_FAIL_COND_MSG( node == nullptr, "UtilityAIConsideration error, invalid nodepath for the sensor in UtilityAIConsideration '" + get_name() + "'.");
     
     _input_sensor = godot::Object::cast_to<UtilityAISensors>(node);
     ERR_FAIL_COND_MSG( _input_sensor == nullptr, "UtilityAIConsideration error, the assigned node's type was not a UtilityAISensor for UtilityAIConsideration '" + get_name() + "'.");

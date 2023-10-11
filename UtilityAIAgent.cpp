@@ -22,6 +22,7 @@ void UtilityAIAgent::_bind_methods() {
 
     ClassDB::bind_method(D_METHOD("evaluate_options", "delta"), &UtilityAIAgent::evaluate_options);
     ClassDB::bind_method(D_METHOD("update_current_behaviour"), &UtilityAIAgent::update_current_behaviour);
+    ClassDB::bind_method(D_METHOD("abort_current_behaviour"), &UtilityAIAgent::abort_current_behaviour);
 
     ClassDB::bind_method(D_METHOD("set_num_behaviours_to_select", "num_behaviours_to_select"), &UtilityAIAgent::set_num_behaviours_to_select);
     ClassDB::bind_method(D_METHOD("get_num_behaviours_to_select"), &UtilityAIAgent::get_num_behaviours_to_select);
@@ -50,6 +51,7 @@ void UtilityAIAgent::_bind_methods() {
     // Add all signals.
 
     ADD_SIGNAL(MethodInfo("behaviour_changed", PropertyInfo(Variant::OBJECT, "behaviour_node")));
+    ADD_SIGNAL(MethodInfo("action_changed", PropertyInfo(Variant::OBJECT, "action_node")));
 }
 
 
@@ -231,7 +233,11 @@ void UtilityAIAgent::evaluate_options(double delta) { //double delta) {
 void UtilityAIAgent::update_current_behaviour() {
     if( _current_behaviour_node == nullptr ) return;
     //WARN_PRINT("Update behaviour for agent " + get_name() + "/" + _current_behaviour_node->get_name() );
-    _current_action_node = godot::Object::cast_to<Node>((godot::Object::cast_to<UtilityAIBehaviour>(_current_behaviour_node))->update_behaviour());
+    Node* new_action_node = godot::Object::cast_to<Node>((godot::Object::cast_to<UtilityAIBehaviour>(_current_behaviour_node))->update_behaviour());
+    if( _current_action_node != new_action_node ) {
+        _current_action_node = new_action_node;
+        emit_signal("action_changed", _current_action_node );
+    }
     if( _current_action_node == nullptr ) {
         //WARN_PRINT("Update behaviour " + _current_behaviour_node->get_name() + ": No more actions, ending behaviour.");
         (godot::Object::cast_to<UtilityAIBehaviour>(_current_behaviour_node))->end_behaviour();
@@ -247,6 +253,17 @@ void UtilityAIAgent::set_current_action_is_finished(bool is_finished) {
     if( _current_behaviour_node == nullptr ) return;
     if( _current_action_node == nullptr ) return;
     ((UtilityAIAction*)_current_action_node)->set_is_finished(is_finished);
+}
+
+void UtilityAIAgent::abort_current_behaviour() {
+    if( _current_behaviour_node == nullptr ) return;
+    (godot::Object::cast_to<UtilityAIBehaviour>(_current_behaviour_node))->end_behaviour();
+    _current_behaviour_name = "";
+    _current_behaviour_node = nullptr;
+    _current_behaviour_index = -1;
+    _current_action_node = nullptr;    
+    emit_signal("behaviour_changed", _current_behaviour_node);
+    emit_signal("action_changed", _current_action_node );
 }
 
 // Getters and Setters.

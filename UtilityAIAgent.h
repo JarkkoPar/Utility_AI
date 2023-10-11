@@ -65,6 +65,7 @@ public:
     void update_current_behaviour();
 
     void set_current_action_is_finished(bool is_finished);
+    void abort_current_behaviour();
 };
 
 }
