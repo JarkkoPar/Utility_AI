@@ -31,7 +31,7 @@ void UtilityAIBehaviourGroup::_bind_methods() {
 
 UtilityAIBehaviourGroup::UtilityAIBehaviourGroup() {
     _score = 0.0;
-    _activation_score = 1.0;
+    _activation_score = 0.0;
 }
 
 
