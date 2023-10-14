@@ -20,7 +20,7 @@ private:
     double _current_cooldown_seconds;
     int    _cooldown_turns;
     int    _current_cooldown_turns;
-    float  _score;
+    double  _score;
 
     int    _current_action_index;
 
@@ -41,8 +41,8 @@ public:
     void  set_can_be_interrupted( bool can_be_interrupted );
     bool  get_can_be_interrupted() const;
     
-    void  set_score( float score );
-    float get_score() const;
+    void  set_score( double score );
+    double get_score() const;
     
     void  set_cooldown_seconds( double cooldown_seconds );
     double get_cooldown_seconds() const;

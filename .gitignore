@@ -46,3 +46,5 @@ UtilityAISensorGroup.windows.template_debug.x86_64.obj
 UtilityAISensorGroup.windows.template_release.x86_64.obj
 UtilityAISensors.windows.template_debug.x86_64.obj
 UtilityAISensors.windows.template_release.x86_64.obj
+UtilityAIBehaviourGroup.windows.template_debug.x86_64.obj
+UtilityAIBehaviourGroup.windows.template_release.x86_64.obj

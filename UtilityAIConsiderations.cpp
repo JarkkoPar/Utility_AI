@@ -28,7 +28,7 @@ void UtilityAIConsiderations::_bind_methods() {
 
 UtilityAIConsiderations::UtilityAIConsiderations() {
     _has_vetoed = false;
-    _score = 0.0f;
+    _score = 0.0;
 }
 
 

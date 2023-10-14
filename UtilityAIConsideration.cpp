@@ -15,7 +15,6 @@ void UtilityAIConsideration::_bind_methods() {
     ClassDB::bind_method(D_METHOD("get_input_sensor_node_path"), &UtilityAIConsideration::get_input_sensor_node_path);
     ADD_PROPERTY(PropertyInfo(Variant::NODE_PATH, "input_sensor_node_path", PROPERTY_HINT_NODE_PATH_VALID_TYPES, "UtilityAISensors"), "set_input_sensor_node_path", "get_input_sensor_node_path");
 
-
     ClassDB::bind_method(D_METHOD("set_activation_curve", "activation_curve"), &UtilityAIConsideration::set_activation_curve);
     ClassDB::bind_method(D_METHOD("get_activation_curve"), &UtilityAIConsideration::get_activation_curve);
     ADD_PROPERTY(PropertyInfo(Variant::OBJECT, "activation_curve", PROPERTY_HINT_RESOURCE_TYPE, "Curve"), "set_activation_curve", "get_activation_curve");

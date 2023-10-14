@@ -14,13 +14,14 @@ class UtilityAIAgent : public UtilityAI {
 
 private:
     
-    int   _current_behaviour_index;
     Node* _current_behaviour_node;
 
     Node* _current_action_node;
 
     int    _num_behaviours_to_select;
+    int    _num_possible_behaviours;
     int    _top_scoring_behaviours[UTILITYAIAGENT_MAX_TOP_SCORING_BEHAVIOURS];
+    Node*  _top_scoring_behaviours_nodes[UTILITYAIAGENT_MAX_TOP_SCORING_BEHAVIOURS];
     double _top_scoring_behaviours_score[UTILITYAIAGENT_MAX_TOP_SCORING_BEHAVIOURS];
     godot::String _top_scoring_behaviour_name;
     godot::String _current_behaviour_name;
@@ -29,6 +30,7 @@ private:
     double _thinking_delay_in_seconds_current_timer;
 protected:
     static void _bind_methods();
+    void place_into_top_n_behaviour_list(Node* behaviour, float score );
 
 public:
     UtilityAIAgent();
@@ -43,8 +45,8 @@ public:
     void set_current_behaviour_node( Node* new_behaviour_node );
     Node* get_current_behaviour_node() const;
 
-    void set_current_behaviour_index( int current_behaviour_index );
-    int  get_current_behaviour_index() const;
+    //void set_current_behaviour_index( int current_behaviour_index );
+    //int  get_current_behaviour_index() const;
 
     void          set_current_behaviour_name( godot::String current_behaviour_name );
     godot::String get_current_behaviour_name() const;

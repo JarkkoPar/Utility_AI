@@ -46,7 +46,7 @@ void UtilityAIBehaviour::_bind_methods() {
 
 UtilityAIBehaviour::UtilityAIBehaviour() {
     _current_action_node = nullptr;
-    _score = 0.0f;
+    _score = 0.0;
     _cooldown_seconds = 0.0;
     _current_cooldown_seconds = 0.0;
     _cooldown_turns = 0;
@@ -74,11 +74,11 @@ bool  UtilityAIBehaviour::get_can_be_interrupted() const {
     return _can_be_interrupted;
 }
 
-void UtilityAIBehaviour::set_score( float score ) {
+void UtilityAIBehaviour::set_score( double score ) {
     _score = score;
 }
 
-float UtilityAIBehaviour::get_score() const {
+double UtilityAIBehaviour::get_score() const {
     return _score;
 }
 
@@ -177,7 +177,6 @@ void UtilityAIBehaviour::start_behaviour() {
     _current_cooldown_turns = _cooldown_turns;
     _current_action_index = 0;
     _current_action_node = nullptr;
-    //WARN_PRINT("Behaviour started. " + get_name());
     _current_action_node = update_behaviour();
 }
 

@@ -43,7 +43,7 @@ public:
    
     // Handling functions.
 
-    virtual double evaluate() override; //UtilityAIAgent* agent, double delta) override;
+    virtual double evaluate() override;
 };
 
 }

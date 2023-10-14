@@ -2,6 +2,7 @@
 
 // Classes to include in to the gdextension module.
 #include "UtilityAIBehaviour.h"
+#include "UtilityAIBehaviourGroup.h"
 #include "UtilityAIConsiderations.h"
 #include "UtilityAIConsiderationGroup.h"
 #include "UtilityAIConsideration.h"
@@ -40,6 +41,7 @@ void initialize_utility_ai_module(ModuleInitializationLevel p_level) {
     ClassDB::register_class<UtilityAIActionGroup>();
     ClassDB::register_class<UtilityAIAction>();
     ClassDB::register_class<UtilityAIBehaviour>();
+    ClassDB::register_class<UtilityAIBehaviourGroup>();
     ClassDB::register_class<UtilityAIAgent>();
     
 }

@@ -21,6 +21,7 @@ void UtilityAIConsiderationGroup::_bind_methods() {
 // Constructor and destructor.
 
 UtilityAIConsiderationGroup::UtilityAIConsiderationGroup() {
+    _evaluation_method = 4; // Default to multiplication.
 }
 
 
