@@ -38,6 +38,7 @@ This is the main node that is used to manage the UtilityAI. A UtilityAIAgent nod
 
 |Type|Name|Description|
 |--|--|--|
+|bool|is_active|This property can be used to include or exlude the node from processing.|
 |int|num_behaviours_to_select|Pick a behaviour out of top `num_behaviours_to_select` behaviours found after reasoning.|
 |float|thinking_delay_in_seconds|Delay time forced between calls to the method `evaluate_options`.|
 
@@ -45,7 +46,6 @@ This is the main node that is used to manage the UtilityAI. A UtilityAIAgent nod
 
 |Return value|Name|Description|
 |--|--|--|
-|bool|is_active|This property can be used to include or exlude the node from processing.|
 |void|evaluate_options(float delta)|Gathers input from sensors and evaluates all the available behaviours by calculating a score for each of them and then choosing a random behaviour from the top `num_behaviours_to_select` behaviours.|
 |void|update_current_behaviour()|Updates the currently selected behaviour and if the current `action` has been marked as finished, returns the next action.|
 |void|abort_current_behaviour()|Immediately stops the currently selected behaviour and action. Used for stopping behaviours that have `Can Be Interrupted` property as `false`.|
