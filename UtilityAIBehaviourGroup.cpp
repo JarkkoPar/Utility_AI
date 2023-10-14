@@ -66,8 +66,8 @@ double UtilityAIBehaviourGroup::get_score() const {
 // Handling functions.
 
 bool UtilityAIBehaviourGroup::evaluate() { 
-    if( !get_is_active() ) return 0.0;
-    if( Engine::get_singleton()->is_editor_hint() ) return 0.0;
+    if( !get_is_active() ) return false;
+    if( Engine::get_singleton()->is_editor_hint() ) return false;
     int num_children = get_child_count();
     if( num_children < 1 ) return false; 
     
