@@ -71,7 +71,6 @@ Node* UtilityAIActionGroup::step_actions() {
                 UtilityAIActionGroup* current_action_group = godot::Object::cast_to<UtilityAIActionGroup>(current_node);
                 if( current_action_group != nullptr ) {
                     //WARN_PRINT("UtilityAIActionGroup::step_actions(): Stepping action group " + get_name() + " and proceeding to step a subgroup " + current_action_group->get_name());
-            
                     current_action_node = godot::Object::cast_to<UtilityAIAction>(current_action_group->step_actions());
                     if( current_action_node != nullptr ) return current_action_node;
                     current_action_group->end_action();

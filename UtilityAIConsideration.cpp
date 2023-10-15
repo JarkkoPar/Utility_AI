@@ -22,7 +22,8 @@ void UtilityAIConsideration::_bind_methods() {
     ClassDB::bind_method(D_METHOD("set_activation_input_value", "activation_input_value"), &UtilityAIConsideration::set_activation_input_value);
     ClassDB::bind_method(D_METHOD("get_activation_input_value"), &UtilityAIConsideration::get_activation_input_value);
     ADD_PROPERTY(PropertyInfo(Variant::FLOAT, "activation_input_value", PROPERTY_HINT_RANGE, "0.0,1.0,or_less,or_greater"), "set_activation_input_value","get_activation_input_value");
-   
+
+    ClassDB::bind_method(D_METHOD("sample_activation_curve", "input_value"), &UtilityAIConsideration::sample_activation_curve);
 }
 
 
@@ -31,15 +32,13 @@ void UtilityAIConsideration::_bind_methods() {
 UtilityAIConsideration::UtilityAIConsideration() {
     _activation_input_value = 0.0;
     _input_sensor = nullptr;
+    _has_custom_evaluation_method = false;
 }
 
 
 UtilityAIConsideration::~UtilityAIConsideration() {
     _input_sensor = nullptr;
 }
-
-// Handling functions.
-
 
 
 // Getters and Setters.
@@ -82,19 +81,27 @@ void UtilityAIConsideration::_ready() {
     
     _input_sensor = godot::Object::cast_to<UtilityAISensors>(node);
     ERR_FAIL_COND_MSG( _input_sensor == nullptr, "UtilityAIConsideration error, the assigned node's type was not a UtilityAISensor for UtilityAIConsideration '" + get_name() + "'.");
-    
+
+    _has_custom_evaluation_method = has_method("eval");    
 }
 
 
-double UtilityAIConsideration::evaluate() { //UtilityAIAgent* agent, double delta) {
+double UtilityAIConsideration::evaluate() { 
     if( !get_is_active() ) return 0.0;
     if( Engine::get_singleton()->is_editor_hint() ) return 0.0;
 
     if( _input_sensor != nullptr ) {
         _activation_input_value = _input_sensor->get_sensor_value();
-    } //else ERR_FAIL_COND_V_MSG(true, 0.0, "nO INPUT SENSOR!");
-
+    }
     _score = 0.0;
+
+    // If the consideration has been extended with a custom evaluation method,
+    // that is used instead of sampling the curve.
+    if( _has_custom_evaluation_method ) {
+        this->call("eval");
+        return _score;
+    }
+    
     if (_activation_curve.is_valid()) {
 		_score = _activation_curve->sample( _activation_input_value );
 	} else {
@@ -104,4 +111,10 @@ double UtilityAIConsideration::evaluate() { //UtilityAIAgent* agent, double delt
     return _score;
 }
 
+double UtilityAIConsideration::sample_activation_curve( double input_value ) const {
+    if (_activation_curve.is_valid()) {
+		return _activation_curve->sample( input_value );
+    }
+    return 0.0;
+}
 

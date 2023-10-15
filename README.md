@@ -30,25 +30,27 @@ Do what ever you need to do for the action selected and once done, mark it as fi
 
 ## Nodes in-depth 
 
+This section describes the nodes, their properties and methods in detail. After each property and method you can find the version tag when the given property/method was introduced. Nodes, properties and methods that are being developed for a future release have the tag DEV.
+
 ### UtilityAIAgent 
 
 This is the main node that is used to manage the UtilityAI. A UtilityAIAgent node represents an AI entity that can reason based in `sensor` input and then choose `behaviours` to react to the sensor input.
 
 #### Properties
 
-|Type|Name|Description|
-|--|--|--|
-|bool|is_active|This property can be used to include or exlude the node from processing.|
-|int|num_behaviours_to_select|Pick a behaviour out of top `num_behaviours_to_select` behaviours found after reasoning.|
-|float|thinking_delay_in_seconds|Delay time forced between calls to the method `evaluate_options`.|
+|Type|Name|Description|Version|
+|--|--|--|--|
+|bool|is_active|This property can be used to include or exlude the node from processing.|v1.0|
+|int|num_behaviours_to_select|Pick a behaviour out of top `num_behaviours_to_select` behaviours found after reasoning.|v1.0|
+|float|thinking_delay_in_seconds|Delay time forced between calls to the method `evaluate_options`.|v1.0|
 
 #### Methods 
 
-|Return value|Name|Description|
-|--|--|--|
-|void|evaluate_options(float delta)|Gathers input from sensors and evaluates all the available behaviours by calculating a score for each of them and then choosing a random behaviour from the top `num_behaviours_to_select` behaviours.|
-|void|update_current_behaviour()|Updates the currently selected behaviour and if the current `action` has been marked as finished, returns the next action.|
-|void|abort_current_behaviour()|Immediately stops the currently selected behaviour and action. Used for stopping behaviours that have `Can Be Interrupted` property as `false`.|
+|Return value|Name|Description|Version|
+|--|--|--|--|
+|void|evaluate_options(float delta)|Gathers input from sensors and evaluates all the available behaviours by calculating a score for each of them and then choosing a random behaviour from the top `num_behaviours_to_select` behaviours.|v1.0|
+|void|update_current_behaviour()|Updates the currently selected behaviour and if the current `action` has been marked as finished, returns the next action.|v1.0|
+|void|abort_current_behaviour()|Immediately stops the currently selected behaviour and action. Used for stopping behaviours that have `Can Be Interrupted` property as `false`.|v1.0|
 
 
 ### UtilityAISensor and UtilityAISensorGroup
@@ -61,16 +63,16 @@ Why use sensors in the first place? Consider the situation where you have severa
 
 The `UtilityAISensor` has the following properties:
 
-|Type|Name|Description|
-|--|--|--|
-|bool|is_active|This property can be used to include or exlude the node from processing. Note that even a deactivated sensor can be used as valid input for the Considerations.|
-|float|sensor_value|A floating point value in the range of 0..1.|
+|Type|Name|Description|Version|
+|--|--|--|--|
+|bool|is_active|This property can be used to include or exlude the node from processing. Note that even a deactivated sensor can be used as valid input for the Considerations.|v1.0|
+|float|sensor_value|A floating point value in the range of 0..1.|v1.0|
 
 The `UtilityAISensorGroup` has the following properties:
 
-|Type|Name|Description|
-|--|--|--|
-|float|evaluation_method|A choice of how the sensors and sensor groups that are childs of the node are aggregated. Can be one of the following: Sum:0,Min:1,Max:2,Mean:3,Multiply:4,FirstNonZero:5,OneMinusScore:6.|
+|Type|Name|Description|Version|
+|--|--|--|--|
+|float|evaluation_method|A choice of how the sensors and sensor groups that are childs of the node are aggregated. Can be one of the following: Sum:0,Min:1,Max:2,Mean:3,Multiply:4,FirstNonZero:5,OneMinusScore:6.|v1.0|
 
 #### Methods 
 
@@ -91,13 +93,13 @@ The behaviour has also two properties "cooldown" properties: `cooldown_seconds` 
 
 The `UtilityAIBehaviour` has the following properties:
 
-|Type|Name|Description|
-|--|--|--|
-|bool|is_active|This property can be used to include or exlude the node from processing.|
-|bool|can_be_interrupted|A boolean value to determine if the behaviour can be interrupted or not. If a behaviour cannot be interrupted, the `evaluate_options` method of the `UtilityAIAgent` will not execute until the behaviour has completed all its actions.|
-|float|score|The score for the behaviour after the behaviour has evaluated its considerations.|
-|float|cooldown_seconds|If > 0.0, after the behaviour is chosen it will a score of 0.0 during the `evaluate_options` until the time has passed.|
-|int|cooldown_turns|If > 0, after the behaviour is chosen it will a score of 0 during the `evaluate_options` until the given number of calls to the evaluation function has been done.|
+|Type|Name|Description|Version|
+|--|--|--|--|
+|bool|is_active|This property can be used to include or exlude the node from processing.|v1.0|
+|bool|can_be_interrupted|A boolean value to determine if the behaviour can be interrupted or not. If a behaviour cannot be interrupted, the `evaluate_options` method of the `UtilityAIAgent` will not execute until the behaviour has completed all its actions.|v1.0|
+|float|score|The score for the behaviour after the behaviour has evaluated its considerations.|v1.0|
+|float|cooldown_seconds|If > 0.0, after the behaviour is chosen it will a score of 0.0 during the `evaluate_options` until the time has passed.|v1.0|
+|int|cooldown_turns|If > 0, after the behaviour is chosen it will a score of 0 during the `evaluate_options` until the given number of calls to the evaluation function has been done.|v1.0|
 
 
 #### Methods 
@@ -117,11 +119,11 @@ The behaviour group node will use the  `consideration` nodes that are its childs
 
 The `UtilityAIBehaviourGroup` has the following properties:
 
-|Type|Name|Description|
-|--|--|--|
-|bool|is_active|This property can be used to include or exlude the node from processing.|
-|float|score|The score for the behaviour group after the considerations that are its child nodes have been evaluated. If no consideration nodes have been added as the childs of the Behaviour Group, the score will be 0.0 but the child behaviours of the Behaviour Group will still be evaluated.|
-|float|activation_score|The score must be greater or equal to the activation score for the behaviour group to allow for evaluation of the behaviour nodes that are its children.|
+|Type|Name|Description|Version|
+|--|--|--|--|
+|bool|is_active|This property can be used to include or exlude the node from processing.|v1.0|
+|float|score|The score for the behaviour group after the considerations that are its child nodes have been evaluated. If no consideration nodes have been added as the childs of the Behaviour Group, the score will be 0.0 but the child behaviours of the Behaviour Group will still be evaluated.|v1.0|
+|float|activation_score|The score must be greater or equal to the activation score for the behaviour group to allow for evaluation of the behaviour nodes that are its children.|v1.0|
 
 
 #### Methods 
@@ -139,28 +141,49 @@ If a `sensor` or a `sensor group` is used as the input value for a consideration
 
 Consideration groups can be used to aggregate the input from several considerations or consideration groups to create more complex consideration logic. 
 
+-- `DEV` The following section about a feature under development --
+
+A custom evaluation method can be defined for the `UtilityAIConsideration` node by extending the node with a script and defining a method named `eval`: 
+
+```gdscript
+func eval() -> void:
+    # Your code here. 
+    score = 0.0
+```
+
+In your custom `eval` method you should set the `score` property to a value between 0 and 1. You can sample the `activation_curve` using the method `sample_activation_curve(double input_value)`. Also, you can set the `has_vetoed` property by using your custom function. If `has_vetoed` property is true, it causes the Behaviour to receive a score of 0.0 and the behaviour immediately ends evaluating other considerations. 
+
+-- End of section about a feature under development --
+
 #### Properties
 
 The `UtilityAIConsideration` has the following properties:
 
-|Type|Name|Description|
-|--|--|--|
-|bool|is_active|This property can be used to include or exlude the node from processing.|
-|float|activation_input_value|A floating point value in the range of 0..1.|
-|NodePath|input_sensor_node_path|A nodepath to a sensor or a sensor group node that will set the `activation_input_value`.|
-|Curve|activation_curve|A godot curve property that defines how the `activation_input_value` will be translated to a `score`.|
-|float|score|The resulting score for the consideration after evaluation.|
+|Type|Name|Description|Version|
+|--|--|--|--|
+|bool|is_active|This property can be used to include or exlude the node from processing.|v1.0|
+|float|activation_input_value|A floating point value in the range of 0..1.|v1.0|
+|NodePath|input_sensor_node_path|A nodepath to a sensor or a sensor group node that will set the `activation_input_value`.|v1.0|
+|Curve|activation_curve|A godot curve property that defines how the `activation_input_value` will be translated to a `score`.|v1.0|
+|float|score|The resulting score for the consideration after evaluation.|v1.0|
+|bool|has_vetoed|If this is set to `true`, the consideration forces the score to be 0.0 and ends the evaluation immediately.|v1.0|
 
 The `UtilityAIConsiderationGroup` has the following properties:
 
-|Type|Name|Description|
-|--|--|--|
-|float|evaluation_method|A choice of how the sensors and sensor groups that are childs of the node are aggregated. Can be one of the following: Sum:0,Min:1,Max:2,Mean:3,Multiply:4,FirstNonZero:5,OneMinusScore:6.|
-|float|score|The resulting score for the consideration group after evaluation.|
+|Type|Name|Description|Version|
+|--|--|--|--|
+|float|evaluation_method|A choice of how the sensors and sensor groups that are childs of the node are aggregated. Can be one of the following: Sum:0,Min:1,Max:2,Mean:3,Multiply:4,FirstNonZero:5,OneMinusScore:6.|v1.0|
+|float|score|The resulting score for the consideration group after evaluation.|v1.0|
+|bool|has_vetoed|If this is set to `true`, the consideration group forces the score to be 0.0 and ends the evaluation immediately. The consideration group can receive this value from any of the considerations that are its childs.|v1.0|
+
 
 #### Methods 
 
-None.
+The `UtilityAIConsideration` has the following methods:
+
+|Type|Name|Description|Version|
+|--|--|--|--|
+|double|sample_activation_curve(double input_value)|Use the input_value to get the resulting Y-value for the `activation_curve`. If no valid curve is set, this method will return 0.0.|DEV|
 
 ### UtilityAIAction and UtilityAIActionGroup
 
@@ -174,18 +197,18 @@ Action groups can be used create sequences of actions, or to pick one random act
 
 The `UtilityAIAction` has the following properties:
 
-|Type|Name|Description|
-|--|--|--|
-|bool|is_active|This property can be used to include or exlude the node from processing.|
-|int|action_id|A user-definable numeric ID for the action. Provided as an alternative to using action node names for identifying which is the current action the `AI agent` is currently executing.|
-|bool|is_finished|Use this property only to let the `AI agent` know when the chosen action is finished. The stepper function will immediately set it back to false once it has moved on to the next action.|
+|Type|Name|Description|Version|
+|--|--|--|--|
+|bool|is_active|This property can be used to include or exlude the node from processing.|v1.0|
+|int|action_id|A user-definable numeric ID for the action. Provided as an alternative to using action node names for identifying which is the current action the `AI agent` is currently executing.|v1.0|
+|bool|is_finished|Use this property only to let the `AI agent` know when the chosen action is finished. The stepper function will immediately set it back to false once it has moved on to the next action.|v1.0|
 
 The `UtilityAIActionGroup` has the following properties:
 
-|Type|Name|Description|
-|--|--|--|
-|float|execution_rule|A choice of how the actions that are child nodes are executed: Sequence:0,PickOneAtRandom:1. The Sequence choice will execute the actions from top to bottom and the Pick One At Random does what it says it will.|
-|bool|is_finished|Set internally by the stepper, visible only for debugging purposes.|
+|Type|Name|Description|Version|
+|--|--|--|--|
+|float|execution_rule|A choice of how the actions that are child nodes are executed: Sequence:0,PickOneAtRandom:1. The Sequence choice will execute the actions from top to bottom and the Pick One At Random does what it says it will.|v1.0|
+|bool|is_finished|Set internally by the stepper, visible only for debugging purposes.|v1.0|
 
 #### Methods 
 

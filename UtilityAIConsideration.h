@@ -14,9 +14,10 @@ class UtilityAIConsideration : public UtilityAIConsiderations {
 
 private:
     UtilityAISensors* _input_sensor;
-    NodePath _input_sensor_node_path;
-    Ref<Curve> _activation_curve;
-    double     _activation_input_value;
+    NodePath          _input_sensor_node_path;
+    Ref<Curve>        _activation_curve;
+    double            _activation_input_value;
+    bool              _has_custom_evaluation_method;
     
 protected:
     static void _bind_methods();
@@ -44,6 +45,7 @@ public:
     // Handling functions.
 
     virtual double evaluate() override;
+    virtual double sample_activation_curve( double input_value ) const;
 };
 
 }
