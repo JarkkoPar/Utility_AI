@@ -98,7 +98,7 @@ double UtilityAIConsideration::evaluate() {
     // If the consideration has been extended with a custom evaluation method,
     // that is used instead of sampling the curve.
     if( _has_custom_evaluation_method ) {
-        this->call("eval");
+        call(StringName("eval"));
         return _score;
     }
     
