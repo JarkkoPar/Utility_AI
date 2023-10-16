@@ -22,11 +22,11 @@ void UtilityAIBehaviour::_bind_methods() {
     
     ClassDB::bind_method(D_METHOD("set_cooldown_seconds", "cooldown_seconds"), &UtilityAIBehaviour::set_cooldown_seconds);
     ClassDB::bind_method(D_METHOD("get_cooldown_seconds"), &UtilityAIBehaviour::get_cooldown_seconds);
-    ADD_PROPERTY(PropertyInfo(Variant::FLOAT, "cooldown_seconds", PROPERTY_HINT_RANGE, "0.0,600.0,or_greater"), "set_cooldown_seconds","get_cooldown_seconds");
+    ADD_PROPERTY(PropertyInfo(Variant::FLOAT, "cooldown_seconds", PROPERTY_HINT_RANGE, "0.0,3600.0,or_greater,suffix:seconds"), "set_cooldown_seconds","get_cooldown_seconds");
 
     ClassDB::bind_method(D_METHOD("set_cooldown_turns", "cooldown_turns"), &UtilityAIBehaviour::set_cooldown_turns);
     ClassDB::bind_method(D_METHOD("get_cooldown_turns"), &UtilityAIBehaviour::get_cooldown_turns);
-    ADD_PROPERTY(PropertyInfo(Variant::INT, "cooldown_turns", PROPERTY_HINT_RANGE, "0,64,or_greater"), "set_cooldown_turns","get_cooldown_turns");
+    ADD_PROPERTY(PropertyInfo(Variant::INT, "cooldown_turns", PROPERTY_HINT_RANGE, "0,64,or_greater,suffix:turns"), "set_cooldown_turns","get_cooldown_turns");
 
 
     ADD_SUBGROUP("Debugging","");
@@ -37,7 +37,7 @@ void UtilityAIBehaviour::_bind_methods() {
 
     ClassDB::bind_method(D_METHOD("set_current_action_index", "current_action_index"), &UtilityAIBehaviour::set_current_action_index);
     ClassDB::bind_method(D_METHOD("get_current_action_index"), &UtilityAIBehaviour::get_current_action_index);
-    ADD_PROPERTY(PropertyInfo(Variant::INT, "current_action_index", PROPERTY_HINT_RANGE,"-0,256"), "set_current_action_index","get_current_action_index");
+    ADD_PROPERTY(PropertyInfo(Variant::INT, "current_action_index", PROPERTY_HINT_RANGE,"0,256"), "set_current_action_index","get_current_action_index");
     
 }
 
@@ -201,6 +201,7 @@ Node* UtilityAIBehaviour::step_actions() {
 
     // Check if the node is an action.
     Node* current_node = get_child(_current_action_index);
+    if( current_node == nullptr ) return nullptr;
     UtilityAIAction* current_action = godot::Object::cast_to<UtilityAIAction>(current_node);
     if( current_action != nullptr ) {
         if( !current_action->get_is_finished() ) return current_node;
@@ -225,30 +226,32 @@ Node* UtilityAIBehaviour::step_actions() {
     ++_current_action_index;
     while( _current_action_index < get_child_count() ) {
         current_node = get_child(_current_action_index);
-        if( UtilityAIAction* action_node = godot::Object::cast_to<UtilityAIAction>(current_node) ) {
-            //WARN_PRINT("UtilityAIBehaviour::step_actions(): Found an action, starting the action...");
-            if( action_node->get_is_active() ) {
-                _current_action_node = action_node;
-                _current_action_node->start_action();
-                //WARN_PRINT("UtilityAIBehaviour::step_actions(): Done, returning action node.");
-                return _current_action_node;
-            }//endif action is active
-        } else if( UtilityAIActionGroup* action_group = godot::Object::cast_to<UtilityAIActionGroup>(current_node) ) {
-            if( action_group->get_is_active() ) {
-                //WARN_PRINT("UtilityAIBehaviour::step_actions(): Found an action group, starting the action group." + get_name());
-                action_group->start_action();
-                //WARN_PRINT("UtilityAIBehaviour::step_actions(): Stepping it to find the sub action...");    
-                _current_action_node = godot::Object::cast_to<UtilityAIAction>(action_group->step_actions());
-                //if( _current_action_node == nullptr ) {
-                    //WARN_PRINT("UtilityAIBehaviour::step_actions(): Stepping function returned NULL action pointer.");    
-                //}
-                if( _current_action_node != nullptr ) {
-                    //WARN_PRINT("UtilityAIBehaviour::step_actions(): Stepping function returned a valid action pointer." + _current_action_node->get_name());    
+        if( current_node == nullptr ) {         
+            if( UtilityAIAction* action_node = godot::Object::cast_to<UtilityAIAction>(current_node) ) {
+                //WARN_PRINT("UtilityAIBehaviour::step_actions(): Found an action, starting the action...");
+                if( action_node->get_is_active() ) {
+                    _current_action_node = action_node;
                     _current_action_node->start_action();
+                    //WARN_PRINT("UtilityAIBehaviour::step_actions(): Done, returning action node.");
                     return _current_action_node;
-                }
-            }//endif action group is active            
-        }// endif is action or action_group
+                }//endif action is active
+            } else if( UtilityAIActionGroup* action_group = godot::Object::cast_to<UtilityAIActionGroup>(current_node) ) {
+                if( action_group->get_is_active() ) {
+                    //WARN_PRINT("UtilityAIBehaviour::step_actions(): Found an action group, starting the action group." + get_name());
+                    action_group->start_action();
+                    //WARN_PRINT("UtilityAIBehaviour::step_actions(): Stepping it to find the sub action...");    
+                    _current_action_node = godot::Object::cast_to<UtilityAIAction>(action_group->step_actions());
+                    //if( _current_action_node == nullptr ) {
+                        //WARN_PRINT("UtilityAIBehaviour::step_actions(): Stepping function returned NULL action pointer.");    
+                    //}
+                    if( _current_action_node != nullptr ) {
+                        //WARN_PRINT("UtilityAIBehaviour::step_actions(): Stepping function returned a valid action pointer." + _current_action_node->get_name());    
+                        _current_action_node->start_action();
+                        return _current_action_node;
+                    }
+                }//endif action group is active            
+            }// endif is action or action_group
+        }// endif node is not nullptr
         ++_current_action_index;
         
     }//endwhile action index in bounds

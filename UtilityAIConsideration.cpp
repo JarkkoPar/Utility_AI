@@ -24,6 +24,7 @@ void UtilityAIConsideration::_bind_methods() {
     ADD_PROPERTY(PropertyInfo(Variant::FLOAT, "activation_input_value", PROPERTY_HINT_RANGE, "0.0,1.0,or_less,or_greater"), "set_activation_input_value","get_activation_input_value");
 
     ClassDB::bind_method(D_METHOD("sample_activation_curve", "input_value"), &UtilityAIConsideration::sample_activation_curve);
+    ClassDB::bind_method(D_METHOD("initialize_consideration"), &UtilityAIConsideration::initialize_consideration);
 }
 
 
@@ -33,6 +34,7 @@ UtilityAIConsideration::UtilityAIConsideration() {
     _activation_input_value = 0.0;
     _input_sensor = nullptr;
     _has_custom_evaluation_method = false;
+    
 }
 
 
@@ -72,19 +74,46 @@ double UtilityAIConsideration::get_activation_input_value() const {
 // Godot virtuals.
 
 void UtilityAIConsideration::_ready() {
-    if( !get_is_active() ) return;
-    if( Engine::get_singleton()->is_editor_hint() ) return;
-    Node* node = get_node_or_null(_input_sensor_node_path);
-    // As this is not always needed, error out without a message.
-    if( node == nullptr ) return;
-    //ERR_FAIL_COND_MSG( node == nullptr, "UtilityAIConsideration error, invalid nodepath for the sensor in UtilityAIConsideration '" + get_name() + "'.");
-    
-    _input_sensor = godot::Object::cast_to<UtilityAISensors>(node);
-    ERR_FAIL_COND_MSG( _input_sensor == nullptr, "UtilityAIConsideration error, the assigned node's type was not a UtilityAISensor for UtilityAIConsideration '" + get_name() + "'.");
-
-    _has_custom_evaluation_method = has_method("eval");    
+    initialize_consideration();
 }
 
+/**
+void UtilityAIConsideration::_notification(int p_what) {
+	switch (p_what) {
+        case NOTIFICATION_ENTER_TREE: {
+            // Entered the tree. 
+        } break;
+		case NOTIFICATION_EXIT_TREE: {
+			//_clear_monitoring();
+		} break;
+	}
+}
+/**/
+
+// Handling functions.
+
+void UtilityAIConsideration::initialize_consideration() {
+    if( !get_is_active() ) return;
+    if( Engine::get_singleton()->is_editor_hint() ) return;
+
+    _has_custom_evaluation_method = has_method("eval");
+    if( _input_sensor_node_path.is_empty()) {
+        return;
+    }
+    Node* node = get_node_or_null(_input_sensor_node_path);
+    // As this is not always needed, error out without a message.
+    if( node == nullptr ) {
+        return;
+    } 
+
+    UtilityAISensors* sensor = godot::Object::cast_to<UtilityAISensors>(node);
+    if( sensor == nullptr ) {
+        return;
+    }
+    _input_sensor = sensor;
+    //ERR_FAIL_COND_MSG( _input_sensor == nullptr, "UtilityAIConsideration::intialize_consideration(): Error, the assigned node's type was not a UtilityAISensors type for UtilityAIConsideration '" + get_name() + "'.");
+}
+    
 
 double UtilityAIConsideration::evaluate() { 
     if( !get_is_active() ) return 0.0;
@@ -98,11 +127,11 @@ double UtilityAIConsideration::evaluate() {
     // If the consideration has been extended with a custom evaluation method,
     // that is used instead of sampling the curve.
     if( _has_custom_evaluation_method ) {
-        call(StringName("eval"));
+        call("eval");
         return _score;
     }
     
-    if (_activation_curve.is_valid()) {
+    if(_activation_curve.is_valid()) {
 		_score = _activation_curve->sample( _activation_input_value );
 	} else {
         _score = _activation_input_value;
@@ -112,7 +141,7 @@ double UtilityAIConsideration::evaluate() {
 }
 
 double UtilityAIConsideration::sample_activation_curve( double input_value ) const {
-    if (_activation_curve.is_valid()) {
+    if(_activation_curve.is_valid()) {
 		return _activation_curve->sample( input_value );
     }
     return 0.0;

@@ -41,9 +41,11 @@ public:
             
     // Godot virtuals.
     void _ready();
+    //void _notification( int p_what );
    
     // Handling functions.
-
+    
+    void initialize_consideration();
     virtual double evaluate() override;
     virtual double sample_activation_curve( double input_value ) const;
 };

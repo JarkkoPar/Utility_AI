@@ -31,21 +31,6 @@ public:
 
     virtual double evaluate_sensor_value();
  
-    /**
-    
-    // Godot virtuals.
-    void _ready();
-    void _process(double delta);
-    void _physics_process(double delta);
-
-    void _notification(int p_what);
-
-    // Handling functions.
-
-    bool _change_to_state( String target_state_name );
-
-    void _update_current_state(double delta);
-    */
 };
 
 }

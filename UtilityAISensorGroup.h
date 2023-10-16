@@ -14,6 +14,7 @@ class UtilityAISensorGroup : public UtilityAISensors {
 
 private:
     int _evaluation_method;
+    bool _invert_sensor_value;
 protected:
     static void _bind_methods();
 
@@ -34,18 +35,11 @@ public:
         Mean=3,
         Multiply=4,
         FirstNonZero=5,
-        OneMinusScore=6
     };
 
-    /**
-  
-    // Godot virtuals.
-    void _ready();
-    void _process(double delta);
-    void _physics_process(double delta);
+    void set_invert_sensor_value( bool invert_sensor_value );
+    bool get_invert_sensor_value() const;
 
-    void _notification(int p_what);
-    */
     // Handling functions.
 
     virtual double evaluate_sensor_value() override;

@@ -30,7 +30,7 @@ Do what ever you need to do for the action selected and once done, mark it as fi
 
 ## Nodes in-depth 
 
-This section describes the nodes, their properties and methods in detail. After each property and method you can find the version tag when the given property/method was introduced. Nodes, properties and methods that are being developed for a future release have the tag DEV.
+This section describes the nodes, their properties and methods in detail. After each property and method you can find the version tag when the given property/method was introduced. Nodes, properties and methods that are being developed for a future release have the version tag `DEV`.
 
 ### UtilityAIAgent 
 
@@ -72,7 +72,12 @@ The `UtilityAISensorGroup` has the following properties:
 
 |Type|Name|Description|Version|
 |--|--|--|--|
+|bool|is_active|This property can be used to include or exlude the node from processing. Note that even a deactivated sensor can be used as valid input for the Considerations.|v1.0|
+|float|sensor_value|A floating point value in the range of 0..1.|v1.0|
 |float|evaluation_method|A choice of how the sensors and sensor groups that are childs of the node are aggregated. Can be one of the following: Sum:0,Min:1,Max:2,Mean:3,Multiply:4,FirstNonZero:5,OneMinusScore:6.|v1.0|
+|float|evaluation_method|A choice of how the sensors and sensor groups that are childs of the node are aggregated. Can be one of the following: Sum:0,Min:1,Max:2,Mean:3,Multiply:4,FirstNonZero:5.|`DEV`|
+|bool|invert_sensor_value|This inverts the group sensor_value by calculating: sensor_value = 1.0 - sensor_value. It is applied after all the child nodes have been evaluated.|`DEV`| 
+
 
 #### Methods 
 
@@ -85,9 +90,9 @@ This node type should be added as child node of the `UtilityAIAgent` node or the
 
 As you may have guessed from the name, the purpose of the behaviour nodes is to define what the `AI agent` will do based on different inputs given using the `sensor` nodes. To accomplish this each behaviour node must have one or more `consideration` or `consideration group` nodes as its childs, and also one or more `action` or `action group` nodes. 
 
-The behaviour node will use the  `consideration` nodes that are its childs to determine a `score` for itself. When the behaviour is chosen by the `AI agent` as the one to execute, the `action` nodes are stepped through.
+The behaviour node will use the  `consideration` nodes that are its childs to determine a `score` for itself. Basically it just sums up the scores from the considerations. When the behaviour is chosen by the `AI agent` as the one to execute, the `action` nodes are stepped through.
 
-The behaviour has also two properties "cooldown" properties: `cooldown_seconds` and `cooldown_turns`. These can be used to temporarily exclude some behaviours from subsequent `AI agent`'s `evaluate_options` calls once they have been chosen. The `cooldown_seconds` is meant to be used with real-time games and the `cooldown_turns` with turn based games but both can be used even at the same time. The difference in the cooldown countdown is that the `cooldown_seconds` counts down regardless of how many times the `AI agent`'s `evaluate_options` method is called, and the `cooldown_turns` counts down only when the `evaluate_options` method is called. 
+The behaviour has also two "cooldown" properties: `cooldown_seconds` and `cooldown_turns`. These can be used to temporarily exclude some behaviours from subsequent `AI agent`'s `evaluate_options` calls once they have been chosen. The `cooldown_seconds` is meant to be used with real-time games and the `cooldown_turns` with turn based games but both can be used even at the same time. The difference in the cooldown countdown is that the `cooldown_seconds` counts down regardless of how many times the `AI agent`'s `evaluate_options` method is called, and the `cooldown_turns` counts down only when the `evaluate_options` method is called. 
 
 #### Properties
 
@@ -151,7 +156,15 @@ func eval() -> void:
     score = 0.0
 ```
 
-In your custom `eval` method you should set the `score` property to a value between 0 and 1. You can sample the `activation_curve` using the method `sample_activation_curve(double input_value)`. Also, you can set the `has_vetoed` property by using your custom function. If `has_vetoed` property is true, it causes the Behaviour to receive a score of 0.0 and the behaviour immediately ends evaluating other considerations. 
+In your custom `eval` method you should set the `score` property to a value between 0 and 1. You can sample the `activation_curve` using the method `sample_activation_curve(double input_value)`. Also, you can set the `has_vetoed` property by using your custom function. If `has_vetoed` property is true, it causes the Behaviour to receive a score of 0.0 and the behaviour immediately ends evaluating other considerations. Note that the `has_vetoed` property will not be reset back to false automatically, so if you set it to true in your custom evaluation method, you will also need to set it to false when you want the veto-state to end.
+
+If you need to override the `_ready()` method for your custom consideration, you need to add the `initialize_consideration()` method call to your `_ready()` method:
+```gdscript
+func _ready():
+    initialize_consideration()
+    # Your code here. 
+    
+```
 
 -- End of section about a feature under development --
 
@@ -173,8 +186,10 @@ The `UtilityAIConsiderationGroup` has the following properties:
 |Type|Name|Description|Version|
 |--|--|--|--|
 |float|evaluation_method|A choice of how the sensors and sensor groups that are childs of the node are aggregated. Can be one of the following: Sum:0,Min:1,Max:2,Mean:3,Multiply:4,FirstNonZero:5,OneMinusScore:6.|v1.0|
+|float|evaluation_method|A choice of how the sensors and sensor groups that are childs of the node are aggregated. Can be one of the following: Sum:0,Min:1,Max:2,Mean:3,Multiply:4,FirstNonZero:5.|`DEV`|
 |float|score|The resulting score for the consideration group after evaluation.|v1.0|
 |bool|has_vetoed|If this is set to `true`, the consideration group forces the score to be 0.0 and ends the evaluation immediately. The consideration group can receive this value from any of the considerations that are its childs.|v1.0|
+|bool|invert_score|This inverts the group score by calculating: score = 1.0 - score. It is applied after all the child nodes have been evaluated.|`DEV`| 
 
 
 #### Methods 
@@ -183,7 +198,8 @@ The `UtilityAIConsideration` has the following methods:
 
 |Type|Name|Description|Version|
 |--|--|--|--|
-|double|sample_activation_curve(double input_value)|Use the input_value to get the resulting Y-value for the `activation_curve`. If no valid curve is set, this method will return 0.0.|DEV|
+|void|initialize_consideration()|If you override the _ready() method, you have to call initialize_consideration() in your _ready() method.|`DEV`|
+|double|sample_activation_curve(double input_value)|Use the input_value to get the resulting Y-value for the `activation_curve`. If no valid curve is set, this method will return 0.0.|`DEV`|
 
 ### UtilityAIAction and UtilityAIActionGroup
 

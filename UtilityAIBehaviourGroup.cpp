@@ -38,9 +38,6 @@ UtilityAIBehaviourGroup::UtilityAIBehaviourGroup() {
 UtilityAIBehaviourGroup::~UtilityAIBehaviourGroup() {
 }
 
-// Handling functions.
-
-
 
 
 // Getters and Setters.
@@ -79,12 +76,14 @@ bool UtilityAIBehaviourGroup::evaluate() {
 
     // Evaluate the children.
     for( int i = 0; i < num_children; ++i ) {
-        UtilityAIConsiderations* considerationNode = godot::Object::cast_to<UtilityAIConsiderations>(get_child(i));
-        if( considerationNode == nullptr ) continue;
-        if( !considerationNode->get_is_active() ) continue;
-        _score += considerationNode->evaluate();
+        Node* node = get_child(i);
+        if( node == nullptr ) continue;
+        UtilityAIConsiderations* considerationsNode = godot::Object::cast_to<UtilityAIConsiderations>(node);
+        if( considerationsNode == nullptr ) continue;
+        if( !considerationsNode->get_is_active() ) continue;
+        _score += considerationsNode->evaluate();
         ++num_consideration_nodes_handled;
-        if( considerationNode->get_has_vetoed()){
+        if( considerationsNode->get_has_vetoed()){
             _score = 0.0;
             return false; // The consideration vetoed this behaviour group.
         }

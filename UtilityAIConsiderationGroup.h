@@ -15,6 +15,7 @@ class UtilityAIConsiderationGroup : public UtilityAIConsiderations {
 private:
 
     int _evaluation_method;
+    bool _invert_score;
     
 protected:
     static void _bind_methods();
@@ -36,8 +37,11 @@ public:
         Mean=3,
         Multiply=4,
         FirstNonZero=5,
-        OneMinusScore=6
+        //OneMinusScore=6
     };
+
+    void set_invert_score( bool invert_score );
+    bool get_invert_score() const;
 
     // Handling functions.
 

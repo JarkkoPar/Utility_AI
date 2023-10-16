@@ -4,6 +4,8 @@
 #include "UtilityAI.h"
 
 #include <godot_cpp/classes/node.hpp>
+#include <godot_cpp/classes/random_number_generator.hpp>
+
 
 #define UTILITYAIAGENT_MAX_TOP_SCORING_BEHAVIOURS 16
 
@@ -13,14 +15,14 @@ class UtilityAIAgent : public UtilityAI {
     GDCLASS(UtilityAIAgent, UtilityAI)
 
 private:
-    
+    RandomNumberGenerator _rng;
     Node* _current_behaviour_node;
 
     Node* _current_action_node;
 
     int    _num_behaviours_to_select;
     int    _num_possible_behaviours;
-    int    _top_scoring_behaviours[UTILITYAIAGENT_MAX_TOP_SCORING_BEHAVIOURS];
+    //int    _top_scoring_behaviours[UTILITYAIAGENT_MAX_TOP_SCORING_BEHAVIOURS];
     Node*  _top_scoring_behaviours_nodes[UTILITYAIAGENT_MAX_TOP_SCORING_BEHAVIOURS];
     double _top_scoring_behaviours_score[UTILITYAIAGENT_MAX_TOP_SCORING_BEHAVIOURS];
     godot::String _top_scoring_behaviour_name;
@@ -59,6 +61,9 @@ public:
 
     void set_current_action_node( Node* new_action_node );
     Node* get_current_action_node() const;
+
+    //void set_random_number_generator( RandomNumberGenerator rng );
+    //RandomNumberGenerator get_random_number_generator() const;
 
     // Handling functions.
 

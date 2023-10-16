@@ -58,7 +58,7 @@ double UtilityAIConsiderations::get_score() const {
     return _score;
 }
 
-double UtilityAIConsiderations::evaluate() { //UtilityAIAgent* agent, double delta) {
+double UtilityAIConsiderations::evaluate() { 
     return 0.0;
 }
 
