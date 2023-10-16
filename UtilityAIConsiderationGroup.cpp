@@ -114,7 +114,7 @@ double UtilityAIConsiderationGroup::evaluate() { //UtilityAIAgent* agent, double
         
     }//endfor children
 
-    if( UtilityAIConsiderationGroupEvaluationMethod::Mean ) {
+    if( _evaluation_method == UtilityAIConsiderationGroupEvaluationMethod::Mean ) {
         _score = _score / ((double)num_children);
     }
 
