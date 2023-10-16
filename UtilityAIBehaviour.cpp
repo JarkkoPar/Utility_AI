@@ -201,7 +201,6 @@ Node* UtilityAIBehaviour::step_actions() {
 
     // Check if the node is an action.
     Node* current_node = get_child(_current_action_index);
-    if( current_node == nullptr ) return nullptr;
     UtilityAIAction* current_action = godot::Object::cast_to<UtilityAIAction>(current_node);
     if( current_action != nullptr ) {
         if( !current_action->get_is_finished() ) return current_node;
@@ -226,7 +225,7 @@ Node* UtilityAIBehaviour::step_actions() {
     ++_current_action_index;
     while( _current_action_index < get_child_count() ) {
         current_node = get_child(_current_action_index);
-        if( current_node == nullptr ) {         
+        if( current_node != nullptr ) {         
             if( UtilityAIAction* action_node = godot::Object::cast_to<UtilityAIAction>(current_node) ) {
                 //WARN_PRINT("UtilityAIBehaviour::step_actions(): Found an action, starting the action...");
                 if( action_node->get_is_active() ) {
