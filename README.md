@@ -4,7 +4,7 @@ A Utility AI implementation for the Godot Engine using gdextension. If you don't
 
 *"...Utility AI, is a simple but effective way to model behaviours for non-player characters. Using numbers, formulas and scores to rate the relative benefit of possible actions, one can assign utilities to each action. A behaviour can then be selected based on which one scores the highest 'utility'...* - [Wikipedia - Utility system](https://en.wikipedia.org/wiki/Utility_system)
 
-You can download the latest version from the releases. The release contains an example project that shows the usage of these nodes.
+You can download the latest version of the source code from the releases. The releases in this repository contain only the source code. To get the binaries and the example project, go to this repository: [Utility AI GDExtension](https://github.com/JarkkoPar/Utility_AI_GDExtension).
 
 
 ## Node listing
@@ -75,8 +75,8 @@ The `UtilityAISensorGroup` has the following properties:
 |bool|is_active|This property can be used to include or exlude the node from processing. Note that even a deactivated sensor can be used as valid input for the Considerations.|v1.0|
 |float|sensor_value|A floating point value in the range of 0..1.|v1.0|
 |float|evaluation_method|A choice of how the sensors and sensor groups that are childs of the node are aggregated. Can be one of the following: Sum:0,Min:1,Max:2,Mean:3,Multiply:4,FirstNonZero:5,OneMinusScore:6.|v1.0|
-|float|evaluation_method|A choice of how the sensors and sensor groups that are childs of the node are aggregated. Can be one of the following: Sum:0,Min:1,Max:2,Mean:3,Multiply:4,FirstNonZero:5.|`DEV`|
-|bool|invert_sensor_value|This inverts the group sensor_value by calculating: sensor_value = 1.0 - sensor_value. It is applied after all the child nodes have been evaluated.|`DEV`| 
+|float|evaluation_method|A choice of how the sensors and sensor groups that are childs of the node are aggregated. Can be one of the following: Sum:0,Min:1,Max:2,Mean:3,Multiply:4,FirstNonZero:5.|v1.1|
+|bool|invert_sensor_value|This inverts the group sensor_value by calculating: sensor_value = 1.0 - sensor_value. It is applied after all the child nodes have been evaluated.|v1.1| 
 
 
 #### Methods 
@@ -146,8 +146,6 @@ If a `sensor` or a `sensor group` is used as the input value for a consideration
 
 Consideration groups can be used to aggregate the input from several considerations or consideration groups to create more complex consideration logic. 
 
--- `DEV` The following section about a feature under development --
-
 A custom evaluation method can be defined for the `UtilityAIConsideration` node by extending the node with a script and defining a method named `eval`: 
 
 ```gdscript
@@ -165,8 +163,6 @@ func _ready():
     # Your code here. 
     
 ```
-
--- End of section about a feature under development --
 
 #### Properties
 
@@ -186,10 +182,10 @@ The `UtilityAIConsiderationGroup` has the following properties:
 |Type|Name|Description|Version|
 |--|--|--|--|
 |float|evaluation_method|A choice of how the considerations and consideration groups that are childs of the node are aggregated. Can be one of the following: Sum:0,Min:1,Max:2,Mean:3,Multiply:4,FirstNonZero:5,OneMinusScore:6.|v1.0|
-|float|evaluation_method|A choice of how the considerations and consideration groups that are childs of the node are aggregated. Can be one of the following: Sum:0,Min:1,Max:2,Mean:3,Multiply:4,FirstNonZero:5.|`DEV`|
+|float|evaluation_method|A choice of how the considerations and consideration groups that are childs of the node are aggregated. Can be one of the following: Sum:0,Min:1,Max:2,Mean:3,Multiply:4,FirstNonZero:5.|v1.1|
 |float|score|The resulting score for the consideration group after evaluation.|v1.0|
 |bool|has_vetoed|If this is set to `true`, the consideration group forces the score to be 0.0 and ends the evaluation immediately. The consideration group can receive this value from any of the considerations that are its childs.|v1.0|
-|bool|invert_score|This inverts the group score by calculating: score = 1.0 - score. It is applied after all the child nodes have been evaluated.|`DEV`| 
+|bool|invert_score|This inverts the group score by calculating: score = 1.0 - score. It is applied after all the child nodes have been evaluated.|v1.1| 
 
 
 #### Methods 
@@ -198,8 +194,8 @@ The `UtilityAIConsideration` has the following methods:
 
 |Type|Name|Description|Version|
 |--|--|--|--|
-|void|initialize_consideration()|If you override the _ready() method, you have to call initialize_consideration() in your _ready() method.|`DEV`|
-|double|sample_activation_curve(double input_value)|Use the input_value to get the resulting Y-value for the `activation_curve`. If no valid curve is set, this method will return 0.0.|`DEV`|
+|void|initialize_consideration()|If you override the _ready() method, you have to call initialize_consideration() in your _ready() method.|v1.1|
+|double|sample_activation_curve(double input_value)|Use the input_value to get the resulting Y-value for the `activation_curve`. If no valid curve is set, this method will return 0.0.|v1.1|
 
 ### UtilityAIAction and UtilityAIActionGroup
 
@@ -233,7 +229,7 @@ None.
 
 ## Compiling from source
 
-To compile this repository, first setup the GDExample project as described in the Godot documentation. Copy the contents of this repository into the src-folder. Finally, copy the SConstruct file from the src folder to the parent folder.
+To compile this repository, first setup the GDExample project as described in the Godot documentation. The contents of this repository is in practice the src-folder, so copy the contents of this repository into the src-folder in the example project. Finally, copy the SConstruct file from the src folder to the parent folder.
  
 You should now be able to compile the project with the scons commands as noted in the Godot documentation for the GDExample project. 
 
