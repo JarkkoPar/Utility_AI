@@ -54,3 +54,7 @@ compile_commands.json
 *.so
 *.dll
 demo/.godot/
+bin/libutilityai.windows.template_debug.x86_64.exp
+bin/libutilityai.windows.template_debug.x86_64.lib
+bin/libutilityai.windows.template_release.x86_64.exp
+bin/libutilityai.windows.template_release.x86_64.lib
