@@ -6,6 +6,9 @@ A Utility AI implementation for the Godot Engine using gdextension. If you don't
 
 You can download the latest version of the source code from the releases. The releases in this repository contain only the source code. To get the binaries and the example project, go to this repository: [Utility AI GDExtension](https://github.com/JarkkoPar/Utility_AI_GDExtension).
 
+## Compatibility
+
+Godot 4.1.2 or newer.
 
 ## Node listing
 
