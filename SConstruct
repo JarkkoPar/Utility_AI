@@ -18,14 +18,14 @@ sources = Glob("src/*.cpp")
 
 if env["platform"] == "macos":
     library = env.SharedLibrary(
-        "demo/bin/libutilityai.{}.{}.framework/libutilityai.{}.{}".format(
+        "bin/libutilityai.{}.{}.framework/libutilityai.{}.{}".format(
             env["platform"], env["target"], env["platform"], env["target"]
         ),
         source=sources,
     )
 else:
     library = env.SharedLibrary(
-        "demo/bin/libutilityai{}{}".format(env["suffix"], env["SHLIBSUFFIX"]),
+        "bin/libutilityai{}{}".format(env["suffix"], env["SHLIBSUFFIX"]),
         source=sources,
     )
 

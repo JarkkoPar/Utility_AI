@@ -49,3 +49,8 @@ UtilityAISensors.windows.template_release.x86_64.obj
 UtilityAIBehaviourGroup.windows.template_debug.x86_64.obj
 UtilityAIBehaviourGroup.windows.template_release.x86_64.obj
 UtilityAIBehaviourGroup.os
+compile_commands.json
+.sconsign.dblite
+*.so
+*.dll
+demo/.godot/

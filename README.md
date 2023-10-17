@@ -229,9 +229,15 @@ None.
 
 ## Compiling from source
 
-To compile this repository, first setup the GDExample project as described in the Godot documentation. The contents of this repository is in practice the src-folder, so copy the contents of this repository into the src-folder in the example project. Finally, copy the SConstruct file from the src folder to the parent folder.
- 
-You should now be able to compile the project with the scons commands as noted in the Godot documentation for the GDExample project. 
+1. Clone the repository
+2. Initialize and update submodules
+```
+git submodule init && git submodule update
+```
+3. Now you should be able to compile the project with scons
+```
+scons platform=<valid platform>
+```
 
-After compilation, copy the libutilityai.gdextension file and the icons-folder with its contents to the Demo-project bin-folder. If all goes well, you should now be able to use the nodes in the Demo-project and the nodes should have their icons.
+After compilation, copy the bin folder into `demo/addons/utility_ai/` folder. If all goes well, you should be able to launch the demo project in Godot and start using the addon.
 
