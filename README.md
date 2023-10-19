@@ -86,6 +86,36 @@ The `UtilityAISensorGroup` has the following properties:
 
 None.
 
+-- `DEV` This section contains information about a feature under development --
+
+### Specialized Sensors 
+
+There are also a number of specialized sensors that make it more convinient to use vectors with certain common input types. 
+
+#### UtilityAIDistanceVector2Sensor and UtilityAIDistanceVector3Sensor
+As the name suggests, these are distance sensors. Uses the squared distance when scaling the values to 0..1 range.
+
+##### Properties
+
+|Type|Name|Description|Version|
+|--|--|--|--|
+|bool|is_active|This property can be used to include or exlude the node from processing.|v1.0|
+|float|sensor_value|A floating point value in the range of 0..1.|v1.0|
+|Vector2/3|from_vector|The start point of the distance vector.|`DEV`|
+|Vector2/3|to_vector|The end point of the distance vector.|`DEV`|
+|Vector2/3|from_to_vector|Vector obtained by calculating to_vector - from_vector.|`DEV`|
+|Vector2/3|direction_vector|Optionally calculated direction vector.|`DEV`|
+|float|distance|Optionally calculated non-squared distance.|`DEV`|
+|float|distance_squared|Squared distance.|`DEV`|
+|bool|is_distance_calculated|If true, the non-squared distance is calculated.|`DEV`|
+|bool|is_direction_vector_calculated|Optionally calculated direction vector.|`DEV`|
+
+
+##### Methods 
+
+None
+
+-- End of section about a feature under development --
 
 ### UtilityAIBehaviour
 

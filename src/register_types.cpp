@@ -14,6 +14,12 @@
 #include "UtilityAISensor.h"
 #include "UtilityAISensorGroup.h"
 
+// Special sensors.
+#include "SpecialSensors/UtilityAIBooleanSensor.h"
+#include "SpecialSensors/UtilityAIDistanceVector2Sensor.h"
+#include "SpecialSensors/UtilityAIDistanceVector3Sensor.h"
+
+// Main header for UtilityAI.
 #include "UtilityAI.h"
 
 // Standard headers.
@@ -43,6 +49,11 @@ void initialize_utility_ai_module(ModuleInitializationLevel p_level) {
     ClassDB::register_class<UtilityAIBehaviour>();
     ClassDB::register_class<UtilityAIBehaviourGroup>();
     ClassDB::register_class<UtilityAIAgent>();
+    
+    // Special sensors.
+    ClassDB::register_class<UtilityAIBooleanSensor>();
+    ClassDB::register_class<UtilityAIDistanceVector2Sensor>();
+    ClassDB::register_class<UtilityAIDistanceVector3Sensor>();
     
 }
 

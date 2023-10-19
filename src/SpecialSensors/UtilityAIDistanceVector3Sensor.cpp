@@ -12,16 +12,23 @@ void UtilityAIDistanceVector3Sensor::_bind_methods() {
     
     ClassDB::bind_method(D_METHOD("set_from_vector", "to_vector"), &UtilityAIDistanceVector3Sensor::set_from_vector3);
     ClassDB::bind_method(D_METHOD("get_from_vector"), &UtilityAIDistanceVector3Sensor::get_from_vector3);
-    ADD_PROPERTY(PropertyInfo(Variant::VECTOR3, "to_vector", PROPERTY_HINT_NONE), "set_from_vector","get_from_vector");
+    ADD_PROPERTY(PropertyInfo(Variant::VECTOR3, "from_vector", PROPERTY_HINT_NONE), "set_from_vector","get_from_vector");
 
     ClassDB::bind_method(D_METHOD("set_to_vector", "to_vector"), &UtilityAIDistanceVector3Sensor::set_to_vector3);
     ClassDB::bind_method(D_METHOD("get_to_vector"), &UtilityAIDistanceVector3Sensor::get_to_vector3);
     ADD_PROPERTY(PropertyInfo(Variant::VECTOR3, "to_vector", PROPERTY_HINT_NONE), "set_to_vector","get_to_vector");
-
     
     ClassDB::bind_method(D_METHOD("set_max_distance", "max_distance"), &UtilityAIDistanceVector3Sensor::set_max_distance);
     ClassDB::bind_method(D_METHOD("get_max_distance"), &UtilityAIDistanceVector3Sensor::get_max_distance);
     ADD_PROPERTY(PropertyInfo(Variant::FLOAT, "max_distance", PROPERTY_HINT_RANGE, "0.00000001,1000.0,or_greater"), "set_max_distance","get_max_distance");
+
+    ClassDB::bind_method(D_METHOD("set_is_distance_calculated", "is_distance_calculated"), &UtilityAIDistanceVector3Sensor::set_is_distance_calculated);
+    ClassDB::bind_method(D_METHOD("get_is_distance_calculated"), &UtilityAIDistanceVector3Sensor::get_is_distance_calculated);
+    ADD_PROPERTY(PropertyInfo(Variant::BOOL, "is_distance_calculated", PROPERTY_HINT_RANGE, "0.00000001,1000.0,or_greater"), "set_is_distance_calculated","get_is_distance_calculated");
+
+    ClassDB::bind_method(D_METHOD("set_is_direction_vector_calculated", "is_direction_vector_calculated"), &UtilityAIDistanceVector3Sensor::set_is_direction_vector_calculated);
+    ClassDB::bind_method(D_METHOD("get_is_direction_vector_calculated"), &UtilityAIDistanceVector3Sensor::get_is_direction_vector_calculated);
+    ADD_PROPERTY(PropertyInfo(Variant::BOOL, "is_direction_vector_calculated", PROPERTY_HINT_RANGE, "0.00000001,1000.0,or_greater"), "set_is_direction_vector_calculated","get_is_direction_vector_calculated");
 
     ADD_SUBGROUP("Debugging","");
 
