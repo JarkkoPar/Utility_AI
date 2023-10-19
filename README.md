@@ -90,7 +90,23 @@ None.
 
 ### Specialized Sensors 
 
-There are also a number of specialized sensors that make it more convinient to use vectors with certain common input types. 
+There are also a number of specialized sensors that make it more convinient to use the sensors with certain common input types. They automatically convert the specialized input value to a sensor value in the 0..1 range.
+
+#### UtilityAIBooleanSensor
+This sensor accepts a boolean value and scales it to 0..1 range.
+
+##### Properties
+
+|Type|Name|Description|Version|
+|--|--|--|--|
+|bool|is_active|This property can be used to include or exlude the node from processing.|v1.0|
+|float|sensor_value|A floating point value in the range of 0..1.|v1.0|
+|bool|boolean_value|Input value for the sensor.|`DEV`|
+
+
+##### Methods 
+
+None
 
 #### UtilityAIDistanceVector2Sensor and UtilityAIDistanceVector3Sensor
 As the name suggests, these are distance sensors. Uses the squared distance when scaling the values to 0..1 range.
