@@ -1,8 +1,6 @@
 #include "UtilityAIBooleanSensor.h"
 
 #include <godot_cpp/core/class_db.hpp>
-#include <godot_cpp/classes/engine.hpp>
-#include <godot_cpp/classes/random_number_generator.hpp>
 
 
 using namespace godot;
@@ -29,7 +27,7 @@ UtilityAIBooleanSensor::~UtilityAIBooleanSensor() {
 // Handling functions.
 
 double UtilityAIBooleanSensor::evaluate_sensor_value() {
-    set_sensor_value((float)_boolean_value);
+    set_sensor_value((double)_boolean_value);
     return get_sensor_value();
 }
 

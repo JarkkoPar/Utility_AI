@@ -65,3 +65,7 @@ src/SpecialSensors/UtilityAIDistanceVector2Sensor.windows.template_release.x86_6
 .vscode/settings.json
 src/SpecialSensors/UtilityAIBooleanSensor.windows.template_release.x86_64.obj
 src/SpecialSensors/UtilityAIBooleanSensor.windows.template_debug.x86_64.obj
+src/SpecialSensors/UtilityAIFloatRangeSensor.windows.template_debug.x86_64.obj
+src/SpecialSensors/UtilityAIFloatRangeSensor.windows.template_release.x86_64.obj
+src/SpecialSensors/UtilityAIIntRangeSensor.windows.template_debug.x86_64.obj
+src/SpecialSensors/UtilityAIIntRangeSensor.windows.template_release.x86_64.obj

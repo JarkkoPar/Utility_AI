@@ -1,0 +1,89 @@
+#include "UtilityAIFloatRangeSensor.h"
+
+#include <godot_cpp/core/class_db.hpp>
+
+
+using namespace godot;
+
+// Method binds.
+
+void UtilityAIFloatRangeSensor::_bind_methods() {
+    ClassDB::bind_method(D_METHOD("set_range_value", "range_value"), &UtilityAIFloatRangeSensor::set_range_value);
+    ClassDB::bind_method(D_METHOD("get_range_value"), &UtilityAIFloatRangeSensor::get_range_value);
+    ADD_PROPERTY(PropertyInfo(Variant::FLOAT, "range_value", PROPERTY_HINT_NONE), "set_range_value","get_range_value");    
+
+    ClassDB::bind_method(D_METHOD("set_range_min_value", "range_min_value"), &UtilityAIFloatRangeSensor::set_range_min_value);
+    ClassDB::bind_method(D_METHOD("get_range_min_value"), &UtilityAIFloatRangeSensor::get_range_min_value);
+    ADD_PROPERTY(PropertyInfo(Variant::FLOAT, "range_min_value", PROPERTY_HINT_NONE), "set_range_min_value","get_range_min_value");    
+
+    ClassDB::bind_method(D_METHOD("set_range_max_value", "range_max_value"), &UtilityAIFloatRangeSensor::set_range_max_value);
+    ClassDB::bind_method(D_METHOD("get_range_max_value"), &UtilityAIFloatRangeSensor::get_range_max_value);
+    ADD_PROPERTY(PropertyInfo(Variant::FLOAT, "range_max_value", PROPERTY_HINT_NONE), "set_range_max_value","get_range_max_value");    
+}
+
+
+// Constructor and destructor.
+
+UtilityAIFloatRangeSensor::UtilityAIFloatRangeSensor() {
+    _range_max_value = 100.0;
+    _range_min_value = 0.0;
+    _range_value = 0.0;
+    _range_length = 100.0;
+    _one_over_range_length = 1.0 / _range_length;
+}
+
+
+UtilityAIFloatRangeSensor::~UtilityAIFloatRangeSensor() {
+}
+
+// Handling functions.
+
+double UtilityAIFloatRangeSensor::evaluate_sensor_value() {
+    set_sensor_value((_range_value - _range_min_value) * _one_over_range_length);
+    return get_sensor_value();
+}
+
+// Getters and Setters.
+
+void UtilityAIFloatRangeSensor::set_range_min_value( double range_min_value ) {
+    if( _range_min_value == _range_max_value ) {
+        return;
+    }
+    _range_min_value = range_min_value;
+    _range_length = _range_max_value - _range_min_value;
+    if( _range_length != 0.0 ) {
+        _one_over_range_length = 1.0 / _range_length;
+    } else {
+        _one_over_range_length = 0.0;
+    }
+}
+
+double UtilityAIFloatRangeSensor::get_range_min_value() const {
+    return _range_min_value;
+}
+
+void UtilityAIFloatRangeSensor::set_range_max_value( double range_max_value ) {
+    if( _range_min_value == _range_max_value ) {
+        return;
+    }
+    _range_max_value = range_max_value;
+    _range_length = _range_max_value - _range_min_value;
+    if( _range_length != 0.0 ) {
+        _one_over_range_length = 1.0 / _range_length;
+    } else {
+        _one_over_range_length = 0.0;
+    }
+}
+
+double UtilityAIFloatRangeSensor::get_range_max_value() const {
+    return _range_max_value;
+}
+
+void UtilityAIFloatRangeSensor::set_range_value( double range_value ) {
+    _range_value = range_value;
+}
+
+double UtilityAIFloatRangeSensor::get_range_value() const {
+    return _range_value;
+}
+

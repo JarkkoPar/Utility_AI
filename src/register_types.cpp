@@ -16,6 +16,8 @@
 
 // Special sensors.
 #include "SpecialSensors/UtilityAIBooleanSensor.h"
+#include "SpecialSensors/UtilityAIFloatRangeSensor.h"
+#include "SpecialSensors/UtilityAIIntRangeSensor.h"
 #include "SpecialSensors/UtilityAIDistanceVector2Sensor.h"
 #include "SpecialSensors/UtilityAIDistanceVector3Sensor.h"
 
@@ -52,6 +54,8 @@ void initialize_utility_ai_module(ModuleInitializationLevel p_level) {
     
     // Special sensors.
     ClassDB::register_class<UtilityAIBooleanSensor>();
+    ClassDB::register_class<UtilityAIFloatRangeSensor>();
+    ClassDB::register_class<UtilityAIIntRangeSensor>();
     ClassDB::register_class<UtilityAIDistanceVector2Sensor>();
     ClassDB::register_class<UtilityAIDistanceVector3Sensor>();
     
