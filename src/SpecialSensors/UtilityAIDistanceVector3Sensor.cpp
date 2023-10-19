@@ -32,6 +32,14 @@ void UtilityAIDistanceVector3Sensor::_bind_methods() {
 
     ADD_SUBGROUP("Debugging","");
 
+    ClassDB::bind_method(D_METHOD("set_from_to_vector", "from_to_vector"), &UtilityAIDistanceVector3Sensor::set_from_to_vector3);
+    ClassDB::bind_method(D_METHOD("get_from_to_vector"), &UtilityAIDistanceVector3Sensor::get_from_to_vector3);
+    ADD_PROPERTY(PropertyInfo(Variant::VECTOR3, "from_to_vector", PROPERTY_HINT_NONE), "set_from_to_vector","get_from_to_vector");
+
+    ClassDB::bind_method(D_METHOD("set_direction_vector", "direction_vector"), &UtilityAIDistanceVector3Sensor::set_direction_vector3);
+    ClassDB::bind_method(D_METHOD("get_direction_vector"), &UtilityAIDistanceVector3Sensor::get_direction_vector3);
+    ADD_PROPERTY(PropertyInfo(Variant::VECTOR3, "direction_vector", PROPERTY_HINT_NONE), "set_direction_vector","get_direction_vector");
+
     ClassDB::bind_method(D_METHOD("set_distance", "distance"), &UtilityAIDistanceVector3Sensor::set_distance);
     ClassDB::bind_method(D_METHOD("get_distance"), &UtilityAIDistanceVector3Sensor::get_distance);
     ADD_PROPERTY(PropertyInfo(Variant::FLOAT, "distance", PROPERTY_HINT_RANGE, "0.00000001,1000.0,or_greater"), "set_distance","get_distance");

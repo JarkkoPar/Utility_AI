@@ -33,6 +33,14 @@ void UtilityAIDistanceVector2Sensor::_bind_methods() {
 
     ADD_SUBGROUP("Debugging","");
 
+    ClassDB::bind_method(D_METHOD("set_from_to_vector", "from_to_vector"), &UtilityAIDistanceVector2Sensor::set_from_to_vector2);
+    ClassDB::bind_method(D_METHOD("get_from_to_vector"), &UtilityAIDistanceVector2Sensor::get_from_to_vector2);
+    ADD_PROPERTY(PropertyInfo(Variant::VECTOR2, "from_to_vector", PROPERTY_HINT_NONE), "set_from_to_vector","get_from_to_vector");
+
+    ClassDB::bind_method(D_METHOD("set_direction_vector", "direction_vector"), &UtilityAIDistanceVector2Sensor::set_direction_vector2);
+    ClassDB::bind_method(D_METHOD("get_direction_vector"), &UtilityAIDistanceVector2Sensor::get_direction_vector2);
+    ADD_PROPERTY(PropertyInfo(Variant::VECTOR3, "direction_vector", PROPERTY_HINT_NONE), "set_direction_vector","get_direction_vector");
+
     ClassDB::bind_method(D_METHOD("set_distance", "distance"), &UtilityAIDistanceVector2Sensor::set_distance);
     ClassDB::bind_method(D_METHOD("get_distance"), &UtilityAIDistanceVector2Sensor::get_distance);
     ADD_PROPERTY(PropertyInfo(Variant::FLOAT, "distance", PROPERTY_HINT_RANGE, "0.00000001,1000.0,or_greater"), "set_distance","get_distance");
@@ -124,19 +132,19 @@ bool UtilityAIDistanceVector2Sensor::get_is_direction_vector_calculated() const 
 
 // Debugging / current values.
 
-void UtilityAIDistanceVector2Sensor::set_from_to_Vector2( Vector2 from_to ) {
+void UtilityAIDistanceVector2Sensor::set_from_to_vector2( Vector2 from_to ) {
     _from_to_vector = from_to;
 }
 
-Vector2 UtilityAIDistanceVector2Sensor::get_from_to_Vector2() const {
+Vector2 UtilityAIDistanceVector2Sensor::get_from_to_vector2() const {
     return _from_to_vector;
 }
 
-void UtilityAIDistanceVector2Sensor::set_direction_Vector2( Vector2 direction ) {
+void UtilityAIDistanceVector2Sensor::set_direction_vector2( Vector2 direction ) {
     _direction_vector = direction;
 }
 
-Vector2 UtilityAIDistanceVector2Sensor::get_direction_Vector2() const {
+Vector2 UtilityAIDistanceVector2Sensor::get_direction_vector2() const {
     return _direction_vector;
 }
 

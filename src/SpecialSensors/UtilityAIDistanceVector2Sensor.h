@@ -54,11 +54,11 @@ public:
 
     // Debugging / current values.
 
-    void set_from_to_Vector2( Vector2 from_to );
-    Vector2 get_from_to_Vector2() const;
+    void set_from_to_vector2( Vector2 from_to );
+    Vector2 get_from_to_vector2() const;
 
-    void set_direction_Vector2( Vector2 direction );
-    Vector2 get_direction_Vector2() const;
+    void set_direction_vector2( Vector2 direction );
+    Vector2 get_direction_vector2() const;
     
     void set_distance( double distance );
     double get_distance() const;
