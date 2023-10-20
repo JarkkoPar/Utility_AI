@@ -39,7 +39,13 @@ UtilityAIFloatRangeSensor::~UtilityAIFloatRangeSensor() {
 // Handling functions.
 
 double UtilityAIFloatRangeSensor::evaluate_sensor_value() {
-    set_sensor_value((_range_value - _range_min_value) * _one_over_range_length);
+    double range_result = ((double)(_range_value - _range_min_value)) * _one_over_range_length;
+    if( range_result < 0.0 ) {
+        range_result = 0.0;
+    } else if( range_result > 1.0 ) {
+        range_result = 1.0;
+    }
+    set_sensor_value(range_result);
     return get_sensor_value();
 }
 

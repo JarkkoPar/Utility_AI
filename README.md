@@ -108,6 +108,25 @@ This sensor accepts a boolean value and scales it to 0..1 range.
 
 None
 
+#### UtilityAIFloatRangeSensor and UtilityAIIntRangeSensor
+This sensor accepts a minimum and maximum value that defines a value range. The input value given is scaled to 0..1 range within the given min and max values.
+
+##### Properties
+
+|Type|Name|Description|Version|
+|--|--|--|--|
+|bool|is_active|This property can be used to include or exlude the node from processing.|v1.0|
+|float|sensor_value|A floating point value in the range of 0..1.|v1.0|
+|float/int|range_value|Input value for the sensor.|`DEV`|
+|float/int|range_min_value|The minimum value for the range.|`DEV`|
+|float/int|range_max_value|The maximum value for the range.|`DEV`|
+
+
+##### Methods 
+
+None
+
+
 #### UtilityAIDistanceVector2Sensor and UtilityAIDistanceVector3Sensor
 As the name suggests, these are distance sensors. Uses the squared distance when scaling the values to 0..1 range.
 

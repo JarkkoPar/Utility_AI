@@ -39,6 +39,9 @@ public:
     void   set_range_value( int range_value );
     int get_range_value() const; 
 
+    //void   set_range_length( int range_length );
+    //int get_range_length() const; 
+
 };
 
 }
