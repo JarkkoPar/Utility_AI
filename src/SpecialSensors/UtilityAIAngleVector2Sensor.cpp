@@ -52,11 +52,11 @@ void UtilityAIAngleVector2Sensor::_bind_methods() {
 UtilityAIAngleVector2Sensor::UtilityAIAngleVector2Sensor() {
     _angle_radian = 0.0;
     _angle_euler = 0.0;
-    _min_angle_radian = -M_PI;
+    _min_angle_radian = -Math_PI;
     _min_angle_euler = godot::Math::rad_to_deg(_min_angle_radian);
-    _max_angle_radian = M_PI;//godot::Math::;
+    _max_angle_radian = Math_PI;
     _max_angle_euler = godot::Math::rad_to_deg(_max_angle_radian);
-    _one_over_2_pi = 1.0 / (2.0 * M_PI);
+    _one_over_2_pi = 1.0 / (2.0 * Math_PI);
 }
 
 
@@ -73,7 +73,7 @@ double UtilityAIAngleVector2Sensor::evaluate_sensor_value() {
         _angle_radian = _max_angle_radian;
     }
     _angle_euler = godot::Math::rad_to_deg(_angle_radian);
-    set_sensor_value((_angle_radian + M_PI) * _one_over_2_pi );
+    set_sensor_value((_angle_radian + Math_PI) * _one_over_2_pi );
     return get_sensor_value();
 }
 

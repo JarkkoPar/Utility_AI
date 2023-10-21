@@ -44,9 +44,8 @@ void UtilityAIAngleVector3Sensor::_bind_methods() {
 UtilityAIAngleVector3Sensor::UtilityAIAngleVector3Sensor() {
     _angle_radian = 0.0;
     _angle_euler = 0.0;
-    _max_angle_radian = 2.0 * M_PI;//godot::Math::;
-    _max_angle_euler = 360.0;//godot::Math::;
-
+    _max_angle_radian = 2.0 * Math_PI;
+    _max_angle_euler = 360.0;
 }
 
 
