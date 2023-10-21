@@ -69,3 +69,8 @@ src/SpecialSensors/UtilityAIFloatRangeSensor.windows.template_debug.x86_64.obj
 src/SpecialSensors/UtilityAIFloatRangeSensor.windows.template_release.x86_64.obj
 src/SpecialSensors/UtilityAIIntRangeSensor.windows.template_debug.x86_64.obj
 src/SpecialSensors/UtilityAIIntRangeSensor.windows.template_release.x86_64.obj
+src/SpecialSensors/UtilityAIBooleanSensor.os
+src/SpecialSensors/UtilityAIDistanceVector2Sensor.os
+src/SpecialSensors/UtilityAIDistanceVector3Sensor.os
+src/SpecialSensors/UtilityAIFloatRangeSensor.os
+src/SpecialSensors/UtilityAIIntRangeSensor.os
