@@ -74,3 +74,5 @@ src/SpecialSensors/UtilityAIDistanceVector2Sensor.os
 src/SpecialSensors/UtilityAIDistanceVector3Sensor.os
 src/SpecialSensors/UtilityAIFloatRangeSensor.os
 src/SpecialSensors/UtilityAIIntRangeSensor.os
+src/SpecialSensors/UtilityAIAngleVector3Sensor.os
+src/SpecialSensors/UtilityAIAngleVector2Sensor.os
