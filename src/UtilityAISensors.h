@@ -22,6 +22,13 @@ public:
     UtilityAISensors();
     ~UtilityAISensors();
     
+    // Godot virtuals.
+
+    void _ready();
+
+    // Handling methods.
+
+    virtual void initialize_sensor();
     
     // Getters and setters for attributes.
     

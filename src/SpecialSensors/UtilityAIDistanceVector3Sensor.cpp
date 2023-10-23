@@ -10,7 +10,7 @@ using namespace godot;
 
 void UtilityAIDistanceVector3Sensor::_bind_methods() {
     
-    ClassDB::bind_method(D_METHOD("set_from_vector", "to_vector"), &UtilityAIDistanceVector3Sensor::set_from_vector3);
+    ClassDB::bind_method(D_METHOD("set_from_vector", "from_vector"), &UtilityAIDistanceVector3Sensor::set_from_vector3);
     ClassDB::bind_method(D_METHOD("get_from_vector"), &UtilityAIDistanceVector3Sensor::get_from_vector3);
     ADD_PROPERTY(PropertyInfo(Variant::VECTOR3, "from_vector", PROPERTY_HINT_NONE), "set_from_vector","get_from_vector");
 

@@ -25,7 +25,18 @@ UtilityAISensors::UtilityAISensors() {
 UtilityAISensors::~UtilityAISensors() {
 }
 
-// Handling functions.
+
+// Godot virtuals.
+
+void UtilityAISensors::_ready() {
+    initialize_sensor();
+}
+
+// Handling methods.
+
+void UtilityAISensors::initialize_sensor() {
+
+}
 
 double UtilityAISensors::evaluate_sensor_value() {
     return 0.0;

@@ -170,6 +170,28 @@ As the name suggests, these are distance sensors. Uses the squared distance when
 
 None
 
+#### UtilityAIArea2DVisibilitySensor and UtilityAIArea3DVisibilitySensor
+This sensor is used for visibility queries based on Area3D's. It returns the number of entities seen by the AI Agent and the sensor value is scaled to 0..1 by comparing the number of seen entities to a defined, expected, maximum number.
+
+The sensor will store a list of the found Area3D's that are within the defined visibility volume and a separate list with only those that are not occluded by other geometry. 
+
+##### Properties
+
+|Type|Name|Description|Version|
+|--|--|--|--|
+|bool|is_active|This property can be used to include or exlude the node from processing.|v1.0|
+|float|sensor_value|A floating point value in the range of 0..1.|v1.0|
+|Vector2/3|from_vector|Input value for the sensor. The location of the AI entity in global space (global_transform).|`DEV`|
+|NodePath|visibility_volume|An Area2D/Area3D node defining the visibility volume for the sensor.|`DEV`|
+|uint32_t|collision_mask|The collision mask used for occlusion. Usually this is set to your level geometry and props.|`DEV`|
+|int|max_expected_entities_found|The maximum number of entities expected to be found using the visibility volume. Scales the sensor value.|`DEV`|
+|int|num_entities_found|Number of entities found within the visibility volume. If do_occlusion_test is true, this will be the number of unoccluded entities within the visibility volume.|`DEV`|
+
+##### Methods 
+
+None
+
+
 -- End of section about a feature under development --
 
 ### UtilityAIBehaviour

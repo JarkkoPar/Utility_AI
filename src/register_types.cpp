@@ -22,6 +22,7 @@
 #include "SpecialSensors/UtilityAIAngleVector3Sensor.h"
 #include "SpecialSensors/UtilityAIDistanceVector2Sensor.h"
 #include "SpecialSensors/UtilityAIDistanceVector3Sensor.h"
+#include "SpecialSensors/UtilityAIArea3DVisibilitySensor.h"
 
 // Main header for UtilityAI.
 #include "UtilityAI.h"
@@ -62,7 +63,7 @@ void initialize_utility_ai_module(ModuleInitializationLevel p_level) {
     ClassDB::register_class<UtilityAIAngleVector3Sensor>();
     ClassDB::register_class<UtilityAIDistanceVector2Sensor>();
     ClassDB::register_class<UtilityAIDistanceVector3Sensor>();
-    
+    ClassDB::register_class<UtilityAIArea3DVisibilitySensor>();    
 }
 
 void uninitialize_utility_ai_module(ModuleInitializationLevel p_level) {
