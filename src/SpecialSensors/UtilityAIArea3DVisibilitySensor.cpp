@@ -193,7 +193,7 @@ double UtilityAIArea3DVisibilitySensor::evaluate_sensor_value() {
                                                                                                  _collision_mask, 
                                                                                                  _occlusion_test_exclusion_list);
             //(const Vector3 &from, const Vector3 &to, uint32_t collision_mask = 4294967295, const TypedArray<RID> &exclude = {})
-            params->set_collide_with_bodies(false);
+            params->set_collide_with_bodies(true);
             params->set_collide_with_areas(true);
             //params->set_block_signals(true);
             Dictionary results = dss->intersect_ray( params );
