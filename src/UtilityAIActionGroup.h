@@ -15,7 +15,7 @@ class UtilityAIActionGroup : public UtilityAIActions {
 private:
     int _action_execution_rule;
     int _current_action_index;
-    
+    bool _if_else_boolean_value;
 protected:
     static void _bind_methods();
 
@@ -31,12 +31,17 @@ public:
 
     enum UtilityAIActionGroupExecutionRule {
         Sequence = 0,
-        PickOneAtRandom=1
+        PickOneAtRandom = 1,
+        IfElse = 2,
+        CustomRule = 3,
     };
 
 
     void  set_current_action_index( int current_action_index );
     int   get_current_action_index() const;
+
+    void  set_if_else_boolean_value( int if_else_boolean_value );
+    int   get_if_else_boolean_value() const;
 
     // Handling functions.
 

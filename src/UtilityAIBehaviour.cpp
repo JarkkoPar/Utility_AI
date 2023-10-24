@@ -230,14 +230,16 @@ Node* UtilityAIBehaviour::step_actions() {
                 //WARN_PRINT("UtilityAIBehaviour::step_actions(): Found an action, starting the action...");
                 if( action_node->get_is_active() ) {
                     _current_action_node = action_node;
-                    _current_action_node->start_action();
+                    bool action_start_result = _current_action_node->start_action();
+                    //if( !action_start_result ) return nullptr;
                     //WARN_PRINT("UtilityAIBehaviour::step_actions(): Done, returning action node.");
                     return _current_action_node;
                 }//endif action is active
             } else if( UtilityAIActionGroup* action_group = godot::Object::cast_to<UtilityAIActionGroup>(current_node) ) {
                 if( action_group->get_is_active() ) {
                     //WARN_PRINT("UtilityAIBehaviour::step_actions(): Found an action group, starting the action group." + get_name());
-                    action_group->start_action();
+                    bool action_group_start_result = action_group->start_action();
+                    //if( !action_group_start_result ) return nullptr;
                     //WARN_PRINT("UtilityAIBehaviour::step_actions(): Stepping it to find the sub action...");    
                     _current_action_node = godot::Object::cast_to<UtilityAIAction>(action_group->step_actions());
                     //if( _current_action_node == nullptr ) {

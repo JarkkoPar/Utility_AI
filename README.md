@@ -22,6 +22,13 @@ Godot 4.1.2 or newer.
 * *UtilityAIAction* A behaviour, if selected, will run any actions attached to it.
 * *UtilityAIActionGroup* Groups can help organize how a behaviour will run the actions attached to it.
 
+-- `DEV` This section contains information about a feature under development --
+
+There are also a number of specialized sensor nodes to accomodate 2D and 3D visibility queries, distance and angle calculations, etc. 
+
+-- End of section about a feature under development --
+
+
 ## How to use the nodes
 
 Start by adding a UtilityAIAgent to your scene. Next you can add the Sensors as the childs of the AI agent node. And then add the Behaviours. It is expected that any sensors are before behaviours. 
@@ -337,8 +344,10 @@ The `UtilityAIActionGroup` has the following properties:
 
 |Type|Name|Description|Version|
 |--|--|--|--|
-|float|execution_rule|A choice of how the actions that are child nodes are executed: Sequence:0,PickOneAtRandom:1. The Sequence choice will execute the actions from top to bottom and the Pick One At Random does what it says it will.|v1.0|
 |bool|is_finished|Set internally by the stepper, visible only for debugging purposes.|v1.0|
+|float|execution_rule|A choice of how the actions that are child nodes are executed: Sequence:0,PickOneAtRandom:1. The Sequence choice will execute the actions from top to bottom and the Pick One At Random does what it says it will.|v1.0|
+|float|execution_rule|A choice of how the actions that are child nodes are executed: Sequence:0,PickOneAtRandom:1,IfElse:2,CustomRule:3. The Sequence choice will execute the actions from top to bottom, the Pick One At Random does what it says it will, the IfElse rule uses the `if_else_boolean_value` property to decide if the first or the second child node of the `UtilityAIActionGroup` will be chosen. Finally, the CustomRule choice allows you to write your own `eval` method that is responsible for setting the `current_action_index` property to choose what action should be executed.|`DEV`|
+|int|current_action_index|Exposed for the use with a custom `eval` method to choose a child action/action group node to execute.|`DEV`|
 
 #### Methods 
 
