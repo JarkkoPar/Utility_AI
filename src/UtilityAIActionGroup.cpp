@@ -157,9 +157,22 @@ Node* UtilityAIActionGroup::step_actions() {
             // Re-evaluate.
             if( has_method("eval")) {
                 call("eval");
-            } else {
-                return nullptr;
-            }
+                if( current_action_node = godot::Object::cast_to<UtilityAIAction>(get_child(_current_action_index)) ) {
+                    if( current_action_node->get_is_active() ) {
+                        current_action_node->start_action();
+                        return current_action_node;
+                    }
+                } else if(UtilityAIActionGroup* action_group = godot::Object::cast_to<UtilityAIActionGroup>(get_child(_current_action_index)) ) {
+                    if( action_group->get_is_active() ) {
+                        action_group->start_action();
+                        current_action_node = godot::Object::cast_to<UtilityAIAction>(action_group->step_actions());
+                        if( current_action_node != nullptr ) {
+                            current_action_node->start_action();
+                            return current_action_node;
+                        }
+                    }
+                }// endif is action or action_group
+            } 
         }
         break;
         default: {
