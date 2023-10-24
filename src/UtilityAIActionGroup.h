@@ -40,8 +40,8 @@ public:
     void  set_current_action_index( int current_action_index );
     int   get_current_action_index() const;
 
-    void  set_if_else_boolean_value( int if_else_boolean_value );
-    int   get_if_else_boolean_value() const;
+    void  set_if_else_boolean_value( bool if_else_boolean_value );
+    bool  get_if_else_boolean_value() const;
 
     // Handling functions.
 

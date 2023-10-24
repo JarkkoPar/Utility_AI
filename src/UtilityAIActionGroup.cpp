@@ -232,11 +232,11 @@ int  UtilityAIActionGroup::get_current_action_index() const {
     return _current_action_index;
 }
 
-void UtilityAIActionGroup::set_if_else_boolean_value( int if_else_boolean_value ) {
+void UtilityAIActionGroup::set_if_else_boolean_value( bool if_else_boolean_value ) {
     _if_else_boolean_value = if_else_boolean_value;
 }
 
-int  UtilityAIActionGroup::get_if_else_boolean_value() const {
+bool UtilityAIActionGroup::get_if_else_boolean_value() const {
     return _if_else_boolean_value;
 }
 
