@@ -84,3 +84,5 @@ src/SpecialSensors/UtilityAIArea3DProximitySensor.windows.template_debug.x86_64.
 src/SpecialSensors/UtilityAIArea3DProximitySensor.windows.template_release.x86_64.obj
 src/SpecialSensors/UtilityAIArea3DVisibilitySensor.windows.template_debug.x86_64.obj
 src/SpecialSensors/UtilityAIArea3DVisibilitySensor.windows.template_release.x86_64.obj
+src/SpecialSensors/UtilityAIArea2DVisibilitySensor.windows.template_debug.x86_64.obj
+src/SpecialSensors/UtilityAIArea2DVisibilitySensor.windows.template_release.x86_64.obj
