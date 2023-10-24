@@ -168,7 +168,7 @@ void UtilityAIAgent::evaluate_options(double delta) { //double delta) {
             (godot::Object::cast_to<UtilityAIBehaviour>(_current_behaviour_node))->end_behaviour();
             _current_behaviour_node = nullptr;
         }
-        WARN_PRINT("UtilityAIAgent::evaluate_options(): Error, agent could not find valid behaviours!");
+        //WARN_PRINT("UtilityAIAgent::evaluate_options(): Error, agent could not find valid behaviours!");
         return; // No behaviour chosen.
     }
 
