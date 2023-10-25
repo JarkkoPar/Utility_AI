@@ -119,7 +119,16 @@ UtilityAIArea3DVisibilitySensor::~UtilityAIArea3DVisibilitySensor() {
 }
 /**/
 
+void UtilityAIArea3DVisibilitySensor::_notification(int p_what) {
+    switch (p_what) {
+		case NOTIFICATION_EXIT_TREE: {
+			// Remove the signal connections.
+            _visibility_volume_node->disconnect("area_entered", Callable(this, "on_area_entered"));
+            _visibility_volume_node->disconnect("area_exited", Callable(this, "on_area_exited"));
 
+		} break;
+	}
+}
 
 
 // Handling functions.
