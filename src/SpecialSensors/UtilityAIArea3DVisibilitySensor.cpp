@@ -118,7 +118,7 @@ UtilityAIArea3DVisibilitySensor::~UtilityAIArea3DVisibilitySensor() {
     initialize_sensor();
 }
 /**/
-
+/**
 void UtilityAIArea3DVisibilitySensor::_notification(int p_what) {
     switch (p_what) {
 		case NOTIFICATION_EXIT_TREE: {
@@ -129,6 +129,7 @@ void UtilityAIArea3DVisibilitySensor::_notification(int p_what) {
 		} break;
 	}
 }
+/**/
 
 
 // Handling functions.

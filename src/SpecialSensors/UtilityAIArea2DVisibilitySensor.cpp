@@ -117,7 +117,7 @@ UtilityAIArea2DVisibilitySensor::~UtilityAIArea2DVisibilitySensor() {
 /*void UtilityAIArea2DVisibilitySensor::_ready() {
     initialize_sensor();
 }
-/**/
+/**
 
 void UtilityAIArea2DVisibilitySensor::_notification(int p_what) {
     switch (p_what) {
@@ -129,7 +129,7 @@ void UtilityAIArea2DVisibilitySensor::_notification(int p_what) {
 		} break;
 	}
 }
-
+/**/
 
 
 // Handling functions.
