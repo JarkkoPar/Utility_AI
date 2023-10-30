@@ -45,6 +45,7 @@ void UtilityAIAgent::_bind_methods() {
     // Add all signals.
 
     ADD_SIGNAL(MethodInfo("behaviour_changed", PropertyInfo(Variant::OBJECT, "behaviour_node")));
+    ADD_SIGNAL(MethodInfo("behaviour_completed", PropertyInfo(Variant::OBJECT, "behaviour_node")));
     ADD_SIGNAL(MethodInfo("action_changed", PropertyInfo(Variant::OBJECT, "action_node")));
 }
 
@@ -255,16 +256,20 @@ void UtilityAIAgent::update_current_behaviour() {
     if( _current_action_node == nullptr ) {
         (godot::Object::cast_to<UtilityAIBehaviour>(_current_behaviour_node))->end_behaviour();
         _current_behaviour_name = "";
+        emit_signal("behaviour_completed", _current_behaviour_node );
         _current_behaviour_node = nullptr;
+        emit_signal("behaviour_changed", _current_behaviour_node );
         return;
     }
 }
+
 
 void UtilityAIAgent::set_current_action_is_finished(bool is_finished) {
     if( _current_behaviour_node == nullptr ) return;
     if( _current_action_node == nullptr ) return;
     ((UtilityAIAction*)_current_action_node)->set_is_finished(is_finished);
 }
+
 
 void UtilityAIAgent::abort_current_behaviour() {
     if( _current_behaviour_node == nullptr ) return;
@@ -275,6 +280,7 @@ void UtilityAIAgent::abort_current_behaviour() {
     emit_signal("behaviour_changed", _current_behaviour_node);
     emit_signal("action_changed", _current_action_node );
 }
+
 
 // Getters and Setters.
 

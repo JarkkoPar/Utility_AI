@@ -62,6 +62,14 @@ This is the main node that is used to manage the UtilityAI. A UtilityAIAgent nod
 |void|update_current_behaviour()|Updates the currently selected behaviour and if the current `action` has been marked as finished, returns the next action.|v1.0|
 |void|abort_current_behaviour()|Immediately stops the currently selected behaviour and action. Used for stopping behaviours that have `Can Be Interrupted` property as `false`.|v1.0|
 
+#### Signals
+
+|Signal|Parameters|Description|Version|
+|--|--|--|--|
+|behaviour_completed|behaviour_node|Emitted when there are no more actions to execute for a behaviour during a `update_current_behaviour` call.|`DEV`|
+|behaviour_changed|behaviour_node|Emitted when the behaviour changes during `evaluate_options` or after a behaviour has completed during the `update_current_behaviour` call.|v1.0|
+|action_changed|action_node|Emitted when the current action changes during a `update_current_behaviour` call.|v1.0|
+
 
 ### UtilityAISensor and UtilityAISensorGroup
 
