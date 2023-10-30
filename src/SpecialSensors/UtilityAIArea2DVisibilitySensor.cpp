@@ -222,12 +222,16 @@ double UtilityAIArea2DVisibilitySensor::evaluate_sensor_value() {
             }
         } else {
             ++_num_entities_found;
-        }
-
-        
+        }    
     }//endfor entered areas.
-    
+    /**
+    if( get_use_absolute_value() ) {
+        set_sensor_value(((double)_num_entities_found));
+    } else {
+    /**/
     set_sensor_value(((double)_num_entities_found) * _one_over_max_expected_entities_found);
+    /*}*/
+
     return get_sensor_value();
 }
 

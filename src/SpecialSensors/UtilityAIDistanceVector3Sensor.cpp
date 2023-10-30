@@ -78,8 +78,17 @@ double UtilityAIDistanceVector3Sensor::evaluate_sensor_value() {
     if( _is_direction_vector_calculated ) {
         _direction_vector = _from_to_vector / _distance;
     }
-
+    /**
+    if( get_use_absolute_value() ) {
+        if( _is_distance_calculated ) {
+            set_sensor_value(_distance );
+        } else {
+            set_sensor_value(_distance_squared );
+        }
+    } else {
+    /**/
     set_sensor_value(_distance_squared * _one_over_max_distance_squared );
+    /*}*/
     return get_sensor_value();
 }
 

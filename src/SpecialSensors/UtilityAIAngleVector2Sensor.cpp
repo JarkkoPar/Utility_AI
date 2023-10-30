@@ -73,7 +73,14 @@ double UtilityAIAngleVector2Sensor::evaluate_sensor_value() {
         _angle_radian = _max_angle_radian;
     }
     _angle_euler = godot::Math::rad_to_deg(_angle_radian);
+    /**
+    if( get_use_absolute_value() ) {
+        set_sensor_value(_angle_radian + Math_PI);
+    } else {
+    /**/
     set_sensor_value((_angle_radian + Math_PI) * _one_over_2_pi );
+    /*}*/
+    
     return get_sensor_value();
 }
 

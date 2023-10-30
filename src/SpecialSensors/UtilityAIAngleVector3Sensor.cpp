@@ -57,7 +57,13 @@ UtilityAIAngleVector3Sensor::~UtilityAIAngleVector3Sensor() {
 double UtilityAIAngleVector3Sensor::evaluate_sensor_value() {
     _angle_radian = _from_vector.angle_to(_to_vector);
     _angle_euler = godot::Math::rad_to_deg(_angle_radian);
+    /**
+    if( get_use_absolute_value() ) {
+        set_sensor_value(_angle_radian);
+    } else {
+    /**/
     set_sensor_value(_angle_radian * _one_over_max_angle_radian);
+    /*}*/
     return get_sensor_value();
 }
 
