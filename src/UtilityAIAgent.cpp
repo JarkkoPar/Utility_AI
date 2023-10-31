@@ -88,18 +88,17 @@ void UtilityAIAgent::evaluate_options(double delta) { //double delta) {
     int num_children = get_child_count();
     if( num_children < 1 ) return; // Cannot evaluate without children.
 
-    // Respect the thinking delay.
-    _thinking_delay_in_seconds_current_timer -= delta;
-    if( _thinking_delay_in_seconds_current_timer > 0.0 ) return;
-    _thinking_delay_in_seconds_current_timer = _thinking_delay_in_seconds;
-
-    // If the current behaviour cannot be interrupted, don't evaluate.
     if( _current_behaviour_node != nullptr ) {
+        // Respect the thinking delay if we have a current behaviour.
+        _thinking_delay_in_seconds_current_timer -= delta;
+        if( _thinking_delay_in_seconds_current_timer > 0.0 ) return;
+        _thinking_delay_in_seconds_current_timer = _thinking_delay_in_seconds;
+
+        // If the current behaviour cannot be interrupted, don't evaluate.
         UtilityAIBehaviour* behaviour_node = godot::Object::cast_to<UtilityAIBehaviour>(_current_behaviour_node);
         if( !behaviour_node->get_can_be_interrupted() ) {
             return;
         }
-        
     }
 
     // Go through the behaviours and check which one seems
@@ -197,8 +196,10 @@ void UtilityAIAgent::evaluate_options(double delta) { //double delta) {
     _current_behaviour_name = new_behaviour->get_name();
     _current_behaviour_node = godot::Object::cast_to<Node>(new_behaviour);
     new_behaviour->start_behaviour();
-    
+    _current_action_node = nullptr; 
     emit_signal("behaviour_changed", _current_behaviour_node);
+
+    _thinking_delay_in_seconds_current_timer = _thinking_delay_in_seconds;
 }
 
 
@@ -256,7 +257,7 @@ void UtilityAIAgent::update_current_behaviour() {
     if( _current_action_node == nullptr ) {
         (godot::Object::cast_to<UtilityAIBehaviour>(_current_behaviour_node))->end_behaviour();
         _current_behaviour_name = "";
-        emit_signal("behaviour_completed", _current_behaviour_node );
+        //emit_signal("behaviour_completed", _current_behaviour_node );
         _current_behaviour_node = nullptr;
         emit_signal("behaviour_changed", _current_behaviour_node );
         return;

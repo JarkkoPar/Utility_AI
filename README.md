@@ -66,7 +66,6 @@ This is the main node that is used to manage the UtilityAI. A UtilityAIAgent nod
 
 |Signal|Parameters|Description|Version|
 |--|--|--|--|
-|behaviour_completed|behaviour_node|Emitted when there are no more actions to execute for a behaviour during a `update_current_behaviour` call.|`DEV`|
 |behaviour_changed|behaviour_node|Emitted when the behaviour changes during `evaluate_options` or after a behaviour has completed during the `update_current_behaviour` call.|v1.0|
 |action_changed|action_node|Emitted when the current action changes during a `update_current_behaviour` call.|v1.0|
 

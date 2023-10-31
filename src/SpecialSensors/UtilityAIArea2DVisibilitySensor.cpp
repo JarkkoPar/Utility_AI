@@ -109,6 +109,13 @@ UtilityAIArea2DVisibilitySensor::UtilityAIArea2DVisibilitySensor() {
 
 
 UtilityAIArea2DVisibilitySensor::~UtilityAIArea2DVisibilitySensor() {
+    if( _visibility_volume_node != nullptr ) 
+    {
+        // Disconnect to the area entered and exited signals.
+        _visibility_volume_node->disconnect("area_entered", Callable(this, "on_area_entered"));
+        _visibility_volume_node->disconnect("area_exited", Callable(this, "on_area_exited"));
+        _visibility_volume_node = nullptr;
+    }
 }
 
 
