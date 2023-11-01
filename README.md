@@ -22,11 +22,7 @@ Godot 4.1.2 or newer.
 * *UtilityAIAction* A behaviour, if selected, will run any actions attached to it.
 * *UtilityAIActionGroup* Groups can help organize how a behaviour will run the actions attached to it.
 
--- `DEV` This section contains information about a feature under development --
-
 There are also a number of specialized sensor nodes to accomodate 2D and 3D visibility queries, distance and angle calculations, etc. 
-
--- End of section about a feature under development --
 
 
 ## How to use the nodes
@@ -100,8 +96,6 @@ The `UtilityAISensorGroup` has the following properties:
 
 None.
 
--- `DEV` This section contains information about a feature under development --
-
 ### Specialized Sensors 
 
 There are also a number of specialized sensors that make it more convinient to use the sensors with certain common input types. They automatically convert the specialized input value to a sensor value in the 0..1 range.
@@ -115,7 +109,7 @@ This sensor accepts a boolean value and scales it to 0..1 range.
 |--|--|--|--|
 |bool|is_active|This property can be used to include or exlude the node from processing.|v1.0|
 |float|sensor_value|A floating point value in the range of 0..1.|v1.0|
-|bool|boolean_value|Input value for the sensor.|`DEV`|
+|bool|boolean_value|Input value for the sensor.|v1.2|
 
 
 ##### Methods 
@@ -131,12 +125,12 @@ This sensor accepts two vectors, calculates the angle between them and scales it
 |--|--|--|--|
 |bool|is_active|This property can be used to include or exlude the node from processing.|v1.0|
 |float|sensor_value|A floating point value in the range of 0..1.|v1.0|
-|Vector2/3|from_vector|Input value for the sensor. Base value for the angle calculation, for example the direction of an AI entity.|`DEV`|
-|Vector2/3|to_vector|Input value for the sensor. The other vector to compare from-vector to, for example direction to closest enemy entity.|`DEV`|
-|float|max_angle_radian|The maximum value for the angle between from and to in radians, this corresponds to 1.0 for the sensor_value. Updates the euler angle automatically.|`DEV`|
-|float|max_angle_euler|The maximum value for the angle between from and to in eulers, this corresponds to 1.0 for the sensor_value. Updates the radian angle automatically.|`DEV`|
-|float|min_angle_radian|Only for Vector2 - The minimum value for the angle between from and to in radians, this corresponds to 0.0 for the sensor_value. Updates the euler angle automatically.|`DEV`|
-|float|min_angle_euler|Only for Vector2 - The minimum value for the angle between from and to in eulers, this corresponds to 0.0 for the sensor_value. Updates the radian angle automatically.|`DEV`|
+|Vector2/3|from_vector|Input value for the sensor. Base value for the angle calculation, for example the direction of an AI entity.|v1.2|
+|Vector2/3|to_vector|Input value for the sensor. The other vector to compare from-vector to, for example direction to closest enemy entity.|v1.2|
+|float|max_angle_radian|The maximum value for the angle between from and to in radians, this corresponds to 1.0 for the sensor_value. Updates the euler angle automatically.|v1.2|
+|float|max_angle_euler|The maximum value for the angle between from and to in eulers, this corresponds to 1.0 for the sensor_value. Updates the radian angle automatically.|v1.2|
+|float|min_angle_radian|Only for Vector2 - The minimum value for the angle between from and to in radians, this corresponds to 0.0 for the sensor_value. Updates the euler angle automatically.|v1.2|
+|float|min_angle_euler|Only for Vector2 - The minimum value for the angle between from and to in eulers, this corresponds to 0.0 for the sensor_value. Updates the radian angle automatically.|v1.2|
 
 ##### Methods 
 
@@ -151,9 +145,9 @@ This sensor accepts a minimum and maximum value that defines a value range. The 
 |--|--|--|--|
 |bool|is_active|This property can be used to include or exlude the node from processing.|v1.0|
 |float|sensor_value|A floating point value in the range of 0..1.|v1.0|
-|float/int|range_value|Input value for the sensor.|`DEV`|
-|float/int|range_min_value|The minimum value for the range.|`DEV`|
-|float/int|range_max_value|The maximum value for the range.|`DEV`|
+|float/int|range_value|Input value for the sensor.|v1.2|
+|float/int|range_min_value|The minimum value for the range.|v1.2|
+|float/int|range_max_value|The maximum value for the range.|v1.2|
 
 
 ##### Methods 
@@ -170,14 +164,14 @@ As the name suggests, these are distance sensors. Uses the squared distance when
 |--|--|--|--|
 |bool|is_active|This property can be used to include or exlude the node from processing.|v1.0|
 |float|sensor_value|A floating point value in the range of 0..1.|v1.0|
-|Vector2/3|from_vector|The start point of the distance vector.|`DEV`|
-|Vector2/3|to_vector|The end point of the distance vector.|`DEV`|
-|Vector2/3|from_to_vector|Vector obtained by calculating to_vector - from_vector.|`DEV`|
-|Vector2/3|direction_vector|Optionally calculated direction vector.|`DEV`|
-|float|distance|Optionally calculated non-squared distance.|`DEV`|
-|float|distance_squared|Squared distance.|`DEV`|
-|bool|is_distance_calculated|If true, the non-squared distance is calculated.|`DEV`|
-|bool|is_direction_vector_calculated|Optionally calculated direction vector.|`DEV`|
+|Vector2/3|from_vector|The start point of the distance vector.|v1.2|
+|Vector2/3|to_vector|The end point of the distance vector.|v1.2|
+|Vector2/3|from_to_vector|Vector obtained by calculating to_vector - from_vector.|v1.2|
+|Vector2/3|direction_vector|Optionally calculated direction vector.|v1.2|
+|float|distance|Optionally calculated non-squared distance.|v1.2|
+|float|distance_squared|Squared distance.|v1.2|
+|bool|is_distance_calculated|If true, the non-squared distance is calculated.|v1.2|
+|bool|is_direction_vector_calculated|Optionally calculated direction vector.|v1.2|
 
 
 ##### Methods 
@@ -195,18 +189,18 @@ The sensor will store a list of the found Area3D's that are within the defined v
 |--|--|--|--|
 |bool|is_active|This property can be used to include or exlude the node from processing.|v1.0|
 |float|sensor_value|A floating point value in the range of 0..1.|v1.0|
-|Vector2/3|from_vector|Input value for the sensor. The location of the AI entity's eyes in global coordinates (global_position).|`DEV`|
-|NodePath|visibility_volume|An Area2D/Area3D node defining the visibility volume for the sensor.|`DEV`|
-|uint32_t|collision_mask|The collision mask used for occlusion. Usually this is set to match the layers for your level geometry and props.|`DEV`|
-|int|max_expected_entities_found|The maximum number of entities expected to be found using the visibility volume. Scales the sensor value.|`DEV`|
-|int|num_entities_found|Number of entities found within the visibility volume. If `do_occlusion_test` is set to `true`, this will be the number of unoccluded entities within the `visibility_volume`.|`DEV`|
-|TypedArray<Area2/3D>|intersecting_areas|Areas that are within or intersect with the `visibility_volume`.|`DEV`|
-|TypedArray<float>|squared_distances_to_intersecting_areas|Squared distances from the `from_vector` to an area's `global_position` within or intersecting with the visibility_volume.|`DEV`|
-|int|closest_intersecting_area_index|Index of the closest area to `from_vector` within the `intersecting_areas` array.|`DEV`|
-|TypedArray<Area2/3D>|unoccluded_areas|Populated if `do_occlusion_test` is set to `true`. Areas that are within or intersect with the `visibility_volume` and that are not blocked by any geometry that is set to the layer(s) defined in `collision_mask`.|`DEV`|
-|TypedArray<float>|squared_distances_to_unoccluded_areas|Squared distances from the `from_vector` to an area's `global_position` within or intersecting with the `visibility_volume` and that are not blocked by any geometry that is set to the layer(s) defined in `collision_mask`.|`DEV`|
-|int|closest_unoccluded_area_index|Index of the closest area to `from_vector` within the `unoccluded_areas` array.|`DEV`|
-|TypedArray<RID>|occlusion_test_exclusion_list|Used during occlusion testing to exclude listed nodes from the raycast collision test.|`DEV`|
+|Vector2/3|from_vector|Input value for the sensor. The location of the AI entity's eyes in global coordinates (global_position).|v1.2|
+|NodePath|visibility_volume|An Area2D/Area3D node defining the visibility volume for the sensor.|v1.2|
+|uint32_t|collision_mask|The collision mask used for occlusion. Usually this is set to match the layers for your level geometry and props.|v1.2|
+|int|max_expected_entities_found|The maximum number of entities expected to be found using the visibility volume. Scales the sensor value.|v1.2|
+|int|num_entities_found|Number of entities found within the visibility volume. If `do_occlusion_test` is set to `true`, this will be the number of unoccluded entities within the `visibility_volume`.|v1.2|
+|TypedArray<Area2/3D>|intersecting_areas|Areas that are within or intersect with the `visibility_volume`.|v1.2|
+|TypedArray<float>|squared_distances_to_intersecting_areas|Squared distances from the `from_vector` to an area's `global_position` within or intersecting with the visibility_volume.|v1.2|
+|int|closest_intersecting_area_index|Index of the closest area to `from_vector` within the `intersecting_areas` array.|v1.2|
+|TypedArray<Area2/3D>|unoccluded_areas|Populated if `do_occlusion_test` is set to `true`. Areas that are within or intersect with the `visibility_volume` and that are not blocked by any geometry that is set to the layer(s) defined in `collision_mask`.|v1.2|
+|TypedArray<float>|squared_distances_to_unoccluded_areas|Squared distances from the `from_vector` to an area's `global_position` within or intersecting with the `visibility_volume` and that are not blocked by any geometry that is set to the layer(s) defined in `collision_mask`.|v1.2|
+|int|closest_unoccluded_area_index|Index of the closest area to `from_vector` within the `unoccluded_areas` array.|v1.2|
+|TypedArray<RID>|occlusion_test_exclusion_list|Used during occlusion testing to exclude listed nodes from the raycast collision test.|v1.2|
 
 
 ##### Methods 
@@ -353,8 +347,8 @@ The `UtilityAIActionGroup` has the following properties:
 |--|--|--|--|
 |bool|is_finished|Set internally by the stepper, visible only for debugging purposes.|v1.0|
 |float|execution_rule|A choice of how the actions that are child nodes are executed: Sequence:0,PickOneAtRandom:1. The Sequence choice will execute the actions from top to bottom and the Pick One At Random does what it says it will.|v1.0|
-|float|execution_rule|A choice of how the actions that are child nodes are executed: Sequence:0,PickOneAtRandom:1,IfElse:2,CustomRule:3. The Sequence choice will execute the actions from top to bottom, the Pick One At Random does what it says it will, the IfElse rule uses the `if_else_boolean_value` property to decide if the first or the second child node of the `UtilityAIActionGroup` will be chosen. Finally, the CustomRule choice allows you to write your own `eval` method that is responsible for setting the `current_action_index` property to choose what action should be executed.|`DEV`|
-|int|current_action_index|Exposed for the use with a custom `eval` method to choose a child action/action group node to execute.|`DEV`|
+|float|execution_rule|A choice of how the actions that are child nodes are executed: Sequence:0,PickOneAtRandom:1,IfElse:2,CustomRule:3. The Sequence choice will execute the actions from top to bottom, the Pick One At Random does what it says it will, the IfElse rule uses the `if_else_boolean_value` property to decide if the first or the second child node of the `UtilityAIActionGroup` will be chosen. Finally, the CustomRule choice allows you to write your own `eval` method that is responsible for setting the `current_action_index` property to choose what action should be executed.|v1.2|
+|int|current_action_index|Exposed for the use with a custom `eval` method to choose a child action/action group node to execute.|v1.2|
 
 #### Methods 
 
