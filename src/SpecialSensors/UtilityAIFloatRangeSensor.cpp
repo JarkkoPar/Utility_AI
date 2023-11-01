@@ -101,6 +101,11 @@ double UtilityAIFloatRangeSensor::get_range_max_value() const {
 
 void UtilityAIFloatRangeSensor::set_range_value( double range_value ) {
     _range_value = range_value;
+    if( _range_value < _range_min_value ) {
+        _range_value = _range_min_value;
+    }else if( _range_value > _range_max_value ) {
+        _range_value = _range_max_value;
+    }
 }
 
 double UtilityAIFloatRangeSensor::get_range_value() const {

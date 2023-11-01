@@ -101,6 +101,11 @@ int UtilityAIIntRangeSensor::get_range_max_value() const {
 
 void UtilityAIIntRangeSensor::set_range_value( int range_value ) {
     _range_value = range_value;
+    if( _range_value < _range_min_value ) {
+        _range_value = _range_min_value;
+    }else if( _range_value > _range_max_value ) {
+        _range_value = _range_max_value;
+    }
 }
 
 int UtilityAIIntRangeSensor::get_range_value() const {

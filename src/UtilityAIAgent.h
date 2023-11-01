@@ -17,7 +17,6 @@ class UtilityAIAgent : public UtilityAI {
 private:
     RandomNumberGenerator _rng;
     Node* _current_behaviour_node;
-
     Node* _current_action_node;
 
     int    _num_behaviours_to_select;

@@ -246,9 +246,19 @@ void UtilityAIAgent::place_into_top_n_behaviour_list(Node* behaviour, float scor
 }
 
 
-
 void UtilityAIAgent::update_current_behaviour() {
-    if( _current_behaviour_node == nullptr ) return;
+    if( _current_behaviour_node == nullptr ){
+        // No behaviour, so make sure the current action node is null as well.
+        if( _current_action_node != nullptr ) {
+            UtilityAIActions* actions_node = godot::Object::cast_to<UtilityAIActions>(_current_action_node);
+            if( actions_node != nullptr ) {
+                actions_node->end_action();
+            }
+            _current_action_node = nullptr;
+            emit_signal("action_changed", _current_action_node );    
+        }
+        return;
+    } 
     Node* new_action_node = godot::Object::cast_to<Node>((godot::Object::cast_to<UtilityAIBehaviour>(_current_behaviour_node))->update_behaviour());
     if( _current_action_node != new_action_node ) {
         _current_action_node = new_action_node;
@@ -260,7 +270,6 @@ void UtilityAIAgent::update_current_behaviour() {
         //emit_signal("behaviour_completed", _current_behaviour_node );
         _current_behaviour_node = nullptr;
         emit_signal("behaviour_changed", _current_behaviour_node );
-        return;
     }
 }
 

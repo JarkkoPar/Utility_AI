@@ -24,7 +24,7 @@ private:
 
     int    _current_action_index;
 
-    UtilityAIAction*  _current_action_node;
+    //UtilityAIAction*  _current_action_node;
     
     bool   _can_be_interrupted;
 
@@ -53,7 +53,7 @@ public:
     void  set_current_action_index( int current_action_index );
     int   get_current_action_index() const;
 
-    UtilityAIAction* get_current_action_node() const { return _current_action_node;};
+    //UtilityAIAction* get_current_action_node() const { return _current_action_node;};
 
     // Godot virtuals.
     void _ready();
