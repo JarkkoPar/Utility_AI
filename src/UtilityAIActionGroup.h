@@ -14,6 +14,7 @@ class UtilityAIActionGroup : public UtilityAIActions {
 
 private:
     int _action_execution_rule;
+    int _error_handling_rule;
     int _current_action_index;
     bool _if_else_boolean_value;
 protected:
@@ -34,8 +35,16 @@ public:
         PickOneAtRandom = 1,
         IfElse = 2,
         CustomRule = 3,
+        //IfPreviousActionFailedElse = 4,
     };
 
+    void set_error_handling_rule( int error_handling_rule );
+    int  get_error_handling_rule() const;
+
+    enum UtilityAIActionGroupErrorHandlingRule {
+        EndExecution = 0,
+        ContinueExecution = 1,
+    };
 
     void  set_current_action_index( int current_action_index );
     int   get_current_action_index() const;

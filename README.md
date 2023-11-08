@@ -31,8 +31,8 @@ Start by adding a UtilityAIAgent to your scene. Next you can add the Sensors as 
 
 Then add considerations to the Behaviours you have added and connect them to sensors by setting the input_sensor_nodepath property on the considerations. And finally, add the Actions to the behaviour. 
 
-In your code update the sensor's `sensor_value` with a floating point value between 0.0 and 1.0. Then run the UtilityAIAgent's `evaluate_options` method and `update_current_behaviour` method to get an `action` to execute. You can then get the action by using the `get_current_action` method.
-Do what ever you need to do for the action selected and once done, mark it as finished using the `set_is_finished(true)` method. This will allow the current behaviour to step to the next action during the `update_current_behaviour` call.
+In your code update the sensor's `sensor_value` with a floating point value between 0.0 and 1.0. Then run the UtilityAIAgent's `evaluate_options()` method and `update_current_behaviour()` method to get an `action` to execute. You can then get the action by using the `get_current_action()` method.
+Do what ever you need to do for the action selected and once done, mark it as finished using the `set_is_finished(true)` method. This will allow the current behaviour to step to the next action during the `update_current_behaviour()` call.
 
 ## Nodes in-depth 
 
@@ -48,7 +48,7 @@ This is the main node that is used to manage the UtilityAI. A UtilityAIAgent nod
 |--|--|--|--|
 |bool|is_active|This property can be used to include or exlude the node from processing.|v1.0|
 |int|num_behaviours_to_select|Pick a behaviour out of top `num_behaviours_to_select` behaviours found after reasoning.|v1.0|
-|float|thinking_delay_in_seconds|Delay time forced between calls to the method `evaluate_options`.|v1.0|
+|float|thinking_delay_in_seconds|Delay time forced between calls to the method `evaluate_options()`.|v1.0|
 
 #### Methods 
 
@@ -62,8 +62,8 @@ This is the main node that is used to manage the UtilityAI. A UtilityAIAgent nod
 
 |Signal|Parameters|Description|Version|
 |--|--|--|--|
-|behaviour_changed|behaviour_node|Emitted when the behaviour changes during `evaluate_options` or after a behaviour has completed during the `update_current_behaviour` call.|v1.0|
-|action_changed|action_node|Emitted when the current action changes during a `update_current_behaviour` call.|v1.0|
+|behaviour_changed|behaviour_node|Emitted when the behaviour changes during `evaluate_options()` or after a behaviour has completed during the `update_current_behaviour()` call.|v1.0|
+|action_changed|action_node|Emitted when the current action changes during a `update_current_behaviour()` call.|v1.0|
 
 
 ### UtilityAISensor and UtilityAISensorGroup
@@ -208,8 +208,6 @@ The sensor will store a list of the found Area3D's that are within the defined v
 None
 
 
--- End of section about a feature under development --
-
 ### UtilityAIBehaviour
 
 This node type should be added as child node of the `UtilityAIAgent` node or the `UtilityAIBehaviourGroup`, preferably after any `sensor` and `sensor group` nodes. There can be several behaviour nodes as childs of the `UtilityAIAgent` or the `UtilityAIBehaviourGroup` node.
@@ -218,7 +216,7 @@ As you may have guessed from the name, the purpose of the behaviour nodes is to 
 
 The behaviour node will use the  `consideration` nodes that are its childs to determine a `score` for itself. Basically it just sums up the scores from the considerations. When the behaviour is chosen by the `AI agent` as the one to execute, the `action` nodes are stepped through.
 
-The behaviour has also two "cooldown" properties: `cooldown_seconds` and `cooldown_turns`. These can be used to temporarily exclude some behaviours from subsequent `AI agent`'s `evaluate_options` calls once they have been chosen. The `cooldown_seconds` is meant to be used with real-time games and the `cooldown_turns` with turn based games but both can be used even at the same time. The difference in the cooldown countdown is that the `cooldown_seconds` counts down regardless of how many times the `AI agent`'s `evaluate_options` method is called, and the `cooldown_turns` counts down only when the `evaluate_options` method is called. 
+The behaviour has also two "cooldown" properties: `cooldown_seconds` and `cooldown_turns`. These can be used to temporarily exclude some behaviours from subsequent `AI agent`'s `evaluate_options()` calls once they have been chosen. The `cooldown_seconds` is meant to be used with real-time games and the `cooldown_turns` with turn based games but both can be used even at the same time. The difference in the cooldown countdown is that the `cooldown_seconds` counts down regardless of how many times the `AI agent`'s `evaluate_options()` method is called, and the `cooldown_turns` counts down only when the `evaluate_options()` method is called. 
 
 #### Properties
 
@@ -227,10 +225,10 @@ The `UtilityAIBehaviour` has the following properties:
 |Type|Name|Description|Version|
 |--|--|--|--|
 |bool|is_active|This property can be used to include or exlude the node from processing.|v1.0|
-|bool|can_be_interrupted|A boolean value to determine if the behaviour can be interrupted or not. If a behaviour cannot be interrupted, the `evaluate_options` method of the `UtilityAIAgent` will not execute until the behaviour has completed all its actions.|v1.0|
+|bool|can_be_interrupted|A boolean value to determine if the behaviour can be interrupted or not. If a behaviour cannot be interrupted, the `evaluate_options()` method of the `UtilityAIAgent` will not execute until the behaviour has completed all its actions.|v1.0|
 |float|score|The score for the behaviour after the behaviour has evaluated its considerations.|v1.0|
-|float|cooldown_seconds|If > 0.0, after the behaviour is chosen it will a score of 0.0 during the `evaluate_options` until the time has passed.|v1.0|
-|int|cooldown_turns|If > 0, after the behaviour is chosen it will a score of 0 during the `evaluate_options` until the given number of calls to the evaluation function has been done.|v1.0|
+|float|cooldown_seconds|If > 0.0, after the behaviour is chosen it will a score of 0.0 during the `evaluate_options()` until the time has passed.|v1.0|
+|int|cooldown_turns|If > 0, after the behaviour is chosen it will a score of 0 during the `evaluate_options()` until the given number of calls to the evaluation function has been done.|v1.0|
 
 
 #### Methods 
@@ -243,7 +241,7 @@ The `UtilityAIBehaviourGroup` node type should be added as child node of the `Ut
 
 The purpose of the behaviour group nodes is to allow logical grouping if behaviours and also to allow group-based activation and deactivation of Behaviour nodes.
 
-The behaviour group node will use the  `consideration` nodes that are its childs to determine a `score` for itself. If this `score` is greater or equal to the set `activation score` or if there are no considerations added to the behaviour group, the child behaviours will be evaluated during the AI Agent's `evaluate_options` call. 
+The behaviour group node will use the `consideration` nodes that are its childs to determine a `score` for itself. If this `score` is greater or equal to the set `activation score` or if there are no considerations added to the behaviour group, the child behaviours will be evaluated during the AI Agent's `evaluate_options()` call. 
 
 
 #### Properties
@@ -340,19 +338,31 @@ The `UtilityAIAction` has the following properties:
 |bool|is_active|This property can be used to include or exlude the node from processing.|v1.0|
 |int|action_id|A user-definable numeric ID for the action. Provided as an alternative to using action node names for identifying which is the current action the `AI agent` is currently executing.|v1.0|
 |bool|is_finished|Use this property only to let the `AI agent` know when the chosen action is finished. The stepper function will immediately set it back to false once it has moved on to the next action.|v1.0|
+|bool|has_failed|Use this property only to let the `AI agent` know when the chosen action has failed. You should still set the `is_finished` property to `true` to finish the action execution. The stepper function will set the parent `action group` as failed. This property will be immediately set back to false for the action once the stepper function has moved on to the next action.|v1.0|
 
 The `UtilityAIActionGroup` has the following properties:
 
 |Type|Name|Description|Version|
 |--|--|--|--|
 |bool|is_finished|Set internally by the stepper, visible only for debugging purposes.|v1.0|
-|float|execution_rule|A choice of how the actions that are child nodes are executed: Sequence:0,PickOneAtRandom:1. The Sequence choice will execute the actions from top to bottom and the Pick One At Random does what it says it will.|v1.0|
-|float|execution_rule|A choice of how the actions that are child nodes are executed: Sequence:0,PickOneAtRandom:1,IfElse:2,CustomRule:3. The Sequence choice will execute the actions from top to bottom, the Pick One At Random does what it says it will, the IfElse rule uses the `if_else_boolean_value` property to decide if the first or the second child node of the `UtilityAIActionGroup` will be chosen. Finally, the CustomRule choice allows you to write your own `eval` method that is responsible for setting the `current_action_index` property to choose what action should be executed.|v1.2|
-|int|current_action_index|Exposed for the use with a custom `eval` method to choose a child action/action group node to execute.|v1.2|
+|bool|has_failed|Set internally by the stepper, visible only for debugging purposes.|`DEV`|
+|int|execution_rule|A choice of how the actions that are child nodes are executed: Sequence:0,PickOneAtRandom:1. The Sequence choice will execute the actions from top to bottom and the Pick One At Random does what it says it will.|v1.0|
+|int|execution_rule|A choice of how the actions that are child nodes are executed: Sequence:0,PickOneAtRandom:1,IfElse:2,CustomRule:3. The Sequence choice will execute the actions from top to bottom, the Pick One At Random does what it says it will, the IfElse rule uses the `if_else_boolean_value` property to decide if the first or the second child node of the `UtilityAIActionGroup` will be chosen. Finally, the CustomRule choice allows you to write your own `eval` method that is responsible for setting the `current_action_index` property to choose what action should be executed.|v1.2|
+|int|current_action_index|Exposed for the use with a custom `eval()` method to choose a child action/action group node to execute.|v1.2|
+|int|error_handling_rule|A choice of how a failed action will affect the execution of the action group: EndExecution:0,ContinueExecution:1. EndExecution choice stops the execution of the behaviour the action group is a child to. ContinueExecution ignores the error.|`DEV`|
+
 
 #### Methods 
 
 None.
+
+#### Signals 
+
+The `UtilityAIActionGroup` has the following signals:
+
+|Signal|Parameters|Description|Version|
+|--|--|--|--|
+|action_failed|action_group|Emitted when a `UtilityAIAction` has set the `has_failed` property to `true`. Note that the signal will not be emitted immediately upon setting `has_failed = true`, but on the next call on the `UtilityAIAgent`'s `update_current_behaviour()` method.|`DEV`|
 
 
 ## Compiling from source

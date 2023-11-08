@@ -34,11 +34,13 @@ UtilityAIAction::~UtilityAIAction() {
 
 bool UtilityAIAction::start_action() {
     set_is_finished(false);
+    set_has_failed(false);
     return true;
 }
 
 bool UtilityAIAction::end_action() {
     set_is_finished(false);
+    set_has_failed(false);
     return true;
 }
 

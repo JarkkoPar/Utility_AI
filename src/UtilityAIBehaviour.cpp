@@ -203,9 +203,14 @@ Node* UtilityAIBehaviour::step_actions() {
     // Check if the node is an action.
     Node* current_node = get_child(_current_action_index);
     if( UtilityAIAction* current_action = godot::Object::cast_to<UtilityAIAction>(current_node) ) {
-        if( !current_action->get_is_finished() ){
+        if( !current_action->get_is_finished() ) {
             return current_node;
         } 
+        // If the action fails, clean up and end stepping.
+        if( current_action->get_has_failed() ) {
+            current_action->end_action();
+            return nullptr;
+        }
         current_action->end_action();
     } else {
 
@@ -217,6 +222,11 @@ Node* UtilityAIBehaviour::step_actions() {
             //if( _current_action_node == nullptr ) WARN_PRINT("UtilityAIBehaviour::step_actions(): group sent back a NULL action pointer.");
             if( current_action != nullptr ) return current_action;
             //WARN_PRINT("UtilityAIBehaviour::step_actions(): Action has completed, ending action for the action group.");
+            // If the group fails, clean up and end stepping.
+            if( current_action_group->get_has_failed() ) {
+                current_action_group->end_action();
+                return nullptr;
+            }
             current_action_group->end_action();
             //WARN_PRINT("UtilityAIBehaviour::step_actions(): Action group action ended.");
         }//endif current node index is action group

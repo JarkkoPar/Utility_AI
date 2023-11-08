@@ -14,7 +14,9 @@ class UtilityAIActions : public UtilityAI {
 private:
     
     bool _is_finished;
-    
+    bool _has_failed;
+    //bool _has_previous_step_failed;
+
 protected:
     static void _bind_methods();
 
@@ -27,6 +29,12 @@ public:
     
     void set_is_finished( bool is_finished );
     bool get_is_finished() const;
+
+    void set_has_failed( bool has_failed );
+    bool get_has_failed() const;
+
+    //void set_has_previous_step_failed( bool has_previous_step_failed );
+    //bool get_has_previous_step_failed() const;
 
     
     // Handling functions.

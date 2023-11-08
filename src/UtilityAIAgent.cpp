@@ -45,7 +45,7 @@ void UtilityAIAgent::_bind_methods() {
     // Add all signals.
 
     ADD_SIGNAL(MethodInfo("behaviour_changed", PropertyInfo(Variant::OBJECT, "behaviour_node")));
-    ADD_SIGNAL(MethodInfo("behaviour_completed", PropertyInfo(Variant::OBJECT, "behaviour_node")));
+    //ADD_SIGNAL(MethodInfo("behaviour_completed", PropertyInfo(Variant::OBJECT, "behaviour_node")));
     ADD_SIGNAL(MethodInfo("action_changed", PropertyInfo(Variant::OBJECT, "action_node")));
 }
 
@@ -187,6 +187,10 @@ void UtilityAIAgent::evaluate_options(double delta) { //double delta) {
     ERR_FAIL_COND_MSG( new_behaviour == nullptr, "UtilityAIAgent::evaluate_options(): Error, new_behaviour is nullptr.");
 
     if( new_behaviour == _current_behaviour_node ) return; // No change.
+    if( _current_action_node != nullptr ) {
+        (godot::Object::cast_to<UtilityAIActions>(_current_action_node))->end_action();   
+        _current_action_node = nullptr;
+    }
     if( _current_behaviour_node != nullptr ) {
         (godot::Object::cast_to<UtilityAIBehaviour>(_current_behaviour_node))->end_behaviour();   
         _current_behaviour_node = nullptr;
@@ -198,6 +202,7 @@ void UtilityAIAgent::evaluate_options(double delta) { //double delta) {
     new_behaviour->start_behaviour();
     _current_action_node = nullptr; 
     emit_signal("behaviour_changed", _current_behaviour_node);
+    emit_signal("action_changed", _current_action_node);
 
     _thinking_delay_in_seconds_current_timer = _thinking_delay_in_seconds;
 }
