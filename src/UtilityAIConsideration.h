@@ -13,21 +13,25 @@ class UtilityAIConsideration : public UtilityAIConsiderations {
     GDCLASS(UtilityAIConsideration, UtilityAIConsiderations )
 
 private:
+    
+protected:
+    static void _bind_methods();
+
     UtilityAISensors* _input_sensor;
     NodePath          _input_sensor_node_path;
     Ref<Curve>        _activation_curve;
     double            _activation_input_value;
     bool              _has_custom_evaluation_method;
-    
-protected:
-    static void _bind_methods();
 
+    virtual void _evaluate_consideration();
 public:
     UtilityAIConsideration();
     ~UtilityAIConsideration();
     
     
     // Getters and setters for attributes.
+
+    virtual UtilityAISensors* get_input_sensor_node() const;
 
     void set_input_sensor_node_path( NodePath input_sensor_node_path );
     NodePath get_input_sensor_node_path() const;

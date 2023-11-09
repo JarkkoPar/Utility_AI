@@ -321,6 +321,33 @@ The `UtilityAIConsideration` has the following methods:
 |void|initialize_consideration()|If you override the _ready() method, you have to call initialize_consideration() in your _ready() method.|v1.1|
 |double|sample_activation_curve(double input_value)|Use the input_value to get the resulting Y-value for the `activation_curve`. If no valid curve is set, this method will return 0.0.|v1.1|
 
+---- This section contains information about a feature under development `DEV` ----
+
+### Specialized Considerations 
+
+There are also specialized considerations that make it more convinient (less configuration) to use the considerations with certain common sensor types.
+
+#### UtilityAIBooleanConsideration
+This sensor converts a given input value to a boolean-type consideration result. Input values less than 0.5 are considered as "false" and other values as "true".
+
+##### Properties
+
+|Type|Name|Description|Version|
+|--|--|--|--|
+|bool|is_active|This property can be used to include or exlude the node from processing.|v1.0|
+|float|activation_input_value|A floating point value in the range of 0..1.|v1.0|
+|NodePath|input_sensor_node_path|A nodepath to a sensor or a sensor group node that will set the `activation_input_value`.|v1.0|
+|Curve|activation_curve|Can be set but is not used.|v1.0|
+|float|score|The resulting score for the consideration after evaluation.|v1.0|
+|bool|has_vetoed|If this is set to `true`, the consideration forces the score to be 0.0 and ends the evaluation immediately.|v1.0|
+
+
+##### Methods 
+
+None
+
+---- End of section about a feature under development `DEV` ----
+
 ### UtilityAIAction and UtilityAIActionGroup
 
 These two node types should be added as child nodes of the `UtilityAIBehaviour` node. They are used when a `behaviour` is being executed by the `AI agent`. 

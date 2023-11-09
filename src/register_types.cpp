@@ -25,6 +25,9 @@
 #include "SpecialSensors/UtilityAIArea2DVisibilitySensor.h"
 #include "SpecialSensors/UtilityAIArea3DVisibilitySensor.h"
 
+// Special considerations.
+#include "SpecialConsiderations/UtilityAIBooleanConsideration.h"
+
 // Main header for UtilityAI.
 #include "UtilityAI.h"
 
@@ -66,6 +69,10 @@ void initialize_utility_ai_module(ModuleInitializationLevel p_level) {
     ClassDB::register_class<UtilityAIDistanceVector3Sensor>();
     ClassDB::register_class<UtilityAIArea2DVisibilitySensor>();
     ClassDB::register_class<UtilityAIArea3DVisibilitySensor>();    
+
+    // Special considerations.
+    ClassDB::register_class<UtilityAIBooleanConsideration>();
+    
 }
 
 void uninitialize_utility_ai_module(ModuleInitializationLevel p_level) {

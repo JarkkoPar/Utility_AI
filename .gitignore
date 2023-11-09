@@ -89,3 +89,5 @@ src/SpecialSensors/UtilityAIArea2DVisibilitySensor.windows.template_release.x86_
 src/SpecialSensors/UtilityAIArea2DVisibilitySensor.os
 .gitignore
 src/SpecialSensors/UtilityAIArea3DVisibilitySensor.os
+src/SpecialConsiderations/UtilityAIBooleanConsideration.windows.template_debug.x86_64.obj
+src/SpecialConsiderations/UtilityAIBooleanConsideration.windows.template_release.x86_64.obj

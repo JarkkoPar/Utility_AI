@@ -45,6 +45,11 @@ UtilityAIConsideration::~UtilityAIConsideration() {
 
 // Getters and Setters.
 
+UtilityAISensors* UtilityAIConsideration::get_input_sensor_node() const {
+    return _input_sensor;
+}
+
+
 void UtilityAIConsideration::set_input_sensor_node_path( NodePath input_sensor_node_path ) {
     _input_sensor_node_path = input_sensor_node_path;
 }
@@ -118,25 +123,13 @@ void UtilityAIConsideration::initialize_consideration() {
 double UtilityAIConsideration::evaluate() { 
     if( !get_is_active() ) return 0.0;
     if( Engine::get_singleton()->is_editor_hint() ) return 0.0;
+    if( get_has_vetoed() ) return 0.0;
 
     if( _input_sensor != nullptr ) {
         _activation_input_value = _input_sensor->get_sensor_value();
     }
     _score = 0.0;
-
-    // If the consideration has been extended with a custom evaluation method,
-    // that is used instead of sampling the curve.
-    if( _has_custom_evaluation_method ) {
-        call("eval");
-        return _score;
-    }
-    
-    if(_activation_curve.is_valid()) {
-		_score = _activation_curve->sample( _activation_input_value );
-	} else {
-        _score = _activation_input_value;
-    }
-
+    _evaluate_consideration();
     return _score;
 }
 
@@ -147,3 +140,18 @@ double UtilityAIConsideration::sample_activation_curve( double input_value ) con
     return 0.0;
 }
 
+
+void UtilityAIConsideration::_evaluate_consideration() {
+    // If the consideration has been extended with a custom evaluation method,
+    // that is used instead of sampling the curve.
+    if( _has_custom_evaluation_method ) {
+        call("eval");
+        return;
+    }
+    
+    if(_activation_curve.is_valid()) {
+		_score = _activation_curve->sample( _activation_input_value );
+	} else {
+        _score = _activation_input_value;
+    }
+}

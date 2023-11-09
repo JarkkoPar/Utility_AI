@@ -95,6 +95,14 @@ double UtilityAIConsiderationGroup::evaluate() { //UtilityAIAgent* agent, double
             {
                 if( i == 0 ) _score = child_score;
                 else _score *= child_score;
+                // If after multiplication we are at 0.0, then none of the
+                // other considerations will ever change the result, so bail.
+                if( _score == 0.0 ) {
+                    if( _invert_score ) {
+                        return 1.0;
+                    }
+                    return 0.0;
+                }
             }
             break;
             case UtilityAIConsiderationGroupEvaluationMethod::FirstNonZero: 
