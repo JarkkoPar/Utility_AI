@@ -340,6 +340,8 @@ This sensor converts a given input value to a boolean-type consideration result.
 |Curve|activation_curve|Can be set but is not used.|v1.0|
 |float|score|The resulting score for the consideration after evaluation.|v1.0|
 |bool|has_vetoed|If this is set to `true`, the consideration forces the score to be 0.0 and ends the evaluation immediately.|v1.0|
+|float|true_score_value|If the boolean input sensor is `true`, this is the score it will receive.|`DEV`|
+|float|false_score_value|If the boolean input sensor is `false`, this is the score it will receive.|`DEV`|
 
 
 ##### Methods 
