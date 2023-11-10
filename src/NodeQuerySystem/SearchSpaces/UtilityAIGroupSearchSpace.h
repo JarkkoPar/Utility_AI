@@ -2,7 +2,7 @@
 #define UtilityAIGroupSearchSpace_H_INCLUDED 
 
 #include "UtilityAINQSSearchSpaces.h"
-
+#include <godot_cpp/classes/node.hpp>
 
 namespace godot {
 
@@ -14,6 +14,7 @@ private:
 protected:
     static void _bind_methods();
 
+    
 public:
     UtilityAIGroupSearchSpace();
     ~UtilityAIGroupSearchSpace();
@@ -23,9 +24,11 @@ public:
     void set_searchspace_node_group( StringName searchspace_node_group );
     StringName get_searchspace_node_group() const;
 
-    virtual TypedArray<Node> get_searchspace_nodes() const;
-    
+    virtual TypedArray<Node> get_searchspace_nodes() const override;
+
     // Handling methods.
+
+    //virtual void execute_query() override;
 
     //void execute_query();
 

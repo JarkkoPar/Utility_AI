@@ -28,6 +28,15 @@
 // Special considerations.
 #include "SpecialConsiderations/UtilityAIBooleanConsideration.h"
 
+// Node Query System.
+#include "NodeQuerySystem/UtilityAINodeQuerySystem.h"
+
+#include "NodeQuerySystem/SearchSpaces/UtilityAINQSSearchSpaces.h"
+#include "NodeQuerySystem/SearchSpaces/UtilityAIGroupSearchSpace.h"
+
+#include "NodeQuerySystem/SearchCriteria/UtilityAISearchCriteria.h"
+#include "NodeQuerySystem/SearchCriteria/UtilityAICustomSearchCriterion.h"
+
 // Main header for UtilityAI.
 #include "UtilityAI.h"
 
@@ -72,7 +81,15 @@ void initialize_utility_ai_module(ModuleInitializationLevel p_level) {
 
     // Special considerations.
     ClassDB::register_class<UtilityAIBooleanConsideration>();
+
+    // Node Query System.
+    ClassDB::register_class<UtilityAINodeQuerySystem>(true);
+
+    ClassDB::register_class<UtilityAINQSSearchSpaces>(true);
+    ClassDB::register_class<UtilityAIGroupSearchSpace>();
     
+    ClassDB::register_class<UtilityAISearchCriteria>(true);
+    ClassDB::register_class<UtilityAICustomSearchCriterion>();
 }
 
 void uninitialize_utility_ai_module(ModuleInitializationLevel p_level) {
