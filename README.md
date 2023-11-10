@@ -27,9 +27,11 @@ There are also a number of specialized sensor nodes to accomodate 2D and 3D visi
 ---- This section contains information about a feature under development `DEV` ----
 
 The included Node Query System (NQS) can be used to "find the best node for the job". It is a set of nodes for scoring and filtering nodes or node groups. It works with anything that has been derived from the Node-class. While this feature is still in development, the intended uses within a game are for example:
+
  * Scoring and filtering cover points
  * Scoring and prioritizing targets
  * Scoring movement targets or tiles
+
 And pretty much any other use case where you have a set of nodes and want to select the best or top N of the nodes based on some evaluation criteria.
 
 ---- End of section about a feature under development `DEV` ----
