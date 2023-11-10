@@ -421,16 +421,11 @@ The search space nodes are used to define the set of nodes that will be included
 |Type|Name|Description|Version|
 |--|--|--|--|
 |bool|is_active|This property can be used to include or exlude the node from processing.|v1.0|
-|int|num_behaviours_to_select|Pick a behaviour out of top `num_behaviours_to_select` behaviours found after reasoning.|v1.0|
-|float|thinking_delay_in_seconds|Delay time forced between calls to the method `evaluate_options()`.|v1.0|
 
 #### Methods 
 
 |Return value|Name|Description|Version|
 |--|--|--|--|
-|void|evaluate_options(float delta)|Gathers input from sensors and evaluates all the available behaviours by calculating a score for each of them and then choosing a random behaviour from the top `num_behaviours_to_select` behaviours.|v1.0|
-|void|update_current_behaviour()|Updates the currently selected behaviour and if the current `action` has been marked as finished, returns the next action.|v1.0|
-|void|abort_current_behaviour()|Immediately stops the currently selected behaviour and action. Used for stopping behaviours that have `Can Be Interrupted` property as `false`.|v1.0|
 
 #### Signals
 
