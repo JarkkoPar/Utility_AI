@@ -33,6 +33,7 @@
 
 #include "NodeQuerySystem/SearchSpaces/UtilityAINQSSearchSpaces.h"
 #include "NodeQuerySystem/SearchSpaces/UtilityAIGroupSearchSpace.h"
+#include "NodeQuerySystem/SearchSpaces/UtilityAINodeChildrenSearchSpace.h"
 
 #include "NodeQuerySystem/SearchCriteria/UtilityAISearchCriteria.h"
 #include "NodeQuerySystem/SearchCriteria/UtilityAICustomSearchCriterion.h"
@@ -87,7 +88,8 @@ void initialize_utility_ai_module(ModuleInitializationLevel p_level) {
 
     ClassDB::register_class<UtilityAINQSSearchSpaces>(true);
     ClassDB::register_class<UtilityAIGroupSearchSpace>();
-    
+    ClassDB::register_class<UtilityAINodeChildrenSearchSpace>();
+
     ClassDB::register_class<UtilityAISearchCriteria>(true);
     ClassDB::register_class<UtilityAICustomSearchCriterion>();
 }

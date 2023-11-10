@@ -102,3 +102,5 @@ src/NodeQuerySystem/SearchCriteria/UtilityAICustomSearchCriterion.windows.templa
 src/NodeQuerySystem/SearchCriteria/UtilityAICustomSearchCriterion.windows.template_release.x86_64.obj
 src/NodeQuerySystem/SearchCriteria/UtilityAISearchCriteria.windows.template_debug.x86_64.obj
 src/NodeQuerySystem/SearchCriteria/UtilityAISearchCriteria.windows.template_release.x86_64.obj
+src/NodeQuerySystem/SearchSpaces/UtilityAINodeChildrenSearchSpace.windows.template_debug.x86_64.obj
+src/NodeQuerySystem/SearchSpaces/UtilityAINodeChildrenSearchSpace.windows.template_release.x86_64.obj

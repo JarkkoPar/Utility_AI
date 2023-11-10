@@ -24,6 +24,16 @@ Godot 4.1.2 or newer.
 
 There are also a number of specialized sensor nodes to accomodate 2D and 3D visibility queries, distance and angle calculations, etc. 
 
+---- This section contains information about a feature under development `DEV` ----
+
+The included Node Query System (NQS) can be used to "find the best node for the job". It is a set of nodes for scoring and filtering nodes or node groups. It works with anything that has been derived from the Node-class. While this feature is still in development, the intended uses within a game are for example:
+ * Scoring and filtering cover points
+ * Scoring and prioritizing targets
+ * Scoring movement targets or tiles
+And pretty much any other use case where you have a set of nodes and want to select the best or top N of the nodes based on some evaluation criteria.
+
+---- End of section about a feature under development `DEV` ----
+
 
 ## How to use the nodes
 
@@ -392,6 +402,39 @@ The `UtilityAIActionGroup` has the following signals:
 |Signal|Parameters|Description|Version|
 |--|--|--|--|
 |action_failed|action_group|Emitted when a `UtilityAIAction` has set the `has_failed` property to `true`. Note that the signal will not be emitted immediately upon setting `has_failed = true`, but on the next call on the `UtilityAIAgent`'s `update_current_behaviour()` method.|`DEV`|
+
+
+---- This section contains information about a feature under development `DEV` ----
+
+## UtilityAINodeQuerySystem (NQS)
+
+The Utility AI Node Query System is a set of nodes that can be used to score and filter any set of Godot nodes to find the top N best nodes given a set of search criteria.  
+
+### UtilityAISearchSpace nodes 
+
+The search space nodes are used to define the set of nodes that will be included in the search. 
+
+#### Properties
+
+|Type|Name|Description|Version|
+|--|--|--|--|
+|bool|is_active|This property can be used to include or exlude the node from processing.|v1.0|
+|int|num_behaviours_to_select|Pick a behaviour out of top `num_behaviours_to_select` behaviours found after reasoning.|v1.0|
+|float|thinking_delay_in_seconds|Delay time forced between calls to the method `evaluate_options()`.|v1.0|
+
+#### Methods 
+
+|Return value|Name|Description|Version|
+|--|--|--|--|
+|void|evaluate_options(float delta)|Gathers input from sensors and evaluates all the available behaviours by calculating a score for each of them and then choosing a random behaviour from the top `num_behaviours_to_select` behaviours.|v1.0|
+|void|update_current_behaviour()|Updates the currently selected behaviour and if the current `action` has been marked as finished, returns the next action.|v1.0|
+|void|abort_current_behaviour()|Immediately stops the currently selected behaviour and action. Used for stopping behaviours that have `Can Be Interrupted` property as `false`.|v1.0|
+
+#### Signals
+
+
+
+---- End of section about a feature under development `DEV` ----
 
 
 ## Compiling from source

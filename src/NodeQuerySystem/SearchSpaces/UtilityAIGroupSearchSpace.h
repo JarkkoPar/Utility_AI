@@ -10,7 +10,7 @@ class UtilityAIGroupSearchSpace : public UtilityAINQSSearchSpaces {
     GDCLASS(UtilityAIGroupSearchSpace, UtilityAINQSSearchSpaces)
 
 private:
-    StringName _searchspace_node_group;
+    StringName _group_name;
 protected:
     static void _bind_methods();
 
@@ -21,19 +21,11 @@ public:
     
     
     // Getters and setters for attributes.
-    void set_searchspace_node_group( StringName searchspace_node_group );
-    StringName get_searchspace_node_group() const;
+    void set_group_name( StringName group_name );
+    StringName get_group_name() const;
 
     virtual TypedArray<Node> get_searchspace_nodes() const override;
 
-    // Handling methods.
-
-    //virtual void execute_query() override;
-
-    //void execute_query();
-
-    // Godot virtuals.
-    //void _ready();
 };
 
 }

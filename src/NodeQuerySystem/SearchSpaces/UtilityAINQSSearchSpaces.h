@@ -3,6 +3,7 @@
 
 #include "UtilityAINodeQuerySystem.h"
 #include <godot_cpp/classes/node.hpp>
+#include "../SearchCriteria/UtilityAISearchCriteria.h"
 
 
 
@@ -14,6 +15,9 @@ class UtilityAINQSSearchSpaces : public UtilityAINodeQuerySystem {
 private:
     int                 _top_n_to_find;
     TypedArray<Node>    _query_results;
+
+    TypedArray<UtilityAISearchCriteria> _filtering_criteria;
+
 protected:
     static void _bind_methods();
 
@@ -36,9 +40,10 @@ public:
 
     virtual void execute_query();
 
+    //void apply_criterion( UtilityAISearchCriteria* criteria, TypedArray<Node> search_space, TypedArray<double> current_scores, TypedArray<Node>& result_space, TypedArray<double>& result_scores );
     
     // Godot virtuals.
-    //void _ready();
+    void _ready();
 };
 
 }

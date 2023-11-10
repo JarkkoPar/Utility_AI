@@ -25,10 +25,6 @@ public:
 
     virtual void apply_criterion( Node* node, bool& filter_out, double& score ) override;
 
-    //void execute_query();
-
-    // Godot virtuals.
-    //void _ready();
 };
 
 }
