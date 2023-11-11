@@ -3,7 +3,6 @@
 
 #include <godot_cpp/core/class_db.hpp>
 #include <godot_cpp/classes/engine.hpp>
-#include <godot_cpp/classes/random_number_generator.hpp>
 
 
 using namespace godot;
@@ -39,6 +38,8 @@ UtilityAIActionGroup::UtilityAIActionGroup() {
     _error_handling_rule = UtilityAIActionGroupErrorHandlingRule::EndExecution;
     _current_action_index = 0;
     _if_else_boolean_value = true;
+
+    _rnd.set_seed(time(0));
 }
 
 
@@ -54,9 +55,7 @@ bool UtilityAIActionGroup::start_action() {
     } 
     switch( _action_execution_rule ) {
         case UtilityAIActionGroupExecutionRule::PickOneAtRandom: {
-            RandomNumberGenerator rnd;
-            rnd.set_seed(time(0));
-            _current_action_index = rnd.randi_range(0, get_child_count() - 1 );
+            _current_action_index = _rnd.randi_range(0, get_child_count() - 1 );
         }
         break;
         case UtilityAIActionGroupExecutionRule::IfElse: {

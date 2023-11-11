@@ -4,6 +4,7 @@
 
 #include "UtilityAIActions.h"
 #include <godot_cpp/classes/node.hpp>
+#include <godot_cpp/classes/random_number_generator.hpp>
 
 
 
@@ -17,6 +18,9 @@ private:
     int _error_handling_rule;
     int _current_action_index;
     bool _if_else_boolean_value;
+
+    RandomNumberGenerator _rnd;
+            
 protected:
     static void _bind_methods();
 

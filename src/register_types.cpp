@@ -38,6 +38,9 @@
 #include "NodeQuerySystem/SearchCriteria/UtilityAISearchCriteria.h"
 #include "NodeQuerySystem/SearchCriteria/UtilityAICustomSearchCriterion.h"
 
+#include "NodeQuerySystem/SearchSpaces/PointGridSearchSpaces/UtilityAINavigation3DPointGridSearchSpaces.h"
+#include "NodeQuerySystem/SearchSpaces/PointGridSearchSpaces/UtilityAINavigation3DRectangularPointGridSearchSpace.h"
+
 // Main header for UtilityAI.
 #include "UtilityAI.h"
 
@@ -89,6 +92,9 @@ void initialize_utility_ai_module(ModuleInitializationLevel p_level) {
     ClassDB::register_class<UtilityAINQSSearchSpaces>(true);
     ClassDB::register_class<UtilityAIGroupSearchSpace>();
     ClassDB::register_class<UtilityAINodeChildrenSearchSpace>();
+
+    ClassDB::register_class<UtilityAINavigation3DPointGridSearchSpaces>(true);
+    ClassDB::register_class<UtilityAINavigation3DRectangularPointGridSearchSpace>();
 
     ClassDB::register_class<UtilityAISearchCriteria>(true);
     ClassDB::register_class<UtilityAICustomSearchCriterion>();
