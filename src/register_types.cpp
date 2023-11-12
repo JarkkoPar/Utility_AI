@@ -29,13 +29,13 @@
 #include "SpecialConsiderations/UtilityAIBooleanConsideration.h"
 
 // Node Query System.
-#include "NodeQuerySystem/UtilityAINodeQuerySystem.h"
+//#include "NodeQuerySystem/UtilityAINodeQuerySystem.h" // Not needed.
 
 #include "NodeQuerySystem/SearchSpaces/UtilityAINQSSearchSpaces.h"
 #include "NodeQuerySystem/SearchSpaces/UtilityAIGroupSearchSpace.h"
 #include "NodeQuerySystem/SearchSpaces/UtilityAINodeChildrenSearchSpace.h"
 
-#include "NodeQuerySystem/SearchCriteria/UtilityAISearchCriteria.h"
+#include "NodeQuerySystem/SearchCriteria/UtilityAINQSSearchCriteria.h"
 #include "NodeQuerySystem/SearchCriteria/UtilityAICustomSearchCriterion.h"
 
 #include "NodeQuerySystem/SearchSpaces/PointGridSearchSpaces/UtilityAINavigation3DPointGridSearchSpaces.h"
@@ -87,7 +87,7 @@ void initialize_utility_ai_module(ModuleInitializationLevel p_level) {
     ClassDB::register_class<UtilityAIBooleanConsideration>();
 
     // Node Query System.
-    ClassDB::register_class<UtilityAINodeQuerySystem>(true);
+    //ClassDB::register_class<UtilityAINodeQuerySystem>(true);
 
     ClassDB::register_class<UtilityAINQSSearchSpaces>(true);
     ClassDB::register_class<UtilityAIGroupSearchSpace>();
@@ -96,7 +96,7 @@ void initialize_utility_ai_module(ModuleInitializationLevel p_level) {
     ClassDB::register_class<UtilityAINavigation3DPointGridSearchSpaces>(true);
     ClassDB::register_class<UtilityAINavigation3DRectangularPointGridSearchSpace>();
 
-    ClassDB::register_class<UtilityAISearchCriteria>(true);
+    ClassDB::register_class<UtilityAINQSSearchCriteria>(true);
     ClassDB::register_class<UtilityAICustomSearchCriterion>();
 }
 

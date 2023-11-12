@@ -1,22 +1,23 @@
 #ifndef UtilityAINQSSearchSpaces_H_INCLUDED
 #define UtilityAINQSSearchSpaces_H_INCLUDED 
 
-#include "UtilityAINodeQuerySystem.h"
+//#include "UtilityAINodeQuerySystem.h"
+#include "../UtilityAI.h"
 #include <godot_cpp/classes/node.hpp>
-#include "../SearchCriteria/UtilityAISearchCriteria.h"
+#include "../SearchCriteria/UtilityAINQSSearchCriteria.h"
 
 
 
 namespace godot {
 
-class UtilityAINQSSearchSpaces : public UtilityAINodeQuerySystem {
-    GDCLASS(UtilityAINQSSearchSpaces, UtilityAINodeQuerySystem)
+class UtilityAINQSSearchSpaces : public UtilityAI { //NodeQuerySystem {
+    GDCLASS(UtilityAINQSSearchSpaces, UtilityAI) //NodeQuerySystem)
 
 private:
     int                 _top_n_to_find;
     TypedArray<Node>    _query_results;
 
-    TypedArray<UtilityAISearchCriteria> _filtering_criteria;
+    TypedArray<UtilityAINQSSearchCriteria> _filtering_criteria;
 
 protected:
     static void _bind_methods();

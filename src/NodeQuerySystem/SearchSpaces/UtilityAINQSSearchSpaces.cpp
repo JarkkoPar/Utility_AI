@@ -91,7 +91,7 @@ void UtilityAINQSSearchSpaces::execute_query() {
     TypedArray<Node> search_space = get_searchspace_nodes();
     for( int ss = 0; ss < search_space.size(); ++ss ) {
         for( int c = 0; c < get_child_count(); ++c ) {
-            UtilityAISearchCriteria* criterion = godot::Object::cast_to<UtilityAISearchCriteria>(get_child(c));
+            UtilityAINQSSearchCriteria* criterion = godot::Object::cast_to<UtilityAINQSSearchCriteria>(get_child(c));
             if( criterion == nullptr ) continue;
             Node* node = godot::Object::cast_to<Node>(search_space[ss]);
             criterion->apply_criterion(node, is_filtered_out, score);

@@ -1,12 +1,13 @@
-#ifndef UtilityAISearchCriterias_H_INCLUDED
-#define UtilityAISearchCriterias_H_INCLUDED 
-#include "UtilityAINodeQuerySystem.h"
+#ifndef UtilityAINQSSearchCriterias_H_INCLUDED
+#define UtilityAINQSSearchCriterias_H_INCLUDED 
+#include "../UtilityAI.h"
+//#include "UtilityAINodeQuerySystem.h"
 //#include <godot_cpp/classes/node.hpp>
 
 namespace godot {
 
-class UtilityAISearchCriteria : public UtilityAINodeQuerySystem {
-    GDCLASS(UtilityAISearchCriteria, UtilityAINodeQuerySystem )
+class UtilityAINQSSearchCriteria : public UtilityAI { //NodeQuerySystem {
+    GDCLASS(UtilityAINQSSearchCriteria, UtilityAI ) //NodeQuerySystem )
 
 private:
     bool    _is_filtered;
@@ -20,8 +21,8 @@ protected:
     double _scoring_result;
 
 public:
-    UtilityAISearchCriteria();
-    ~UtilityAISearchCriteria();
+    UtilityAINQSSearchCriteria();
+    ~UtilityAINQSSearchCriteria();
     
     
     // Getters and setters for attributes.

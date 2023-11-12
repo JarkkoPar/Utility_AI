@@ -1,12 +1,12 @@
 #ifndef UtilityAICustomSearchCriterion_H_INCLUDED
 #define UtilityAICustomSearchCriterion_H_INCLUDED 
 
-#include "UtilityAISearchCriteria.h"
+#include "UtilityAINQSSearchCriteria.h"
 
 namespace godot {
 
-class UtilityAICustomSearchCriterion : public UtilityAISearchCriteria {
-    GDCLASS(UtilityAICustomSearchCriterion, UtilityAISearchCriteria)
+class UtilityAICustomSearchCriterion : public UtilityAINQSSearchCriteria {
+    GDCLASS(UtilityAICustomSearchCriterion, UtilityAINQSSearchCriteria)
 
 private:
     
