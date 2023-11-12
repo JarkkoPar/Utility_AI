@@ -10,14 +10,24 @@ using namespace godot;
 
 UtilityAINavigation3DPointGridSearchSpaces::UtilityAINavigation3DPointGridSearchSpaces() {
     _show_debug_info = false;
-    //_navigation_map_rid = get_viewport()->get_world_3d()->get_navigation_map();
     _direction_vector = Vector3( 0.0, 0.0, -1.0 );
     _from_vector = Vector3( 0.0, 0.0, 0.0 );
+
+    _point_grid_parent_node = nullptr; 
 }
 
 
 UtilityAINavigation3DPointGridSearchSpaces::~UtilityAINavigation3DPointGridSearchSpaces() {
-    
+    for( int i = 0; i < _point_grid.size(); ++i ) {
+        Node3D* node = godot::Object::cast_to<Node3D>(_point_grid[i]);
+        memfree(node);
+        _point_grid[i] = nullptr;
+    }//endfor point grid points
+    _point_grid.clear();
+    if( _point_grid_parent_node != nullptr ) {
+        memfree(_point_grid_parent_node);
+        _point_grid_parent_node = nullptr;
+    }
 }
 
 
@@ -58,6 +68,9 @@ void UtilityAINavigation3DPointGridSearchSpaces::_ready() {
     if( _show_debug_info ) {
         create_debug_info_nodes();
     }
+
+    _navigation_map_rid = get_viewport()->get_world_3d()->get_navigation_map();
+    
 }
 
 // Getters and setters.
@@ -143,5 +156,20 @@ void UtilityAINavigation3DPointGridSearchSpaces::create_debug_info_nodes() {
         //new_mesh.instantiate();
         
     }//endfor nodes
+}
+
+
+void UtilityAINavigation3DPointGridSearchSpaces::_initialize_search_space() {
+    if( _point_grid_parent_node == nullptr ) {
+        _point_grid_parent_node = memnew(Node3D);
+        if( _point_grid_parent_node == nullptr ) {
+            ERR_FAIL_MSG("UtilityAINavigation3DPointGridSearchSpaces::_initialize_search_space(): Unable to create the point grid parent node. Out of memory?");
+        }
+        // Add the node3d parent as an internal node.
+        add_child(_point_grid_parent_node, false, InternalMode::INTERNAL_MODE_FRONT);
+    }
+
+    // Create the node3d's for the grid.
+    create_point_grid();
 }
 

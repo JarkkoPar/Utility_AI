@@ -21,7 +21,7 @@ private:
 
 protected:
     static void _bind_methods();
-
+    virtual void _initialize_search_space(){}
 public:
     UtilityAINQSSearchSpaces();
     ~UtilityAINQSSearchSpaces();
@@ -38,6 +38,8 @@ public:
     int  get_top_n_to_find() const;
 
     // Handling methods.
+
+    void initialize_search_space();
 
     virtual void execute_query();
 

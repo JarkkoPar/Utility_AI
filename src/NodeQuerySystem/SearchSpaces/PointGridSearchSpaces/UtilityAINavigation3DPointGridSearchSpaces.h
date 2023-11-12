@@ -52,8 +52,14 @@ private:
 
     Vector3             _from_vector;
     Vector3             _direction_vector;
+    
 protected:
     static void _bind_methods();
+
+    virtual void _initialize_search_space() override;
+
+    Node3D*             _point_grid_parent_node;
+    
 };
 
 }
