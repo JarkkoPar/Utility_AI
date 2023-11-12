@@ -45,7 +45,6 @@ public:
     virtual void create_debug_info_nodes();
 
 private:
-    TypedArray<Node3D>  _point_grid;
     bool                _show_debug_info;
     RID                 _navigation_map_rid;
     double              _y_offset;
@@ -59,6 +58,7 @@ protected:
     virtual void _initialize_search_space() override;
 
     Node3D*             _point_grid_parent_node;
+    TypedArray<Node3D>  _point_grid;
     
 };
 

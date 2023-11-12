@@ -77,7 +77,7 @@ void UtilityAINavigation3DRectangularPointGridSearchSpace::create_point_grid() {
             
             // Get the closest point for this gridpoint on the navigation map.
 
-            get_point_grid().push_back(new_node);
+            _point_grid.push_back(new_node);
         }//endfor z
     }//endfor x
 }

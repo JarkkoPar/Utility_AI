@@ -12,7 +12,7 @@ UtilityAINavigation3DPointGridSearchSpaces::UtilityAINavigation3DPointGridSearch
     _show_debug_info = false;
     _direction_vector = Vector3( 0.0, 0.0, -1.0 );
     _from_vector = Vector3( 0.0, 0.0, 0.0 );
-
+    _y_offset = 0.0;
     _point_grid_parent_node = nullptr; 
 }
 
@@ -63,13 +63,8 @@ void UtilityAINavigation3DPointGridSearchSpaces::_bind_methods() {
 void UtilityAINavigation3DPointGridSearchSpaces::_ready() {
     if( !get_is_active() ) return;
     if( Engine::get_singleton()->is_editor_hint() ) return;
-
-    create_point_grid();
-    if( _show_debug_info ) {
-        create_debug_info_nodes();
-    }
-
-    _navigation_map_rid = get_viewport()->get_world_3d()->get_navigation_map();
+    initialize_search_space();
+    //create_point_grid();
     
 }
 
@@ -171,5 +166,11 @@ void UtilityAINavigation3DPointGridSearchSpaces::_initialize_search_space() {
 
     // Create the node3d's for the grid.
     create_point_grid();
+    if( _show_debug_info ) {
+        create_debug_info_nodes();
+    }
+
+    _navigation_map_rid = get_viewport()->get_world_3d()->get_navigation_map();
+    
 }
 
