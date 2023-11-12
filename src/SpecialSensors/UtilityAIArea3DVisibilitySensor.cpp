@@ -16,7 +16,11 @@ using namespace godot;
 void UtilityAIArea3DVisibilitySensor::_bind_methods() {
 
     ADD_SUBGROUP("Configuration","");
-    
+
+    ClassDB::bind_method(D_METHOD("set_use_owner_global_position", "use_owner_global_position"), &UtilityAIArea3DVisibilitySensor::set_use_owner_global_position);
+    ClassDB::bind_method(D_METHOD("get_use_owner_global_position"), &UtilityAIArea3DVisibilitySensor::get_use_owner_global_position);
+    ADD_PROPERTY(PropertyInfo(Variant::BOOL, "use_owner_global_position", PROPERTY_HINT_NONE), "set_use_owner_global_position","get_use_owner_global_position");
+
     ClassDB::bind_method(D_METHOD("set_from_vector", "from_vector"), &UtilityAIArea3DVisibilitySensor::set_from_vector3);
     ClassDB::bind_method(D_METHOD("get_from_vector"), &UtilityAIArea3DVisibilitySensor::get_from_vector3);
     ADD_PROPERTY(PropertyInfo(Variant::VECTOR3, "from_vector", PROPERTY_HINT_NONE), "set_from_vector","get_from_vector");
@@ -105,6 +109,8 @@ UtilityAIArea3DVisibilitySensor::UtilityAIArea3DVisibilitySensor() {
 
     _closest_intersecting_area_index = -1;
     _closest_unoccluded_area_index = -1;
+
+    _use_owner_global_position = false;
 }
 
 
@@ -163,6 +169,13 @@ double UtilityAIArea3DVisibilitySensor::evaluate_sensor_value() {
         //PhysicsDirectSpaceState3D *dss = PhysicsServer3D::get_singleton()->space_get_direct_state(w3d->get_space());
         ERR_FAIL_NULL_V(dss, get_sensor_value());
     }
+
+    if( _use_owner_global_position && get_owner() != nullptr ) {
+        Node3D* owner3d = godot::Object::cast_to<Node3D>(get_owner());
+        if( owner3d != nullptr ) {
+            _from_vector = owner3d->get_global_position();
+        }//endif owner is derived from node3d
+    }//endif use owner global position
 
     _num_entities_found = 0;
     _closest_intersecting_area_index = -1;
@@ -268,6 +281,16 @@ void UtilityAIArea3DVisibilitySensor::on_area_exited(Area3D* area ) {
 // Getters and Setters.
 
 // Configuration values. 
+
+void UtilityAIArea3DVisibilitySensor::set_use_owner_global_position( bool use_owner_global_position ) {
+    _use_owner_global_position = use_owner_global_position;
+}
+
+
+bool UtilityAIArea3DVisibilitySensor::get_use_owner_global_position() const {
+    return _use_owner_global_position;
+}
+
 
 void UtilityAIArea3DVisibilitySensor::set_from_vector3( Vector3 from ) {
     _from_vector = from;

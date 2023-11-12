@@ -13,7 +13,9 @@ UtilityAINavigation3DPointGridSearchSpaces::UtilityAINavigation3DPointGridSearch
     _direction_vector = Vector3( 0.0, 0.0, -1.0 );
     _from_vector = Vector3( 0.0, 0.0, 0.0 );
     _y_offset = 0.0;
+    _grid_size = 1.0;
     _point_grid_parent_node = nullptr; 
+    _use_owner_global_position_and_orientation = true;
 }
 
 
@@ -47,11 +49,19 @@ void UtilityAINavigation3DPointGridSearchSpaces::_bind_methods() {
     ClassDB::bind_method(D_METHOD("set_direction_vector", "direction_vector"), &UtilityAINavigation3DPointGridSearchSpaces::set_direction_vector3);
     ClassDB::bind_method(D_METHOD("get_direction_vector"), &UtilityAINavigation3DPointGridSearchSpaces::get_direction_vector3);
     ADD_PROPERTY(PropertyInfo(Variant::VECTOR3, "direction_vector", PROPERTY_HINT_NONE), "set_direction_vector","get_direction_vector");
-    
+
+    ClassDB::bind_method(D_METHOD("set_grid_size", "grid_size"), &UtilityAINavigation3DPointGridSearchSpaces::set_grid_size);
+    ClassDB::bind_method(D_METHOD("get_grid_size"), &UtilityAINavigation3DPointGridSearchSpaces::get_grid_size);
+    ADD_PROPERTY(PropertyInfo(Variant::FLOAT, "grid_size", PROPERTY_HINT_RANGE,"0.0000001,100.0,or_greater"), "set_grid_size","get_grid_size");
+
     ClassDB::bind_method(D_METHOD("set_y_offset", "y_offset"), &UtilityAINavigation3DPointGridSearchSpaces::set_y_offset);
     ClassDB::bind_method(D_METHOD("get_y_offset"), &UtilityAINavigation3DPointGridSearchSpaces::get_y_offset);
     ADD_PROPERTY(PropertyInfo(Variant::FLOAT, "y_offset", PROPERTY_HINT_RANGE,"0.0,100.0,or_greater"), "set_y_offset","get_y_offset");
-    
+
+    ClassDB::bind_method(D_METHOD("set_use_owner_global_position_and_orientation", "use_owner_global_position_and_orientation"), &UtilityAINavigation3DPointGridSearchSpaces::set_use_owner_global_position_and_orientation);
+    ClassDB::bind_method(D_METHOD("get_use_owner_global_position_and_orientation"), &UtilityAINavigation3DPointGridSearchSpaces::get_use_owner_global_position_and_orientation);
+    ADD_PROPERTY(PropertyInfo(Variant::BOOL, "use_owner_global_position_and_orientation", PROPERTY_HINT_NONE), "set_use_owner_global_position_and_orientation","get_use_owner_global_position_and_orientation");
+
     ClassDB::bind_method(D_METHOD("set_point_grid", "point_grid"), &UtilityAINavigation3DPointGridSearchSpaces::set_point_grid);
     ClassDB::bind_method(D_METHOD("get_point_grid"), &UtilityAINavigation3DPointGridSearchSpaces::get_point_grid);
     ADD_PROPERTY(PropertyInfo(Variant::ARRAY, "point_grid", PROPERTY_HINT_ARRAY_TYPE, vformat("%s/%s:%s", Variant::OBJECT, PROPERTY_HINT_RESOURCE_TYPE, "Node3D")), "set_point_grid","get_point_grid");
@@ -70,6 +80,16 @@ void UtilityAINavigation3DPointGridSearchSpaces::_ready() {
 
 // Getters and setters.
 
+void UtilityAINavigation3DPointGridSearchSpaces::set_grid_size( double grid_size ) {
+    _grid_size = grid_size;
+}
+
+
+double UtilityAINavigation3DPointGridSearchSpaces::get_grid_size() const {
+    return _grid_size;
+}
+
+
 void UtilityAINavigation3DPointGridSearchSpaces::set_show_debug_info( bool show_debug_info ) {
     _show_debug_info = show_debug_info;
 }
@@ -78,6 +98,7 @@ void UtilityAINavigation3DPointGridSearchSpaces::set_show_debug_info( bool show_
 bool UtilityAINavigation3DPointGridSearchSpaces::get_show_debug_info() const {
     return _show_debug_info;
 }
+
 
 void UtilityAINavigation3DPointGridSearchSpaces::set_navigation_map_rid( RID navigation_map_rid ) {
     _navigation_map_rid = navigation_map_rid;
@@ -123,6 +144,16 @@ double UtilityAINavigation3DPointGridSearchSpaces::get_y_offset() const {
 }
 
 
+void UtilityAINavigation3DPointGridSearchSpaces::set_use_owner_global_position_and_orientation( bool use_owner_global_position_and_orientation ) {
+    _use_owner_global_position_and_orientation = use_owner_global_position_and_orientation;
+}
+
+
+bool UtilityAINavigation3DPointGridSearchSpaces::get_use_owner_global_position_and_orientation() const {
+    return _use_owner_global_position_and_orientation;
+}
+
+
 void UtilityAINavigation3DPointGridSearchSpaces::set_point_grid( TypedArray<Node3D> point_grid ) {
     _point_grid = point_grid;
 }
@@ -140,8 +171,9 @@ void UtilityAINavigation3DPointGridSearchSpaces::create_point_grid() {
 
 
 void UtilityAINavigation3DPointGridSearchSpaces::create_debug_info_nodes() {
-    for( int i = 0; i < _point_grid.size(); ++i ) {
-        Node3D* grid_node = godot::Object::cast_to<Node3D>(get_child(i));
+    if( _point_grid_parent_node == nullptr ) return;
+    for( int i = 0; i < _point_grid_parent_node->get_child_count(); ++i ) {
+        Node3D* grid_node = godot::Object::cast_to<Node3D>(_point_grid_parent_node->get_child(i));
         if( grid_node == nullptr) {
             continue;
         }
@@ -161,8 +193,18 @@ void UtilityAINavigation3DPointGridSearchSpaces::_initialize_search_space() {
             ERR_FAIL_MSG("UtilityAINavigation3DPointGridSearchSpaces::_initialize_search_space(): Unable to create the point grid parent node. Out of memory?");
         }
         // Add the node3d parent as an internal node.
+        _point_grid_parent_node->set_name("PointGridNodes");
         add_child(_point_grid_parent_node, false, InternalMode::INTERNAL_MODE_FRONT);
     }
+    if( _use_owner_global_position_and_orientation && get_owner() != nullptr ) {
+        Node3D* owner3d = godot::Object::cast_to<Node3D>(get_owner());
+        if( owner3d != nullptr ) {
+            _from_vector = owner3d->get_global_position();
+            Transform3D owner_global_transform = owner3d->get_global_transform();
+            Basis owner_basis = owner_global_transform.get_basis();
+            _direction_vector = -owner_basis.get_column(2);
+        }//endif owner is node3d derived
+    }//endif use owner global position and orientation
 
     // Create the node3d's for the grid.
     create_point_grid();

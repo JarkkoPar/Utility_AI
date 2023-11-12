@@ -16,7 +16,11 @@ using namespace godot;
 void UtilityAIArea2DVisibilitySensor::_bind_methods() {
 
     ADD_SUBGROUP("Configuration","");
-    
+
+    ClassDB::bind_method(D_METHOD("set_use_owner_global_position", "use_owner_global_position"), &UtilityAIArea2DVisibilitySensor::set_use_owner_global_position);
+    ClassDB::bind_method(D_METHOD("get_use_owner_global_position"), &UtilityAIArea2DVisibilitySensor::get_use_owner_global_position);
+    ADD_PROPERTY(PropertyInfo(Variant::BOOL, "use_owner_global_position", PROPERTY_HINT_NONE), "set_use_owner_global_position","get_use_owner_global_position");
+
     ClassDB::bind_method(D_METHOD("set_from_vector", "from_vector"), &UtilityAIArea2DVisibilitySensor::set_from_Vector2);
     ClassDB::bind_method(D_METHOD("get_from_vector"), &UtilityAIArea2DVisibilitySensor::get_from_Vector2);
     ADD_PROPERTY(PropertyInfo(Variant::VECTOR2, "from_vector", PROPERTY_HINT_NONE), "set_from_vector","get_from_vector");
@@ -105,6 +109,7 @@ UtilityAIArea2DVisibilitySensor::UtilityAIArea2DVisibilitySensor() {
 
     _closest_intersecting_area_index = -1;
     _closest_unoccluded_area_index = -1;
+    _use_owner_global_position = false;
 }
 
 
@@ -170,6 +175,16 @@ double UtilityAIArea2DVisibilitySensor::evaluate_sensor_value() {
         //PhysicsDirectSpaceState3D *dss = PhysicsServer3D::get_singleton()->space_get_direct_state(w3d->get_space());
         ERR_FAIL_NULL_V(dss, get_sensor_value());
     }
+
+    if( _use_owner_global_position && get_owner() != nullptr ) {
+        Node2D* owner2d = godot::Object::cast_to<Node2D>(get_owner());
+        if( owner2d != nullptr ) {
+            _from_vector = owner2d->get_global_position();
+            //Transform2D owner_global_transform = owner2d->get_global_transform();
+            //real_t rotation = owner_global_transform.get_rotation();
+            // = Vector2(1.0,0.0).rotated(rotation);
+        }//endif owner is derived from node2d
+    }//endif use owner global position
 
     _num_entities_found = 0;
     _closest_intersecting_area_index = -1;
@@ -274,6 +289,16 @@ void UtilityAIArea2DVisibilitySensor::on_area_exited(Area2D* area ) {
 // Getters and Setters.
 
 // Configuration values. 
+
+void UtilityAIArea2DVisibilitySensor::set_use_owner_global_position( bool use_owner_global_position ) {
+    _use_owner_global_position = use_owner_global_position;
+}
+
+
+bool UtilityAIArea2DVisibilitySensor::get_use_owner_global_position() const {
+    return _use_owner_global_position;
+}
+
 
 void UtilityAIArea2DVisibilitySensor::set_from_Vector2( Vector2 from ) {
     _from_vector = from;

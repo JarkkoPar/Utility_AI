@@ -32,6 +32,8 @@ private:
     int _num_entities_found;
     int _max_expected_entities_found;
     double _one_over_max_expected_entities_found;
+
+    bool _use_owner_global_position;
 protected:
     static void _bind_methods();
 
@@ -55,6 +57,9 @@ public:
     // Getters and setters for attributes.
     
     // Configuration values. 
+
+    void set_use_owner_global_position( bool use_owner_global_position );
+    bool get_use_owner_global_position() const;
 
     void set_from_vector3( Vector3 from );
     Vector3 get_from_vector3() const;

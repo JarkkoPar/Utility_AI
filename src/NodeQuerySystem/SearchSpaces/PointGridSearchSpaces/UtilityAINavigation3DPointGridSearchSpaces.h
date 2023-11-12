@@ -31,8 +31,14 @@ public:
     void set_direction_vector3( Vector3 direction_vector );
     Vector3 get_direction_vector3() const;
 
+    void set_grid_size( double grid_size );
+    double get_grid_size() const;
+
     void set_y_offset( double y_offset );
     double get_y_offset() const;
+
+    void set_use_owner_global_position_and_orientation( bool use_owner_global_position_and_orientation );
+    bool get_use_owner_global_position_and_orientation() const;
 
     void set_point_grid( TypedArray<Node3D> point_grid );
     TypedArray<Node3D> get_point_grid() const;
@@ -44,14 +50,16 @@ public:
     virtual void create_point_grid();
     virtual void create_debug_info_nodes();
 
+
 private:
     bool                _show_debug_info;
     RID                 _navigation_map_rid;
     double              _y_offset;
-
+    double              _grid_size;
     Vector3             _from_vector;
     Vector3             _direction_vector;
     
+    bool                _use_owner_global_position_and_orientation;
 protected:
     static void _bind_methods();
 

@@ -18,9 +18,6 @@ public:
     //void _ready();    
     
     // Getters and setters for attributes.
-    
-    void set_grid_size( double grid_size );
-    double get_grid_size() const;
 
     void set_rectangle_width( double rectangle_width );
     double get_rectangle_width() const;
@@ -35,7 +32,7 @@ public:
 private:
     double  _rectangle_width;
     double  _rectangle_height;
-    double  _grid_size;
+    //double  _grid_size;
 protected:
     static void _bind_methods();
 

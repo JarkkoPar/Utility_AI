@@ -10,15 +10,17 @@ class UtilityAINQSSearchCriteria : public UtilityAI { //NodeQuerySystem {
     GDCLASS(UtilityAINQSSearchCriteria, UtilityAI ) //NodeQuerySystem )
 
 private:
-    bool    _is_filtered;
-    bool    _is_scored;
-
+    bool    _use_for_scoring;
+    bool    _use_for_filtering;
     
 protected:
     static void _bind_methods();
 
-    bool   _filtering_result;
-    double _scoring_result;
+    //bool   _filtering_result;
+    //double _scoring_result;
+    double  _score;
+    bool    _is_filtered;
+
 
 public:
     UtilityAINQSSearchCriteria();
@@ -27,17 +29,17 @@ public:
     
     // Getters and setters for attributes.
     
+    void set_use_for_scoring( bool use_for_scoring );
+    bool get_use_for_scoring() const;
+
+    void set_use_for_filtering( bool use_for_filtering );
+    bool get_use_for_filtering() const;
+
     void set_is_filtered( bool is_filtered );
     bool get_is_filtered() const;
 
-    void set_is_scored( bool is_filtered );
-    bool get_is_scored() const;
-
-    void set_filtering_result( bool filtering_result );
-    bool get_filtering_result() const;
-
-    void set_scoring_result( double scoring_result );
-    double get_scoring_result() const;
+    void set_score( double score );
+    double get_score() const;
 
 
     // Handling methods.

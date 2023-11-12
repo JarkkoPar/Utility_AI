@@ -4,7 +4,8 @@ using namespace godot;
 
 
 UtilityAINavigation3DRectangularPointGridSearchSpace::UtilityAINavigation3DRectangularPointGridSearchSpace() {
-
+    _rectangle_width = 10.0;
+    _rectangle_height = 10.0;
 }
 
 
@@ -15,22 +16,17 @@ UtilityAINavigation3DRectangularPointGridSearchSpace::~UtilityAINavigation3DRect
 
 
 void UtilityAINavigation3DRectangularPointGridSearchSpace::_bind_methods() {
-    //ClassDB::bind_method(D_METHOD("set_show_debug_info", "show_debug_info"), &UtilityAINavigation3DPointGridSearchSpaces::set_show_debug_info);
-    //ClassDB::bind_method(D_METHOD("get_show_debug_info"), &UtilityAINavigation3DPointGridSearchSpaces::get_show_debug_info);
-    //ADD_PROPERTY(PropertyInfo(Variant::BOOL, "show_debug_info", PROPERTY_HINT_NONE), "set_show_debug_info","get_show_debug_info");
+    ClassDB::bind_method(D_METHOD("set_rectangle_width", "rectangle_width"), &UtilityAINavigation3DRectangularPointGridSearchSpace::set_rectangle_width);
+    ClassDB::bind_method(D_METHOD("get_rectangle_width"), &UtilityAINavigation3DRectangularPointGridSearchSpace::get_rectangle_width);
+    ADD_PROPERTY(PropertyInfo(Variant::FLOAT, "rectangle_width", PROPERTY_HINT_NONE), "set_rectangle_width","get_rectangle_width");
+
+    ClassDB::bind_method(D_METHOD("set_rectangle_height", "rectangle_height"), &UtilityAINavigation3DRectangularPointGridSearchSpace::set_rectangle_height);
+    ClassDB::bind_method(D_METHOD("get_rectangle_height"), &UtilityAINavigation3DRectangularPointGridSearchSpace::get_rectangle_height);
+    ADD_PROPERTY(PropertyInfo(Variant::FLOAT, "rectangle_height", PROPERTY_HINT_NONE), "set_rectangle_height","get_rectangle_height");
+
 }
 
 // Getters and setters.
-
-void UtilityAINavigation3DRectangularPointGridSearchSpace::set_grid_size( double grid_size ) {
-    _grid_size = grid_size;
-}
-
-
-double UtilityAINavigation3DRectangularPointGridSearchSpace::get_grid_size() const {
-    return _grid_size;
-}
-
 
 void UtilityAINavigation3DRectangularPointGridSearchSpace::set_rectangle_width( double rectangle_width ) {
     if( rectangle_width <= 0.0 ) return;
@@ -56,8 +52,8 @@ double UtilityAINavigation3DRectangularPointGridSearchSpace::get_rectangle_heigh
 // Handling methods.
 
 void UtilityAINavigation3DRectangularPointGridSearchSpace::create_point_grid() {
-    int x_points = _rectangle_width / _grid_size;
-    int z_points = _rectangle_height / _grid_size;
+    int x_points = _rectangle_width / get_grid_size();
+    int z_points = _rectangle_height / get_grid_size();
     double half_width = _rectangle_width * 0.5;
     double half_height = _rectangle_height * 0.5;
 
@@ -73,7 +69,7 @@ void UtilityAINavigation3DRectangularPointGridSearchSpace::create_point_grid() {
                 ERR_FAIL_MSG("UtilityAINavigation3DRectangularPointGridSearchSpace::create_point_grid() - Failed, out of memory!");
             }
             _point_grid_parent_node->add_child(new_node);
-            new_node->set_global_position( get_from_vector3() + Vector3( -half_width + (double)x * _grid_size, get_y_offset(), -half_height + (double)z * _grid_size));
+            new_node->set_global_position( get_from_vector3() + Vector3( -half_width + (double)x * get_grid_size(), get_y_offset(), -half_height + (double)z * get_grid_size()));
             
             // Get the closest point for this gridpoint on the navigation map.
 
