@@ -17,9 +17,11 @@ private:
 
     double _min_distance_squared;
     double _max_distance_squared;
+    double _span_length;
+    double _one_over_span_length;
 
-    NodePath _observer_nodepath;
-    Node3D*  _observer_node;
+    NodePath _distance_to_nodepath;
+    Node3D*  _distance_to_node;
 
 protected:
     //static void _bind_methods();
@@ -31,8 +33,8 @@ public:
     
     // Getters and setters for attributes.
 
-    void set_observer_nodepath( NodePath observer_nodepath );
-    NodePath get_observer_nodepath() const;
+    void set_distance_to_nodepath( NodePath distance_to_nodepath );
+    NodePath get_distance_to_nodepath() const;
 
 
     void set_min_distance( double min_distance );
