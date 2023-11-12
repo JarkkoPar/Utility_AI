@@ -20,10 +20,6 @@ void UtilityAIArea3DVisibilitySensor::_bind_methods() {
     ClassDB::bind_method(D_METHOD("set_use_owner_global_position", "use_owner_global_position"), &UtilityAIArea3DVisibilitySensor::set_use_owner_global_position);
     ClassDB::bind_method(D_METHOD("get_use_owner_global_position"), &UtilityAIArea3DVisibilitySensor::get_use_owner_global_position);
     ADD_PROPERTY(PropertyInfo(Variant::BOOL, "use_owner_global_position", PROPERTY_HINT_NONE), "set_use_owner_global_position","get_use_owner_global_position");
-
-    ClassDB::bind_method(D_METHOD("set_from_vector", "from_vector"), &UtilityAIArea3DVisibilitySensor::set_from_vector3);
-    ClassDB::bind_method(D_METHOD("get_from_vector"), &UtilityAIArea3DVisibilitySensor::get_from_vector3);
-    ADD_PROPERTY(PropertyInfo(Variant::VECTOR3, "from_vector", PROPERTY_HINT_NONE), "set_from_vector","get_from_vector");
     
     ClassDB::bind_method(D_METHOD("set_visibility_volume_nodepath", "visibility_volume_nodepath"), &UtilityAIArea3DVisibilitySensor::set_visibility_volume_nodepath);
     ClassDB::bind_method(D_METHOD("get_visibility_volume_nodepath"), &UtilityAIArea3DVisibilitySensor::get_visibility_volume_nodepath);
@@ -53,9 +49,13 @@ void UtilityAIArea3DVisibilitySensor::_bind_methods() {
     //ADD_PROPERTY(PropertyInfo(Variant::INT, "entity_mask", PROPERTY_HINT_LAYERS_3D_PHYSICS), "set_entity_mask","get_entity_mask");
 
     ClassDB::bind_method(D_METHOD("on_area_entered", "area"), &UtilityAIArea3DVisibilitySensor::on_area_entered);
-    ClassDB::bind_method(D_METHOD("on_area_exited", "aera"), &UtilityAIArea3DVisibilitySensor::on_area_exited);
+    ClassDB::bind_method(D_METHOD("on_area_exited", "area"), &UtilityAIArea3DVisibilitySensor::on_area_exited);
 
     ADD_SUBGROUP("Debugging","");
+
+    ClassDB::bind_method(D_METHOD("set_from_vector", "from_vector"), &UtilityAIArea3DVisibilitySensor::set_from_vector3);
+    ClassDB::bind_method(D_METHOD("get_from_vector"), &UtilityAIArea3DVisibilitySensor::get_from_vector3);
+    ADD_PROPERTY(PropertyInfo(Variant::VECTOR3, "from_vector", PROPERTY_HINT_NONE), "set_from_vector","get_from_vector");
 
     ClassDB::bind_method(D_METHOD("set_num_entities_found", "num_entities_found"), &UtilityAIArea3DVisibilitySensor::set_num_entities_found);
     ClassDB::bind_method(D_METHOD("get_num_entities_found"), &UtilityAIArea3DVisibilitySensor::get_num_entities_found);

@@ -53,7 +53,7 @@ void UtilityAIArea2DVisibilitySensor::_bind_methods() {
     //ADD_PROPERTY(PropertyInfo(Variant::INT, "entity_mask", PROPERTY_HINT_LAYERS_3D_PHYSICS), "set_entity_mask","get_entity_mask");
 
     ClassDB::bind_method(D_METHOD("on_area_entered", "area"), &UtilityAIArea2DVisibilitySensor::on_area_entered);
-    ClassDB::bind_method(D_METHOD("on_area_exited", "aera"), &UtilityAIArea2DVisibilitySensor::on_area_exited);
+    ClassDB::bind_method(D_METHOD("on_area_exited", "area"), &UtilityAIArea2DVisibilitySensor::on_area_exited);
 
     ADD_SUBGROUP("Debugging","");
 

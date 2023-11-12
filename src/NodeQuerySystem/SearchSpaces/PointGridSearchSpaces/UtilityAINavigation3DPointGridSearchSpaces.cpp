@@ -34,21 +34,12 @@ UtilityAINavigation3DPointGridSearchSpaces::~UtilityAINavigation3DPointGridSearc
 
 
 void UtilityAINavigation3DPointGridSearchSpaces::_bind_methods() {
+
+    ADD_SUBGROUP("Configuration","");
+
     ClassDB::bind_method(D_METHOD("set_navigation_map_rid", "navigation_map_rid"), &UtilityAINavigation3DPointGridSearchSpaces::set_navigation_map_rid);
     ClassDB::bind_method(D_METHOD("get_navigation_map_rid"), &UtilityAINavigation3DPointGridSearchSpaces::get_navigation_map_rid);
     ADD_PROPERTY(PropertyInfo(Variant::RID, "navigation_map_rid", PROPERTY_HINT_NONE), "set_navigation_map_rid","get_navigation_map_rid");
-
-    ClassDB::bind_method(D_METHOD("set_show_debug_info", "show_debug_info"), &UtilityAINavigation3DPointGridSearchSpaces::set_show_debug_info);
-    ClassDB::bind_method(D_METHOD("get_show_debug_info"), &UtilityAINavigation3DPointGridSearchSpaces::get_show_debug_info);
-    ADD_PROPERTY(PropertyInfo(Variant::BOOL, "show_debug_info", PROPERTY_HINT_NONE), "set_show_debug_info","get_show_debug_info");
-
-    ClassDB::bind_method(D_METHOD("set_from_vector", "from_vector"), &UtilityAINavigation3DPointGridSearchSpaces::set_from_vector3);
-    ClassDB::bind_method(D_METHOD("get_from_vector"), &UtilityAINavigation3DPointGridSearchSpaces::get_from_vector3);
-    ADD_PROPERTY(PropertyInfo(Variant::VECTOR3, "from_vector", PROPERTY_HINT_NONE), "set_from_vector","get_from_vector");
-    
-    ClassDB::bind_method(D_METHOD("set_direction_vector", "direction_vector"), &UtilityAINavigation3DPointGridSearchSpaces::set_direction_vector3);
-    ClassDB::bind_method(D_METHOD("get_direction_vector"), &UtilityAINavigation3DPointGridSearchSpaces::get_direction_vector3);
-    ADD_PROPERTY(PropertyInfo(Variant::VECTOR3, "direction_vector", PROPERTY_HINT_NONE), "set_direction_vector","get_direction_vector");
 
     ClassDB::bind_method(D_METHOD("set_grid_size", "grid_size"), &UtilityAINavigation3DPointGridSearchSpaces::set_grid_size);
     ClassDB::bind_method(D_METHOD("get_grid_size"), &UtilityAINavigation3DPointGridSearchSpaces::get_grid_size);
@@ -61,6 +52,20 @@ void UtilityAINavigation3DPointGridSearchSpaces::_bind_methods() {
     ClassDB::bind_method(D_METHOD("set_use_owner_global_position_and_orientation", "use_owner_global_position_and_orientation"), &UtilityAINavigation3DPointGridSearchSpaces::set_use_owner_global_position_and_orientation);
     ClassDB::bind_method(D_METHOD("get_use_owner_global_position_and_orientation"), &UtilityAINavigation3DPointGridSearchSpaces::get_use_owner_global_position_and_orientation);
     ADD_PROPERTY(PropertyInfo(Variant::BOOL, "use_owner_global_position_and_orientation", PROPERTY_HINT_NONE), "set_use_owner_global_position_and_orientation","get_use_owner_global_position_and_orientation");
+
+    ADD_SUBGROUP("Debugging","");
+
+    ClassDB::bind_method(D_METHOD("set_show_debug_info", "show_debug_info"), &UtilityAINavigation3DPointGridSearchSpaces::set_show_debug_info);
+    ClassDB::bind_method(D_METHOD("get_show_debug_info"), &UtilityAINavigation3DPointGridSearchSpaces::get_show_debug_info);
+    ADD_PROPERTY(PropertyInfo(Variant::BOOL, "show_debug_info", PROPERTY_HINT_NONE), "set_show_debug_info","get_show_debug_info");
+
+    ClassDB::bind_method(D_METHOD("set_from_vector", "from_vector"), &UtilityAINavigation3DPointGridSearchSpaces::set_from_vector3);
+    ClassDB::bind_method(D_METHOD("get_from_vector"), &UtilityAINavigation3DPointGridSearchSpaces::get_from_vector3);
+    ADD_PROPERTY(PropertyInfo(Variant::VECTOR3, "from_vector", PROPERTY_HINT_NONE), "set_from_vector","get_from_vector");
+
+    ClassDB::bind_method(D_METHOD("set_direction_vector", "direction_vector"), &UtilityAINavigation3DPointGridSearchSpaces::set_direction_vector3);
+    ClassDB::bind_method(D_METHOD("get_direction_vector"), &UtilityAINavigation3DPointGridSearchSpaces::get_direction_vector3);
+    ADD_PROPERTY(PropertyInfo(Variant::VECTOR3, "direction_vector", PROPERTY_HINT_NONE), "set_direction_vector","get_direction_vector");
 
     ClassDB::bind_method(D_METHOD("set_point_grid", "point_grid"), &UtilityAINavigation3DPointGridSearchSpaces::set_point_grid);
     ClassDB::bind_method(D_METHOD("get_point_grid"), &UtilityAINavigation3DPointGridSearchSpaces::get_point_grid);

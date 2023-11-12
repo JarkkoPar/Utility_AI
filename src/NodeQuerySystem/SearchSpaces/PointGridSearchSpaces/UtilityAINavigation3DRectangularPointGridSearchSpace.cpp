@@ -16,6 +16,8 @@ UtilityAINavigation3DRectangularPointGridSearchSpace::~UtilityAINavigation3DRect
 
 
 void UtilityAINavigation3DRectangularPointGridSearchSpace::_bind_methods() {
+    ADD_SUBGROUP("Configuration","");
+
     ClassDB::bind_method(D_METHOD("set_rectangle_width", "rectangle_width"), &UtilityAINavigation3DRectangularPointGridSearchSpace::set_rectangle_width);
     ClassDB::bind_method(D_METHOD("get_rectangle_width"), &UtilityAINavigation3DRectangularPointGridSearchSpace::get_rectangle_width);
     ADD_PROPERTY(PropertyInfo(Variant::FLOAT, "rectangle_width", PROPERTY_HINT_NONE), "set_rectangle_width","get_rectangle_width");

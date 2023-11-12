@@ -112,3 +112,5 @@ src/NodeQuerySystem/SearchCriteria/UtilityAINQSSearchCriteria.windows.template_d
 src/NodeQuerySystem/SearchCriteria/UtilityAINQSSearchCriteria.windows.template_release.x86_64.obj
 src/NodeQuerySystem/SearchSpaces/UtilityAINodeGroupSearchSpace.windows.template_debug.x86_64.obj
 src/NodeQuerySystem/SearchSpaces/UtilityAINodeGroupSearchSpace.windows.template_release.x86_64.obj
+src/NodeQuerySystem/SearchSpaces/UtilityAIArea3DSearchSpace.windows.template_debug.x86_64.obj
+src/NodeQuerySystem/SearchSpaces/UtilityAIArea3DSearchSpace.windows.template_release.x86_64.obj
