@@ -1,13 +1,13 @@
-#ifndef UtilityAIGroupSearchSpace_H_INCLUDED
-#define UtilityAIGroupSearchSpace_H_INCLUDED 
+#ifndef UtilityAINodeGroupSearchSpace_H_INCLUDED
+#define UtilityAINodeGroupSearchSpace_H_INCLUDED 
 
 #include "UtilityAINQSSearchSpaces.h"
 #include <godot_cpp/classes/node.hpp>
 
 namespace godot {
 
-class UtilityAIGroupSearchSpace : public UtilityAINQSSearchSpaces {
-    GDCLASS(UtilityAIGroupSearchSpace, UtilityAINQSSearchSpaces)
+class UtilityAINodeGroupSearchSpace : public UtilityAINQSSearchSpaces {
+    GDCLASS(UtilityAINodeGroupSearchSpace, UtilityAINQSSearchSpaces)
 
 private:
     StringName _group_name;
@@ -16,8 +16,8 @@ protected:
 
     
 public:
-    UtilityAIGroupSearchSpace();
-    ~UtilityAIGroupSearchSpace();
+    UtilityAINodeGroupSearchSpace();
+    ~UtilityAINodeGroupSearchSpace();
     
     
     // Getters and setters for attributes.

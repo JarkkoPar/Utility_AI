@@ -408,13 +408,16 @@ The `UtilityAIActionGroup` has the following signals:
 
 ---- This section contains information about a feature under development `DEV` ----
 
-## UtilityAINodeQuerySystem (NQS)
+## UtilityAI Node Query System (NQS)
 
-The Utility AI Node Query System is a set of nodes that can be used to score and filter any set of Godot nodes to find the top N best nodes given a set of search criteria.  
+The Utility AI Node Query System is a set of nodes that can be used to score and filter any set of Godot nodes to find the top N best nodes given a set of search criteria. The two main node types for the Node Query System are `UtilityAINQSSearchSpaces` and `UtilityAINQSSearchCriteria`. The *Search Spaces* nodes define a set of nodes as a "search space", and the `execute_query()` method of the Search Space is used to apply the child *Search Criteria* nodes to filter and score the nodes within the "search space". A practical example would be 
 
-### UtilityAISearchSpace nodes 
+### UtilityAISearchSpaces nodes 
 
-The search space nodes are used to define the set of nodes that will be included in the search. 
+The search space nodes are used to define the set of nodes that will be included in the search. The following nodes have been implemented:
+
+ * UtilityAINodeGroupSearchSpace
+ * UtilityAINodeChildrenSearchSpace
 
 #### Properties
 
