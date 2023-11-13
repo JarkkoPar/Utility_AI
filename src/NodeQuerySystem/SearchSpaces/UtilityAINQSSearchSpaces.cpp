@@ -25,8 +25,8 @@ void UtilityAINQSSearchSpaces::_bind_methods() {
 
     ClassDB::bind_method(D_METHOD("set_query_result_scores", "query_result_scores"), &UtilityAINQSSearchSpaces::set_query_result_scores);
     ClassDB::bind_method(D_METHOD("get_query_result_scores"), &UtilityAINQSSearchSpaces::get_query_result_scores);
-    ADD_PROPERTY(PropertyInfo(Variant::ARRAY, "query_result_scores", PROPERTY_HINT_ARRAY_TYPE, vformat("%s/%s:%s", Variant::FLOAT, PROPERTY_HINT_NONE)), "set_query_result_scores","get_query_result_scores");
-
+    ADD_PROPERTY(PropertyInfo(Variant::ARRAY, "query_result_scores", PROPERTY_HINT_NONE), "set_query_result_scores","get_query_result_scores");
+    //PROPERTY_HINT_ARRAY_TYPE, vformat("%s/%s:%s", Variant::FLOAT, PROPERTY_HINT_NONE)
     ClassDB::bind_method(D_METHOD("initialize_search_space"), &UtilityAINQSSearchSpaces::initialize_search_space);
     ClassDB::bind_method(D_METHOD("execute_query"), &UtilityAINQSSearchSpaces::execute_query);
 }
@@ -110,58 +110,54 @@ void UtilityAINQSSearchSpaces::execute_query() {
     // in-order.
     bool is_filtered_out = false;
     double score = 0.0;
+    double total_score = 0.0;
     TypedArray<Node> search_space = get_searchspace_nodes();
     for( int ss = 0; ss < search_space.size(); ++ss ) {
+        Node* node = godot::Object::cast_to<Node>(search_space[ss]);
+        if( node == nullptr ) continue;
+            
+        total_score = 0.0;
         for( int c = 0; c < get_child_count(); ++c ) {
             UtilityAINQSSearchCriteria* criterion = godot::Object::cast_to<UtilityAINQSSearchCriteria>(get_child(c));
             if( criterion == nullptr ) continue;
             
-            Node* node = godot::Object::cast_to<Node>(search_space[ss]);
-            criterion->apply_criterion(node, is_filtered_out, score);
-            
-            if( is_filtered_out ) continue;
+            criterion->apply_criterion(node, is_filtered_out, score);           
+            total_score += score;
+            if( is_filtered_out ) break;
 
-            place_to_query_results_based_on_score(node, score);
-            
+
         }//endfor search criteria
+        if( !is_filtered_out ) {
+            place_to_query_results_based_on_score(node, score);
+        }
     }//endfor nodes in the search space
     
 }
 
 
 void UtilityAINQSSearchSpaces::place_to_query_results_based_on_score( Node* node, double score ) {
-    int result_count = _query_results.size();
-    if( result_count == 0 ) {
+    if( _query_result_scores.size() == 0 ) {
         _query_results.push_back(node);
         _query_result_scores.push_back(score);
         return;
-    }//endif is first item to insert.
-    else if( result_count == _top_n_to_find ) {
-        // There already are top n in the result set,
-        // check that the new score is not worse than
-        // the last node in the list.
-        double qscore = _query_result_scores[_top_n_to_find - 1];
-        if( qscore >= score ) return; // It is worse, don't add it.
-    }// endif has already top n results score check
+    }
+    
+    int i = 0; 
+    while( i < _query_result_scores.size() && _query_result_scores[i] > score ) {
+        ++i;
+    }
 
-    // Check if the node should go in the middle of the list.
-    for( int i = 0; i < result_count; ++i ) {
-        double qscore = _query_result_scores[i];
-        if( qscore < score ) {
-            _query_results.insert(i, node );
-            _query_result_scores.insert(i, score);
-            if( _query_results.size() > _top_n_to_find ) {
-                int last_item = _query_results.size();
-                _query_results.remove_at(last_item);
-                _query_result_scores.remove_at(last_item);
-            }
-            return;
+    if( i < _query_result_scores.size() ) {
+        _query_results.insert(i, node);
+        _query_result_scores.insert(i, score);
+        if( _query_result_scores.size() >= _top_n_to_find ) {
+            _query_result_scores.remove_at(_top_n_to_find - 1);
+            _query_results.remove_at(_top_n_to_find - 1);
         }
-    }//endfor query results
-
-    // Add to the end of the list.
-    _query_results.push_back(node);
-    _query_result_scores.push_back(score);
+    } else if( i < _top_n_to_find ) {
+        _query_results.push_back(node);
+        _query_result_scores.push_back(score);
+    }
 }
 
 /**

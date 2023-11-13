@@ -16,16 +16,18 @@ private:
 protected:
     static void _bind_methods();
 
-    //bool   _filtering_result;
-    //double _scoring_result;
+    virtual void _initialize_criterion(){};
+
     double  _score;
     bool    _is_filtered;
-
 
 public:
     UtilityAINQSSearchCriteria();
     ~UtilityAINQSSearchCriteria();
     
+    // Godot virtuals.
+    void _ready();    
+
     
     // Getters and setters for attributes.
     

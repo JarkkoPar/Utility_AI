@@ -10,7 +10,7 @@ UtilityAINode3DDistanceSearchCriterion::UtilityAINode3DDistanceSearchCriterion()
     _min_distance_squared = 0.0;
     _max_distance_squared = _max_distance * _max_distance;
     _span_length = _max_distance_squared - _min_distance_squared;
-    _one_over_span_length = 1.0 / _max_distance_squared;
+    _one_over_span_length = 1.0 / _span_length;
     _distance_to_node = nullptr;
 }
 
@@ -38,6 +38,11 @@ void UtilityAINode3DDistanceSearchCriterion::_bind_methods() {
 }
 
 
+void UtilityAINode3DDistanceSearchCriterion::_initialize_criterion() {
+    Node* node = get_node_or_null(_distance_to_nodepath);
+    if( node == nullptr ) return;
+    _distance_to_node = godot::Object::cast_to<Node3D>(node);
+}
 
 
 // Getters and setters.
@@ -114,4 +119,6 @@ void UtilityAINode3DDistanceSearchCriterion::apply_criterion( Node* node, bool& 
     
     filter_out = _is_filtered;
     score = _score;
+    printf("%f", (float)_score);
+    //WARN_PRINT("Filter: " + to_string(_is_filtered) + " Score: " + to_string(_score));
 }

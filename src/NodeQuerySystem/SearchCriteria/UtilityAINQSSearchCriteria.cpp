@@ -18,6 +18,12 @@ UtilityAINQSSearchCriteria::~UtilityAINQSSearchCriteria() {
 }
 
 
+void UtilityAINQSSearchCriteria::_ready() {
+    _initialize_criterion();
+}
+
+
+
 void UtilityAINQSSearchCriteria::_bind_methods() {
     ClassDB::bind_method(D_METHOD("set_use_for_scoring", "use_for_scoring"), &UtilityAINQSSearchCriteria::set_use_for_scoring);
     ClassDB::bind_method(D_METHOD("get_use_for_scoring"), &UtilityAINQSSearchCriteria::get_use_for_scoring);

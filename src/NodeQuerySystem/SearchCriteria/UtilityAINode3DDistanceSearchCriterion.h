@@ -25,7 +25,7 @@ private:
 
 protected:
     static void _bind_methods();
-
+    virtual void _initialize_criterion() override;
 public:
     UtilityAINode3DDistanceSearchCriterion();
     ~UtilityAINode3DDistanceSearchCriterion();
