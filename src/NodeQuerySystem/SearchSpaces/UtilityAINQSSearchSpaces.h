@@ -16,12 +16,15 @@ class UtilityAINQSSearchSpaces : public UtilityAI { //NodeQuerySystem {
 private:
     int                 _top_n_to_find;
     TypedArray<Node>    _query_results;
+    PackedFloat64Array  _query_result_scores;
 
     TypedArray<UtilityAINQSSearchCriteria> _filtering_criteria;
 
 protected:
     static void _bind_methods();
     virtual void _initialize_search_space(){}
+
+    void place_to_query_results_based_on_score( Node* node, double score );
 public:
     UtilityAINQSSearchSpaces();
     ~UtilityAINQSSearchSpaces();
@@ -33,6 +36,10 @@ public:
     
     void set_query_results(TypedArray<Node> query_results);
     TypedArray<Node> get_query_results() const;
+
+    void set_query_result_scores(PackedFloat64Array query_result_scores);
+    PackedFloat64Array get_query_result_scores() const;
+
     
     void set_top_n_to_find( int top_n_to_find );
     int  get_top_n_to_find() const;

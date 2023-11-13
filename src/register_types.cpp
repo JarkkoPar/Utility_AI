@@ -42,6 +42,9 @@
 #include "NodeQuerySystem/SearchCriteria/UtilityAINQSSearchCriteria.h"
 #include "NodeQuerySystem/SearchCriteria/UtilityAICustomSearchCriterion.h"
 
+#include "NodeQuerySystem/SearchCriteria/UtilityAINode3DDistanceSearchCriterion.h"
+//#include "NodeQuerySystem/SearchCriteria/UtilityAINode2DDistanceSearchCriterion.h"
+
 #include "NodeQuerySystem/SearchSpaces/PointGridSearchSpaces/UtilityAINavigation3DPointGridSearchSpaces.h"
 #include "NodeQuerySystem/SearchSpaces/PointGridSearchSpaces/UtilityAINavigation3DRectangularPointGridSearchSpace.h"
 
@@ -105,6 +108,9 @@ void initialize_utility_ai_module(ModuleInitializationLevel p_level) {
 
     ClassDB::register_class<UtilityAINQSSearchCriteria>(true);
     ClassDB::register_class<UtilityAICustomSearchCriterion>();
+
+    ClassDB::register_class<UtilityAINode3DDistanceSearchCriterion>();
+
 }
 
 void uninitialize_utility_ai_module(ModuleInitializationLevel p_level) {

@@ -24,7 +24,7 @@ private:
     Node3D*  _distance_to_node;
 
 protected:
-    //static void _bind_methods();
+    static void _bind_methods();
 
 public:
     UtilityAINode3DDistanceSearchCriterion();
