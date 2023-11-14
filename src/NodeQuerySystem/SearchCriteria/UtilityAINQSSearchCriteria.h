@@ -3,6 +3,7 @@
 #include "../UtilityAI.h"
 //#include "UtilityAINodeQuerySystem.h"
 //#include <godot_cpp/classes/node.hpp>
+#include <godot_cpp/classes/curve.hpp>
 
 namespace godot {
 
@@ -13,6 +14,8 @@ private:
     bool    _use_for_scoring;
     bool    _use_for_filtering;
     
+    Ref<Curve> _activation_curve;
+
 protected:
     static void _bind_methods();
 
@@ -43,11 +46,14 @@ public:
     void set_score( double score );
     double get_score() const;
 
+    void set_activation_curve( Ref<Curve> activation_curve );
+    Ref<Curve> get_activation_curve() const;
+
 
     // Handling methods.
 
     virtual void apply_criterion( Node* node, bool& filter_out, double& score );
-
+    virtual double sample_activation_curve( double input_value ) const;
 };
 
 }

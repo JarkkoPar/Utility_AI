@@ -115,10 +115,12 @@ void UtilityAINode3DDistanceSearchCriterion::apply_criterion( Node* node, bool& 
             double distance_from_lower_limit = distance_squared - _min_distance_squared;
             _score = distance_from_lower_limit * _one_over_span_length; 
         }
+        if( get_activation_curve().is_valid()) {
+            _score = sample_activation_curve(_score);
+        }
     }//endif do scoring
     
     filter_out = _is_filtered;
     score = _score;
-    printf("%f", (float)_score);
-    //WARN_PRINT("Filter: " + to_string(_is_filtered) + " Score: " + to_string(_score));
+    
 }
