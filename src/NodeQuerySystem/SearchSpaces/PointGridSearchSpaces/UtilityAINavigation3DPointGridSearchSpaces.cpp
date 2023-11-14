@@ -3,6 +3,8 @@
 #include <godot_cpp/classes/viewport.hpp>
 #include <godot_cpp/classes/world3d.hpp>
 #include <godot_cpp/classes/mesh_instance3d.hpp>
+#include <godot_cpp/classes/mesh.hpp>
+#include <godot_cpp/classes/sphere_mesh.hpp>
 #include <godot_cpp/classes/engine.hpp>
 
 using namespace godot;
@@ -184,8 +186,7 @@ void UtilityAINavigation3DPointGridSearchSpaces::create_debug_info_nodes() {
         }
 
         //Ref<MeshInstance3D> new_mesh_instance = memnew(MeshInstance3D);
-        //Ref<Mesh> new_mesh; //= memnew(Mesh);
-        //new_mesh.instantiate();
+        //Ref<SphereMesh> new_mesh = memnew(SphereMesh);
         
     }//endfor nodes
 }

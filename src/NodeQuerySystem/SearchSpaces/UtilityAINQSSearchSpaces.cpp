@@ -105,11 +105,25 @@ void UtilityAINQSSearchSpaces::execute_query() {
     
     _query_results.clear();
     _query_result_scores.clear();
-
-    // We start with a naive implementation to run all the criteria
-    // in-order.
+    
+    // Use the search criterias to narrow down the search space with
+    // each applied criterion.
     bool is_filtered_out = false;
     double score = 0.0;
+    TypedArray<Node> search_space = get_searchspace_nodes();
+    PackedFloat64Array scores;
+    for( int c = 0; c < get_child_count(); ++c ) {
+        UtilityAINQSSearchCriteria* criterion = godot::Object::cast_to<UtilityAINQSSearchCriteria>(get_child(c));
+        if( criterion == nullptr ) continue;
+        apply_criterion(criterion, search_space, scores, search_space, scores );
+    }
+    // Put all the remaining scores to the serach results in order.
+    for( int n = 0; n < search_space.size(); ++n ) {
+        Node* node = godot::Object::cast_to<Node>(search_space[n]);
+        place_to_query_results_based_on_score(node, scores[n]);
+    }
+    /**
+    // The compulsory naive implementation of the search criteria application.
     double total_score = 0.0;
     TypedArray<Node> search_space = get_searchspace_nodes();
     for( int ss = 0; ss < search_space.size(); ++ss ) {
@@ -131,7 +145,34 @@ void UtilityAINQSSearchSpaces::execute_query() {
             place_to_query_results_based_on_score(node, score);
         }
     }//endfor nodes in the search space
-    
+    /**/
+
+}
+
+
+void UtilityAINQSSearchSpaces::apply_criterion( UtilityAINQSSearchCriteria* criterion, TypedArray<Node> search_space, PackedFloat64Array scores, TypedArray<Node>& result_space, PackedFloat64Array& result_scores ) {
+    TypedArray<Node> result_space_after_application;
+    PackedFloat64Array result_scores_after_application;
+
+    bool filter_out = false;
+    double score = 0.0;
+    for( int i = 0; i < search_space.size(); ++i ) {
+        Node* node = godot::Object::cast_to<Node>(search_space[i]);
+        if( node == nullptr ) continue;
+        double previous_score = 1.0;
+        if( i < scores.size() ) {
+            previous_score = scores[i];
+        }
+        
+        criterion->apply_criterion(node, filter_out, score );
+        if( filter_out ) continue;
+
+        result_space_after_application.push_back(node);
+        result_scores_after_application.push_back(previous_score * score);
+    }//endfor search space nodes
+
+    result_space = result_space_after_application;
+    result_scores = result_scores_after_application;
 }
 
 
@@ -140,6 +181,8 @@ void UtilityAINQSSearchSpaces::place_to_query_results_based_on_score( Node* node
         _query_results.push_back(node);
         _query_result_scores.push_back(score);
         return;
+    } else if( _query_result_scores.size() == _top_n_to_find ) {
+        if( score < _query_result_scores[_top_n_to_find - 1]) return; // Worse than the worst on the list.
     }
     
     int i = 0; 
@@ -150,13 +193,14 @@ void UtilityAINQSSearchSpaces::place_to_query_results_based_on_score( Node* node
     if( i < _query_result_scores.size() ) {
         _query_results.insert(i, node);
         _query_result_scores.insert(i, score);
-        if( _query_result_scores.size() >= _top_n_to_find ) {
-            _query_result_scores.remove_at(_top_n_to_find - 1);
-            _query_results.remove_at(_top_n_to_find - 1);
-        }
+        
     } else if( i < _top_n_to_find ) {
         _query_results.push_back(node);
         _query_result_scores.push_back(score);
+    }
+    if( _query_result_scores.size() > _top_n_to_find ) {
+        _query_result_scores.remove_at(_top_n_to_find);
+        _query_results.remove_at(_top_n_to_find);
     }
 }
 

@@ -24,6 +24,7 @@ protected:
     static void _bind_methods();
     virtual void _initialize_search_space(){}
 
+    void apply_criterion( UtilityAINQSSearchCriteria* criterion, TypedArray<Node> search_space, PackedFloat64Array scores, TypedArray<Node>& result_space, PackedFloat64Array& result_scores );
     void place_to_query_results_based_on_score( Node* node, double score );
 public:
     UtilityAINQSSearchSpaces();
