@@ -423,27 +423,43 @@ The search space nodes are used to define the set of nodes that will be included
  * UtilityAINodeGroupSearchSpace
  * UtilityAINodeChildrenSearchSpace
 
-** 2D search spaces ** 
+**2D search spaces** 
 
 * UtilityAIArea2DSearchSpace
 
-** 3D search spaces ** 
+**3D search spaces** 
 
 * UtilityAIArea3DSearchSpace
 * UtilityAINavigation3DRectangularPointGridSearchSpace
 
 #### Properties
 
+All the search spaces have the following general properties.
+
 |Type|Name|Description|Version|
 |--|--|--|--|
-|bool|is_active|This property can be used to include or exlude the node from processing.|v1.0|
+|bool|is_active|This property can be used to include or exlude the node from processing.|`DEV`|
+|int|top_n_to_find|The number of nodes to return (at maximum)|`DEV`|
+|PackedFloat64Array|_query_result_scores|The resulting array of node scores.|`DEV`|
+|TypedArray<Node>|_query_results|The resulting array of nodes.|`DEV`|
+
+### UtilityAINodeGroupSearchSpace
+
+This node uses the node grouping property of the Godot Engine to construct the search space. All the nodes in the given group are returned as the search space.
+
+#### Properties
+
+|Type|Name|Description|Version|
+|--|--|--|--|
+|bool|is_active|This property can be used to include or exlude the node from processing.|`DEV`|
+|int|top_n_to_find|The number of nodes to return (at maximum)|`DEV`|
+|StringName|group_name|The group name to use in the search.|`DEV`|
+
 
 #### Methods 
 
 |Return value|Name|Description|Version|
 |--|--|--|--|
-
-#### Signals
 
 
 
