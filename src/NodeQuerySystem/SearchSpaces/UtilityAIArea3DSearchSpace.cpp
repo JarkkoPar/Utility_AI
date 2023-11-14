@@ -9,6 +9,10 @@ UtilityAIArea3DSearchSpace::UtilityAIArea3DSearchSpace() {
 
 
 UtilityAIArea3DSearchSpace::~UtilityAIArea3DSearchSpace() {
+    if( _area3d_node != nullptr ) {
+        _area3d_node->disconnect("area_entered", Callable(this, "on_area_entered"));
+        _area3d_node->disconnect("area_exited", Callable(this, "on_area_exited"));
+    }
     _area3d_node = nullptr;
 }
 

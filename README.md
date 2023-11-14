@@ -418,8 +418,19 @@ The Node Query System has been designed to be as flexible as possible and to all
 
 The search space nodes are used to define the set of nodes that will be included in the search. The following nodes have been implemented:
 
+**General search spaces**
+
  * UtilityAINodeGroupSearchSpace
  * UtilityAINodeChildrenSearchSpace
+
+** 2D search spaces ** 
+
+* UtilityAIArea2DSearchSpace
+
+** 3D search spaces ** 
+
+* UtilityAIArea3DSearchSpace
+* UtilityAINavigation3DRectangularPointGridSearchSpace
 
 #### Properties
 
