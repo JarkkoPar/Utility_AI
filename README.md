@@ -432,6 +432,8 @@ The search space nodes are used to define the set of nodes that will be included
 * UtilityAIArea3DSearchSpace
 * UtilityAINavigation3DRectangularPointGridSearchSpace
 
+The search space nodes need to have the `UtilityAISearchCriteria` nodes as their children. For performance, when adding the search criteria add the **filtering** criteria first if possible to reduce the number of nodes as early as possible. After those add the score-based criteria to filter and rank the remaining nodes. 
+
 #### Properties
 
 All the search spaces have the following general properties.
@@ -442,6 +444,14 @@ All the search spaces have the following general properties.
 |int|top_n_to_find|The number of nodes to return (at maximum)|`DEV`|
 |PackedFloat64Array|_query_result_scores|The resulting array of node scores.|`DEV`|
 |TypedArray<Node>|_query_results|The resulting array of nodes.|`DEV`|
+
+
+#### Methods
+
+|Type|Name|Description|Version|
+|--|--|--|--|
+|void|initialize_search_space()|If you override the _ready() method, you have to call initialize_search_space() in your _ready() method.|`DEV`|
+|void|execute_query()|The `execute_query()` method fetches the search space nodes based on its configuration and then applies the search criteria in top-down order.|`DEV`|
 
 ### UtilityAINodeGroupSearchSpace
 
@@ -512,6 +522,33 @@ None.
 ### UtilityAISearchCriteria nodes 
 
 The search criteria nodes are used to filter and score the nodes fetched using the search spaces. There are general criterias that can be used with any Godot node and specific criteria for 2D and 3D related search spaces.
+
+Each criterion has an internal `apply_criterion()` method that is applied to the node passed to it. This method updates the `is_filtered` and `score` properties of the criterion and the results are visible in the Godot Engine editor inspector.
+
+#### Properties
+
+All the criterion nodes share the following general properties.
+
+|Type|Name|Description|Version|
+|--|--|--|--|
+|bool|use_for_scoring|If true, the criterion will be used for scoring.|`DEV`|
+|bool|use_for_filtering|If true, the criterion will be used for filtering.|`DEV`|
+|bool|is_filtered|Used in `apply_criterion()`. If set to true, the will be filtered out.|`DEV`|
+|float|score|Used in `apply_criterion()`. The score calculated by `apply_criterion()`. Default value: 1.0.|`DEV`|
+
+
+### UtilityAICustomSearchCriterion
+
+With the custom search criterion you can define a method `apply_criterion()` that will be called to execute the filtering.
+
+#### Properties
+
+None.
+
+
+#### Methods 
+
+None.
 
 
 ### UtilityAICustomSearchCriterion
