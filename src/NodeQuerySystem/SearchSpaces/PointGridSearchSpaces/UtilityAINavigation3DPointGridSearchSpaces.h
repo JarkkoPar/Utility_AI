@@ -28,15 +28,17 @@ public:
     void set_from_vector3( Vector3 from_vector );
     Vector3 get_from_vector3() const;
 
+    void set_offset_vector3( Vector3 offset );
+    Vector3 get_offset_vector3() const;
+
+
     void set_direction_vector3( Vector3 direction_vector );
     Vector3 get_direction_vector3() const;
 
     void set_grid_size( double grid_size );
     double get_grid_size() const;
 
-    void set_y_offset( double y_offset );
-    double get_y_offset() const;
-
+    
     void set_use_owner_global_position_and_orientation( bool use_owner_global_position_and_orientation );
     bool get_use_owner_global_position_and_orientation() const;
 
@@ -58,6 +60,7 @@ private:
     double              _grid_size;
     Vector3             _from_vector;
     Vector3             _direction_vector;
+    Vector3             _offset_vector;
     
     bool                _use_owner_global_position_and_orientation;
 protected:

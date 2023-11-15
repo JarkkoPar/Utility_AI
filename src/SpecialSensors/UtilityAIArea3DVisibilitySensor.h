@@ -14,6 +14,7 @@ private:
     Area3D* _visibility_volume_node;
 
     Vector3 _from_vector;
+    Vector3 _offset_vector;
 
     TypedArray<RID>    _occlusion_test_exclusion_list;
     TypedArray<Area3D> _intersecting_areas;
@@ -63,6 +64,9 @@ public:
 
     void set_from_vector3( Vector3 from );
     Vector3 get_from_vector3() const;
+
+    void set_offset_vector3( Vector3 offset );
+    Vector3 get_offset_vector3() const;
 
     void set_visibility_volume_nodepath( NodePath visibility_volume_nodepath );
     NodePath get_visibility_volume_nodepath() const;

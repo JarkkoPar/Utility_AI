@@ -14,6 +14,7 @@ private:
     Area2D* _visibility_volume_node;
 
     Vector2 _from_vector;
+    Vector2 _offset_vector;
 
     TypedArray<RID>    _occlusion_test_exclusion_list;
     TypedArray<Area2D> _intersecting_areas;
@@ -62,8 +63,11 @@ public:
     void set_use_owner_global_position( bool use_owner_global_position );
     bool get_use_owner_global_position() const;
 
-    void set_from_Vector2( Vector2 from );
-    Vector2 get_from_Vector2() const;
+    void set_from_vector2( Vector2 from );
+    Vector2 get_from_vector2() const;
+
+    void set_offset_vector2( Vector2 offset );
+    Vector2 get_offset_vector2() const;
 
     void set_visibility_volume_nodepath( NodePath visibility_volume_nodepath );
     NodePath get_visibility_volume_nodepath() const;

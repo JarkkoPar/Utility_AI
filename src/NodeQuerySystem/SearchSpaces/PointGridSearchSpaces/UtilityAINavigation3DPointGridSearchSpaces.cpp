@@ -14,7 +14,7 @@ UtilityAINavigation3DPointGridSearchSpaces::UtilityAINavigation3DPointGridSearch
     _show_debug_info = false;
     _direction_vector = Vector3( 0.0, 0.0, -1.0 );
     _from_vector = Vector3( 0.0, 0.0, 0.0 );
-    _y_offset = 0.0;
+    _offset_vector = Vector3(0.0,0.0,0.0);
     _grid_size = 1.0;
     _point_grid_parent_node = nullptr; 
     _use_owner_global_position_and_orientation = true;
@@ -47,9 +47,9 @@ void UtilityAINavigation3DPointGridSearchSpaces::_bind_methods() {
     ClassDB::bind_method(D_METHOD("get_grid_size"), &UtilityAINavigation3DPointGridSearchSpaces::get_grid_size);
     ADD_PROPERTY(PropertyInfo(Variant::FLOAT, "grid_size", PROPERTY_HINT_RANGE,"0.0000001,100.0,or_greater"), "set_grid_size","get_grid_size");
 
-    ClassDB::bind_method(D_METHOD("set_y_offset", "y_offset"), &UtilityAINavigation3DPointGridSearchSpaces::set_y_offset);
-    ClassDB::bind_method(D_METHOD("get_y_offset"), &UtilityAINavigation3DPointGridSearchSpaces::get_y_offset);
-    ADD_PROPERTY(PropertyInfo(Variant::FLOAT, "y_offset", PROPERTY_HINT_RANGE,"0.0,100.0,or_greater"), "set_y_offset","get_y_offset");
+    ClassDB::bind_method(D_METHOD("set_offset_vector", "offset_vector"), &UtilityAINavigation3DPointGridSearchSpaces::set_offset_vector3);
+    ClassDB::bind_method(D_METHOD("get_offset_vector"), &UtilityAINavigation3DPointGridSearchSpaces::get_offset_vector3);
+    ADD_PROPERTY(PropertyInfo(Variant::VECTOR3, "offset_vector", PROPERTY_HINT_NONE), "set_offset_vector","get_offset_vector");
 
     ClassDB::bind_method(D_METHOD("set_use_owner_global_position_and_orientation", "use_owner_global_position_and_orientation"), &UtilityAINavigation3DPointGridSearchSpaces::set_use_owner_global_position_and_orientation);
     ClassDB::bind_method(D_METHOD("get_use_owner_global_position_and_orientation"), &UtilityAINavigation3DPointGridSearchSpaces::get_use_owner_global_position_and_orientation);
@@ -78,7 +78,7 @@ void UtilityAINavigation3DPointGridSearchSpaces::_bind_methods() {
 // Godot virtuals.
 
 void UtilityAINavigation3DPointGridSearchSpaces::_ready() {
-    if( !get_is_active() ) return;
+    //if( !get_is_active() ) return;
     if( Engine::get_singleton()->is_editor_hint() ) return;
     initialize_search_space();
     //create_point_grid();
@@ -117,6 +117,17 @@ RID  UtilityAINavigation3DPointGridSearchSpaces::get_navigation_map_rid() const 
 }
 
 TypedArray<Node> UtilityAINavigation3DPointGridSearchSpaces::get_searchspace_nodes() const {
+    /*if( _use_owner_global_position_and_orientation && get_owner() != nullptr ) {
+        Node3D* owner3d = godot::Object::cast_to<Node3D>(get_owner());
+        if( owner3d != nullptr ) {
+            _from_vector = owner3d->get_global_position();
+            Transform3D owner_global_transform = owner3d->get_global_transform();
+            Basis owner_basis = owner_global_transform.get_basis();
+            //_direction_vector = -owner_basis.get_column(2);
+        }//endif owner is node3d derived
+    }//endif use owner global position and orientation
+    _point_grid_parent_node->set_global_position(_from_vector + _offset_vector);
+    /**/
     return _point_grid;
 }
 
@@ -141,13 +152,13 @@ Vector3 UtilityAINavigation3DPointGridSearchSpaces::get_direction_vector3() cons
 }
 
 
-void UtilityAINavigation3DPointGridSearchSpaces::set_y_offset( double y_offset ) {
-    _y_offset = y_offset;
+void UtilityAINavigation3DPointGridSearchSpaces::set_offset_vector3( Vector3 offset ) {
+    _offset_vector = offset;
 }
 
 
-double UtilityAINavigation3DPointGridSearchSpaces::get_y_offset() const {
-    return _y_offset;
+Vector3 UtilityAINavigation3DPointGridSearchSpaces::get_offset_vector3() const {
+    return _offset_vector;
 }
 
 
@@ -174,6 +185,7 @@ TypedArray<Node3D> UtilityAINavigation3DPointGridSearchSpaces::get_point_grid() 
 // Handling methods.
 
 void UtilityAINavigation3DPointGridSearchSpaces::create_point_grid() {
+    
 }
 
 
@@ -202,6 +214,7 @@ void UtilityAINavigation3DPointGridSearchSpaces::_initialize_search_space() {
         _point_grid_parent_node->set_name("PointGridNodes");
         add_child(_point_grid_parent_node, false, InternalMode::INTERNAL_MODE_FRONT);
     }
+    /**
     if( _use_owner_global_position_and_orientation && get_owner() != nullptr ) {
         Node3D* owner3d = godot::Object::cast_to<Node3D>(get_owner());
         if( owner3d != nullptr ) {
@@ -211,7 +224,7 @@ void UtilityAINavigation3DPointGridSearchSpaces::_initialize_search_space() {
             _direction_vector = -owner_basis.get_column(2);
         }//endif owner is node3d derived
     }//endif use owner global position and orientation
-
+    /**/
     // Create the node3d's for the grid.
     create_point_grid();
     if( _show_debug_info ) {

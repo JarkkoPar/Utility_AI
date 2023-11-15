@@ -21,10 +21,10 @@ void UtilityAIArea2DVisibilitySensor::_bind_methods() {
     ClassDB::bind_method(D_METHOD("get_use_owner_global_position"), &UtilityAIArea2DVisibilitySensor::get_use_owner_global_position);
     ADD_PROPERTY(PropertyInfo(Variant::BOOL, "use_owner_global_position", PROPERTY_HINT_NONE), "set_use_owner_global_position","get_use_owner_global_position");
 
-    ClassDB::bind_method(D_METHOD("set_from_vector", "from_vector"), &UtilityAIArea2DVisibilitySensor::set_from_Vector2);
-    ClassDB::bind_method(D_METHOD("get_from_vector"), &UtilityAIArea2DVisibilitySensor::get_from_Vector2);
-    ADD_PROPERTY(PropertyInfo(Variant::VECTOR2, "from_vector", PROPERTY_HINT_NONE), "set_from_vector","get_from_vector");
-    
+    ClassDB::bind_method(D_METHOD("set_offset_vector", "offset_vector"), &UtilityAIArea2DVisibilitySensor::set_offset_vector2);
+    ClassDB::bind_method(D_METHOD("get_offset_vector"), &UtilityAIArea2DVisibilitySensor::get_offset_vector2);
+    ADD_PROPERTY(PropertyInfo(Variant::VECTOR2, "offset_vector", PROPERTY_HINT_NONE), "set_offset_vector","get_offset_vector");
+
     ClassDB::bind_method(D_METHOD("set_visibility_volume_nodepath", "visibility_volume_nodepath"), &UtilityAIArea2DVisibilitySensor::set_visibility_volume_nodepath);
     ClassDB::bind_method(D_METHOD("get_visibility_volume_nodepath"), &UtilityAIArea2DVisibilitySensor::get_visibility_volume_nodepath);
     ADD_PROPERTY(PropertyInfo(Variant::NODE_PATH, "visibility_volume_nodepath", PROPERTY_HINT_NODE_PATH_VALID_TYPES, "Area2D"), "set_visibility_volume_nodepath","get_visibility_volume_nodepath");
@@ -57,6 +57,10 @@ void UtilityAIArea2DVisibilitySensor::_bind_methods() {
 
     ADD_SUBGROUP("Debugging","");
 
+    ClassDB::bind_method(D_METHOD("set_from_vector", "from_vector"), &UtilityAIArea2DVisibilitySensor::set_from_vector2);
+    ClassDB::bind_method(D_METHOD("get_from_vector"), &UtilityAIArea2DVisibilitySensor::get_from_vector2);
+    ADD_PROPERTY(PropertyInfo(Variant::VECTOR2, "from_vector", PROPERTY_HINT_NONE), "set_from_vector","get_from_vector");
+    
     ClassDB::bind_method(D_METHOD("set_num_entities_found", "num_entities_found"), &UtilityAIArea2DVisibilitySensor::set_num_entities_found);
     ClassDB::bind_method(D_METHOD("get_num_entities_found"), &UtilityAIArea2DVisibilitySensor::get_num_entities_found);
     ADD_PROPERTY(PropertyInfo(Variant::INT, "num_entities_found", PROPERTY_HINT_RANGE, "0,32,or_greater"), "set_num_entities_found","get_num_entities_found");
@@ -186,6 +190,8 @@ double UtilityAIArea2DVisibilitySensor::evaluate_sensor_value() {
         }//endif owner is derived from node2d
     }//endif use owner global position
 
+    Vector2 offset_from_vector = _from_vector + _offset_vector;
+
     _num_entities_found = 0;
     _closest_intersecting_area_index = -1;
     _closest_unoccluded_area_index = -1;
@@ -204,7 +210,7 @@ double UtilityAIArea2DVisibilitySensor::evaluate_sensor_value() {
         Vector2 area_position = area->get_global_position();
 
         // Calculate the distance to the area.
-        Vector2 from_to = area_position - _from_vector;
+        Vector2 from_to = area_position - offset_from_vector;
         float distance_squared = from_to.length_squared();
         _squared_distances_to_intersecting_areas.push_back(distance_squared);
         if( _closest_intersecting_area_index == -1 ) {
@@ -220,7 +226,7 @@ double UtilityAIArea2DVisibilitySensor::evaluate_sensor_value() {
             if (to == zero_vector) {
                 continue; 
             }
-            Ref<PhysicsRayQueryParameters2D> params = godot::PhysicsRayQueryParameters2D::create(_from_vector, 
+            Ref<PhysicsRayQueryParameters2D> params = godot::PhysicsRayQueryParameters2D::create(offset_from_vector, 
                                                                                                  to, 
                                                                                                  _collision_mask, 
                                                                                                  _occlusion_test_exclusion_list);
@@ -300,13 +306,23 @@ bool UtilityAIArea2DVisibilitySensor::get_use_owner_global_position() const {
 }
 
 
-void UtilityAIArea2DVisibilitySensor::set_from_Vector2( Vector2 from ) {
+void UtilityAIArea2DVisibilitySensor::set_from_vector2( Vector2 from ) {
     _from_vector = from;
 }
 
 
-Vector2 UtilityAIArea2DVisibilitySensor::get_from_Vector2() const {
+Vector2 UtilityAIArea2DVisibilitySensor::get_from_vector2() const {
     return _from_vector;
+}
+
+
+void UtilityAIArea2DVisibilitySensor::set_offset_vector2( Vector2 offset ) {
+    _offset_vector = offset;
+}
+
+
+Vector2 UtilityAIArea2DVisibilitySensor::get_offset_vector2() const {
+    return _offset_vector;
 }
 
 

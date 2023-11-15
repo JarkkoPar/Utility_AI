@@ -71,7 +71,7 @@ void UtilityAINavigation3DRectangularPointGridSearchSpace::create_point_grid() {
                 ERR_FAIL_MSG("UtilityAINavigation3DRectangularPointGridSearchSpace::create_point_grid() - Failed, out of memory!");
             }
             _point_grid_parent_node->add_child(new_node);
-            new_node->set_global_position( get_from_vector3() + Vector3( -half_width + (double)x * get_grid_size(), get_y_offset(), -half_height + (double)z * get_grid_size()));
+            new_node->set_position( Vector3( -half_width + (double)x * get_grid_size(), 0.0, -half_height + (double)z * get_grid_size()));
             
             // Get the closest point for this gridpoint on the navigation map.
 

@@ -29,7 +29,6 @@
 #include "SpecialConsiderations/UtilityAIBooleanConsideration.h"
 
 // Node Query System.
-//#include "NodeQuerySystem/UtilityAINodeQuerySystem.h" // Not needed.
 
 #include "NodeQuerySystem/SearchSpaces/UtilityAINQSSearchSpaces.h"
 #include "NodeQuerySystem/SearchSpaces/UtilityAINodeGroupSearchSpace.h"
@@ -94,8 +93,6 @@ void initialize_utility_ai_module(ModuleInitializationLevel p_level) {
     ClassDB::register_class<UtilityAIBooleanConsideration>();
 
     // Node Query System.
-    //ClassDB::register_class<UtilityAINodeQuerySystem>(true);
-
     ClassDB::register_class<UtilityAINQSSearchSpaces>(true);
     ClassDB::register_class<UtilityAINodeGroupSearchSpace>();
     ClassDB::register_class<UtilityAINodeChildrenSearchSpace>();

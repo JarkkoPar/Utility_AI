@@ -442,15 +442,15 @@ All the search spaces have the following general properties.
 |--|--|--|--|
 |bool|is_active|This property can be used to include or exlude the node from processing.|`DEV`|
 |int|top_n_to_find|The number of nodes to return (at maximum)|`DEV`|
-|PackedFloat64Array|_query_result_scores|The resulting array of node scores.|`DEV`|
 |TypedArray<Node>|_query_results|The resulting array of nodes.|`DEV`|
+|PackedFloat64Array|_query_result_scores|The resulting array of node scores.|`DEV`|
 
 
 #### Methods
 
 |Type|Name|Description|Version|
 |--|--|--|--|
-|void|initialize_search_space()|If you override the _ready() method, you have to call initialize_search_space() in your _ready() method.|`DEV`|
+|void|initialize_search_space()|If you override the `_ready()` method, you have to call `initialize_search_space()` in your overridden _ready() method.|`DEV`|
 |void|execute_query()|The `execute_query()` method fetches the search space nodes based on its configuration and then applies the search criteria in top-down order.|`DEV`|
 
 ### UtilityAINodeGroupSearchSpace
@@ -487,13 +487,14 @@ None.
 
 ### UtilityAIArea2DSearchSpace and UtilityAIArea3DSearchSpace
 
-These nodes use an Area2D or Area3D to define the search space. All the nodes that are within or intersecting with the Area2D/area3D are returned as the search space.
+These nodes use an Area2D or Area3D to define the search space. All the nodes that are within or intersecting with the Area2D/area3D are returned as the search space. The search space uses the on_area_entered and on_area_exited signals to determine which other Area2D/3D nodes are intersecting with the set area.
 
 #### Properties
 
 |Type|Name|Description|Version|
 |--|--|--|--|
-|StringName|group_name|The group name to use in the search.|`DEV`|
+|NodeName|area2d/3d_nodepath|The nodepath to the Area3D node to use.|`DEV`|
+|TypedArray<Area2D/3D>|intersecting_areas|The areas intersecting or within the set area. Useful when debugging the search space.|`DEV`|
 
 #### Methods 
 
@@ -503,16 +504,31 @@ None.
 
 The Navigation2D/Navigation3D search spaces are meant to be used with Godot Engine's navigation nodes. They create a set of Node2D or Node3D nodes that can be scored and filtered using the search criteria.
 
+#### Shared Properties
+
+|Type|Name|Description|Version|
+|--|--|--|--|
+|RID|navigation_map_rid|The RID for the navigation map to use. Defaults to what ever is the default for the current viewport.|`DEV`|
+|float|grid_size|The distance between grid points.|`DEV`|
+|bool|use_owner_global_position_and_orientation|If true, the owner global position and orientation is used to set location and orientation for the point grid.|`DEV`|
+|bool|show_deug_info|IN DEVELOPMENT.|`DEV`|
+|Vector3|from_vector|The global position for the point grid if the owner position is not used.|`DEV`|
+|Vector3|direction_vector|The orientation for the point grid if the owner orientation is not used.|`DEV`|
+|TypedArray<Node3D>|point_grid|The points for the grid as nodes.|`DEV`|
+
 
 ### UtilityAINavigation3DRectangularPointGridSearchSpace
 
-The RectangularPointGrid search spaces create a grid of Node2D/Node3D's on the navmesh. All the grid nodes are returned as the search space.
+The RectangularPointGrid search spaces create a grid of Node2D/Node3D's on the navmesh. All the created grid nodes are returned as the search space.
+IN DEVELOPMENT!
 
 #### Properties
 
 |Type|Name|Description|Version|
 |--|--|--|--|
-|StringName|group_name|The group name to use in the search.|`DEV`|
+|float|rectangle_width|The width of the rectangular point grid (x-axis).|`DEV`|
+|float|rectangle_height|The height of the rectangular point grid (z-axis).|`DEV`|
+
 
 #### Methods 
 

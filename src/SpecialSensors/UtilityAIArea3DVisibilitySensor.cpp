@@ -21,6 +21,11 @@ void UtilityAIArea3DVisibilitySensor::_bind_methods() {
     ClassDB::bind_method(D_METHOD("get_use_owner_global_position"), &UtilityAIArea3DVisibilitySensor::get_use_owner_global_position);
     ADD_PROPERTY(PropertyInfo(Variant::BOOL, "use_owner_global_position", PROPERTY_HINT_NONE), "set_use_owner_global_position","get_use_owner_global_position");
     
+    ClassDB::bind_method(D_METHOD("set_offset_vector", "offset_vector"), &UtilityAIArea3DVisibilitySensor::set_offset_vector3);
+    ClassDB::bind_method(D_METHOD("get_offset_vector"), &UtilityAIArea3DVisibilitySensor::get_offset_vector3);
+    ADD_PROPERTY(PropertyInfo(Variant::VECTOR2, "offset_vector", PROPERTY_HINT_NONE), "set_offset_vector","get_offset_vector");
+
+
     ClassDB::bind_method(D_METHOD("set_visibility_volume_nodepath", "visibility_volume_nodepath"), &UtilityAIArea3DVisibilitySensor::set_visibility_volume_nodepath);
     ClassDB::bind_method(D_METHOD("get_visibility_volume_nodepath"), &UtilityAIArea3DVisibilitySensor::get_visibility_volume_nodepath);
     ADD_PROPERTY(PropertyInfo(Variant::NODE_PATH, "visibility_volume_nodepath", PROPERTY_HINT_NODE_PATH_VALID_TYPES, "Area3D"), "set_visibility_volume_nodepath","get_visibility_volume_nodepath");
@@ -177,6 +182,8 @@ double UtilityAIArea3DVisibilitySensor::evaluate_sensor_value() {
         }//endif owner is derived from node3d
     }//endif use owner global position
 
+    Vector3 offset_from_vector = _from_vector + _offset_vector;
+
     _num_entities_found = 0;
     _closest_intersecting_area_index = -1;
     _closest_unoccluded_area_index = -1;
@@ -195,7 +202,7 @@ double UtilityAIArea3DVisibilitySensor::evaluate_sensor_value() {
         Vector3 area_position = area->get_global_position();
 
         // Calculate the distance to the area.
-        Vector3 from_to = area_position - _from_vector;
+        Vector3 from_to = area_position - offset_from_vector;
         float distance_squared = from_to.length_squared();
         _squared_distances_to_intersecting_areas.push_back(distance_squared);
         if( _closest_intersecting_area_index == -1 ) {
@@ -211,7 +218,7 @@ double UtilityAIArea3DVisibilitySensor::evaluate_sensor_value() {
             if (to == zero_vector) {
                 continue; 
             }
-            Ref<PhysicsRayQueryParameters3D> params = godot::PhysicsRayQueryParameters3D::create(_from_vector, 
+            Ref<PhysicsRayQueryParameters3D> params = godot::PhysicsRayQueryParameters3D::create(offset_from_vector, 
                                                                                                  to, 
                                                                                                  _collision_mask, 
                                                                                                  _occlusion_test_exclusion_list);
@@ -299,6 +306,16 @@ void UtilityAIArea3DVisibilitySensor::set_from_vector3( Vector3 from ) {
 
 Vector3 UtilityAIArea3DVisibilitySensor::get_from_vector3() const {
     return _from_vector;
+}
+
+
+void UtilityAIArea3DVisibilitySensor::set_offset_vector3( Vector3 offset ) {
+    _offset_vector = offset;
+}
+
+
+Vector3 UtilityAIArea3DVisibilitySensor::get_offset_vector3() const {
+    return _offset_vector;
 }
 
 
