@@ -33,6 +33,9 @@ void UtilityAINQSSearchSpaces::_bind_methods() {
 
 
 void UtilityAINQSSearchSpaces::_ready() {
+    if( !get_is_active() ) return;
+    if( Engine::get_singleton()->is_editor_hint() ) return;
+
     initialize_search_space(); // Maybe not really needed? We'll see.
     /**
     // Find all the boolean filtering criterias, as they will be run first.

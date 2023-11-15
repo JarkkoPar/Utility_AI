@@ -451,16 +451,81 @@ This node uses the node grouping property of the Godot Engine to construct the s
 
 |Type|Name|Description|Version|
 |--|--|--|--|
-|bool|is_active|This property can be used to include or exlude the node from processing.|`DEV`|
-|int|top_n_to_find|The number of nodes to return (at maximum)|`DEV`|
 |StringName|group_name|The group name to use in the search.|`DEV`|
 
 
 #### Methods 
 
-|Return value|Name|Description|Version|
-|--|--|--|--|
+None.
 
+
+### UtilityAINodeChildrenSearchSpace
+
+This node uses the children of a node to construct the search space. The direct children of the given node are returned as the search space.
+
+#### Properties
+
+|Type|Name|Description|Version|
+|--|--|--|--|
+|NodePath|parent_node|The parent node to use in the search.|`DEV`|
+
+
+#### Methods 
+
+None.
+
+
+### UtilityAIArea2DSearchSpace and UtilityAIArea3DSearchSpace
+
+These nodes use an Area2D or Area3D to define the search space. All the nodes that are within or intersecting with the Area2D/area3D are returned as the search space.
+
+#### Properties
+
+|Type|Name|Description|Version|
+|--|--|--|--|
+|StringName|group_name|The group name to use in the search.|`DEV`|
+
+#### Methods 
+
+None.
+
+## UtilityAINavigation related search spaces
+
+The Navigation2D/Navigation3D search spaces are meant to be used with Godot Engine's navigation nodes. They create a set of Node2D or Node3D nodes that can be scored and filtered using the search criteria.
+
+
+### UtilityAINavigation3DRectangularPointGridSearchSpace
+
+The RectangularPointGrid search spaces create a grid of Node2D/Node3D's on the navmesh. All the grid nodes are returned as the search space.
+
+#### Properties
+
+|Type|Name|Description|Version|
+|--|--|--|--|
+|StringName|group_name|The group name to use in the search.|`DEV`|
+
+#### Methods 
+
+None.
+
+
+### UtilityAISearchCriteria nodes 
+
+The search criteria nodes are used to filter and score the nodes fetched using the search spaces. There are general criterias that can be used with any Godot node and specific criteria for 2D and 3D related search spaces.
+
+
+### UtilityAICustomSearchCriterion
+
+With the custom search criterion you can define a method `apply_criterion()` that will be called to execute the filtering.
+
+#### Properties
+
+None.
+
+
+#### Methods 
+
+None.
 
 
 ---- End of section about a feature under development `DEV` ----
