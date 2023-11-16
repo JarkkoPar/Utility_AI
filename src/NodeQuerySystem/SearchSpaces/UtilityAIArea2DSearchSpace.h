@@ -2,7 +2,7 @@
 #define UtilityAIArea2DSearchSpace_H_INCLUDED 
 
 #include "UtilityAINQSSearchSpaces.h"
-#include <godot_cpp/classes/area2D.hpp>
+#include <godot_cpp/classes/area2d.hpp>
 
 namespace godot {
 
