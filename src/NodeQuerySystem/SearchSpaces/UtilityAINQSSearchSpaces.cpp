@@ -57,7 +57,8 @@ void UtilityAINQSSearchSpaces::_ready() {
 // Getters and setters.
 
 TypedArray<Node> UtilityAINQSSearchSpaces::get_searchspace_nodes() const {
-    return nullptr;
+    TypedArray<Node> emptyarray;
+    return emptyarray;
 }
 
 
