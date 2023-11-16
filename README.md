@@ -442,7 +442,7 @@ All the search spaces have the following general properties.
 |--|--|--|--|
 |bool|is_active|This property can be used to include or exlude the node from processing.|`DEV`|
 |int|top_n_to_find|The number of nodes to return (at maximum)|`DEV`|
-|TypedArray<Node>|_query_results|The resulting array of nodes.|`DEV`|
+|TypedArray<Node>|_query_results|The resulting array of nodes, sorted in descending order based on the score.|`DEV`|
 |PackedFloat64Array|_query_result_scores|The resulting array of node scores.|`DEV`|
 
 
@@ -496,6 +496,7 @@ These nodes use an Area2D or Area3D to define the search space. All the nodes th
 |NodeName|area2d/3d_nodepath|The nodepath to the Area3D node to use.|`DEV`|
 |TypedArray<Area2D/3D>|intersecting_areas|The areas intersecting or within the set area. Useful when debugging the search space.|`DEV`|
 
+
 #### Methods 
 
 None.
@@ -503,6 +504,8 @@ None.
 ## UtilityAINavigation related search spaces
 
 The Navigation2D/Navigation3D search spaces are meant to be used with Godot Engine's navigation nodes. They create a set of Node2D or Node3D nodes that can be scored and filtered using the search criteria.
+
+The navigation search spaces are included but not yet fully developed. 
 
 #### Shared Properties
 
@@ -567,13 +570,34 @@ None.
 None.
 
 
-### UtilityAICustomSearchCriterion
+### UtilityAINode2DDistanceSearchCriterion and UtilityAINode3DDistanceSearchCriterion
 
-With the custom search criterion you can define a method `apply_criterion()` that will be called to execute the filtering.
+The Node2D/Node3D distance search criterion can be used to score and filter based on minimum and maximum distance to the set `distance_to` node.
 
 #### Properties
 
+|Type|Name|Description|Version|
+|--|--|--|--|
+|NodePath|distance_to_nodepath|The path to the node to which you want to compare the distance to.|`DEV`|
+|float|min_distance|Minimum distance. If the distance is less than this and filtering is applied, the tested node is filtered out.|`DEV`|
+|float|max_distance|Maximum distance. If the distance is more than this and filtering is applied, the tested node is filtered out.|`DEV`|
+
+
+#### Methods 
+
 None.
+
+
+### UtilityAIMetadataSearchCriterion
+
+The metadata search criterion can be used to filter out nodes that do not contain certain metadata.
+
+
+#### Properties
+
+|Type|Name|Description|Version|
+|--|--|--|--|
+|StringName|metadata|The name of the metadata field to find||`DEV`|
 
 
 #### Methods 

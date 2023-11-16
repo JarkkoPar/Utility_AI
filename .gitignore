@@ -120,3 +120,5 @@ src/NodeQuerySystem/SearchSpaces/UtilityAIArea2DSearchSpace.windows.template_deb
 src/NodeQuerySystem/SearchSpaces/UtilityAIArea2DSearchSpace.windows.template_release.x86_64.obj
 src/NodeQuerySystem/SearchCriteria/UtilityAIMetadataSearchCriterion.windows.template_debug.x86_64.obj
 src/NodeQuerySystem/SearchCriteria/UtilityAIMetadataSearchCriterion.windows.template_release.x86_64.obj
+src/NodeQuerySystem/SearchCriteria/UtilityAINode2DDistanceSearchCriterion.windows.template_debug.x86_64.obj
+src/NodeQuerySystem/SearchCriteria/UtilityAINode2DDistanceSearchCriterion.windows.template_release.x86_64.obj
