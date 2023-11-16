@@ -35,7 +35,8 @@ NodePath UtilityAINodeChildrenSearchSpace::get_parent_node_path() const {
 
 TypedArray<Node> UtilityAINodeChildrenSearchSpace::get_searchspace_nodes() const {
     if( _parent_node == nullptr ) {
-        return nullptr;
+        TypedArray<Node> emptyarray;
+        return emptyarray;
     }
     return _parent_node->get_children();
 }
