@@ -139,10 +139,10 @@ This sensor accepts two vectors, calculates the angle between them and scales it
 |float|sensor_value|A floating point value in the range of 0..1.|v1.0|
 |Vector2/3|from_vector|Input value for the sensor. Base value for the angle calculation, for example the direction of an AI entity.|v1.2|
 |Vector2/3|to_vector|Input value for the sensor. The other vector to compare from-vector to, for example direction to closest enemy entity.|v1.2|
-|float|max_angle_radian|The maximum value for the angle between from and to in radians, this corresponds to 1.0 for the sensor_value. Updates the euler angle automatically.|v1.2|
-|float|max_angle_euler|The maximum value for the angle between from and to in eulers, this corresponds to 1.0 for the sensor_value. Updates the radian angle automatically.|v1.2|
-|float|min_angle_radian|Only for Vector2 - The minimum value for the angle between from and to in radians, this corresponds to 0.0 for the sensor_value. Updates the euler angle automatically.|v1.2|
-|float|min_angle_euler|Only for Vector2 - The minimum value for the angle between from and to in eulers, this corresponds to 0.0 for the sensor_value. Updates the radian angle automatically.|v1.2|
+|float|max_angle_radian|The maximum value for the angle between from and to in radians, this corresponds to 1.0 for the sensor_value. Updates the degrees angle automatically.|v1.2|
+|float|max_angle_degrees|The maximum value for the angle between from and to in degrees, this corresponds to 1.0 for the sensor_value. Updates the radian angle automatically.|v1.2|
+|float|min_angle_radian|Only for Vector2 - The minimum value for the angle between from and to in radians, this corresponds to 0.0 for the sensor_value. Updates the degrees angle automatically.|v1.2|
+|float|min_angle_degrees|Only for Vector2 - The minimum value for the angle between from and to in degrees, this corresponds to 0.0 for the sensor_value. Updates the radian angle automatically.|v1.2|
 
 ##### Methods 
 

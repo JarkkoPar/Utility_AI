@@ -13,9 +13,9 @@ private:
     Vector3 _from_vector;
     Vector3 _to_vector;
     double  _angle_radian;
-    double  _angle_euler;
+    double  _angle_degrees;
     double  _max_angle_radian; 
-    double  _max_angle_euler; 
+    double  _max_angle_degrees; 
     double  _one_over_max_angle_radian;
 
 protected:
@@ -42,16 +42,16 @@ public:
     void set_max_angle_radian( double max_angle_radian );
     double get_max_angle_radian() const;
 
-    void set_max_angle_euler( double max_angle_radian );
-    double get_max_angle_euler() const;
+    void set_max_angle_degrees( double max_angle_radian );
+    double get_max_angle_degrees() const;
 
     // Debugging / current values.
     
     void set_angle_radian( double angle_radian );
     double get_angle_radian() const;
 
-    void set_angle_euler( double angle_euler );
-    double get_angle_euler() const;
+    void set_angle_degrees( double angle_degrees );
+    double get_angle_degrees() const;
 
 };
 
