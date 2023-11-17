@@ -7,6 +7,8 @@ using namespace godot;
 UtilityAIVector2AngleSearchCriterion::UtilityAIVector2AngleSearchCriterion() {
     _min_angle_degrees = -90.0;
     _max_angle_degrees =  90.0;
+    _min_angle_radians = godot::Math::deg_to_rad(_min_angle_degrees);
+    _max_angle_radians = godot::Math::deg_to_rad(_max_angle_degrees);
     _angle_to_direction_vector = Vector2(1.0,0.0);
 }
 
