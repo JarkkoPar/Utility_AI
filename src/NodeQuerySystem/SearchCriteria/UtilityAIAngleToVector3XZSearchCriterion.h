@@ -1,13 +1,13 @@
-#ifndef UtilityAIVector3XZAngleSearchCriterion_H_INCLUDED
-#define UtilityAIVector3XZAngleSearchCriterion_H_INCLUDED 
+#ifndef UtilityAIAngleToVector3XZSearchCriterion_H_INCLUDED
+#define UtilityAIAngleToVector3XZSearchCriterion_H_INCLUDED 
 
 #include "UtilityAINQSSearchCriteria.h"
 
 
 namespace godot {
 
-class UtilityAIVector3XZAngleSearchCriterion : public UtilityAINQSSearchCriteria {
-    GDCLASS(UtilityAIVector3XZAngleSearchCriterion, UtilityAINQSSearchCriteria)
+class UtilityAIAngleToVector3XZSearchCriterion : public UtilityAINQSSearchCriteria {
+    GDCLASS(UtilityAIAngleToVector3XZSearchCriterion, UtilityAINQSSearchCriteria)
 
 private:
     double _min_angle_degrees;
@@ -26,8 +26,8 @@ protected:
     static void _bind_methods();
     virtual void _initialize_criterion() override;
 public:
-    UtilityAIVector3XZAngleSearchCriterion();
-    ~UtilityAIVector3XZAngleSearchCriterion();
+    UtilityAIAngleToVector3XZSearchCriterion();
+    ~UtilityAIAngleToVector3XZSearchCriterion();
     
     
     // Getters and setters for attributes.

@@ -1,15 +1,13 @@
-#ifndef UtilityAINode3DDistanceSearchCriterion_H_INCLUDED
-#define UtilityAINode3DDistanceSearchCriterion_H_INCLUDED 
+#ifndef UtilityAIDistanceToVector3SearchCriterion_H_INCLUDED
+#define UtilityAIDistanceToVector3SearchCriterion_H_INCLUDED 
 
 #include "UtilityAINQSSearchCriteria.h"
-
-#include <godot_cpp/classes/node3d.hpp>
 
 
 namespace godot {
 
-class UtilityAINode3DDistanceSearchCriterion : public UtilityAINQSSearchCriteria {
-    GDCLASS(UtilityAINode3DDistanceSearchCriterion, UtilityAINQSSearchCriteria)
+class UtilityAIDistanceToVector3SearchCriterion : public UtilityAINQSSearchCriteria {
+    GDCLASS(UtilityAIDistanceToVector3SearchCriterion, UtilityAINQSSearchCriteria)
 
 private:
     double _min_distance;
@@ -20,21 +18,20 @@ private:
     double _span_length;
     double _one_over_span_length;
 
-    NodePath _distance_to_nodepath;
-    Node3D*  _distance_to_node;
+    Vector3 _distance_to_vector;
 
 protected:
     static void _bind_methods();
     virtual void _initialize_criterion() override;
 public:
-    UtilityAINode3DDistanceSearchCriterion();
-    ~UtilityAINode3DDistanceSearchCriterion();
+    UtilityAIDistanceToVector3SearchCriterion();
+    ~UtilityAIDistanceToVector3SearchCriterion();
     
     
     // Getters and setters for attributes.
 
-    void set_distance_to_nodepath( NodePath distance_to_nodepath );
-    NodePath get_distance_to_nodepath() const;
+    void set_distance_to_vector( Vector3 distance_to_vector );
+    Vector3 get_distance_to_vector() const;
 
 
     void set_min_distance( double min_distance );

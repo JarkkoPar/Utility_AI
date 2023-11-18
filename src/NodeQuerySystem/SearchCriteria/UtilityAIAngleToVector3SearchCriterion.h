@@ -1,13 +1,13 @@
-#ifndef UtilityAIVector2AngleSearchCriterion_H_INCLUDED
-#define UtilityAIVector2AngleSearchCriterion_H_INCLUDED 
+#ifndef UtilityAIAngleToVector3SearchCriterion_H_INCLUDED
+#define UtilityAIAngleToVector3SearchCriterion_H_INCLUDED 
 
 #include "UtilityAINQSSearchCriteria.h"
 
 
 namespace godot {
 
-class UtilityAIVector2AngleSearchCriterion : public UtilityAINQSSearchCriteria {
-    GDCLASS(UtilityAIVector2AngleSearchCriterion, UtilityAINQSSearchCriteria)
+class UtilityAIAngleToVector3SearchCriterion : public UtilityAINQSSearchCriteria {
+    GDCLASS(UtilityAIAngleToVector3SearchCriterion, UtilityAINQSSearchCriteria)
 
 private:
     double _min_angle_degrees;
@@ -19,20 +19,20 @@ private:
     double _span_radians;
     double _one_over_span_radians;
 
-    Vector2 _angle_to_direction_vector;
+    Vector3 _angle_to_direction_vector;
 
 protected:
     static void _bind_methods();
     virtual void _initialize_criterion() override;
 public:
-    UtilityAIVector2AngleSearchCriterion();
-    ~UtilityAIVector2AngleSearchCriterion();
+    UtilityAIAngleToVector3SearchCriterion();
+    ~UtilityAIAngleToVector3SearchCriterion();
     
     
     // Getters and setters for attributes.
 
-    void set_angle_to_direction_vector( Vector2 angle_to_direction_vector );
-    Vector2 get_angle_to_direction_vector() const;
+    void set_angle_to_direction_vector( Vector3 angle_to_direction_vector );
+    Vector3 get_angle_to_direction_vector() const;
 
 
     void set_min_angle_degrees( double min_angle_degrees );

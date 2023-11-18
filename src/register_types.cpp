@@ -42,15 +42,15 @@
 #include "NodeQuerySystem/SearchCriteria/UtilityAICustomSearchCriterion.h"
 #include "NodeQuerySystem/SearchCriteria/UtilityAIMetadataSearchCriterion.h"
 
-#include "NodeQuerySystem/SearchCriteria/UtilityAINode3DDistanceSearchCriterion.h"
-#include "NodeQuerySystem/SearchCriteria/UtilityAINode2DDistanceSearchCriterion.h"
+#include "NodeQuerySystem/SearchCriteria/UtilityAIDistanceToNode3DSearchCriterion.h"
+#include "NodeQuerySystem/SearchCriteria/UtilityAIDistanceToNode2DSearchCriterion.h"
 
-#include "NodeQuerySystem/SearchCriteria/UtilityAIVector3DistanceSearchCriterion.h"
-#include "NodeQuerySystem/SearchCriteria/UtilityAIVector2DistanceSearchCriterion.h"
+#include "NodeQuerySystem/SearchCriteria/UtilityAIDistanceToVector3SearchCriterion.h"
+#include "NodeQuerySystem/SearchCriteria/UtilityAIDistanceToVector2SearchCriterion.h"
 
-#include "NodeQuerySystem/SearchCriteria/UtilityAIVector3XZAngleSearchCriterion.h"
-#include "NodeQuerySystem/SearchCriteria/UtilityAIVector3AngleSearchCriterion.h"
-#include "NodeQuerySystem/SearchCriteria/UtilityAIVector2AngleSearchCriterion.h"
+#include "NodeQuerySystem/SearchCriteria/UtilityAIAngleToVector3XZSearchCriterion.h"
+#include "NodeQuerySystem/SearchCriteria/UtilityAIAngleToVector3SearchCriterion.h"
+#include "NodeQuerySystem/SearchCriteria/UtilityAIAngleToVector2SearchCriterion.h"
 
 
 #include "NodeQuerySystem/SearchSpaces/PointGridSearchSpaces/UtilityAINavigation3DPointGridSearchSpaces.h"
@@ -115,15 +115,15 @@ void initialize_utility_ai_module(ModuleInitializationLevel p_level) {
     ClassDB::register_class<UtilityAINQSSearchCriteria>(true);
     ClassDB::register_class<UtilityAICustomSearchCriterion>();
     ClassDB::register_class<UtilityAIMetadataSearchCriterion>();
-    ClassDB::register_class<UtilityAIVector3DistanceSearchCriterion>();
-    ClassDB::register_class<UtilityAIVector2DistanceSearchCriterion>();
+    ClassDB::register_class<UtilityAIDistanceToVector3SearchCriterion>();
+    ClassDB::register_class<UtilityAIDistanceToVector2SearchCriterion>();
 
-    ClassDB::register_class<UtilityAINode3DDistanceSearchCriterion>();
-    ClassDB::register_class<UtilityAINode2DDistanceSearchCriterion>();
+    ClassDB::register_class<UtilityAIDistanceToNode3DSearchCriterion>();
+    ClassDB::register_class<UtilityAIDistanceToNode2DSearchCriterion>();
 
-    ClassDB::register_class<UtilityAIVector3XZAngleSearchCriterion>();
-    ClassDB::register_class<UtilityAIVector3AngleSearchCriterion>();
-    ClassDB::register_class<UtilityAIVector2AngleSearchCriterion>();
+    ClassDB::register_class<UtilityAIAngleToVector3XZSearchCriterion>();
+    ClassDB::register_class<UtilityAIAngleToVector3SearchCriterion>();
+    ClassDB::register_class<UtilityAIAngleToVector2SearchCriterion>();
 
 }
 

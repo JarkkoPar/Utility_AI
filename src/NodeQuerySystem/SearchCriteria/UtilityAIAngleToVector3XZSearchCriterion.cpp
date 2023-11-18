@@ -1,10 +1,10 @@
-#include "UtilityAIVector3XZAngleSearchCriterion.h"
+#include "UtilityAIAngleToVector3XZSearchCriterion.h"
 #include <godot_cpp/classes/node3d.hpp>
 
 using namespace godot;
 
 
-UtilityAIVector3XZAngleSearchCriterion::UtilityAIVector3XZAngleSearchCriterion() {
+UtilityAIAngleToVector3XZSearchCriterion::UtilityAIAngleToVector3XZSearchCriterion() {
     _min_angle_degrees = -90.0;
     _max_angle_degrees =  90.0;
     _min_angle_radians = godot::Math::deg_to_rad(_min_angle_degrees);
@@ -14,30 +14,30 @@ UtilityAIVector3XZAngleSearchCriterion::UtilityAIVector3XZAngleSearchCriterion()
 }
 
 
-UtilityAIVector3XZAngleSearchCriterion::~UtilityAIVector3XZAngleSearchCriterion() {
+UtilityAIAngleToVector3XZSearchCriterion::~UtilityAIAngleToVector3XZSearchCriterion() {
 
 }
 
 
-void UtilityAIVector3XZAngleSearchCriterion::_bind_methods() {
+void UtilityAIAngleToVector3XZSearchCriterion::_bind_methods() {
     
-    ClassDB::bind_method(D_METHOD("set_angle_to_direction_vector", "angle_to_direction_vector"), &UtilityAIVector3XZAngleSearchCriterion::set_angle_to_direction_vector);
-    ClassDB::bind_method(D_METHOD("get_angle_to_direction_vector"), &UtilityAIVector3XZAngleSearchCriterion::get_angle_to_direction_vector);
+    ClassDB::bind_method(D_METHOD("set_angle_to_direction_vector", "angle_to_direction_vector"), &UtilityAIAngleToVector3XZSearchCriterion::set_angle_to_direction_vector);
+    ClassDB::bind_method(D_METHOD("get_angle_to_direction_vector"), &UtilityAIAngleToVector3XZSearchCriterion::get_angle_to_direction_vector);
     ADD_PROPERTY(PropertyInfo(Variant::VECTOR3, "angle_to_direction_vector", PROPERTY_HINT_NONE), "set_angle_to_direction_vector","get_angle_to_direction_vector");
     
-    ClassDB::bind_method(D_METHOD("set_min_angle_degrees", "min_angle_degrees"), &UtilityAIVector3XZAngleSearchCriterion::set_min_angle_degrees);
-    ClassDB::bind_method(D_METHOD("get_min_angle_degrees"), &UtilityAIVector3XZAngleSearchCriterion::get_min_angle_degrees);
+    ClassDB::bind_method(D_METHOD("set_min_angle_degrees", "min_angle_degrees"), &UtilityAIAngleToVector3XZSearchCriterion::set_min_angle_degrees);
+    ClassDB::bind_method(D_METHOD("get_min_angle_degrees"), &UtilityAIAngleToVector3XZSearchCriterion::get_min_angle_degrees);
     ADD_PROPERTY(PropertyInfo(Variant::FLOAT, "min_angle_degrees", PROPERTY_HINT_RANGE, "-180.0,180.0"), "set_min_angle_degrees","get_min_angle_degrees");
     
-    ClassDB::bind_method(D_METHOD("set_max_angle_degrees", "max_angle_degrees"), &UtilityAIVector3XZAngleSearchCriterion::set_max_angle_degrees);
-    ClassDB::bind_method(D_METHOD("get_max_angle_degrees"), &UtilityAIVector3XZAngleSearchCriterion::get_max_angle_degrees);
+    ClassDB::bind_method(D_METHOD("set_max_angle_degrees", "max_angle_degrees"), &UtilityAIAngleToVector3XZSearchCriterion::set_max_angle_degrees);
+    ClassDB::bind_method(D_METHOD("get_max_angle_degrees"), &UtilityAIAngleToVector3XZSearchCriterion::get_max_angle_degrees);
     ADD_PROPERTY(PropertyInfo(Variant::FLOAT, "max_angle_degrees", PROPERTY_HINT_RANGE, "-180.0,180.0"), "set_max_angle_degrees","get_max_angle_degrees");
     
     
 }
 
 
-void UtilityAIVector3XZAngleSearchCriterion::_initialize_criterion() {
+void UtilityAIAngleToVector3XZSearchCriterion::_initialize_criterion() {
     if( _max_angle_degrees <= _min_angle_degrees ) {
         _max_angle_degrees = _min_angle_degrees + 1.0;
         if( _max_angle_degrees > 180.0 ) {
@@ -54,18 +54,18 @@ void UtilityAIVector3XZAngleSearchCriterion::_initialize_criterion() {
 
 // Getters and setters.
 
-void UtilityAIVector3XZAngleSearchCriterion::set_angle_to_direction_vector( Vector3 angle_to_direction_vector ) {
+void UtilityAIAngleToVector3XZSearchCriterion::set_angle_to_direction_vector( Vector3 angle_to_direction_vector ) {
     _angle_to_direction_vector = angle_to_direction_vector;
     _xz_angle_vector = Vector2(-_angle_to_direction_vector.z, _angle_to_direction_vector.x);
 }
 
 
-Vector3 UtilityAIVector3XZAngleSearchCriterion::get_angle_to_direction_vector() const {
+Vector3 UtilityAIAngleToVector3XZSearchCriterion::get_angle_to_direction_vector() const {
     return _angle_to_direction_vector;
 }
 
 
-void UtilityAIVector3XZAngleSearchCriterion::set_min_angle_degrees( double min_angle_degrees ) {
+void UtilityAIAngleToVector3XZSearchCriterion::set_min_angle_degrees( double min_angle_degrees ) {
     //if( _min_angle_degrees >= _max_angle_degrees ) return;
     if( _min_angle_degrees < -180.0 ) return;
     
@@ -76,12 +76,12 @@ void UtilityAIVector3XZAngleSearchCriterion::set_min_angle_degrees( double min_a
 }
 
 
-double UtilityAIVector3XZAngleSearchCriterion::get_min_angle_degrees() const {
+double UtilityAIAngleToVector3XZSearchCriterion::get_min_angle_degrees() const {
     return _min_angle_degrees;
 }
 
 
-void UtilityAIVector3XZAngleSearchCriterion::set_max_angle_degrees( double max_angle_degrees ) {
+void UtilityAIAngleToVector3XZSearchCriterion::set_max_angle_degrees( double max_angle_degrees ) {
     //if( max_angle_degrees <= _min_angle_degrees ) return;
     if( max_angle_degrees > 180.0 ) return;
     _max_angle_degrees = max_angle_degrees;
@@ -91,14 +91,14 @@ void UtilityAIVector3XZAngleSearchCriterion::set_max_angle_degrees( double max_a
 }
 
 
-double UtilityAIVector3XZAngleSearchCriterion::get_max_angle_degrees() const {
+double UtilityAIAngleToVector3XZSearchCriterion::get_max_angle_degrees() const {
     return _max_angle_degrees;
 }
 
 
 // Handing methods.
 
-void UtilityAIVector3XZAngleSearchCriterion::apply_criterion( Node* node, bool& filter_out, double& score ) {
+void UtilityAIAngleToVector3XZSearchCriterion::apply_criterion( Node* node, bool& filter_out, double& score ) {
     Node3D* node3d = godot::Object::cast_to<Node3D>(node);
     if( node3d == nullptr ) return;
 

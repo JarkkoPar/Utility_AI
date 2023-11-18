@@ -1,61 +1,61 @@
-#include "UtilityAIVector2DistanceSearchCriterion.h"
-#include <godot_cpp/classes/node2d.hpp>
+#include "UtilityAIDistanceToVector3SearchCriterion.h"
+#include <godot_cpp/classes/node3d.hpp>
 
 using namespace godot;
 
 
-UtilityAIVector2DistanceSearchCriterion::UtilityAIVector2DistanceSearchCriterion() {
+UtilityAIDistanceToVector3SearchCriterion::UtilityAIDistanceToVector3SearchCriterion() {
     _min_distance = 0.0;
     _max_distance = 100.0;
     _min_distance_squared = 0.0;
     _max_distance_squared = _max_distance * _max_distance;
     _span_length = _max_distance_squared - _min_distance_squared;
     _one_over_span_length = 1.0 / _span_length;
-    _distance_to_vector = Vector2(0.0,0.0);
+    _distance_to_vector = Vector3(0.0,0.0,0.0);
 }
 
 
-UtilityAIVector2DistanceSearchCriterion::~UtilityAIVector2DistanceSearchCriterion() {
+UtilityAIDistanceToVector3SearchCriterion::~UtilityAIDistanceToVector3SearchCriterion() {
 
 }
 
 
-void UtilityAIVector2DistanceSearchCriterion::_bind_methods() {
+void UtilityAIDistanceToVector3SearchCriterion::_bind_methods() {
     
-    ClassDB::bind_method(D_METHOD("set_distance_to_vector", "distance_to_vector"), &UtilityAIVector2DistanceSearchCriterion::set_distance_to_vector);
-    ClassDB::bind_method(D_METHOD("get_distance_to_vector"), &UtilityAIVector2DistanceSearchCriterion::get_distance_to_vector);
-    ADD_PROPERTY(PropertyInfo(Variant::VECTOR2, "distance_to_vector", PROPERTY_HINT_NONE), "set_distance_to_vector","get_distance_to_vector");
+    ClassDB::bind_method(D_METHOD("set_distance_to_vector", "distance_to_vector"), &UtilityAIDistanceToVector3SearchCriterion::set_distance_to_vector);
+    ClassDB::bind_method(D_METHOD("get_distance_to_vector"), &UtilityAIDistanceToVector3SearchCriterion::get_distance_to_vector);
+    ADD_PROPERTY(PropertyInfo(Variant::VECTOR3, "distance_to_vector", PROPERTY_HINT_NONE), "set_distance_to_vector","get_distance_to_vector");
     
-    ClassDB::bind_method(D_METHOD("set_min_distance", "min_distance"), &UtilityAIVector2DistanceSearchCriterion::set_min_distance);
-    ClassDB::bind_method(D_METHOD("get_min_distance"), &UtilityAIVector2DistanceSearchCriterion::get_min_distance);
+    ClassDB::bind_method(D_METHOD("set_min_distance", "min_distance"), &UtilityAIDistanceToVector3SearchCriterion::set_min_distance);
+    ClassDB::bind_method(D_METHOD("get_min_distance"), &UtilityAIDistanceToVector3SearchCriterion::get_min_distance);
     ADD_PROPERTY(PropertyInfo(Variant::FLOAT, "min_distance", PROPERTY_HINT_NONE), "set_min_distance","get_min_distance");
     
-    ClassDB::bind_method(D_METHOD("set_max_distance", "max_distance"), &UtilityAIVector2DistanceSearchCriterion::set_max_distance);
-    ClassDB::bind_method(D_METHOD("get_max_distance"), &UtilityAIVector2DistanceSearchCriterion::get_max_distance);
+    ClassDB::bind_method(D_METHOD("set_max_distance", "max_distance"), &UtilityAIDistanceToVector3SearchCriterion::set_max_distance);
+    ClassDB::bind_method(D_METHOD("get_max_distance"), &UtilityAIDistanceToVector3SearchCriterion::get_max_distance);
     ADD_PROPERTY(PropertyInfo(Variant::FLOAT, "max_distance", PROPERTY_HINT_NONE), "set_max_distance","get_max_distance");
     
     
 }
 
 
-void UtilityAIVector2DistanceSearchCriterion::_initialize_criterion() {
+void UtilityAIDistanceToVector3SearchCriterion::_initialize_criterion() {
 
 }
 
 
 // Getters and setters.
 
-void UtilityAIVector2DistanceSearchCriterion::set_distance_to_vector( Vector2 distance_to_vector ) {
+void UtilityAIDistanceToVector3SearchCriterion::set_distance_to_vector( Vector3 distance_to_vector ) {
     _distance_to_vector = distance_to_vector;
 }
 
 
-Vector2 UtilityAIVector2DistanceSearchCriterion::get_distance_to_vector() const {
+Vector3 UtilityAIDistanceToVector3SearchCriterion::get_distance_to_vector() const {
     return _distance_to_vector;
 }
 
 
-void UtilityAIVector2DistanceSearchCriterion::set_min_distance( double min_distance ) {
+void UtilityAIDistanceToVector3SearchCriterion::set_min_distance( double min_distance ) {
     if( _min_distance < 0.0 ) return;
     if( _min_distance >= _max_distance ) return;
 
@@ -67,12 +67,12 @@ void UtilityAIVector2DistanceSearchCriterion::set_min_distance( double min_dista
 }
 
 
-double UtilityAIVector2DistanceSearchCriterion::get_min_distance() const {
+double UtilityAIDistanceToVector3SearchCriterion::get_min_distance() const {
     return _min_distance;
 }
 
 
-void UtilityAIVector2DistanceSearchCriterion::set_max_distance( double max_distance ) {
+void UtilityAIDistanceToVector3SearchCriterion::set_max_distance( double max_distance ) {
     if( max_distance <= _min_distance ) return;
     _max_distance = max_distance;
     _max_distance_squared = _max_distance * _max_distance;
@@ -82,21 +82,21 @@ void UtilityAIVector2DistanceSearchCriterion::set_max_distance( double max_dista
 }
 
 
-double UtilityAIVector2DistanceSearchCriterion::get_max_distance() const {
+double UtilityAIDistanceToVector3SearchCriterion::get_max_distance() const {
     return _max_distance;
 }
 
 
 // Handing methods.
 
-void UtilityAIVector2DistanceSearchCriterion::apply_criterion( Node* node, bool& filter_out, double& score ) {
-    Node2D* node2d = godot::Object::cast_to<Node2D>(node);
-    if( node2d == nullptr ) return;
+void UtilityAIDistanceToVector3SearchCriterion::apply_criterion( Node* node, bool& filter_out, double& score ) {
+    Node3D* node3d = godot::Object::cast_to<Node3D>(node);
+    if( node3d == nullptr ) return;
 
     _is_filtered = false;
     _score = 0.0;
 
-    Vector2 from_to = node2d->get_global_position() - _distance_to_vector;
+    Vector3 from_to = node3d->get_global_position() - _distance_to_vector;
     double distance_squared = from_to.length_squared();
     
     if( get_use_for_filtering() ) {

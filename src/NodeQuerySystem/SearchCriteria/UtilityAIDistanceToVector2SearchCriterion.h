@@ -1,13 +1,13 @@
-#ifndef UtilityAIVector3DistanceSearchCriterion_H_INCLUDED
-#define UtilityAIVector3DistanceSearchCriterion_H_INCLUDED 
+#ifndef UtilityAIDistanceToVector2SearchCriterion_H_INCLUDED
+#define UtilityAIDistanceToVector2SearchCriterion_H_INCLUDED 
 
 #include "UtilityAINQSSearchCriteria.h"
 
 
 namespace godot {
 
-class UtilityAIVector3DistanceSearchCriterion : public UtilityAINQSSearchCriteria {
-    GDCLASS(UtilityAIVector3DistanceSearchCriterion, UtilityAINQSSearchCriteria)
+class UtilityAIDistanceToVector2SearchCriterion : public UtilityAINQSSearchCriteria {
+    GDCLASS(UtilityAIDistanceToVector2SearchCriterion, UtilityAINQSSearchCriteria)
 
 private:
     double _min_distance;
@@ -18,20 +18,20 @@ private:
     double _span_length;
     double _one_over_span_length;
 
-    Vector3 _distance_to_vector;
+    Vector2 _distance_to_vector;
 
 protected:
     static void _bind_methods();
     virtual void _initialize_criterion() override;
 public:
-    UtilityAIVector3DistanceSearchCriterion();
-    ~UtilityAIVector3DistanceSearchCriterion();
+    UtilityAIDistanceToVector2SearchCriterion();
+    ~UtilityAIDistanceToVector2SearchCriterion();
     
     
     // Getters and setters for attributes.
 
-    void set_distance_to_vector( Vector3 distance_to_vector );
-    Vector3 get_distance_to_vector() const;
+    void set_distance_to_vector( Vector2 distance_to_vector );
+    Vector2 get_distance_to_vector() const;
 
 
     void set_min_distance( double min_distance );

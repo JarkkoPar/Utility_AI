@@ -1,15 +1,15 @@
-#ifndef UtilityAINode2DDistanceSearchCriterion_H_INCLUDED
-#define UtilityAINode2DDistanceSearchCriterion_H_INCLUDED 
+#ifndef UtilityAIDistanceToNode3DSearchCriterion_H_INCLUDED
+#define UtilityAIDistanceToNode3DSearchCriterion_H_INCLUDED 
 
 #include "UtilityAINQSSearchCriteria.h"
 
-#include <godot_cpp/classes/node2d.hpp>
+#include <godot_cpp/classes/node3d.hpp>
 
 
 namespace godot {
 
-class UtilityAINode2DDistanceSearchCriterion : public UtilityAINQSSearchCriteria {
-    GDCLASS(UtilityAINode2DDistanceSearchCriterion, UtilityAINQSSearchCriteria)
+class UtilityAIDistanceToNode3DSearchCriterion : public UtilityAINQSSearchCriteria {
+    GDCLASS(UtilityAIDistanceToNode3DSearchCriterion, UtilityAINQSSearchCriteria)
 
 private:
     double _min_distance;
@@ -21,14 +21,14 @@ private:
     double _one_over_span_length;
 
     NodePath _distance_to_nodepath;
-    Node2D*  _distance_to_node;
+    Node3D*  _distance_to_node;
 
 protected:
     static void _bind_methods();
     virtual void _initialize_criterion() override;
 public:
-    UtilityAINode2DDistanceSearchCriterion();
-    ~UtilityAINode2DDistanceSearchCriterion();
+    UtilityAIDistanceToNode3DSearchCriterion();
+    ~UtilityAIDistanceToNode3DSearchCriterion();
     
     
     // Getters and setters for attributes.

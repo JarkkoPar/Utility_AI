@@ -1,10 +1,10 @@
-#include "UtilityAINode2DDistanceSearchCriterion.h"
+#include "UtilityAIDistanceToNode2DSearchCriterion.h"
 #include <godot_cpp/classes/node2d.hpp>
 
 using namespace godot;
 
 
-UtilityAINode2DDistanceSearchCriterion::UtilityAINode2DDistanceSearchCriterion() {
+UtilityAIDistanceToNode2DSearchCriterion::UtilityAIDistanceToNode2DSearchCriterion() {
     _min_distance = 0.0;
     _max_distance = 100.0;
     _min_distance_squared = 0.0;
@@ -15,30 +15,30 @@ UtilityAINode2DDistanceSearchCriterion::UtilityAINode2DDistanceSearchCriterion()
 }
 
 
-UtilityAINode2DDistanceSearchCriterion::~UtilityAINode2DDistanceSearchCriterion() {
+UtilityAIDistanceToNode2DSearchCriterion::~UtilityAIDistanceToNode2DSearchCriterion() {
     _distance_to_node = nullptr;
 }
 
 
-void UtilityAINode2DDistanceSearchCriterion::_bind_methods() {
+void UtilityAIDistanceToNode2DSearchCriterion::_bind_methods() {
     
-    ClassDB::bind_method(D_METHOD("set_distance_to_nodepath", "distance_to_nodepath"), &UtilityAINode2DDistanceSearchCriterion::set_distance_to_nodepath);
-    ClassDB::bind_method(D_METHOD("get_distance_to_nodepath"), &UtilityAINode2DDistanceSearchCriterion::get_distance_to_nodepath);
+    ClassDB::bind_method(D_METHOD("set_distance_to_nodepath", "distance_to_nodepath"), &UtilityAIDistanceToNode2DSearchCriterion::set_distance_to_nodepath);
+    ClassDB::bind_method(D_METHOD("get_distance_to_nodepath"), &UtilityAIDistanceToNode2DSearchCriterion::get_distance_to_nodepath);
     ADD_PROPERTY(PropertyInfo(Variant::NODE_PATH, "distance_to_nodepath", PROPERTY_HINT_NODE_PATH_VALID_TYPES, "Node2D"), "set_distance_to_nodepath","get_distance_to_nodepath");
     
-    ClassDB::bind_method(D_METHOD("set_min_distance", "min_distance"), &UtilityAINode2DDistanceSearchCriterion::set_min_distance);
-    ClassDB::bind_method(D_METHOD("get_min_distance"), &UtilityAINode2DDistanceSearchCriterion::get_min_distance);
+    ClassDB::bind_method(D_METHOD("set_min_distance", "min_distance"), &UtilityAIDistanceToNode2DSearchCriterion::set_min_distance);
+    ClassDB::bind_method(D_METHOD("get_min_distance"), &UtilityAIDistanceToNode2DSearchCriterion::get_min_distance);
     ADD_PROPERTY(PropertyInfo(Variant::FLOAT, "min_distance", PROPERTY_HINT_NONE), "set_min_distance","get_min_distance");
     
-    ClassDB::bind_method(D_METHOD("set_max_distance", "max_distance"), &UtilityAINode2DDistanceSearchCriterion::set_max_distance);
-    ClassDB::bind_method(D_METHOD("get_max_distance"), &UtilityAINode2DDistanceSearchCriterion::get_max_distance);
+    ClassDB::bind_method(D_METHOD("set_max_distance", "max_distance"), &UtilityAIDistanceToNode2DSearchCriterion::set_max_distance);
+    ClassDB::bind_method(D_METHOD("get_max_distance"), &UtilityAIDistanceToNode2DSearchCriterion::get_max_distance);
     ADD_PROPERTY(PropertyInfo(Variant::FLOAT, "max_distance", PROPERTY_HINT_NONE), "set_max_distance","get_max_distance");
     
     
 }
 
 
-void UtilityAINode2DDistanceSearchCriterion::_initialize_criterion() {
+void UtilityAIDistanceToNode2DSearchCriterion::_initialize_criterion() {
     Node* node = get_node_or_null(_distance_to_nodepath);
     if( node == nullptr ) return;
     _distance_to_node = godot::Object::cast_to<Node2D>(node);
@@ -47,17 +47,17 @@ void UtilityAINode2DDistanceSearchCriterion::_initialize_criterion() {
 
 // Getters and setters.
 
-void UtilityAINode2DDistanceSearchCriterion::set_distance_to_nodepath( NodePath distance_to_nodepath ) {
+void UtilityAIDistanceToNode2DSearchCriterion::set_distance_to_nodepath( NodePath distance_to_nodepath ) {
     _distance_to_nodepath = distance_to_nodepath;
 }
 
 
-NodePath UtilityAINode2DDistanceSearchCriterion::get_distance_to_nodepath() const {
+NodePath UtilityAIDistanceToNode2DSearchCriterion::get_distance_to_nodepath() const {
     return _distance_to_nodepath;
 }
 
 
-void UtilityAINode2DDistanceSearchCriterion::set_min_distance( double min_distance ) {
+void UtilityAIDistanceToNode2DSearchCriterion::set_min_distance( double min_distance ) {
     if( _min_distance < 0.0 ) return;
     if( _min_distance >= _max_distance ) return;
 
@@ -69,12 +69,12 @@ void UtilityAINode2DDistanceSearchCriterion::set_min_distance( double min_distan
 }
 
 
-double UtilityAINode2DDistanceSearchCriterion::get_min_distance() const {
+double UtilityAIDistanceToNode2DSearchCriterion::get_min_distance() const {
     return _min_distance;
 }
 
 
-void UtilityAINode2DDistanceSearchCriterion::set_max_distance( double max_distance ) {
+void UtilityAIDistanceToNode2DSearchCriterion::set_max_distance( double max_distance ) {
     if( max_distance <= _min_distance ) return;
     _max_distance = max_distance;
     _max_distance_squared = _max_distance * _max_distance;
@@ -84,14 +84,14 @@ void UtilityAINode2DDistanceSearchCriterion::set_max_distance( double max_distan
 }
 
 
-double UtilityAINode2DDistanceSearchCriterion::get_max_distance() const {
+double UtilityAIDistanceToNode2DSearchCriterion::get_max_distance() const {
     return _max_distance;
 }
 
 
 // Handing methods.
 
-void UtilityAINode2DDistanceSearchCriterion::apply_criterion( Node* node, bool& filter_out, double& score ) {
+void UtilityAIDistanceToNode2DSearchCriterion::apply_criterion( Node* node, bool& filter_out, double& score ) {
     if( _distance_to_node == nullptr ) return;
     Node2D* node2d = godot::Object::cast_to<Node2D>(node);
     if( node2d == nullptr ) return;
