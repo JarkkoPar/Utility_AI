@@ -111,16 +111,16 @@ void UtilityAIAngleToVector3XZSearchCriterion::apply_criterion( Node* node, bool
     double angle = _xz_angle_vector.angle_to(node3d_2d_direction_vector);
     
     if( get_use_for_filtering() ) {
-        _is_filtered = (angle < _min_angle_degrees || angle > _max_angle_degrees );
+        _is_filtered = (angle < _min_angle_radians || angle > _max_angle_radians );
     }//endif do filtering
 
     if( get_use_for_scoring() ) {
-        if( angle >= _max_angle_degrees ) {
+        if( angle >= _max_angle_radians ) {
             _score = 1.0;
-        } else if( angle <= _min_angle_degrees) {
+        } else if( angle <= _min_angle_radians) {
             _score = 0.0;
         } else {
-            double angle_from_lower_limit = angle - _min_angle_degrees;
+            double angle_from_lower_limit = angle - _min_angle_radians;
             _score = angle_from_lower_limit * _one_over_span_radians; 
         }
         if( get_activation_curve().is_valid()) {
