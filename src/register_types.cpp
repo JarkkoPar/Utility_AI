@@ -48,6 +48,10 @@
 #include "NodeQuerySystem/SearchCriteria/UtilityAIVector3DistanceSearchCriterion.h"
 #include "NodeQuerySystem/SearchCriteria/UtilityAIVector2DistanceSearchCriterion.h"
 
+#include "NodeQuerySystem/SearchCriteria/UtilityAIVector3XZAngleSearchCriterion.h"
+#include "NodeQuerySystem/SearchCriteria/UtilityAIVector3AngleSearchCriterion.h"
+#include "NodeQuerySystem/SearchCriteria/UtilityAIVector2AngleSearchCriterion.h"
+
 
 #include "NodeQuerySystem/SearchSpaces/PointGridSearchSpaces/UtilityAINavigation3DPointGridSearchSpaces.h"
 #include "NodeQuerySystem/SearchSpaces/PointGridSearchSpaces/UtilityAINavigation3DRectangularPointGridSearchSpace.h"
@@ -116,6 +120,10 @@ void initialize_utility_ai_module(ModuleInitializationLevel p_level) {
 
     ClassDB::register_class<UtilityAINode3DDistanceSearchCriterion>();
     ClassDB::register_class<UtilityAINode2DDistanceSearchCriterion>();
+
+    ClassDB::register_class<UtilityAIVector3XZAngleSearchCriterion>();
+    ClassDB::register_class<UtilityAIVector3AngleSearchCriterion>();
+    ClassDB::register_class<UtilityAIVector2AngleSearchCriterion>();
 
 }
 
