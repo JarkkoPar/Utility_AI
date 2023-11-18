@@ -1,5 +1,5 @@
 #include "UtilityAIVector3AngleSearchCriterion.h"
-#include <godot_cpp/classes/Node3D.hpp>
+#include <godot_cpp/classes/node3d.hpp>
 
 using namespace godot;
 
