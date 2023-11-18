@@ -120,6 +120,7 @@ void UtilityAINQSSearchSpaces::execute_query() {
     for( int c = 0; c < get_child_count(); ++c ) {
         UtilityAINQSSearchCriteria* criterion = godot::Object::cast_to<UtilityAINQSSearchCriteria>(get_child(c));
         if( criterion == nullptr ) continue;
+        if( !criterion->get_is_active() ) continue;
         apply_criterion(criterion, search_space, scores, search_space, scores );
     }
     // Put all the remaining scores to the serach results in order.
