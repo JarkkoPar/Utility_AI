@@ -84,7 +84,7 @@ void UtilityAIDotProductToPositionVector3SearchCriterion::apply_criterion( Node*
     Vector3 node3d_position_vector = node3d->get_global_position();
     Vector3 node3d_from_to_position_vector = (_dot_product_position_vector - node3d_position_vector).normalized();
 
-    double DotProductToPosition = _dot_product_position_vector.dot(node3d_from_to_position_vector);
+    double DotProductToPosition = node3d_direction_vector.dot(node3d_from_to_position_vector);
     
     if( get_use_for_filtering() ) {
         switch(_filtering_rule) {
