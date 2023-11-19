@@ -55,6 +55,8 @@
 #include "NodeQuerySystem/SearchCriteria/UtilityAIDotProductVector3SearchCriterion.h"
 #include "NodeQuerySystem/SearchCriteria/UtilityAIDotProductVector2SearchCriterion.h"
 
+#include "NodeQuerySystem/SearchCriteria/UtilityAIDotProductToPositionVector3SearchCriterion.h"
+//#include "NodeQuerySystem/SearchCriteria/UtilityAIDotProductVector2SearchCriterion.h"
 
 #include "NodeQuerySystem/SearchSpaces/PointGridSearchSpaces/UtilityAINavigation3DPointGridSearchSpaces.h"
 #include "NodeQuerySystem/SearchSpaces/PointGridSearchSpaces/UtilityAINavigation3DRectangularPointGridSearchSpace.h"
@@ -130,6 +132,10 @@ void initialize_utility_ai_module(ModuleInitializationLevel p_level) {
 
     ClassDB::register_class<UtilityAIDotProductVector3SearchCriterion>();
     ClassDB::register_class<UtilityAIDotProductVector2SearchCriterion>();
+
+    ClassDB::register_class<UtilityAIDotProductToPositionVector3SearchCriterion>();
+    //ClassDB::register_class<UtilityAIDotProductToPositionVector2SearchCriterion>();
+
 }
 
 void uninitialize_utility_ai_module(ModuleInitializationLevel p_level) {
