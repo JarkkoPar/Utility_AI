@@ -21,7 +21,7 @@ void UtilityAIDotProductToPositionVector2SearchCriterion::_bind_methods() {
     
     ClassDB::bind_method(D_METHOD("set_dot_product_position_vector", "dot_product_position_vector"), &UtilityAIDotProductToPositionVector2SearchCriterion::set_dot_product_position_vector);
     ClassDB::bind_method(D_METHOD("get_dot_product_position_vector"), &UtilityAIDotProductToPositionVector2SearchCriterion::get_dot_product_position_vector);
-    ADD_PROPERTY(PropertyInfo(Variant::VECTOR2, "dot_product_vector", PROPERTY_HINT_NONE), "set_dot_product_position_vector","get_dot_product_position_vector");
+    ADD_PROPERTY(PropertyInfo(Variant::VECTOR2, "dot_product_position", PROPERTY_HINT_NONE), "set_dot_product_position_vector","get_dot_product_position_vector");
     
     
     ClassDB::bind_method(D_METHOD("set_filtering_value", "filtering_value"), &UtilityAIDotProductToPositionVector2SearchCriterion::set_filtering_value);
