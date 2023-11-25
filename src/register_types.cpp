@@ -114,8 +114,8 @@ void initialize_utility_ai_module(ModuleInitializationLevel p_level) {
     ClassDB::register_class<UtilityAIArea3DSearchSpace>();
     ClassDB::register_class<UtilityAIArea2DSearchSpace>();
 
-    ClassDB::register_class<UtilityAINavigation3DPointGridSearchSpaces>(true);
-    ClassDB::register_class<UtilityAINavigation3DRectangularPointGridSearchSpace>();
+    //ClassDB::register_class<UtilityAINavigation3DPointGridSearchSpaces>(true);
+    //ClassDB::register_class<UtilityAINavigation3DRectangularPointGridSearchSpace>();
 
     ClassDB::register_class<UtilityAINQSSearchCriteria>(true);
     ClassDB::register_class<UtilityAICustomSearchCriterion>();
