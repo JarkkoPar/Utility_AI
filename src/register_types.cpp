@@ -27,6 +27,7 @@
 
 // Special considerations.
 #include "SpecialConsiderations/UtilityAIBooleanConsideration.h"
+#include "SpecialConsiderations/UtilityAICustomPropertyConsideration.h"
 
 // Node Query System.
 
@@ -105,6 +106,7 @@ void initialize_utility_ai_module(ModuleInitializationLevel p_level) {
 
     // Special considerations.
     ClassDB::register_class<UtilityAIBooleanConsideration>();
+    ClassDB::register_class<UtilityAICustomPropertyConsideration>();
 
     // Node Query System.
     ClassDB::register_class<UtilityAINQSSearchSpaces>(true);
