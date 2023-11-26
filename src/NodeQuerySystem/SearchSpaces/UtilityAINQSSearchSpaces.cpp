@@ -107,17 +107,21 @@ int  UtilityAINQSSearchSpaces::get_top_n_to_find() const {
     return _top_n_to_find;
 }
 
+
 void UtilityAINQSSearchSpaces::set_total_query_runtime_usec( int total_query_runtime_usec ) {
     _total_query_runtime_usec = total_query_runtime_usec;
 }
+
 
 int  UtilityAINQSSearchSpaces::get_total_query_runtime_usec() const {
     return _total_query_runtime_usec;
 }
 
+
 void UtilityAINQSSearchSpaces::set_total_query_node_visits( int total_query_node_visits ) {
     _total_query_node_visits = total_query_node_visits;
 }
+
 
 int  UtilityAINQSSearchSpaces::get_total_query_node_visits() const {
     return _total_query_node_visits;
@@ -127,6 +131,7 @@ int  UtilityAINQSSearchSpaces::get_total_query_node_visits() const {
 void UtilityAINQSSearchSpaces::set_total_query_call_count( int total_query_call_count ) {
     _total_query_call_count = total_query_call_count;
 }
+
 
 int  UtilityAINQSSearchSpaces::get_total_query_call_count() const {
     return _total_query_call_count;
