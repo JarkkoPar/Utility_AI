@@ -24,6 +24,7 @@ private:
     //uint64_t            _query_time_budget_per_frame_usec;
     uint64_t            _total_query_runtime_usec;
     unsigned int        _total_query_node_visits;
+    unsigned int        _total_query_call_count;
     //double              _total_query_runtime_sec;
     TypedArray<Node>    _search_space;
     PackedFloat64Array  _scores;
@@ -76,6 +77,9 @@ public:
 
     void set_total_query_node_visits( int total_query_node_visits );
     int  get_total_query_node_visits() const;
+
+    void set_total_query_call_count( int total_query_call_count );
+    int  get_total_query_call_count() const;
 
     // Handling methods.
 

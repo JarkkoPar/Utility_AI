@@ -40,6 +40,9 @@ void UtilityAINQSSearchSpaces::_bind_methods() {
     ClassDB::bind_method(D_METHOD("get_total_query_node_visits"), &UtilityAINQSSearchSpaces::get_total_query_node_visits);
     ADD_PROPERTY(PropertyInfo(Variant::INT, "total_query_node_visits", PROPERTY_HINT_NONE), "set_total_query_node_visits","get_total_query_node_visits");
 
+    ClassDB::bind_method(D_METHOD("set_total_query_call_count", "total_query_call_count"), &UtilityAINQSSearchSpaces::set_total_query_call_count);
+    ClassDB::bind_method(D_METHOD("get_total_query_call_count"), &UtilityAINQSSearchSpaces::get_total_query_call_count);
+    ADD_PROPERTY(PropertyInfo(Variant::INT, "total_query_call_count", PROPERTY_HINT_NONE), "set_total_query_call_count","get_total_query_call_count");
 
     //PROPERTY_HINT_ARRAY_TYPE, vformat("%s/%s:%s", Variant::FLOAT, PROPERTY_HINT_NONE)
     ClassDB::bind_method(D_METHOD("initialize_search_space"), &UtilityAINQSSearchSpaces::initialize_search_space);
@@ -121,6 +124,15 @@ int  UtilityAINQSSearchSpaces::get_total_query_node_visits() const {
 }
 
 
+void UtilityAINQSSearchSpaces::set_total_query_call_count( int total_query_call_count ) {
+    _total_query_call_count = total_query_call_count;
+}
+
+int  UtilityAINQSSearchSpaces::get_total_query_call_count() const {
+    return _total_query_call_count;
+}
+
+
 // Handling methods.
 
 void UtilityAINQSSearchSpaces::initialize_search_space() {
@@ -141,6 +153,7 @@ bool UtilityAINQSSearchSpaces::execute_query(uint64_t time_budget_usec) {
         // Query was not running already, so initialize a new one.
         _total_query_runtime_usec = 0;
         _total_query_node_visits = 0;
+        _total_query_call_count = 0;
 
         _current_criterion_index = 0;
         _current_node_index = 0;
@@ -168,6 +181,7 @@ bool UtilityAINQSSearchSpaces::execute_query(uint64_t time_budget_usec) {
         _query_results.clear();
         _query_result_scores.clear();
     }//endif query is not running
+    ++_total_query_call_count;
 
     while( _current_criterion_index < get_child_count() ) {
         UtilityAINQSSearchCriteria* criterion = godot::Object::cast_to<UtilityAINQSSearchCriteria>(get_child(_current_criterion_index));
@@ -182,10 +196,6 @@ bool UtilityAINQSSearchSpaces::execute_query(uint64_t time_budget_usec) {
         ++_current_criterion_index;
     }//endwhile criterions left to process
 
-    // All the criterions are processed. Store the total time used for processing.
-    uint64_t time_used = godot::Time::get_singleton()->get_ticks_usec() - method_start_time_usec;
-    _total_query_runtime_usec += time_used; 
-
     // Put all the remaining scores to the search results in order.
     for( int n = 0; n < _num_search_space_nodes; ++n ) {
         Node* node = godot::Object::cast_to<Node>((*_ptr_current_search_space)[n]);
@@ -198,6 +208,10 @@ bool UtilityAINQSSearchSpaces::execute_query(uint64_t time_budget_usec) {
     _work_in_progress_num_added_nodes = 0;
     _num_search_space_nodes = 0;
     _is_query_still_running = false;
+
+    // All the criterions are processed and results sorted. Store the total time used for processing.
+    _total_query_runtime_usec += (godot::Time::get_singleton()->get_ticks_usec() - method_start_time_usec); 
+
 
     return true;
     /**
