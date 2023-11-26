@@ -1,5 +1,6 @@
 #include "UtilityAINQSSearchSpaces.h"
 #include <godot_cpp/classes/engine.hpp>
+#include <godot_cpp/classes/time.hpp>
 
 
 using namespace godot;
@@ -7,11 +8,14 @@ using namespace godot;
 
 UtilityAINQSSearchSpaces::UtilityAINQSSearchSpaces() {
     _top_n_to_find = 1;
+    _is_query_still_running = false;
+    _current_criterion_index = 0;
+    _total_query_runtime_usec = 0;
+    _work_in_progress_num_added_nodes = 0;
 }
 
 
 UtilityAINQSSearchSpaces::~UtilityAINQSSearchSpaces() {
-    
 }
 
 
@@ -27,16 +31,25 @@ void UtilityAINQSSearchSpaces::_bind_methods() {
     ClassDB::bind_method(D_METHOD("set_query_result_scores", "query_result_scores"), &UtilityAINQSSearchSpaces::set_query_result_scores);
     ClassDB::bind_method(D_METHOD("get_query_result_scores"), &UtilityAINQSSearchSpaces::get_query_result_scores);
     ADD_PROPERTY(PropertyInfo(Variant::ARRAY, "query_result_scores", PROPERTY_HINT_NONE), "set_query_result_scores","get_query_result_scores");
+
+    ClassDB::bind_method(D_METHOD("set_total_query_runtime_usec", "total_query_runtime_usec"), &UtilityAINQSSearchSpaces::set_total_query_runtime_usec);
+    ClassDB::bind_method(D_METHOD("get_total_query_runtime_usec"), &UtilityAINQSSearchSpaces::get_total_query_runtime_usec);
+    ADD_PROPERTY(PropertyInfo(Variant::INT, "total_query_runtime_usec", PROPERTY_HINT_NONE), "set_total_query_runtime_usec","get_total_query_runtime_usec");
+
+    ClassDB::bind_method(D_METHOD("set_total_query_node_visits", "total_query_node_visits"), &UtilityAINQSSearchSpaces::set_total_query_node_visits);
+    ClassDB::bind_method(D_METHOD("get_total_query_node_visits"), &UtilityAINQSSearchSpaces::get_total_query_node_visits);
+    ADD_PROPERTY(PropertyInfo(Variant::INT, "total_query_node_visits", PROPERTY_HINT_NONE), "set_total_query_node_visits","get_total_query_node_visits");
+
+
     //PROPERTY_HINT_ARRAY_TYPE, vformat("%s/%s:%s", Variant::FLOAT, PROPERTY_HINT_NONE)
     ClassDB::bind_method(D_METHOD("initialize_search_space"), &UtilityAINQSSearchSpaces::initialize_search_space);
-    ClassDB::bind_method(D_METHOD("execute_query"), &UtilityAINQSSearchSpaces::execute_query);
+    ClassDB::bind_method(D_METHOD("execute_query", "time_budget_usec"), &UtilityAINQSSearchSpaces::execute_query);
 }
 
 
 void UtilityAINQSSearchSpaces::_ready() {
     //if( !get_is_active() ) return;
     if( Engine::get_singleton()->is_editor_hint() ) return;
-
     initialize_search_space(); // Maybe not really needed? We'll see.
     /**
     // Find all the boolean filtering criterias, as they will be run first.
@@ -91,6 +104,22 @@ int  UtilityAINQSSearchSpaces::get_top_n_to_find() const {
     return _top_n_to_find;
 }
 
+void UtilityAINQSSearchSpaces::set_total_query_runtime_usec( int total_query_runtime_usec ) {
+    _total_query_runtime_usec = total_query_runtime_usec;
+}
+
+int  UtilityAINQSSearchSpaces::get_total_query_runtime_usec() const {
+    return _total_query_runtime_usec;
+}
+
+void UtilityAINQSSearchSpaces::set_total_query_node_visits( int total_query_node_visits ) {
+    _total_query_node_visits = total_query_node_visits;
+}
+
+int  UtilityAINQSSearchSpaces::get_total_query_node_visits() const {
+    return _total_query_node_visits;
+}
+
 
 // Handling methods.
 
@@ -99,17 +128,84 @@ void UtilityAINQSSearchSpaces::initialize_search_space() {
 }
 
 
-void UtilityAINQSSearchSpaces::execute_query() {
-    if( !get_is_active() ) return;
-    if( Engine::get_singleton()->is_editor_hint() ) return;
-
+bool UtilityAINQSSearchSpaces::execute_query(uint64_t time_budget_usec) {
+    uint64_t method_start_time_usec = godot::Time::get_singleton()->get_ticks_usec();
+    if( !get_is_active() ) return true;
+    if( Engine::get_singleton()->is_editor_hint() ) return true;
     if( get_child_count() < 1 ) {
         WARN_PRINT("UtilityAINodeQuerySystem::execute_query() - No search criteria nodes added.");
-        return;
+        return true;
     }
-    
+
+    if( !_is_query_still_running ) {
+        // Query was not running already, so initialize a new one.
+        _total_query_runtime_usec = 0;
+        _total_query_node_visits = 0;
+
+        _current_criterion_index = 0;
+        _current_node_index = 0;
+        _work_in_progress_num_added_nodes = 0;
+        
+        // Get the search space nodes and set the score to 1.0 for all of them.
+        _search_space = get_searchspace_nodes();
+        _num_search_space_nodes = _search_space.size();
+        _scores.resize(_num_search_space_nodes);
+        _scores.fill(1.0);
+
+        // Create the work-in-progress search space we will be swapping with.
+        _work_in_progress_search_space = _search_space.duplicate();
+        _work_in_progress_scores = _scores.duplicate();
+        _work_in_progress_num_added_nodes = 0;
+
+        _ptr_current_search_space = &_search_space;
+        _ptr_current_scores = &_scores;
+
+        _ptr_current_work_in_progress_search_space = &_work_in_progress_search_space;
+        _ptr_current_work_in_progress_scores = &_work_in_progress_scores;
+
+        _is_query_still_running = true; // Set the query as running.
+
+        _query_results.clear();
+        _query_result_scores.clear();
+    }//endif query is not running
+
+    while( _current_criterion_index < get_child_count() ) {
+        UtilityAINQSSearchCriteria* criterion = godot::Object::cast_to<UtilityAINQSSearchCriteria>(get_child(_current_criterion_index));
+        if( criterion == nullptr ) continue;
+        if( !criterion->get_is_active() ) continue;
+        bool is_criterion_complete = apply_criterion_with_time_budget(criterion,
+                                                            method_start_time_usec,
+                                                            time_budget_usec );
+        if( !is_criterion_complete) {
+            return false; // The criterion did not complete, so it timed out.
+        }
+        ++_current_criterion_index;
+    }//endwhile criterions left to process
+
+    // All the criterions are processed. Store the total time used for processing.
+    uint64_t time_used = godot::Time::get_singleton()->get_ticks_usec() - method_start_time_usec;
+    _total_query_runtime_usec += time_used; 
+
+    // Put all the remaining scores to the search results in order.
+    for( int n = 0; n < _num_search_space_nodes; ++n ) {
+        Node* node = godot::Object::cast_to<Node>((*_ptr_current_search_space)[n]);
+        place_to_query_results_based_on_score(node, (*_ptr_current_scores)[n]);
+    }
+
+    // Clear everything to be ready for the next query.
+    _current_criterion_index = 0;
+    _current_node_index = 0;
+    _work_in_progress_num_added_nodes = 0;
+    _num_search_space_nodes = 0;
+    _is_query_still_running = false;
+
+    return true;
+    /**
+    // Query not running, so start a new one.
+    _total_query_runtime_usec = 0;
     _query_results.clear();
     _query_result_scores.clear();
+    _is_query_still_running = true;
     
     // Use the search criterias to narrow down the search space with
     // each applied criterion.
@@ -123,37 +219,90 @@ void UtilityAINQSSearchSpaces::execute_query() {
         if( !criterion->get_is_active() ) continue;
         apply_criterion(criterion, search_space, scores, search_space, scores );
     }
-    // Put all the remaining scores to the serach results in order.
+    // Put all the remaining scores to the search results in order.
     for( int n = 0; n < search_space.size(); ++n ) {
         Node* node = godot::Object::cast_to<Node>(search_space[n]);
         place_to_query_results_based_on_score(node, scores[n]);
     }
-    /**
-    // The compulsory naive implementation of the search criteria application.
-    double total_score = 0.0;
-    TypedArray<Node> search_space = get_searchspace_nodes();
-    for( int ss = 0; ss < search_space.size(); ++ss ) {
-        Node* node = godot::Object::cast_to<Node>(search_space[ss]);
-        if( node == nullptr ) continue;
-            
-        total_score = 0.0;
-        for( int c = 0; c < get_child_count(); ++c ) {
-            UtilityAINQSSearchCriteria* criterion = godot::Object::cast_to<UtilityAINQSSearchCriteria>(get_child(c));
-            if( criterion == nullptr ) continue;
-            
-            criterion->apply_criterion(node, is_filtered_out, score);           
-            total_score += score;
-            if( is_filtered_out ) break;
+        /**
+        // The compulsory naive implementation of the search criteria application.
+        double total_score = 0.0;
+        TypedArray<Node> search_space = get_searchspace_nodes();
+        for( int ss = 0; ss < search_space.size(); ++ss ) {
+            Node* node = godot::Object::cast_to<Node>(search_space[ss]);
+            if( node == nullptr ) continue;
+                
+            total_score = 0.0;
+            for( int c = 0; c < get_child_count(); ++c ) {
+                UtilityAINQSSearchCriteria* criterion = godot::Object::cast_to<UtilityAINQSSearchCriteria>(get_child(c));
+                if( criterion == nullptr ) continue;
+                
+                criterion->apply_criterion(node, is_filtered_out, score);           
+                total_score += score;
+                if( is_filtered_out ) break;
 
 
-        }//endfor search criteria
-        if( !is_filtered_out ) {
-            place_to_query_results_based_on_score(node, score);
-        }
-    }//endfor nodes in the search space
-    /**/
-
+            }//endfor search criteria
+            if( !is_filtered_out ) {
+                place_to_query_results_based_on_score(node, score);
+            }
+        }//endfor nodes in the search space
+        /**/
+    
+    // The query is done.
+    return true;
 }
+
+
+bool UtilityAINQSSearchSpaces::apply_criterion_with_time_budget( UtilityAINQSSearchCriteria* criterion, 
+                                                                 uint64_t start_time_usec,
+                                                                 uint64_t time_budget_usec ) {
+    bool filter_out = false;
+    double score = 0.0;
+    while( _current_node_index < _num_search_space_nodes ) {
+        Node* node = godot::Object::cast_to<Node>((*_ptr_current_search_space)[_current_node_index]);
+        if( node == nullptr ) continue;
+        double previous_score = 1.0;
+        if( _current_node_index < (*_ptr_current_scores).size() ) {
+            previous_score = (*_ptr_current_scores)[_current_node_index];
+        }
+        ++_total_query_node_visits;
+        criterion->apply_criterion(node, filter_out, score );
+        if( !filter_out ) {
+            (*_ptr_current_work_in_progress_search_space)[_work_in_progress_num_added_nodes] = node;
+            (*_ptr_current_work_in_progress_scores)[_work_in_progress_num_added_nodes] = score;
+            ++_work_in_progress_num_added_nodes;
+        }
+
+        // Move to the next node and if we havea time budget,
+        // check if we are out of time and must stop.
+        ++_current_node_index;
+        if( time_budget_usec > 0 ) {
+            uint64_t time_used = godot::Time::get_singleton()->get_ticks_usec() - start_time_usec;
+            if( time_used >= time_budget_usec ) {
+                _total_query_runtime_usec += time_used;
+                return false; // Still running
+            } // endif timebudget used up
+        }//endif timebudget is applied
+    }
+
+    TypedArray<Node>* temparray = _ptr_current_search_space;
+    PackedFloat64Array* tempscores = _ptr_current_scores;
+    _ptr_current_search_space = _ptr_current_work_in_progress_search_space;
+    _ptr_current_scores = _ptr_current_work_in_progress_scores;
+
+    _ptr_current_work_in_progress_search_space = temparray;
+    _ptr_current_work_in_progress_scores = tempscores;
+
+    _num_search_space_nodes = _work_in_progress_num_added_nodes;
+
+    _current_node_index = 0;
+    _work_in_progress_num_added_nodes = 0;
+
+    // All done! 
+    return true; 
+}
+
 
 
 void UtilityAINQSSearchSpaces::apply_criterion( UtilityAINQSSearchCriteria* criterion, TypedArray<Node> search_space, PackedFloat64Array scores, TypedArray<Node>& result_space, PackedFloat64Array& result_scores ) {
@@ -162,6 +311,7 @@ void UtilityAINQSSearchSpaces::apply_criterion( UtilityAINQSSearchCriteria* crit
 
     bool filter_out = false;
     double score = 0.0;
+    _current_node_index = 0;
     for( int i = 0; i < search_space.size(); ++i ) {
         Node* node = godot::Object::cast_to<Node>(search_space[i]);
         if( node == nullptr ) continue;

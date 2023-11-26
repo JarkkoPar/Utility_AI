@@ -10,13 +10,18 @@ using namespace godot;
 
 void UtilityAICustomPropertyConsideration::_bind_methods() {
 
-    ClassDB::bind_method(D_METHOD("set_property_max_value", "property_max_value"), &UtilityAICustomPropertyConsideration::set_property_max_value);
-    ClassDB::bind_method(D_METHOD("get_property_max_value"), &UtilityAICustomPropertyConsideration::get_property_max_value);
-    ADD_PROPERTY(PropertyInfo(Variant::FLOAT, "property_max_value", PROPERTY_HINT_NONE), "set_property_max_value","get_property_max_value");
+    ClassDB::bind_method(D_METHOD("set_node_with_property_nodepath", "node_with_property_nodepath"), &UtilityAICustomPropertyConsideration::set_node_with_property_nodepath);
+    ClassDB::bind_method(D_METHOD("get_node_with_property_nodepath"), &UtilityAICustomPropertyConsideration::get_node_with_property_nodepath);
+    ADD_PROPERTY(PropertyInfo(Variant::NODE_PATH, "node_with_property_nodepath", PROPERTY_HINT_NONE), "set_node_with_property_nodepath","get_node_with_property_nodepath");
 
     ClassDB::bind_method(D_METHOD("set_property_name", "property_name"), &UtilityAICustomPropertyConsideration::set_property_name);
     ClassDB::bind_method(D_METHOD("get_property_name"), &UtilityAICustomPropertyConsideration::get_property_name);
     ADD_PROPERTY(PropertyInfo(Variant::STRING_NAME, "property_name", PROPERTY_HINT_NONE), "set_property_name","get_property_name");
+
+    ClassDB::bind_method(D_METHOD("set_property_max_value", "property_max_value"), &UtilityAICustomPropertyConsideration::set_property_max_value);
+    ClassDB::bind_method(D_METHOD("get_property_max_value"), &UtilityAICustomPropertyConsideration::get_property_max_value);
+    ADD_PROPERTY(PropertyInfo(Variant::FLOAT, "property_max_value", PROPERTY_HINT_NONE), "set_property_max_value","get_property_max_value");
+
 
     ClassDB::bind_method(D_METHOD("sample_activation_curve", "input_value"), &UtilityAICustomPropertyConsideration::sample_activation_curve);
 }
@@ -78,6 +83,7 @@ void UtilityAICustomPropertyConsideration::_ready() {
     if( Engine::get_singleton()->is_editor_hint() ) return;
 
     _node_with_property = get_node_or_null(_node_with_property_nodepath);
+    initialize_consideration();
 }
 
 /**
@@ -96,8 +102,12 @@ void UtilityAICustomPropertyConsideration::_notification(int p_what) {
 
 
 void UtilityAICustomPropertyConsideration::initialize_consideration() {
-    if( !get_is_active() ) return;
+    //if( !get_is_active() ) return;
     if( Engine::get_singleton()->is_editor_hint() ) return;
+
+    if( _property_max_value != 0.0 ) {
+        _one_over_property_max_value = _property_max_value;
+    }
 }
 
 // Handling functions.
