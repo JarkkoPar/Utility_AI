@@ -29,6 +29,10 @@
 #include "SpecialConsiderations/UtilityAIBooleanConsideration.h"
 #include "SpecialConsiderations/UtilityAICustomPropertyConsideration.h"
 
+// Behaviour tree.
+#include "BehaviourTree/UtilityAIBehaviourTreeNodes.h"
+#include "BehaviourTree/UtilityAIBTSequence.h"
+
 // Node Query System.
 
 #include "NodeQuerySystem/SearchSpaces/UtilityAINQSSearchSpaces.h"
@@ -107,6 +111,11 @@ void initialize_utility_ai_module(ModuleInitializationLevel p_level) {
     // Special considerations.
     ClassDB::register_class<UtilityAIBooleanConsideration>();
     ClassDB::register_class<UtilityAICustomPropertyConsideration>();
+
+    // Behaviour tree.
+    ClassDB::register_class<UtilityAIBehaviourTreeNodes>(true);
+    ClassDB::register_class<UtilityAIBTSequence>();
+    
 
     // Node Query System.
     ClassDB::register_class<UtilityAINQSSearchSpaces>(true);

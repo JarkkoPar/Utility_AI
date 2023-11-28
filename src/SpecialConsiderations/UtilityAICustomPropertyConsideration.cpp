@@ -82,7 +82,7 @@ StringName UtilityAICustomPropertyConsideration::get_property_name() const {
 void UtilityAICustomPropertyConsideration::_ready() {
     if( Engine::get_singleton()->is_editor_hint() ) return;
 
-    _node_with_property = get_node_or_null(_node_with_property_nodepath);
+    
     initialize_consideration();
 }
 
@@ -102,9 +102,8 @@ void UtilityAICustomPropertyConsideration::_notification(int p_what) {
 
 
 void UtilityAICustomPropertyConsideration::initialize_consideration() {
-    //if( !get_is_active() ) return;
     if( Engine::get_singleton()->is_editor_hint() ) return;
-
+    _node_with_property = get_node_or_null(_node_with_property_nodepath);
     if( _property_max_value != 0.0 ) {
         _one_over_property_max_value = _property_max_value;
     }
@@ -120,16 +119,12 @@ void UtilityAICustomPropertyConsideration::_evaluate_consideration() {
 
 
 double UtilityAICustomPropertyConsideration::evaluate() { 
+    if( Engine::get_singleton()->is_editor_hint() ) return 0.0;
     if( !get_is_active() ) return 0.0;
     if( _node_with_property == nullptr ) return 0.0;
-    if( Engine::get_singleton()->is_editor_hint() ) return 0.0;
     if( get_has_vetoed() ) return 0.0;
 
-    if( !this->_get(_property_name, _property_variant_value) ) {
-        _score = 0.0;
-        return 0.0;
-    }
-
+    _property_variant_value = _node_with_property->get(_property_name);
     _score = (double)_property_variant_value * _one_over_property_max_value;
 
     if(_activation_curve.is_valid()) {
