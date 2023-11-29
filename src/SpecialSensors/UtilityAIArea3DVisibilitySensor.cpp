@@ -146,7 +146,7 @@ void UtilityAIArea3DVisibilitySensor::_notification(int p_what) {
 // Handling functions.
 
 void UtilityAIArea3DVisibilitySensor::initialize_sensor() {
-    if( !get_is_active() ) return;
+    //if( !get_is_active() ) return;
     if( Engine::get_singleton()->is_editor_hint() ) return;
 
     Node* node = get_node_or_null(_visibility_volume_nodepath);
@@ -157,6 +157,15 @@ void UtilityAIArea3DVisibilitySensor::initialize_sensor() {
     // Connect to the area entered and exited signals.
     Error error_visibility_volume_on_entered = _visibility_volume_node->connect("area_entered", Callable(this, "on_area_entered"));
     Error error_visibility_volume_on_exited  = _visibility_volume_node->connect("area_exited", Callable(this, "on_area_exited"));
+}
+
+
+void UtilityAIArea3DVisibilitySensor::uninitialize_sensor() {
+    if( _visibility_volume_node != nullptr ) {
+        _visibility_volume_node->disconnect("area_entered", Callable(this, "on_area_entered"));
+        _visibility_volume_node->disconnect("area_exited", Callable(this, "on_area_exited"));
+        _visibility_volume_node = nullptr;
+    }
 }
 
 

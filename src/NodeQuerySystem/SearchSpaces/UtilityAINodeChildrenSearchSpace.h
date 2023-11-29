@@ -11,11 +11,12 @@ class UtilityAINodeChildrenSearchSpace : public UtilityAINQSSearchSpaces {
 
 private:
     NodePath _parent_node_path;
-    Node*    _parent_node;
+    Node*   _parent_node;
 protected:
     static void _bind_methods();
 
-    
+    virtual void _initialize_search_space() override;
+    virtual void _uninitialize_search_space() override;
 public:
     UtilityAINodeChildrenSearchSpace();
     ~UtilityAINodeChildrenSearchSpace();
@@ -28,7 +29,7 @@ public:
     virtual TypedArray<Node> get_searchspace_nodes() const override;
 
     // Godot virtuals.
-    void _ready();
+    //void _ready();
 };
 
 }

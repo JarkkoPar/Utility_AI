@@ -27,9 +27,12 @@ public:
 
     void _ready();
 
+    void _exit_tree();
+
     // Handling methods.
 
     virtual void initialize_sensor();
+    virtual void uninitialize_sensor() {}
     
     // Getters and setters for attributes.
     

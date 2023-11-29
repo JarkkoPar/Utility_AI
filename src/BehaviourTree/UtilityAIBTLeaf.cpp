@@ -25,15 +25,11 @@ void UtilityAIBTLeaf::_bind_methods() {
 // Constructor and destructor.
 
 UtilityAIBTLeaf::UtilityAIBTLeaf() {
-    
 }
 
 
 UtilityAIBTLeaf::~UtilityAIBTLeaf() {
 }
-
-// Handling functions.
-
 
 
 // Getters and Setters.
@@ -47,8 +43,12 @@ int  UtilityAIBTLeaf::get_tick_result() const {
     return _tick_result;
 }
 
+// Handling methods.
 
 int UtilityAIBTLeaf::tick() { 
+    if( has_method("tick")) {
+        call("tick");
+    }
     return _tick_result;
 }
 

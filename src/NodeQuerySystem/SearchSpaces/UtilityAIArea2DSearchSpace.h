@@ -18,7 +18,7 @@ protected:
     static void _bind_methods();
     
     virtual void _initialize_search_space() override;
-
+    virtual void _uninitialize_search_space() override;
 public:
     UtilityAIArea2DSearchSpace();
     ~UtilityAIArea2DSearchSpace();

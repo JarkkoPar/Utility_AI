@@ -54,7 +54,7 @@ bool UtilityAIConsiderationGroup::get_invert_score() const {
 
 // Handling functions.
 
-double UtilityAIConsiderationGroup::evaluate() { //UtilityAIAgent* agent, double delta) {
+double UtilityAIConsiderationGroup::evaluate() { 
     if( !get_is_active() ) return 0.0;
     if( Engine::get_singleton()->is_editor_hint() ) return 0.0;
 

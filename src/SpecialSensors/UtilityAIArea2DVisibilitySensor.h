@@ -50,6 +50,8 @@ public:
     
     // Handling functions. 
     virtual void initialize_sensor() override;
+    virtual void uninitialize_sensor() override;
+
 
     virtual double evaluate_sensor_value() override;
 

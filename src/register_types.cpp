@@ -31,7 +31,10 @@
 
 // Behaviour tree.
 #include "BehaviourTree/UtilityAIBehaviourTreeNodes.h"
+#include "BehaviourTree/UtilityAIBTAgent.h"
 #include "BehaviourTree/UtilityAIBTSequence.h"
+#include "BehaviourTree/UtilityAIBTSelector.h"
+#include "BehaviourTree/UtilityAIBTLeaf.h"
 
 // Node Query System.
 
@@ -114,7 +117,10 @@ void initialize_utility_ai_module(ModuleInitializationLevel p_level) {
 
     // Behaviour tree.
     ClassDB::register_class<UtilityAIBehaviourTreeNodes>(true);
+    ClassDB::register_class<UtilityAIBTAgent>();
     ClassDB::register_class<UtilityAIBTSequence>();
+    ClassDB::register_class<UtilityAIBTSelector>();
+    ClassDB::register_class<UtilityAIBTLeaf>();
     
 
     // Node Query System.

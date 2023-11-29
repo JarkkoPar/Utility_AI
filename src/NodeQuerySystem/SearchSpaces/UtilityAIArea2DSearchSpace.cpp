@@ -4,14 +4,17 @@ using namespace godot;
 
 
 UtilityAIArea2DSearchSpace::UtilityAIArea2DSearchSpace() {
-    _area2d_node = nullptr;
+    //_area2d_node = nullptr;
 }
 
 
 UtilityAIArea2DSearchSpace::~UtilityAIArea2DSearchSpace() {
+    
+    _area2d_node = godot::Object::cast_to<Area2D>(get_node_or_null(_area2d_nodepath));
     if( _area2d_node != nullptr ) {
         _area2d_node->disconnect("area_entered", Callable(this, "on_area_entered"));
         _area2d_node->disconnect("area_exited", Callable(this, "on_area_exited"));
+        
     }
     _area2d_node = nullptr;
 }
@@ -100,5 +103,15 @@ void UtilityAIArea2DSearchSpace::_initialize_search_space() {
     Error error_visibility_volume_on_entered = _area2d_node->connect("area_entered", Callable(this, "on_area_entered"));
     Error error_visibility_volume_on_exited  = _area2d_node->connect("area_exited", Callable(this, "on_area_exited"));
 
+}
+
+
+
+void UtilityAIArea2DSearchSpace::_uninitialize_search_space() {
+    if( _area2d_node != nullptr ) {
+        _area2d_node->disconnect("area_entered", Callable(this, "on_area_entered"));
+        _area2d_node->disconnect("area_exited", Callable(this, "on_area_exited"));
+    }
+    _area2d_node = nullptr;
 }
 

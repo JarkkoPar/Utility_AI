@@ -21,6 +21,15 @@ void UtilityAINodeChildrenSearchSpace::_bind_methods() {
     ADD_PROPERTY(PropertyInfo(Variant::NODE_PATH, "parent_node_path", PROPERTY_HINT_NONE), "set_parent_node_path","get_parent_node_path");
 }
 
+
+void UtilityAINodeChildrenSearchSpace::_initialize_search_space() {
+    _parent_node = get_node_or_null(_parent_node_path);
+}
+
+void UtilityAINodeChildrenSearchSpace::_uninitialize_search_space() {
+    _parent_node = nullptr;
+}
+
 // Getters and setters.
 
 void UtilityAINodeChildrenSearchSpace::set_parent_node_path( NodePath parent_node_path ) {
@@ -42,10 +51,12 @@ TypedArray<Node> UtilityAINodeChildrenSearchSpace::get_searchspace_nodes() const
 }
 
 
+/**
 void UtilityAINodeChildrenSearchSpace::_ready() {
-    if( !get_is_active() ) return;
+    //if( !get_is_active() ) return;
     if( Engine::get_singleton()->is_editor_hint() ) return;
 
-    _parent_node = get_node_or_null(_parent_node_path);
+    //_parent_node = get_node_or_null(_parent_node_path);
+    
 }
-
+/**/

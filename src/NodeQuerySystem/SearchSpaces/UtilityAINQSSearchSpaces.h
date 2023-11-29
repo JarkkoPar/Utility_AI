@@ -42,6 +42,7 @@ private:
 protected:
     static void _bind_methods();
     virtual void _initialize_search_space(){}
+    virtual void _uninitialize_search_space(){}
 
     void apply_criterion(   UtilityAINQSSearchCriteria* criterion, 
                             TypedArray<Node> search_space, 
@@ -91,6 +92,7 @@ public:
     
     // Godot virtuals.
     void _ready();
+    void _exit_tree();
 };
 
 }

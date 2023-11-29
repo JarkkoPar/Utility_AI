@@ -70,6 +70,12 @@ void UtilityAINQSSearchSpaces::_ready() {
 }
 
 
+void UtilityAINQSSearchSpaces::_exit_tree() {
+    if( Engine::get_singleton()->is_editor_hint() ) return;
+    _uninitialize_search_space();
+}
+
+
 // Getters and setters.
 
 TypedArray<Node> UtilityAINQSSearchSpaces::get_searchspace_nodes() const {

@@ -14,7 +14,7 @@ class UtilityAIBTSelector : public UtilityAIBehaviourTreeNodes {
 private:
     
 
-    
+    int _current_child_index;
 protected:
     static void _bind_methods();
 

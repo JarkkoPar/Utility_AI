@@ -37,6 +37,11 @@ void UtilityAISensors::_ready() {
     initialize_sensor();
 }
 
+
+void UtilityAISensors::_exit_tree() {
+    uninitialize_sensor();
+}
+
 // Handling methods.
 
 void UtilityAISensors::initialize_sensor() {

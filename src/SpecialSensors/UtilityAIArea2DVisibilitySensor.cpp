@@ -118,13 +118,13 @@ UtilityAIArea2DVisibilitySensor::UtilityAIArea2DVisibilitySensor() {
 
 
 UtilityAIArea2DVisibilitySensor::~UtilityAIArea2DVisibilitySensor() {
-    if( _visibility_volume_node != nullptr ) 
+    /*if( _visibility_volume_node != nullptr ) 
     {
         // Disconnect to the area entered and exited signals.
         _visibility_volume_node->disconnect("area_entered", Callable(this, "on_area_entered"));
         _visibility_volume_node->disconnect("area_exited", Callable(this, "on_area_exited"));
         _visibility_volume_node = nullptr;
-    }
+    }*/
 }
 
 
@@ -163,6 +163,16 @@ void UtilityAIArea2DVisibilitySensor::initialize_sensor() {
     Error error_visibility_volume_on_entered = _visibility_volume_node->connect("area_entered", Callable(this, "on_area_entered"));
     Error error_visibility_volume_on_exited  = _visibility_volume_node->connect("area_exited", Callable(this, "on_area_exited"));
 }
+
+
+void UtilityAIArea2DVisibilitySensor::uninitialize_sensor() {
+    if( _visibility_volume_node != nullptr ) {
+        _visibility_volume_node->disconnect("area_entered", Callable(this, "on_area_entered"));
+        _visibility_volume_node->disconnect("area_exited", Callable(this, "on_area_exited"));
+        _visibility_volume_node = nullptr;
+    }
+}
+
 
 
 double UtilityAIArea2DVisibilitySensor::evaluate_sensor_value() {
