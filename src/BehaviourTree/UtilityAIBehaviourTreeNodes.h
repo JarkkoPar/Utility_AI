@@ -18,7 +18,6 @@ private:
     bool   _invert_score;
 protected:
     static void _bind_methods();
-
 public:
     UtilityAIBehaviourTreeNodes();
     ~UtilityAIBehaviourTreeNodes();
@@ -47,6 +46,10 @@ public:
     virtual double evaluate();
 
     virtual int tick();
+
+    // Godot virtuals.
+
+    
 };
 
 }

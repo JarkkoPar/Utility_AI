@@ -201,3 +201,5 @@ src/BehaviourTree/UtilityAIBTInverter.windows.template_debug.x86_64.obj
 src/BehaviourTree/UtilityAIBTInverter.windows.template_release.x86_64.obj
 src/BehaviourTree/UtilityAIBTParallel.windows.template_debug.x86_64.obj
 src/BehaviourTree/UtilityAIBTParallel.windows.template_release.x86_64.obj
+src/BehaviourTree/UtilityAIBTRunNQSQuery.windows.template_release.x86_64.obj
+src/BehaviourTree/UtilityAIBTRunNQSQuery.windows.template_debug.x86_64.obj
