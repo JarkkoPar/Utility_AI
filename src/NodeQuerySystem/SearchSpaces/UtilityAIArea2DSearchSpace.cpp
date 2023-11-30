@@ -4,19 +4,11 @@ using namespace godot;
 
 
 UtilityAIArea2DSearchSpace::UtilityAIArea2DSearchSpace() {
-    //_area2d_node = nullptr;
+    _area2d_node = nullptr;
 }
 
 
 UtilityAIArea2DSearchSpace::~UtilityAIArea2DSearchSpace() {
-    
-    _area2d_node = godot::Object::cast_to<Area2D>(get_node_or_null(_area2d_nodepath));
-    if( _area2d_node != nullptr ) {
-        _area2d_node->disconnect("area_entered", Callable(this, "on_area_entered"));
-        _area2d_node->disconnect("area_exited", Callable(this, "on_area_exited"));
-        
-    }
-    _area2d_node = nullptr;
 }
 
 

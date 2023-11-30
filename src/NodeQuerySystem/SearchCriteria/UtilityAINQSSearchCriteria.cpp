@@ -19,7 +19,7 @@ UtilityAINQSSearchCriteria::~UtilityAINQSSearchCriteria() {
 
 
 void UtilityAINQSSearchCriteria::_ready() {
-    if( !get_is_active() ) return;
+    //if( !get_is_active() ) return;
     if( Engine::get_singleton()->is_editor_hint() ) return;
 
     _initialize_criterion();

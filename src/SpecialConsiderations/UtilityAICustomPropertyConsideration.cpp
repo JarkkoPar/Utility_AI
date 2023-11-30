@@ -125,7 +125,8 @@ double UtilityAICustomPropertyConsideration::evaluate() {
     if( get_has_vetoed() ) return 0.0;
 
     _property_variant_value = _node_with_property->get(_property_name);
-    _score = (double)_property_variant_value * _one_over_property_max_value;
+    //.can_convert(_property_variant_value.get_type(), godot::Variant::FLOAT)
+    _score = (float)_property_variant_value * _one_over_property_max_value;
 
     if(_activation_curve.is_valid()) {
 		_score = _activation_curve->sample( _score );

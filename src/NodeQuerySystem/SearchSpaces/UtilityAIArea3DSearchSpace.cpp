@@ -106,3 +106,4 @@ void UtilityAIArea3DSearchSpace::_uninitialize_search_space() {
     }
     _area3d_node = nullptr;
 }
+

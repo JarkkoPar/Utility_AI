@@ -9,12 +9,12 @@ using namespace godot;
 // Method binds.
 
 void UtilityAIBTSequence::_bind_methods() {
-    /**
-    ClassDB::bind_method(D_METHOD("set_has_vetoed", "has_vetoed"), &UtilityAIBTSequence::set_has_vetoed);
-    ClassDB::bind_method(D_METHOD("get_has_vetoed"), &UtilityAIBTSequence::get_has_vetoed);
-    ADD_PROPERTY(PropertyInfo(Variant::BOOL, "has_vetoed", PROPERTY_HINT_NONE), "set_has_vetoed","get_has_vetoed");
     
-
+    ClassDB::bind_method(D_METHOD("set_is_reactive", "is_reactive"), &UtilityAIBTSequence::set_is_reactive);
+    ClassDB::bind_method(D_METHOD("get_is_reactive"), &UtilityAIBTSequence::get_is_reactive);
+    ADD_PROPERTY(PropertyInfo(Variant::BOOL, "is_reactive", PROPERTY_HINT_NONE), "set_is_reactive","get_is_reactive");
+    
+    /*
     ClassDB::bind_method(D_METHOD("set_score", "score"), &UtilityAIBTSequence::set_score);
     ClassDB::bind_method(D_METHOD("get_score"), &UtilityAIBTSequence::get_score);
     ADD_PROPERTY(PropertyInfo(Variant::FLOAT, "score", PROPERTY_HINT_NONE ), "set_score","get_score");
@@ -27,6 +27,7 @@ void UtilityAIBTSequence::_bind_methods() {
 
 UtilityAIBTSequence::UtilityAIBTSequence() {
     _current_child_index = 0;
+    _is_reactive = true;
 }
 
 
@@ -39,27 +40,18 @@ UtilityAIBTSequence::~UtilityAIBTSequence() {
 
 // Getters and Setters.
 
-/**
-void UtilityAIBTSequence::set_has_vetoed( bool has_vetoed ) {
-    _has_vetoed = has_vetoed;
+
+void UtilityAIBTSequence::set_is_reactive( bool is_reactive ) {
+    _is_reactive = is_reactive;
 }
 
-bool UtilityAIBTSequence::get_has_vetoed() const {
-    return _has_vetoed;
+bool UtilityAIBTSequence::get_is_reactive() const {
+    return _is_reactive;
 }
 
-
-void UtilityAIBTSequence::set_score( double score ) {
-    _score = score;
-}
-
-double UtilityAIBTSequence::get_score() const {
-    return _score;
-}
-*/
 
 int UtilityAIBTSequence::tick() {
-    if( _current_child_index < 0 ) {
+    if( _current_child_index < 0 || _is_reactive ) {
         _current_child_index = 0;
     }
 

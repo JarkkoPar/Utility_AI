@@ -72,7 +72,7 @@ int UtilityAIBTAgent::tick() {
             return result;
         }
     }
-    return 0;
+    return -1;
 }
 
 

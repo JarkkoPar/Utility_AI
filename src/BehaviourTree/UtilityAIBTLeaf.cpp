@@ -25,6 +25,7 @@ void UtilityAIBTLeaf::_bind_methods() {
 // Constructor and destructor.
 
 UtilityAIBTLeaf::UtilityAIBTLeaf() {
+    _tick_result = 1;
 }
 
 

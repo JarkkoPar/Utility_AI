@@ -195,3 +195,7 @@ src/BehaviourTree/UtilityAIBTSelector.windows.template_debug.x86_64.obj
 src/BehaviourTree/UtilityAIBTSelector.windows.template_release.x86_64.obj
 src/BehaviourTree/UtilityAIBTSequence.windows.template_debug.x86_64.obj
 src/BehaviourTree/UtilityAIBTSequence.windows.template_release.x86_64.obj
+src/BehaviourTree/UtilityAIBTScoreBasedPicker.windows.template_debug.x86_64.obj
+src/BehaviourTree/UtilityAIBTScoreBasedPicker.windows.template_release.x86_64.obj
+src/BehaviourTree/UtilityAIBTInverter.windows.template_debug.x86_64.obj
+src/BehaviourTree/UtilityAIBTInverter.windows.template_release.x86_64.obj

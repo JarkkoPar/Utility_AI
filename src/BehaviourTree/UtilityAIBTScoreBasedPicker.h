@@ -1,5 +1,5 @@
-#ifndef UtilityAIBTSequence_H_INCLUDED
-#define UtilityAIBTSequence_H_INCLUDED 
+#ifndef UtilityAIBTScoreBasedPicker_H_INCLUDED
+#define UtilityAIBTScoreBasedPicker_H_INCLUDED 
 
 #include "UtilityAIBehaviourTreeNodes.h"
 #include <godot_cpp/classes/node.hpp>
@@ -8,8 +8,8 @@
 
 namespace godot {
 
-class UtilityAIBTSequence : public UtilityAIBehaviourTreeNodes {
-    GDCLASS(UtilityAIBTSequence, UtilityAIBehaviourTreeNodes )
+class UtilityAIBTScoreBasedPicker : public UtilityAIBehaviourTreeNodes {
+    GDCLASS(UtilityAIBTScoreBasedPicker, UtilityAIBehaviourTreeNodes )
 
 private:
     bool _is_reactive;
@@ -19,8 +19,8 @@ protected:
     static void _bind_methods();
 
 public:
-    UtilityAIBTSequence();
-    ~UtilityAIBTSequence();
+    UtilityAIBTScoreBasedPicker();
+    ~UtilityAIBTScoreBasedPicker();
     
     
     // Getters and setters for attributes.
