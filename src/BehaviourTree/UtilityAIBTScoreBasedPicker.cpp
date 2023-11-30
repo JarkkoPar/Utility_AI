@@ -26,7 +26,7 @@ void UtilityAIBTScoreBasedPicker::_bind_methods() {
 // Constructor and destructor.
 
 UtilityAIBTScoreBasedPicker::UtilityAIBTScoreBasedPicker() {
-    _current_child_index = 0;
+    _current_child_index = -1;
 }
 
 
@@ -60,7 +60,7 @@ int UtilityAIBTScoreBasedPicker::tick() {
                 continue;
             }
             // Evaluate the node to get its score.
-            double score = btnode->get_score();
+            double score = btnode->evaluate();
             if( score > current_highest_score ) {
                 _current_child_index = i;
                 current_highest_score = score;
