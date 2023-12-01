@@ -12,6 +12,9 @@ UtilityAINQSSearchSpaces::UtilityAINQSSearchSpaces() {
     _current_criterion_index = 0;
     _total_query_runtime_usec = 0;
     _work_in_progress_num_added_nodes = 0;
+    _total_query_call_count = 0;
+    _total_query_node_visits = 0;
+    _current_query_runtime_usec = 0;
 }
 
 
