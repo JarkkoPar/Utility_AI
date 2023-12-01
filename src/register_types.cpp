@@ -33,6 +33,8 @@
 #include "BehaviourTree/UtilityAIBehaviourTreeNodes.h"
 #include "BehaviourTree/UtilityAIBTAgent.h"
 
+#include "BehaviourTree/UtilityAIBTRandomSequence.h"
+#include "BehaviourTree/UtilityAIBTRandomSelector.h"
 #include "BehaviourTree/UtilityAIBTSequence.h"
 #include "BehaviourTree/UtilityAIBTSelector.h"
 #include "BehaviourTree/UtilityAIBTParallel.h"
@@ -131,6 +133,8 @@ void initialize_utility_ai_module(ModuleInitializationLevel p_level) {
     ClassDB::register_class<UtilityAIBTSequence>();
     ClassDB::register_class<UtilityAIBTSelector>();
     ClassDB::register_class<UtilityAIBTParallel>();
+    ClassDB::register_class<UtilityAIBTRandomSequence>();
+    ClassDB::register_class<UtilityAIBTRandomSelector>();
     ClassDB::register_class<UtilityAIBTScoreBasedPicker>();
 
     ClassDB::register_class<UtilityAIBTFixedResult>();
