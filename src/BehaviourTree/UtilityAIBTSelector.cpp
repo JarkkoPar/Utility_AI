@@ -60,7 +60,7 @@ double UtilityAIBTSelector::get_score() const {
 }
 */
 
-int UtilityAIBTSelector::tick() { 
+int UtilityAIBTSelector::tick(Variant user_data, double delta) { 
     if( _current_child_index < 0 || _is_reactive ) {
         _current_child_index = 0;
     }
@@ -68,7 +68,7 @@ int UtilityAIBTSelector::tick() {
     while( _current_child_index < get_child_count() ) {
         UtilityAIBehaviourTreeNodes* btnode = godot::Object::cast_to<UtilityAIBehaviourTreeNodes>(get_child(_current_child_index));
         if( btnode != nullptr ) {
-            int result = btnode->tick();
+            int result = btnode->tick(user_data, delta);
             if( result == BT_SUCCESS ) {
                 _current_child_index = -1;
                 return BT_SUCCESS;

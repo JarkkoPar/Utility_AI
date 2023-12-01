@@ -45,7 +45,7 @@ public:
     
     virtual double evaluate();
 
-    virtual int tick();
+    virtual int tick(Variant user_data, double delta);
 
     // Godot virtuals.
 

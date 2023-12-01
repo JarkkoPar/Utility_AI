@@ -134,7 +134,7 @@ double UtilityAIBehaviourTreeNodes::evaluate() {
     return _score;
 }
 
-int UtilityAIBehaviourTreeNodes::tick() { 
+int UtilityAIBehaviourTreeNodes::tick(Variant user_data, double delta) { 
     return 0;
 }
 

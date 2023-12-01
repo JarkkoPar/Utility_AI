@@ -21,7 +21,7 @@ void UtilityAIBTAgent::_bind_methods() {
     ADD_PROPERTY(PropertyInfo(Variant::FLOAT, "score", PROPERTY_HINT_NONE ), "set_score","get_score");
     /**/
 
-    ClassDB::bind_method(D_METHOD("tick"), &UtilityAIBTAgent::tick);
+    ClassDB::bind_method(D_METHOD("tick", "user_data", "delta"), &UtilityAIBTAgent::tick);
 }
 
 
@@ -60,7 +60,7 @@ double UtilityAIBTAgent::get_score() const {
 }
 */
 
-int UtilityAIBTAgent::tick() { 
+int UtilityAIBTAgent::tick(Variant user_data, double delta) { 
     for( int i = 0; i < get_child_count(); ++i ) {
         Node* node = get_child(i);
         if( UtilityAISensors* sensor = godot::Object::cast_to<UtilityAISensors>(node) ) {
@@ -68,7 +68,7 @@ int UtilityAIBTAgent::tick() {
             continue;
         }
         if( UtilityAIBehaviourTreeNodes* btnode = godot::Object::cast_to<UtilityAIBehaviourTreeNodes>(node) ) {
-            int result = btnode->tick();
+            int result = btnode->tick(user_data, delta);
             return result;
         }
     }

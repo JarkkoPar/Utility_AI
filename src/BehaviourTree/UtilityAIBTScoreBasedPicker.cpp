@@ -48,7 +48,7 @@ bool UtilityAIBTScoreBasedPicker::get_is_reactive() const {
 }
 
 
-int UtilityAIBTScoreBasedPicker::tick() {
+int UtilityAIBTScoreBasedPicker::tick(Variant user_data, double delta) {
     if( _current_child_index < 0 || _is_reactive ) {
         // Evaluate the scores and pick the child with the highest
         // score to run.
@@ -73,7 +73,7 @@ int UtilityAIBTScoreBasedPicker::tick() {
 
     UtilityAIBehaviourTreeNodes* btnode = godot::Object::cast_to<UtilityAIBehaviourTreeNodes>(get_child(_current_child_index));
     if( btnode != nullptr ) {
-        return btnode->tick();
+        return btnode->tick(user_data, delta);
     }//endif node was of correct type
     return BT_FAILURE; 
 }

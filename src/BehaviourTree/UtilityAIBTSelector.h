@@ -33,7 +33,7 @@ public:
 
     // Handling functions.
 
-    virtual int tick() override;
+    virtual int tick(Variant user_data, double delta) override;
 };
 
 }

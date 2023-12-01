@@ -46,9 +46,9 @@ int  UtilityAIBTLeaf::get_tick_result() const {
 
 // Handling methods.
 
-int UtilityAIBTLeaf::tick() { 
+int UtilityAIBTLeaf::tick(Variant user_data, double delta) { 
     if( has_method("tick")) {
-        call("tick");
+        call("tick", user_data, delta);
     }
     return _tick_result;
 }

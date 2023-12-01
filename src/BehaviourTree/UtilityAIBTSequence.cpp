@@ -50,7 +50,7 @@ bool UtilityAIBTSequence::get_is_reactive() const {
 }
 
 
-int UtilityAIBTSequence::tick() {
+int UtilityAIBTSequence::tick(Variant user_data, double delta) {
     if( _current_child_index < 0 || _is_reactive ) {
         _current_child_index = 0;
     }
@@ -58,7 +58,7 @@ int UtilityAIBTSequence::tick() {
     while( _current_child_index < get_child_count() ) {
         UtilityAIBehaviourTreeNodes* btnode = godot::Object::cast_to<UtilityAIBehaviourTreeNodes>(get_child(_current_child_index));
         if( btnode != nullptr ) {
-            int result = btnode->tick();
+            int result = btnode->tick(user_data, delta);
             if( result == BT_FAILURE ) {
                 _current_child_index = -1;
                 return BT_FAILURE;

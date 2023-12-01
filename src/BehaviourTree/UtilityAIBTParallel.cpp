@@ -50,12 +50,12 @@ bool UtilityAIBTParallel::get_is_reactive() const {
 }
 /**/
 
-int UtilityAIBTParallel::tick() {
+int UtilityAIBTParallel::tick(Variant user_data, double delta) {
     int parallelresult = BT_SUCCESS;
     for( int i = 0; i < get_child_count(); ++i ) {
         UtilityAIBehaviourTreeNodes* btnode = godot::Object::cast_to<UtilityAIBehaviourTreeNodes>(get_child(i));
         if( btnode != nullptr ) {
-            int result = btnode->tick();
+            int result = btnode->tick(user_data, delta);
             if( result == BT_FAILURE ) {
                 parallelresult = BT_FAILURE;
             } else if ( result == BT_RUNNING ) {
@@ -64,27 +64,7 @@ int UtilityAIBTParallel::tick() {
         }//endif node was of correct type
     }
     return parallelresult;
-    /*
-    if( _current_child_index < 0 || _is_reactive ) {
-        _current_child_index = 0;
-    }
-
-    while( _current_child_index < get_child_count() ) {
-        UtilityAIBehaviourTreeNodes* btnode = godot::Object::cast_to<UtilityAIBehaviourTreeNodes>(get_child(_current_child_index));
-        if( btnode != nullptr ) {
-            int result = btnode->tick();
-            if( result == BT_FAILURE ) {
-                _current_child_index = -1;
-                return BT_FAILURE;
-            } else if ( result == BT_RUNNING ) {
-                return BT_RUNNING;
-            }
-        }//endif node was of correct type
-        ++_current_child_index;
-    }//endwhile children to tick
-    _current_child_index = -1;
-    return BT_SUCCESS;
-    /**/
+    
 }
 
 

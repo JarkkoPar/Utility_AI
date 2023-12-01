@@ -33,7 +33,7 @@ public:
 
     // Handling functions.
 
-    int tick();
+    int tick(Variant user_data, double delta);
 };
 
 }

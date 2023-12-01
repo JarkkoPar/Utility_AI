@@ -28,11 +28,11 @@ UtilityAIBTInverter::~UtilityAIBTInverter() {
 
 // Handling methods.
 
-int UtilityAIBTInverter::tick() { 
+int UtilityAIBTInverter::tick(Variant user_data, double delta) { 
     for( int i = 0; i < get_child_count(); ++i ) {
         Node* node = get_child(i);
         if( UtilityAIBehaviourTreeNodes* btnode = godot::Object::cast_to<UtilityAIBehaviourTreeNodes>(node) ) {
-            return -btnode->tick();
+            return -btnode->tick(user_data, delta);
         }
 
     }

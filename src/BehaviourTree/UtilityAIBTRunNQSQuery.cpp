@@ -73,7 +73,7 @@ int  UtilityAIBTRunNQSQuery::get_top_n_to_find() const {
 
 // Handling methods.
 
-int UtilityAIBTRunNQSQuery::tick() { 
+int UtilityAIBTRunNQSQuery::tick(Variant user_data, double delta) { 
     if( _nqs_search_space_node == nullptr ) {
         return BT_FAILURE;
     }
