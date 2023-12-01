@@ -15,6 +15,7 @@ private:
     NodePath _nqs_search_space_node_path;
     UtilityAINQSSearchSpaces* _nqs_search_space_node;
     int _time_budget_usec;
+    int _top_n_to_find;
 protected:
     static void _bind_methods();
 
@@ -30,6 +31,9 @@ public:
 
     void set_time_budget_usec( int time_budget_usec );
     int  get_time_budget_usec() const;
+
+    void set_top_n_to_find( int top_n_to_find );
+    int  get_top_n_to_find() const;
 
 
     // Handling functions.

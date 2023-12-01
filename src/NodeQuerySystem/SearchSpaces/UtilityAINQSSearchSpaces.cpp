@@ -189,8 +189,8 @@ bool UtilityAINQSSearchSpaces::execute_query(uint64_t time_budget_usec) {
 
         _is_query_still_running = true; // Set the query as running.
 
-        _query_results.clear();
-        _query_result_scores.clear();
+        //_query_results.clear();
+        //_query_result_scores.clear();
     }//endif query is not running
     ++_total_query_call_count;
 
@@ -208,6 +208,8 @@ bool UtilityAINQSSearchSpaces::execute_query(uint64_t time_budget_usec) {
     }//endwhile criterions left to process
 
     // Put all the remaining scores to the search results in order.
+    _query_results.clear();
+    _query_result_scores.clear();
     for( int n = 0; n < _num_search_space_nodes; ++n ) {
         Node* node = godot::Object::cast_to<Node>((*_ptr_current_search_space)[n]);
         place_to_query_results_based_on_score(node, (*_ptr_current_scores)[n]);
