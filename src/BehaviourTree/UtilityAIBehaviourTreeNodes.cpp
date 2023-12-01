@@ -100,8 +100,10 @@ double UtilityAIBehaviourTreeNodes::evaluate() {
                 // other considerations will ever change the result, so bail.
                 if( _score == 0.0 ) {
                     if( _invert_score ) {
+                        _score = 1.0;
                         return 1.0;
                     }
+                    _score = 0.0;
                     return 0.0;
                 }
             }

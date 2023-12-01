@@ -29,6 +29,8 @@ private:
     
     double _thinking_delay_in_seconds;
     double _thinking_delay_in_seconds_current_timer;
+
+    uint64_t _total_evaluate_options_usec;
 protected:
     static void _bind_methods();
     void place_into_top_n_behaviour_list(Node* behaviour, float score );
@@ -60,6 +62,9 @@ public:
 
     void set_current_action_node( Node* new_action_node );
     Node* get_current_action_node() const;
+
+    void set_total_evaluate_options_usec( uint64_t total_evaluate_options_usec );
+    uint64_t get_total_evaluate_options_usec() const;
 
     //void set_random_number_generator( RandomNumberGenerator rng );
     //RandomNumberGenerator get_random_number_generator() const;

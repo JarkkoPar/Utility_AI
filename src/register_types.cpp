@@ -39,6 +39,8 @@
 #include "BehaviourTree/UtilityAIBTScoreBasedPicker.h"
 
 #include "BehaviourTree/UtilityAIBTInverter.h"
+#include "BehaviourTree/UtilityAIBTFixedResult.h"
+
 
 #include "BehaviourTree/UtilityAIBTLeaf.h"
 #include "BehaviourTree/UtilityAIBTRunNQSQuery.h"
@@ -131,6 +133,7 @@ void initialize_utility_ai_module(ModuleInitializationLevel p_level) {
     ClassDB::register_class<UtilityAIBTParallel>();
     ClassDB::register_class<UtilityAIBTScoreBasedPicker>();
 
+    ClassDB::register_class<UtilityAIBTFixedResult>();
     ClassDB::register_class<UtilityAIBTInverter>();
     
     ClassDB::register_class<UtilityAIBTLeaf>();

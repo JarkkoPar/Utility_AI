@@ -162,7 +162,7 @@ bool UtilityAINQSSearchSpaces::execute_query(uint64_t time_budget_usec) {
 
     if( !_is_query_still_running ) {
         // Query was not running already, so initialize a new one.
-        _total_query_runtime_usec = 0;
+        _current_query_runtime_usec = 0;
         _total_query_node_visits = 0;
         _total_query_call_count = 0;
 
@@ -223,8 +223,8 @@ bool UtilityAINQSSearchSpaces::execute_query(uint64_t time_budget_usec) {
     _is_query_still_running = false;
 
     // All the criterions are processed and results sorted. Store the total time used for processing.
-    _total_query_runtime_usec += (godot::Time::get_singleton()->get_ticks_usec() - method_start_time_usec); 
-
+    _current_query_runtime_usec += (godot::Time::get_singleton()->get_ticks_usec() - method_start_time_usec); 
+    _total_query_runtime_usec = _current_query_runtime_usec;
 
     return true;
     /**
@@ -307,7 +307,7 @@ bool UtilityAINQSSearchSpaces::apply_criterion_with_time_budget( UtilityAINQSSea
         if( time_budget_usec > 0 ) {
             uint64_t time_used = godot::Time::get_singleton()->get_ticks_usec() - start_time_usec;
             if( time_used >= time_budget_usec ) {
-                _total_query_runtime_usec += time_used;
+                _current_query_runtime_usec += time_used;
                 return false; // Still running
             } // endif timebudget used up
         }//endif timebudget is applied

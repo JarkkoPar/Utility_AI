@@ -4,6 +4,7 @@
 
 #include <godot_cpp/core/class_db.hpp>
 #include <godot_cpp/classes/engine.hpp>
+#include <godot_cpp/classes/time.hpp>
 
 
 using namespace godot;
@@ -11,15 +12,9 @@ using namespace godot;
 // Method binds.
 
 void UtilityAIBTAgent::_bind_methods() {
-    //ClassDB::bind_method(D_METHOD("set_has_vetoed", "has_vetoed"), &UtilityAIBTAgent::set_has_vetoed);
-    //ClassDB::bind_method(D_METHOD("get_has_vetoed"), &UtilityAIBTAgent::get_has_vetoed);
-    //ADD_PROPERTY(PropertyInfo(Variant::BOOL, "has_vetoed", PROPERTY_HINT_NONE), "set_has_vetoed","get_has_vetoed");
-    
-    /**
-    ClassDB::bind_method(D_METHOD("set_score", "score"), &UtilityAIBTAgent::set_score);
-    ClassDB::bind_method(D_METHOD("get_score"), &UtilityAIBTAgent::get_score);
-    ADD_PROPERTY(PropertyInfo(Variant::FLOAT, "score", PROPERTY_HINT_NONE ), "set_score","get_score");
-    /**/
+    ClassDB::bind_method(D_METHOD("set_total_tick_usec", "total_tick_usec"), &UtilityAIBTAgent::set_total_tick_usec);
+    ClassDB::bind_method(D_METHOD("get_total_tick_usec"), &UtilityAIBTAgent::get_total_tick_usec);
+    ADD_PROPERTY(PropertyInfo(Variant::INT, "total_tick_usec", PROPERTY_HINT_NONE), "set_total_tick_usec","get_total_tick_usec");
 
     ClassDB::bind_method(D_METHOD("tick", "user_data", "delta"), &UtilityAIBTAgent::tick);
 }
@@ -28,39 +23,33 @@ void UtilityAIBTAgent::_bind_methods() {
 // Constructor and destructor.
 
 UtilityAIBTAgent::UtilityAIBTAgent() {
-    
+    _total_tick_usec = 0;
 }
 
 
 UtilityAIBTAgent::~UtilityAIBTAgent() {
 }
 
-// Handling functions.
-
-
 
 // Getters and Setters.
 
-/**
-void UtilityAIBTAgent::set_has_vetoed( bool has_vetoed ) {
-    _has_vetoed = has_vetoed;
+
+void UtilityAIBTAgent::set_total_tick_usec( uint64_t total_tick_usec ) {
+    _total_tick_usec = total_tick_usec;
 }
 
-bool UtilityAIBTAgent::get_has_vetoed() const {
-    return _has_vetoed;
+uint64_t  UtilityAIBTAgent::get_total_tick_usec() const {
+    return _total_tick_usec;
 }
 
 
-void UtilityAIBTAgent::set_score( double score ) {
-    _score = score;
-}
 
-double UtilityAIBTAgent::get_score() const {
-    return _score;
-}
-*/
+
+// Handling functions.
+
 
 int UtilityAIBTAgent::tick(Variant user_data, double delta) { 
+    uint64_t method_start_time_usec = godot::Time::get_singleton()->get_ticks_usec();
     for( int i = 0; i < get_child_count(); ++i ) {
         Node* node = get_child(i);
         if( UtilityAISensors* sensor = godot::Object::cast_to<UtilityAISensors>(node) ) {
@@ -69,9 +58,11 @@ int UtilityAIBTAgent::tick(Variant user_data, double delta) {
         }
         if( UtilityAIBehaviourTreeNodes* btnode = godot::Object::cast_to<UtilityAIBehaviourTreeNodes>(node) ) {
             int result = btnode->tick(user_data, delta);
+            _total_tick_usec = godot::Time::get_singleton()->get_ticks_usec() - method_start_time_usec;
             return result;
         }
     }
+    _total_tick_usec = godot::Time::get_singleton()->get_ticks_usec() - method_start_time_usec;
     return -1;
 }
 

@@ -23,6 +23,7 @@ private:
     //double              _query_time_budget_per_frame_sec;
     //uint64_t            _query_time_budget_per_frame_usec;
     uint64_t            _total_query_runtime_usec;
+    uint64_t            _current_query_runtime_usec;
     unsigned int        _total_query_node_visits;
     unsigned int        _total_query_call_count;
     //double              _total_query_runtime_sec;

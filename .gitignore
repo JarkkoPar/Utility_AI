@@ -205,3 +205,7 @@ src/BehaviourTree/UtilityAIBTRunNQSQuery.windows.template_release.x86_64.obj
 src/BehaviourTree/UtilityAIBTRunNQSQuery.windows.template_debug.x86_64.obj
 src/BehaviourTree/UtilityAIBTFixedResult.windows.template_debug.x86_64.obj
 src/BehaviourTree/UtilityAIBTFixedResult.windows.template_release.x86_64.obj
+src/BehaviourTree/UtilityAIBTRandomSelector.windows.template_debug.x86_64.obj
+src/BehaviourTree/UtilityAIBTRandomSelector.windows.template_release.x86_64.obj
+src/BehaviourTree/UtilityAIBTRandomSequence.windows.template_debug.x86_64.obj
+src/BehaviourTree/UtilityAIBTRandomSequence.windows.template_release.x86_64.obj
