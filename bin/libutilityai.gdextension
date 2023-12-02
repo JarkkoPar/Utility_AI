@@ -65,6 +65,6 @@ UtilityAIBTRandomSelector = "res://addons/utility_ai/bin/icons/UtilityAIBTRandom
 UtilityAIBTRepeater = "res://addons/utility_ai/bin/icons/UtilityAIBTRepeater.svg"
 UtilityAIBTInverter = "res://addons/utility_ai/bin/icons/UtilityAIDefault.svg"
 UtilityAIBTFixedResult = "res://addons/utility_ai/bin/icons/UtilityAIDefault.svg"
-UtilityAIBTScoreBasedPicker = "res://addons/utility_ai/bin/icons/UtilityAIDefault.svg"
+UtilityAIBTScoreBasedPicker = "res://addons/utility_ai/bin/icons/UtilityAIBTScoreBasedPicker.svg"
 UtilityAIBTLeaf = "res://addons/utility_ai/bin/icons/UtilityAIDefault.svg"
 UtilityAIBTRunNQSQuery = "res://addons/utility_ai/bin/icons/UtilityAIBTRunNQSQuery.svg"
