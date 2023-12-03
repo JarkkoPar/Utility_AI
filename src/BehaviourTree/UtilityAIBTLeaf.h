@@ -3,7 +3,7 @@
 
 #include "UtilityAIBehaviourTreeNodes.h"
 #include <godot_cpp/classes/node.hpp>
-
+#include <godot_cpp/core/method_ptrcall.hpp>
 
 
 namespace godot {
@@ -12,7 +12,7 @@ class UtilityAIBTLeaf : public UtilityAIBehaviourTreeNodes {
     GDCLASS(UtilityAIBTLeaf, UtilityAIBehaviourTreeNodes)
 
 private:
-    
+    //Callable _tick_method;
     int _tick_result;
     
 protected:
@@ -31,6 +31,11 @@ public:
     // Handling functions.
 
     virtual int tick(Variant user_data, double delta) override;
+
+    // Godot virtuals.
+
+    //void _enter_tree();
+
 };
 
 }

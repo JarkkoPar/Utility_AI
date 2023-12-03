@@ -68,3 +68,4 @@ UtilityAIBTFixedResult = "res://addons/utility_ai/bin/icons/UtilityAIDefault.svg
 UtilityAIBTScoreBasedPicker = "res://addons/utility_ai/bin/icons/UtilityAIBTScoreBasedPicker.svg"
 UtilityAIBTLeaf = "res://addons/utility_ai/bin/icons/UtilityAIDefault.svg"
 UtilityAIBTRunNQSQuery = "res://addons/utility_ai/bin/icons/UtilityAIBTRunNQSQuery.svg"
+UtilityAIBTNodeReference = "res://addons/utility_ai/bin/icons/UtilityAIBTNodeReference.svg"

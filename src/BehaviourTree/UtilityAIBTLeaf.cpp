@@ -32,6 +32,11 @@ UtilityAIBTLeaf::~UtilityAIBTLeaf() {
 
 void UtilityAIBTLeaf::set_tick_result( int tick_result ) {
     _tick_result = tick_result;
+    if( _tick_result > 1 ) {
+        _tick_result = 1;
+    } else if (_tick_result < -1 ) {
+        _tick_result = -1;
+    }
 }
 
 
@@ -43,9 +48,24 @@ int  UtilityAIBTLeaf::get_tick_result() const {
 
 int UtilityAIBTLeaf::tick(Variant user_data, double delta) { 
     if( has_method("tick")) {
-        call("tick", user_data, delta);
+        godot::Variant return_value = call("tick", user_data, delta);
+        if( return_value.get_type() == godot::Variant::Type::INT) {
+            _tick_result = (int)return_value;
+            if( _tick_result > 1 ) {
+                _tick_result = 1;
+            } else if (_tick_result < -1 ) {
+                _tick_result = -1;
+            }
+        }
+        
     }
     return _tick_result;
 }
 
 
+// Godot virtuals.
+/**
+void UtilityAIBTLeaf::_enter_tree() {
+    _tick_method = 
+}
+/**/
