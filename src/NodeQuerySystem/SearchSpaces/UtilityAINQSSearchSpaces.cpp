@@ -14,7 +14,10 @@ UtilityAINQSSearchSpaces::UtilityAINQSSearchSpaces() {
     _work_in_progress_num_added_nodes = 0;
     _total_query_call_count = 0;
     _total_query_node_visits = 0;
+    _current_query_call_count = 0;
+    _current_query_node_visits = 0;
     _current_query_runtime_usec = 0;
+    _average_call_runtime_usec = 0;
 }
 
 
@@ -34,6 +37,10 @@ void UtilityAINQSSearchSpaces::_bind_methods() {
     ClassDB::bind_method(D_METHOD("set_query_result_scores", "query_result_scores"), &UtilityAINQSSearchSpaces::set_query_result_scores);
     ClassDB::bind_method(D_METHOD("get_query_result_scores"), &UtilityAINQSSearchSpaces::get_query_result_scores);
     ADD_PROPERTY(PropertyInfo(Variant::ARRAY, "query_result_scores", PROPERTY_HINT_NONE), "set_query_result_scores","get_query_result_scores");
+
+    ClassDB::bind_method(D_METHOD("set_average_call_runtime_usec", "average_call_runtime_usec"), &UtilityAINQSSearchSpaces::set_average_call_runtime_usec);
+    ClassDB::bind_method(D_METHOD("get_average_call_runtime_usec"), &UtilityAINQSSearchSpaces::get_average_call_runtime_usec);
+    ADD_PROPERTY(PropertyInfo(Variant::INT, "average_call_runtime_usec", PROPERTY_HINT_NONE), "set_average_call_runtime_usec","get_average_call_runtime_usec");
 
     ClassDB::bind_method(D_METHOD("set_total_query_runtime_usec", "total_query_runtime_usec"), &UtilityAINQSSearchSpaces::set_total_query_runtime_usec);
     ClassDB::bind_method(D_METHOD("get_total_query_runtime_usec"), &UtilityAINQSSearchSpaces::get_total_query_runtime_usec);
@@ -116,6 +123,14 @@ int  UtilityAINQSSearchSpaces::get_top_n_to_find() const {
     return _top_n_to_find;
 }
 
+void UtilityAINQSSearchSpaces::set_average_call_runtime_usec( int average_call_runtime_usec ) {
+    _average_call_runtime_usec = average_call_runtime_usec;
+}
+
+int  UtilityAINQSSearchSpaces::get_average_call_runtime_usec() const {
+    return _average_call_runtime_usec;
+}
+
 
 void UtilityAINQSSearchSpaces::set_total_query_runtime_usec( int total_query_runtime_usec ) {
     _total_query_runtime_usec = total_query_runtime_usec;
@@ -166,9 +181,9 @@ bool UtilityAINQSSearchSpaces::execute_query(uint64_t time_budget_usec) {
     if( !_is_query_still_running ) {
         // Query was not running already, so initialize a new one.
         _current_query_runtime_usec = 0;
-        _total_query_node_visits = 0;
-        _total_query_call_count = 0;
-
+        _current_query_node_visits = 0;
+        _current_query_call_count = 0;
+        _average_call_runtime_usec = 0;
         _current_criterion_index = 0;
         _current_node_index = 0;
         _work_in_progress_num_added_nodes = 0;
@@ -192,10 +207,8 @@ bool UtilityAINQSSearchSpaces::execute_query(uint64_t time_budget_usec) {
 
         _is_query_still_running = true; // Set the query as running.
 
-        //_query_results.clear();
-        //_query_result_scores.clear();
     }//endif query is not running
-    ++_total_query_call_count;
+    ++_current_query_call_count;
 
     while( _current_criterion_index < get_child_count() ) {
         UtilityAINQSSearchCriteria* criterion = godot::Object::cast_to<UtilityAINQSSearchCriteria>(get_child(_current_criterion_index));
@@ -224,10 +237,15 @@ bool UtilityAINQSSearchSpaces::execute_query(uint64_t time_budget_usec) {
     _work_in_progress_num_added_nodes = 0;
     _num_search_space_nodes = 0;
     _is_query_still_running = false;
-
+    _total_query_call_count = _current_query_call_count;
+    _total_query_node_visits = _current_query_node_visits;
+    
     // All the criterions are processed and results sorted. Store the total time used for processing.
-    _current_query_runtime_usec += (godot::Time::get_singleton()->get_ticks_usec() - method_start_time_usec); 
+    uint64_t time_used = (godot::Time::get_singleton()->get_ticks_usec() - method_start_time_usec);
+    _average_call_runtime_usec = _average_call_runtime_usec * 0.5 + 0.5 * time_used;
+    _current_query_runtime_usec += time_used; 
     _total_query_runtime_usec = _current_query_runtime_usec;
+
 
     return true;
     /**
@@ -296,7 +314,7 @@ bool UtilityAINQSSearchSpaces::apply_criterion_with_time_budget( UtilityAINQSSea
         if( _current_node_index < (*_ptr_current_scores).size() ) {
             previous_score = (*_ptr_current_scores)[_current_node_index];
         }
-        ++_total_query_node_visits;
+        ++_current_query_node_visits;
         criterion->apply_criterion(node, filter_out, score );
         if( !filter_out ) {
             (*_ptr_current_work_in_progress_search_space)[_work_in_progress_num_added_nodes] = node;
@@ -311,6 +329,7 @@ bool UtilityAINQSSearchSpaces::apply_criterion_with_time_budget( UtilityAINQSSea
             uint64_t time_used = godot::Time::get_singleton()->get_ticks_usec() - start_time_usec;
             if( time_used >= time_budget_usec ) {
                 _current_query_runtime_usec += time_used;
+                _average_call_runtime_usec = _average_call_runtime_usec * 0.5 + 0.5 * time_used;
                 return false; // Still running
             } // endif timebudget used up
         }//endif timebudget is applied

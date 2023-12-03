@@ -24,6 +24,9 @@ private:
     //uint64_t            _query_time_budget_per_frame_usec;
     uint64_t            _total_query_runtime_usec;
     uint64_t            _current_query_runtime_usec;
+    uint64_t            _average_call_runtime_usec;
+    unsigned int        _current_query_node_visits;
+    unsigned int        _current_query_call_count;
     unsigned int        _total_query_node_visits;
     unsigned int        _total_query_call_count;
     //double              _total_query_runtime_sec;
@@ -73,6 +76,9 @@ public:
     
     void set_top_n_to_find( int top_n_to_find );
     int  get_top_n_to_find() const;
+
+    void set_average_call_runtime_usec( int average_call_runtime_usec );
+    int  get_average_call_runtime_usec() const;
 
     void set_total_query_runtime_usec( int total_query_runtime_usec );
     int  get_total_query_runtime_usec() const;

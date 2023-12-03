@@ -49,6 +49,8 @@ uint64_t  UtilityAIBTAgent::get_total_tick_usec() const {
 
 
 int UtilityAIBTAgent::tick(Variant user_data, double delta) { 
+    if( !get_is_active() ) return BT_FAILURE;
+    if( Engine::get_singleton()->is_editor_hint() ) return BT_FAILURE;
     uint64_t method_start_time_usec = godot::Time::get_singleton()->get_ticks_usec();
     for( int i = 0; i < get_child_count(); ++i ) {
         Node* node = get_child(i);
