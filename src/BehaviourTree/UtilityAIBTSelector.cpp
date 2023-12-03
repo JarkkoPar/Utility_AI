@@ -68,16 +68,15 @@ int UtilityAIBTSelector::tick(Variant user_data, double delta) {
     while( _current_child_index < get_child_count() ) {
         UtilityAIBehaviourTreeNodes* btnode = godot::Object::cast_to<UtilityAIBehaviourTreeNodes>(get_child(_current_child_index));
         if( btnode != nullptr ) {
-            if( !btnode->get_is_active() ) {
-                continue;
-            } 
-            int result = btnode->tick(user_data, delta);
-            if( result == BT_SUCCESS ) {
-                _current_child_index = -1;
-                return BT_SUCCESS;
-            } else if ( result == BT_RUNNING ) {
-                return BT_RUNNING;
-            }
+            if( btnode->get_is_active() ) {
+                int result = btnode->tick(user_data, delta);
+                if( result == BT_SUCCESS ) {
+                    _current_child_index = -1;
+                    return BT_SUCCESS;
+                } else if ( result == BT_RUNNING ) {
+                    return BT_RUNNING;
+                }
+            }//endif is active
         }//endif node was of correct type
         ++_current_child_index;
     }//endwhile children to tick
