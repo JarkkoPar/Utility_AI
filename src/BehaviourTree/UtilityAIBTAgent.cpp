@@ -55,6 +55,9 @@ int UtilityAIBTAgent::tick(Variant user_data, double delta) {
     for( int i = 0; i < get_child_count(); ++i ) {
         Node* node = get_child(i);
         if( UtilityAISensors* sensor = godot::Object::cast_to<UtilityAISensors>(node) ) {
+            if( !sensor-> get_is_active() ) {
+                continue;
+            }
             sensor->evaluate_sensor_value();
             continue;
         }
