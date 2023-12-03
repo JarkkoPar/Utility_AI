@@ -55,6 +55,9 @@ int UtilityAIBTParallel::tick(Variant user_data, double delta) {
     for( int i = 0; i < get_child_count(); ++i ) {
         UtilityAIBehaviourTreeNodes* btnode = godot::Object::cast_to<UtilityAIBehaviourTreeNodes>(get_child(i));
         if( btnode != nullptr ) {
+            if( !btnode->get_is_active() ) {
+                continue;
+            } 
             int result = btnode->tick(user_data, delta);
             if( result == BT_FAILURE ) {
                 parallelresult = BT_FAILURE;

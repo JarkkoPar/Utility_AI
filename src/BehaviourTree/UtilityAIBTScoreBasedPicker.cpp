@@ -59,6 +59,9 @@ int UtilityAIBTScoreBasedPicker::tick(Variant user_data, double delta) {
             if( btnode == nullptr ) {
                 continue;
             }
+            if( !btnode->get_is_active() ) {
+                continue;
+            } 
             // Evaluate the node to get its score.
             double score = btnode->evaluate();
             if( score > current_highest_score ) {

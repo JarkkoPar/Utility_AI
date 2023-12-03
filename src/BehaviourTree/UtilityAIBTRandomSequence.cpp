@@ -52,6 +52,9 @@ int UtilityAIBTRandomSequence::tick(Variant user_data, double delta) {
         for( int i = 0; i < get_child_count(); ++i ) {
             UtilityAIBehaviourTreeNodes* btnode = godot::Object::cast_to<UtilityAIBehaviourTreeNodes>(get_child(i));
             if( btnode == nullptr ) continue;
+            if( !btnode->get_is_active() ) {
+                continue;
+            } 
             _child_node_order.push_back(i);
         }
         _child_node_order.shuffle();
@@ -60,6 +63,9 @@ int UtilityAIBTRandomSequence::tick(Variant user_data, double delta) {
     while( _current_child_index < _child_node_order.size() ) {
         UtilityAIBehaviourTreeNodes* btnode = godot::Object::cast_to<UtilityAIBehaviourTreeNodes>(get_child(_child_node_order[_current_child_index]));
         if( btnode != nullptr ) {
+            if( !btnode->get_is_active() ) {
+                continue;
+            } 
             int result = btnode->tick(user_data, delta);
             if( result == BT_FAILURE ) {
                 _current_child_index = -1;

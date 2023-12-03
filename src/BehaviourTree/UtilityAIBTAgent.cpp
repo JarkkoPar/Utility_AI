@@ -59,6 +59,9 @@ int UtilityAIBTAgent::tick(Variant user_data, double delta) {
             continue;
         }
         if( UtilityAIBehaviourTreeNodes* btnode = godot::Object::cast_to<UtilityAIBehaviourTreeNodes>(node) ) {
+            if( !btnode->get_is_active() ) {
+                continue;
+            } 
             int result = btnode->tick(user_data, delta);
             _total_tick_usec = godot::Time::get_singleton()->get_ticks_usec() - method_start_time_usec;
             return result;

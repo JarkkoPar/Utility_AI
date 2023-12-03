@@ -45,6 +45,9 @@ int UtilityAIBTFixedResult::tick(Variant user_data, double delta) {
     for( int i = 0; i < get_child_count(); ++i ) {
         Node* node = get_child(i);
         if( UtilityAIBehaviourTreeNodes* btnode = godot::Object::cast_to<UtilityAIBehaviourTreeNodes>(node) ) {
+            if( !btnode->get_is_active() ) {
+                continue;
+            } 
             btnode->tick(user_data, delta);
             break;
         }
