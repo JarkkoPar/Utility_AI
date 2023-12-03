@@ -224,3 +224,4 @@ src/BehaviourTree/UtilityAIBTSequence.os
 src/SpecialConsiderations/UtilityAICustomPropertyConsideration.os
 src/BehaviourTree/UtilityAIBTNodeReference.windows.template_debug.x86_64.obj
 src/BehaviourTree/UtilityAIBTNodeReference.windows.template_release.x86_64.obj
+src/BehaviourTree/UtilityAIBTNodeReference.os
