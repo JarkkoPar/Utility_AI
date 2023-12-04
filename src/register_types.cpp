@@ -44,6 +44,7 @@
 #include "BehaviourTree/UtilityAIBTFixedResult.h"
 
 #include "BehaviourTree/UtilityAIBTCooldownTicks.h"
+#include "BehaviourTree/UtilityAIBTCooldownMsec.h"
 #include "BehaviourTree/UtilityAIBTCooldownUsec.h"
 #include "BehaviourTree/UtilityAIBTLeaf.h"
 #include "BehaviourTree/UtilityAIBTRunNQSQuery.h"
@@ -146,6 +147,7 @@ void initialize_utility_ai_module(ModuleInitializationLevel p_level) {
     ClassDB::register_class<UtilityAIBTInverter>();
     
     ClassDB::register_class<UtilityAIBTCooldownTicks>();
+    ClassDB::register_class<UtilityAIBTCooldownMsec>();
     ClassDB::register_class<UtilityAIBTCooldownUsec>();
     ClassDB::register_class<UtilityAIBTLeaf>();
     ClassDB::register_class<UtilityAIBTRunNQSQuery>();

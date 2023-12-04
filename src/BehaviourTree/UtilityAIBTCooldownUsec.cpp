@@ -73,7 +73,7 @@ int  UtilityAIBTCooldownUsec::get_cooldown_return_value() const {
 
 int UtilityAIBTCooldownUsec::tick(Variant user_data, double delta) {
     uint64_t wait_time = godot::Time::get_singleton()->get_ticks_usec() - _cooldown_start_timestamp;
-    if( wait_time >= _cooldown_usec ) {
+    if( wait_time < _cooldown_usec ) {
         return _cooldown_return_value;
     }
     _cooldown_start_timestamp = godot::Time::get_singleton()->get_ticks_usec();
