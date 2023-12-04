@@ -47,6 +47,7 @@
 #include "BehaviourTree/UtilityAIBTLeaf.h"
 #include "BehaviourTree/UtilityAIBTRunNQSQuery.h"
 #include "BehaviourTree/UtilityAIBTNodeReference.h"
+#include "BehaviourTree/UtilityAIBTPassThrough.h"
 
 // Node Query System.
 
@@ -144,6 +145,8 @@ void initialize_utility_ai_module(ModuleInitializationLevel p_level) {
     ClassDB::register_class<UtilityAIBTLeaf>();
     ClassDB::register_class<UtilityAIBTRunNQSQuery>();
     ClassDB::register_class<UtilityAIBTNodeReference>();
+    ClassDB::register_class<UtilityAIBTPassThrough>();
+    
 
     // Node Query System.
     ClassDB::register_class<UtilityAINQSSearchSpaces>(true);
