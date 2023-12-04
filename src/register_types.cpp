@@ -43,11 +43,14 @@
 #include "BehaviourTree/UtilityAIBTInverter.h"
 #include "BehaviourTree/UtilityAIBTFixedResult.h"
 
-
+#include "BehaviourTree/UtilityAIBTCooldownTicks.h"
+#include "BehaviourTree/UtilityAIBTCooldownUsec.h"
 #include "BehaviourTree/UtilityAIBTLeaf.h"
 #include "BehaviourTree/UtilityAIBTRunNQSQuery.h"
 #include "BehaviourTree/UtilityAIBTNodeReference.h"
+#include "BehaviourTree/UtilityAIBTPassBy.h"
 #include "BehaviourTree/UtilityAIBTPassThrough.h"
+
 
 // Node Query System.
 
@@ -142,9 +145,12 @@ void initialize_utility_ai_module(ModuleInitializationLevel p_level) {
     ClassDB::register_class<UtilityAIBTFixedResult>();
     ClassDB::register_class<UtilityAIBTInverter>();
     
+    ClassDB::register_class<UtilityAIBTCooldownTicks>();
+    ClassDB::register_class<UtilityAIBTCooldownUsec>();
     ClassDB::register_class<UtilityAIBTLeaf>();
     ClassDB::register_class<UtilityAIBTRunNQSQuery>();
     ClassDB::register_class<UtilityAIBTNodeReference>();
+    ClassDB::register_class<UtilityAIBTPassBy>();
     ClassDB::register_class<UtilityAIBTPassThrough>();
     
 
