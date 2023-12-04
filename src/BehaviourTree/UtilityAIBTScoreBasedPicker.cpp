@@ -10,9 +10,9 @@ using namespace godot;
 
 void UtilityAIBTScoreBasedPicker::_bind_methods() {
     
-    //ClassDB::bind_method(D_METHOD("set_is_reactive", "is_reactive"), &UtilityAIBTScoreBasedPicker::set_is_reactive);
-    //ClassDB::bind_method(D_METHOD("get_is_reactive"), &UtilityAIBTScoreBasedPicker::get_is_reactive);
-    //ADD_PROPERTY(PropertyInfo(Variant::BOOL, "is_reactive", PROPERTY_HINT_NONE), "set_is_reactive","get_is_reactive");
+    ClassDB::bind_method(D_METHOD("set_is_reactive", "is_reactive"), &UtilityAIBTScoreBasedPicker::set_is_reactive);
+    ClassDB::bind_method(D_METHOD("get_is_reactive"), &UtilityAIBTScoreBasedPicker::get_is_reactive);
+    ADD_PROPERTY(PropertyInfo(Variant::BOOL, "is_reactive", PROPERTY_HINT_NONE), "set_is_reactive","get_is_reactive");
     
     /*
     ClassDB::bind_method(D_METHOD("set_score", "score"), &UtilityAIBTScoreBasedPicker::set_score);
@@ -27,6 +27,7 @@ void UtilityAIBTScoreBasedPicker::_bind_methods() {
 
 UtilityAIBTScoreBasedPicker::UtilityAIBTScoreBasedPicker() {
     _current_child_index = -1;
+    _is_reactive = true;
 }
 
 
@@ -38,7 +39,7 @@ UtilityAIBTScoreBasedPicker::~UtilityAIBTScoreBasedPicker() {
 
 
 // Getters and Setters.
-/**
+/**/
 void UtilityAIBTScoreBasedPicker::set_is_reactive( bool is_reactive ) {
     _is_reactive = is_reactive;
 }
@@ -49,7 +50,7 @@ bool UtilityAIBTScoreBasedPicker::get_is_reactive() const {
 /**/
 
 int UtilityAIBTScoreBasedPicker::tick(Variant user_data, double delta) {
-    if( _current_child_index < 0 ) { //|| _is_reactive ) {
+    if( _current_child_index < 0 || _is_reactive ) {
         // Evaluate the scores and pick the child with the highest
         // score to run.
         _current_child_index = -1;
