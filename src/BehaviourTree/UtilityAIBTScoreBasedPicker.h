@@ -24,8 +24,8 @@ public:
     
     
     // Getters and setters for attributes.
-    void set_is_reactive( bool is_reactive );
-    bool get_is_reactive() const;
+    //void set_is_reactive( bool is_reactive );
+    //bool get_is_reactive() const;
 
     // Handling functions.
 

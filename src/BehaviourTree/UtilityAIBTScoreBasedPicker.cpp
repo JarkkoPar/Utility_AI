@@ -10,9 +10,9 @@ using namespace godot;
 
 void UtilityAIBTScoreBasedPicker::_bind_methods() {
     
-    ClassDB::bind_method(D_METHOD("set_is_reactive", "is_reactive"), &UtilityAIBTScoreBasedPicker::set_is_reactive);
-    ClassDB::bind_method(D_METHOD("get_is_reactive"), &UtilityAIBTScoreBasedPicker::get_is_reactive);
-    ADD_PROPERTY(PropertyInfo(Variant::BOOL, "is_reactive", PROPERTY_HINT_NONE), "set_is_reactive","get_is_reactive");
+    //ClassDB::bind_method(D_METHOD("set_is_reactive", "is_reactive"), &UtilityAIBTScoreBasedPicker::set_is_reactive);
+    //ClassDB::bind_method(D_METHOD("get_is_reactive"), &UtilityAIBTScoreBasedPicker::get_is_reactive);
+    //ADD_PROPERTY(PropertyInfo(Variant::BOOL, "is_reactive", PROPERTY_HINT_NONE), "set_is_reactive","get_is_reactive");
     
     /*
     ClassDB::bind_method(D_METHOD("set_score", "score"), &UtilityAIBTScoreBasedPicker::set_score);
@@ -38,7 +38,7 @@ UtilityAIBTScoreBasedPicker::~UtilityAIBTScoreBasedPicker() {
 
 
 // Getters and Setters.
-
+/**
 void UtilityAIBTScoreBasedPicker::set_is_reactive( bool is_reactive ) {
     _is_reactive = is_reactive;
 }
@@ -46,10 +46,10 @@ void UtilityAIBTScoreBasedPicker::set_is_reactive( bool is_reactive ) {
 bool UtilityAIBTScoreBasedPicker::get_is_reactive() const {
     return _is_reactive;
 }
-
+/**/
 
 int UtilityAIBTScoreBasedPicker::tick(Variant user_data, double delta) {
-    if( _current_child_index < 0 || _is_reactive ) {
+    if( _current_child_index < 0 ) { //|| _is_reactive ) {
         // Evaluate the scores and pick the child with the highest
         // score to run.
         _current_child_index = -1;
@@ -76,7 +76,11 @@ int UtilityAIBTScoreBasedPicker::tick(Variant user_data, double delta) {
 
     UtilityAIBehaviourTreeNodes* btnode = godot::Object::cast_to<UtilityAIBehaviourTreeNodes>(get_child(_current_child_index));
     if( btnode != nullptr ) {
-        return btnode->tick(user_data, delta);
+        int return_value = btnode->tick(user_data, delta);
+        if( return_value == BT_FAILURE || return_value == BT_SUCCESS ) {
+            _current_child_index = -1;
+        }
+        return return_value;
     }//endif node was of correct type
     return BT_FAILURE; 
 }
