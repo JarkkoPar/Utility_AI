@@ -57,6 +57,7 @@ UtilityAIDotProductToPositionVector3SearchCriterion = "res://addons/utility_ai/b
 UtilityAIDotProductToPositionVector2SearchCriterion = "res://addons/utility_ai/bin/icons/UtilityAISearchCriteria.svg"
 UtilityAIBehaviourTreeNodes = "res://addons/utility_ai/bin/icons/UtilityAIBehaviourTreeNodes.svg"
 UtilityAIBTAgent = "res://addons/utility_ai/bin/icons/UtilityAIBTAgent.svg"
+UtilityAIBTRoot = "res://addons/utility_ai/bin/icons/UtilityAIBehaviourTreeNodes.svg"
 UtilityAIBTSequence = "res://addons/utility_ai/bin/icons/UtilityAIBTSequence.svg"
 UtilityAIBTSelector = "res://addons/utility_ai/bin/icons/UtilityAIBTSelector.svg"
 UtilityAIBTParallel = "res://addons/utility_ai/bin/icons/UtilityAIBTParallel.svg"

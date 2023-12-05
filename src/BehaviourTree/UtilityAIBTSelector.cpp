@@ -61,17 +61,19 @@ double UtilityAIBTSelector::get_score() const {
 */
 
 int UtilityAIBTSelector::tick(Variant user_data, double delta) { 
-    if( _current_child_index < 0 || _is_reactive ) {
+    if( get_internal_status() == BT_INTERNAL_STATUS_UNTICKED || _is_reactive ) {
         _current_child_index = 0;
     }
-
+    set_internal_status(BT_INTERNAL_STATUS_TICKED);
     while( _current_child_index < get_child_count() ) {
         UtilityAIBehaviourTreeNodes* btnode = godot::Object::cast_to<UtilityAIBehaviourTreeNodes>(get_child(_current_child_index));
         if( btnode != nullptr ) {
             if( btnode->get_is_active() ) {
                 int result = btnode->tick(user_data, delta);
-                if( result == BT_SUCCESS ) {
-                    _current_child_index = -1;
+                set_tick_result(result);
+                if( result == BT_SUCCESS && _current_child_index == get_child_count() - 1 ) {
+                    //_current_child_index = -1;
+                    set_internal_status(BT_INTERNAL_STATUS_COMPLETED);
                     return BT_SUCCESS;
                 } else if ( result == BT_RUNNING ) {
                     return BT_RUNNING;
@@ -80,7 +82,8 @@ int UtilityAIBTSelector::tick(Variant user_data, double delta) {
         }//endif node was of correct type
         ++_current_child_index;
     }//endwhile children to tick
-    _current_child_index = -1;
+    //_current_child_index = -1;
+    set_internal_status(BT_INTERNAL_STATUS_COMPLETED);
     return BT_FAILURE;
 }
 

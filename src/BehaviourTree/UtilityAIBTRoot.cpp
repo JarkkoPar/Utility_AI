@@ -1,4 +1,4 @@
-#include "UtilityAIBTAgent.h"
+#include "UtilityAIBTRoot.h"
 #include "UtilityAIBehaviourTreeNodes.h"
 #include "../UtilityAISensors.h"
 
@@ -11,34 +11,34 @@ using namespace godot;
 
 // Method binds.
 
-void UtilityAIBTAgent::_bind_methods() {
-    ClassDB::bind_method(D_METHOD("set_total_tick_usec", "total_tick_usec"), &UtilityAIBTAgent::set_total_tick_usec);
-    ClassDB::bind_method(D_METHOD("get_total_tick_usec"), &UtilityAIBTAgent::get_total_tick_usec);
+void UtilityAIBTRoot::_bind_methods() {
+    ClassDB::bind_method(D_METHOD("set_total_tick_usec", "total_tick_usec"), &UtilityAIBTRoot::set_total_tick_usec);
+    ClassDB::bind_method(D_METHOD("get_total_tick_usec"), &UtilityAIBTRoot::get_total_tick_usec);
     ADD_PROPERTY(PropertyInfo(Variant::INT, "total_tick_usec", PROPERTY_HINT_NONE), "set_total_tick_usec","get_total_tick_usec");
 
-    ClassDB::bind_method(D_METHOD("tick", "user_data", "delta"), &UtilityAIBTAgent::tick);
+    ClassDB::bind_method(D_METHOD("tick", "user_data", "delta"), &UtilityAIBTRoot::tick);
 }
 
 
 // Constructor and destructor.
 
-UtilityAIBTAgent::UtilityAIBTAgent() {
+UtilityAIBTRoot::UtilityAIBTRoot() {
     _total_tick_usec = 0;
 }
 
 
-UtilityAIBTAgent::~UtilityAIBTAgent() {
+UtilityAIBTRoot::~UtilityAIBTRoot() {
 }
 
 
 // Getters and Setters.
 
 
-void UtilityAIBTAgent::set_total_tick_usec( uint64_t total_tick_usec ) {
+void UtilityAIBTRoot::set_total_tick_usec( uint64_t total_tick_usec ) {
     _total_tick_usec = total_tick_usec;
 }
 
-uint64_t  UtilityAIBTAgent::get_total_tick_usec() const {
+uint64_t  UtilityAIBTRoot::get_total_tick_usec() const {
     return _total_tick_usec;
 }
 
@@ -48,9 +48,11 @@ uint64_t  UtilityAIBTAgent::get_total_tick_usec() const {
 // Handling functions.
 
 
-int UtilityAIBTAgent::tick(Variant user_data, double delta) { 
+int UtilityAIBTRoot::tick(Variant user_data, double delta) { 
     if( !get_is_active() ) return BT_FAILURE;
     if( Engine::get_singleton()->is_editor_hint() ) return BT_FAILURE;
+    if( get_internal_status() == BT_INTERNAL_STATUS_COMPLETED ) return get_tick_result(); 
+    set_internal_status(BT_INTERNAL_STATUS_TICKED);
     uint64_t method_start_time_usec = godot::Time::get_singleton()->get_ticks_usec();
     for( int i = 0; i < get_child_count(); ++i ) {
         Node* node = get_child(i);
@@ -66,12 +68,17 @@ int UtilityAIBTAgent::tick(Variant user_data, double delta) {
                 continue;
             } 
             int result = btnode->tick(user_data, delta);
+            set_tick_result(result);
+            if( btnode->get_internal_status() == BT_INTERNAL_STATUS_COMPLETED ) {
+                set_internal_status(BT_INTERNAL_STATUS_COMPLETED);
+            }
             _total_tick_usec = godot::Time::get_singleton()->get_ticks_usec() - method_start_time_usec;
             return result;
         }
     }
+    set_internal_status(BT_INTERNAL_STATUS_COMPLETED);
     _total_tick_usec = godot::Time::get_singleton()->get_ticks_usec() - method_start_time_usec;
-    return -1;
+    return BT_FAILURE; // We shouldn't get here. If we do, there were no child nodes.
 }
 
 

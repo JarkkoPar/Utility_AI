@@ -19,6 +19,7 @@ void UtilityAIBTParallel::_bind_methods() {
     ClassDB::bind_method(D_METHOD("get_score"), &UtilityAIBTParallel::get_score);
     ADD_PROPERTY(PropertyInfo(Variant::FLOAT, "score", PROPERTY_HINT_NONE ), "set_score","get_score");
     /**/
+    //ClassDB::bind_method(D_METHOD("_tick", "user_data", "delta"), &UtilityAIBTParallel::tick);
 
 }
 
@@ -51,6 +52,7 @@ bool UtilityAIBTParallel::get_is_reactive() const {
 /**/
 
 int UtilityAIBTParallel::tick(Variant user_data, double delta) {
+    set_internal_status(BT_INTERNAL_STATUS_TICKED);
     int parallelresult = BT_SUCCESS;
     for( int i = 0; i < get_child_count(); ++i ) {
         UtilityAIBehaviourTreeNodes* btnode = godot::Object::cast_to<UtilityAIBehaviourTreeNodes>(get_child(i));
@@ -66,8 +68,11 @@ int UtilityAIBTParallel::tick(Variant user_data, double delta) {
             }
         }//endif node was of correct type
     }
+    if( parallelresult != 0 ) {
+        set_internal_status(BT_INTERNAL_STATUS_COMPLETED);
+    }
+    set_tick_result(parallelresult);
     return parallelresult;
-    
 }
 
 

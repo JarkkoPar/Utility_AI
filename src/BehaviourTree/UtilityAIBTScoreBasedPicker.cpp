@@ -50,7 +50,7 @@ bool UtilityAIBTScoreBasedPicker::get_is_reactive() const {
 /**/
 
 int UtilityAIBTScoreBasedPicker::tick(Variant user_data, double delta) {
-    if( _current_child_index < 0 || _is_reactive ) {
+    if( get_internal_status() == BT_INTERNAL_STATUS_UNTICKED || _is_reactive ) {
         // Evaluate the scores and pick the child with the highest
         // score to run.
         _current_child_index = -1;
@@ -71,18 +71,24 @@ int UtilityAIBTScoreBasedPicker::tick(Variant user_data, double delta) {
             }
         }//endfor children
         if( _current_child_index < 0 ) {
+            set_internal_status(BT_INTERNAL_STATUS_COMPLETED);
+            set_tick_result(BT_FAILURE);
             return BT_FAILURE; // No valid child found.
         }
     }
-
+    set_internal_status(BT_INTERNAL_STATUS_TICKED);
     UtilityAIBehaviourTreeNodes* btnode = godot::Object::cast_to<UtilityAIBehaviourTreeNodes>(get_child(_current_child_index));
     if( btnode != nullptr ) {
         int return_value = btnode->tick(user_data, delta);
         if( return_value == BT_FAILURE || return_value == BT_SUCCESS ) {
             _current_child_index = -1;
         }
+        set_internal_status(BT_INTERNAL_STATUS_COMPLETED);
+        set_tick_result(return_value);
         return return_value;
     }//endif node was of correct type
+    set_internal_status(BT_INTERNAL_STATUS_COMPLETED);
+    set_tick_result(BT_FAILURE);
     return BT_FAILURE; 
 }
 

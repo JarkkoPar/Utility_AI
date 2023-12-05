@@ -6,4 +6,9 @@
 #define BT_FAILURE -1
 #define BT_SKIP -2
 
+
+#define BT_INTERNAL_STATUS_UNTICKED     0
+#define BT_INTERNAL_STATUS_TICKED       1
+#define BT_INTERNAL_STATUS_COMPLETED    2
+
 #endif

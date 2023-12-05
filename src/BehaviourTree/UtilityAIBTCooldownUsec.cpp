@@ -22,6 +22,8 @@ void UtilityAIBTCooldownUsec::_bind_methods() {
     ClassDB::bind_method(D_METHOD("get_cooldown_return_value"), &UtilityAIBTCooldownUsec::get_cooldown_return_value);
     ADD_PROPERTY(PropertyInfo(Variant::INT, "cooldown_return_value", PROPERTY_HINT_ENUM, "Running:0,Success:1,Failure:-1" ), "set_cooldown_return_value","get_cooldown_return_value");
 
+    //ClassDB::bind_method(D_METHOD("_tick", "user_data", "delta"), &UtilityAIBTCooldownUsec::tick);
+
 }
 
 
@@ -72,6 +74,8 @@ int  UtilityAIBTCooldownUsec::get_cooldown_return_value() const {
 // Handling methods.
 
 int UtilityAIBTCooldownUsec::tick(Variant user_data, double delta) {
+    set_internal_status(BT_INTERNAL_STATUS_TICKED);
+            
     uint64_t wait_time = godot::Time::get_singleton()->get_ticks_usec() - _cooldown_start_timestamp;
     if( wait_time < _cooldown_usec ) {
         return _cooldown_return_value;
@@ -83,10 +87,15 @@ int UtilityAIBTCooldownUsec::tick(Variant user_data, double delta) {
             if( !btnode->get_is_active() ) {
                 continue;
             } 
-            return btnode->tick(user_data, delta);
+            int result = btnode->tick(user_data, delta);
+            set_internal_status(BT_INTERNAL_STATUS_COMPLETED);
+            set_tick_result(result);
+            return result;
         }
 
     }
+    set_internal_status(BT_INTERNAL_STATUS_COMPLETED);
+    set_tick_result(BT_FAILURE);
     return BT_FAILURE;
 }
 

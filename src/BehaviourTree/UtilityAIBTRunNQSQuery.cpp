@@ -75,13 +75,19 @@ int  UtilityAIBTRunNQSQuery::get_top_n_to_find() const {
 
 int UtilityAIBTRunNQSQuery::tick(Variant user_data, double delta) { 
     if( _nqs_search_space_node == nullptr ) {
+        set_internal_status(BT_INTERNAL_STATUS_COMPLETED);
+        set_tick_result(BT_FAILURE);
         return BT_FAILURE;
     }
+    set_internal_status(BT_INTERNAL_STATUS_TICKED);
     _nqs_search_space_node->set_top_n_to_find(_top_n_to_find);
     bool is_completed = _nqs_search_space_node->execute_query(_time_budget_usec);
     if( !is_completed ) {
+        set_tick_result(BT_RUNNING);
         return BT_RUNNING;
     }
+    set_internal_status(BT_INTERNAL_STATUS_COMPLETED);
+    set_tick_result(BT_SUCCESS);
     return BT_SUCCESS;
 }
 

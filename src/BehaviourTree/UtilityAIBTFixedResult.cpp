@@ -14,6 +14,8 @@ void UtilityAIBTFixedResult::_bind_methods() {
     ClassDB::bind_method(D_METHOD("get_fixed_result"), &UtilityAIBTFixedResult::get_fixed_result);
     ADD_PROPERTY(PropertyInfo(Variant::INT, "fixed_result", PROPERTY_HINT_ENUM, "Running:0,Success:1,Failure:-1" ), "set_fixed_result","get_fixed_result");
 
+    //ClassDB::bind_method(D_METHOD("_tick", "user_data", "delta"), &UtilityAIBTFixedResult::tick);
+
 }
 
 
@@ -41,7 +43,9 @@ int  UtilityAIBTFixedResult::get_fixed_result() const {
 
 // Handling methods.
 
-int UtilityAIBTFixedResult::tick(Variant user_data, double delta) { 
+int UtilityAIBTFixedResult::tick(Variant user_data, double delta) {
+    set_internal_status(BT_INTERNAL_STATUS_TICKED);
+    set_tick_result(_fixed_result);
     for( int i = 0; i < get_child_count(); ++i ) {
         Node* node = get_child(i);
         if( UtilityAIBehaviourTreeNodes* btnode = godot::Object::cast_to<UtilityAIBehaviourTreeNodes>(node) ) {
@@ -53,6 +57,7 @@ int UtilityAIBTFixedResult::tick(Variant user_data, double delta) {
         }
 
     }
+    set_internal_status(BT_INTERNAL_STATUS_COMPLETED);
     return _fixed_result;
 }
 

@@ -22,6 +22,8 @@ void UtilityAIBTCooldownTicks::_bind_methods() {
     ClassDB::bind_method(D_METHOD("get_cooldown_return_value"), &UtilityAIBTCooldownTicks::get_cooldown_return_value);
     ADD_PROPERTY(PropertyInfo(Variant::INT, "cooldown_return_value", PROPERTY_HINT_ENUM, "Running:0,Success:1,Failure:-1" ), "set_cooldown_return_value","get_cooldown_return_value");
 
+    //ClassDB::bind_method(D_METHOD("_tick", "user_data", "delta"), &UtilityAIBTCooldownTicks::tick);
+
 }
 
 
@@ -72,6 +74,7 @@ int  UtilityAIBTCooldownTicks::get_cooldown_return_value() const {
 // Handling methods.
 
 int UtilityAIBTCooldownTicks::tick(Variant user_data, double delta) { 
+    set_internal_status(BT_INTERNAL_STATUS_TICKED);
     if( _current_cooldown_ticks > 0 ) {
         --_current_cooldown_ticks;
         return _cooldown_return_value;
@@ -83,10 +86,15 @@ int UtilityAIBTCooldownTicks::tick(Variant user_data, double delta) {
             if( !btnode->get_is_active() ) {
                 continue;
             } 
-            return btnode->tick(user_data, delta);
+            int result = btnode->tick(user_data, delta);
+            set_internal_status(BT_INTERNAL_STATUS_COMPLETED);
+            set_tick_result(result);
+            return result;
         }
 
     }
+    set_internal_status(BT_INTERNAL_STATUS_COMPLETED);
+    set_tick_result(BT_FAILURE);
     return BT_FAILURE;
 }
 

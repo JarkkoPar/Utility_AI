@@ -31,13 +31,16 @@
 
 // Behaviour tree.
 #include "BehaviourTree/UtilityAIBehaviourTreeNodes.h"
-#include "BehaviourTree/UtilityAIBTAgent.h"
+#include "BehaviourTree/UtilityAIBTRoot.h"
 
 #include "BehaviourTree/UtilityAIBTRandomSequence.h"
 #include "BehaviourTree/UtilityAIBTRandomSelector.h"
 #include "BehaviourTree/UtilityAIBTSequence.h"
 #include "BehaviourTree/UtilityAIBTSelector.h"
 #include "BehaviourTree/UtilityAIBTParallel.h"
+#include "BehaviourTree/UtilityAIBTRepeater.h"
+#include "BehaviourTree/UtilityAIBTRepeatUntil.h"
+#include "BehaviourTree/UtilityAIBTLimiter.h"
 #include "BehaviourTree/UtilityAIBTScoreBasedPicker.h"
 
 #include "BehaviourTree/UtilityAIBTInverter.h"
@@ -134,11 +137,14 @@ void initialize_utility_ai_module(ModuleInitializationLevel p_level) {
 
     // Behaviour tree.
     ClassDB::register_class<UtilityAIBehaviourTreeNodes>(true);
-    ClassDB::register_class<UtilityAIBTAgent>();
+    ClassDB::register_class<UtilityAIBTRoot>();
 
     ClassDB::register_class<UtilityAIBTSequence>();
     ClassDB::register_class<UtilityAIBTSelector>();
     ClassDB::register_class<UtilityAIBTParallel>();
+    ClassDB::register_class<UtilityAIBTRepeater>();
+    ClassDB::register_class<UtilityAIBTRepeatUntil>();
+    ClassDB::register_class<UtilityAIBTLimiter>();
     ClassDB::register_class<UtilityAIBTRandomSequence>();
     ClassDB::register_class<UtilityAIBTRandomSelector>();
     ClassDB::register_class<UtilityAIBTScoreBasedPicker>();

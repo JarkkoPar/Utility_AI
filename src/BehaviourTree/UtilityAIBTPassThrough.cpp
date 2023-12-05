@@ -14,6 +14,8 @@ void UtilityAIBTPassThrough::_bind_methods() {
     ClassDB::bind_method(D_METHOD("get_tick_result"), &UtilityAIBTPassThrough::get_tick_result);
     ADD_PROPERTY(PropertyInfo(Variant::INT, "tick_result", PROPERTY_HINT_ENUM, "Running:0,Success:1,Failure:-1" ), "set_tick_result","get_tick_result");
 
+    //ClassDB::bind_method(D_METHOD("_tick", "user_data", "delta"), &UtilityAIBTPassThrough::tick);
+
 }
 
 
@@ -50,6 +52,7 @@ int UtilityAIBTPassThrough::tick(Variant user_data, double delta) {
     // The passthrough node just calls its tick and then ticks the first
     // behaviour tree node child and returns the result of the child.
     // Otherwise it returns what ever is set as the tick result property.
+    set_internal_status(BT_INTERNAL_STATUS_TICKED);
     if( has_method("tick")) {
         godot::Variant return_value = call("tick", user_data, delta);
         if( return_value.get_type() == godot::Variant::Type::INT) {
@@ -68,10 +71,15 @@ int UtilityAIBTPassThrough::tick(Variant user_data, double delta) {
             if( !btnode->get_is_active() ) {
                 continue;
             } 
-            return btnode->tick(user_data, delta);
+            int result = btnode->tick(user_data, delta);
+            if( result != BT_RUNNING ) {
+                set_internal_status(BT_INTERNAL_STATUS_COMPLETED);
+            }
+            return result;
         }
 
     }
+    set_internal_status(BT_INTERNAL_STATUS_COMPLETED);
     return _tick_result;
 }
 

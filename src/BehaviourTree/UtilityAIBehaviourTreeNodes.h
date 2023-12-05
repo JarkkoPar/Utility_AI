@@ -16,6 +16,8 @@ private:
     double _score;
     int    _evaluation_method;
     bool   _invert_score;
+    int    _tick_result;
+    int    _internal_status;
 protected:
     static void _bind_methods();
 public:
@@ -41,11 +43,21 @@ public:
     void set_score( double score );
     double get_score() const;
 
+    void set_tick_result( int tick_result );
+    int  get_tick_result() const;
+
+    void set_internal_status( int internal_status );
+    int  get_internal_status() const;
+
     // Handling functions.
     
     virtual double evaluate();
 
-    virtual int tick(Variant user_data, double delta);
+    virtual int tick( Variant user_data, double delta );
+
+    virtual void reset();
+
+    inline virtual bool has_completed() { return (_internal_status == BT_INTERNAL_STATUS_COMPLETED); };
 
     // Godot virtuals.
 

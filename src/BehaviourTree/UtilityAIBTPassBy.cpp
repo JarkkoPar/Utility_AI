@@ -14,6 +14,8 @@ void UtilityAIBTPassBy::_bind_methods() {
     //ClassDB::bind_method(D_METHOD("get_tick_result"), &UtilityAIBTPassBy::get_tick_result);
     //ADD_PROPERTY(PropertyInfo(Variant::INT, "tick_result", PROPERTY_HINT_ENUM, "Running:0,Success:1,Failure:-1" ), "set_tick_result","get_tick_result");
 
+    //ClassDB::bind_method(D_METHOD("_tick", "user_data", "delta"), &UtilityAIBTPassBy::tick);
+
 }
 
 
@@ -51,9 +53,11 @@ int UtilityAIBTPassBy::tick(Variant user_data, double delta) {
     // The passBy node just calls its tick and then ticks the first
     // behaviour tree node child and returns the result of the child.
     // Otherwise it returns what ever is set as the tick result property.
+    set_internal_status(BT_INTERNAL_STATUS_TICKED);
     if( has_method("tick")) {
         call("tick", user_data, delta);
     }
+    set_internal_status(BT_INTERNAL_STATUS_COMPLETED);
     return BT_SKIP;
 }
 

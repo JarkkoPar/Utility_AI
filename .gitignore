@@ -235,3 +235,11 @@ src/BehaviourTree/UtilityAIBTCooldownUsec.windows.template_debug.x86_64.obj
 src/BehaviourTree/UtilityAIBTCooldownUsec.windows.template_release.x86_64.obj
 src/BehaviourTree/UtilityAIBTCooldownMsec.windows.template_debug.x86_64.obj
 src/BehaviourTree/UtilityAIBTCooldownMsec.windows.template_release.x86_64.obj
+src/BehaviourTree/UtilityAIBTRoot.windows.template_debug.x86_64.obj
+src/BehaviourTree/UtilityAIBTRoot.windows.template_release.x86_64.obj
+src/BehaviourTree/UtilityAIBTLimiter.windows.template_debug.x86_64.obj
+src/BehaviourTree/UtilityAIBTLimiter.windows.template_release.x86_64.obj
+src/BehaviourTree/UtilityAIBTRepeater.windows.template_debug.x86_64.obj
+src/BehaviourTree/UtilityAIBTRepeater.windows.template_release.x86_64.obj
+src/BehaviourTree/UtilityAIBTRepeatUntil.windows.template_debug.x86_64.obj
+src/BehaviourTree/UtilityAIBTRepeatUntil.windows.template_release.x86_64.obj

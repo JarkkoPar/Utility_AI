@@ -18,6 +18,16 @@ void UtilityAIBehaviourTreeNodes::_bind_methods() {
     ClassDB::bind_method(D_METHOD("get_score"), &UtilityAIBehaviourTreeNodes::get_score);
     ADD_PROPERTY(PropertyInfo(Variant::FLOAT, "score", PROPERTY_HINT_NONE ), "set_score","get_score");
 
+    ClassDB::bind_method(D_METHOD("set_tick_result", "tick_result"), &UtilityAIBehaviourTreeNodes::set_tick_result);
+    ClassDB::bind_method(D_METHOD("get_tick_result"), &UtilityAIBehaviourTreeNodes::get_tick_result);
+    ADD_PROPERTY(PropertyInfo(Variant::INT, "tick_result", PROPERTY_HINT_ENUM, "Running:0,Success:1,Failure:-1,Skip:-2" ), "set_tick_result","get_tick_result");
+
+    ClassDB::bind_method(D_METHOD("set_internal_status", "internal_status"), &UtilityAIBehaviourTreeNodes::set_internal_status);
+    ClassDB::bind_method(D_METHOD("get_internal_status"), &UtilityAIBehaviourTreeNodes::get_internal_status);
+    ADD_PROPERTY(PropertyInfo(Variant::INT, "internal_status", PROPERTY_HINT_ENUM, "Unticked:0,Ticked:1,Completed:2" ), "set_internal_status","get_internal_status");
+
+    ClassDB::bind_method(D_METHOD("_tick", "user_data", "delta" ), &UtilityAIBehaviourTreeNodes::tick);
+
 }
 
 
@@ -27,6 +37,8 @@ UtilityAIBehaviourTreeNodes::UtilityAIBehaviourTreeNodes() {
     _score = 0.0;
     _evaluation_method = UtilityAIBehaviourTreeNodesEvaluationMethod::Multiply;
     _invert_score = false;
+    _tick_result = BT_SUCCESS;
+    _internal_status = BT_INTERNAL_STATUS_UNTICKED;
 }
 
 
@@ -54,8 +66,41 @@ double UtilityAIBehaviourTreeNodes::get_score() const {
     return _score;
 }
 
+void UtilityAIBehaviourTreeNodes::set_tick_result( int tick_result ) {
+    _tick_result = tick_result;
+    if( _tick_result > 1 ) {
+        _tick_result = 1;
+    } else if (_tick_result < -2 ) {
+        _tick_result = -2;
+    }
+}
+
+
+int  UtilityAIBehaviourTreeNodes::get_tick_result() const {
+    return _tick_result;
+}
+
+void UtilityAIBehaviourTreeNodes::set_internal_status( int internal_status ) {
+    _internal_status = internal_status;
+}
+
+
+int  UtilityAIBehaviourTreeNodes::get_internal_status() const {
+    return _internal_status;
+}
+
 
 // Handling methods.
+
+void UtilityAIBehaviourTreeNodes::reset() {
+    _internal_status = BT_INTERNAL_STATUS_UNTICKED;
+    for( int i = 0; i < get_child_count(); ++i ) {
+        if( UtilityAIBehaviourTreeNodes* btnode = godot::Object::cast_to<UtilityAIBehaviourTreeNodes>(get_child(i)) ) {
+            btnode->reset();
+        }
+    }
+}
+
 
 double UtilityAIBehaviourTreeNodes::evaluate() {
     if( !get_is_active() ) return 0.0;
@@ -137,7 +182,7 @@ double UtilityAIBehaviourTreeNodes::evaluate() {
 }
 
 
-int UtilityAIBehaviourTreeNodes::tick(Variant user_data, double delta) { 
+int UtilityAIBehaviourTreeNodes::tick(Variant user_data, double delta ) { 
     return 0;
 }
 

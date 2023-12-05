@@ -14,6 +14,8 @@ void UtilityAIBTRandomSequence::_bind_methods() {
     ClassDB::bind_method(D_METHOD("get_is_reactive"), &UtilityAIBTRandomSequence::get_is_reactive);
     ADD_PROPERTY(PropertyInfo(Variant::BOOL, "is_reactive", PROPERTY_HINT_NONE), "set_is_reactive","get_is_reactive");
 
+    //ClassDB::bind_method(D_METHOD("_tick", "user_data", "delta"), &UtilityAIBTRandomSequence::tick);
+
 }
 
 
@@ -45,7 +47,7 @@ bool UtilityAIBTRandomSequence::get_is_reactive() const {
 
 
 int UtilityAIBTRandomSequence::tick(Variant user_data, double delta) {
-    if( _current_child_index < 0 || _is_reactive ) {
+    if( get_internal_status() == BT_INTERNAL_STATUS_UNTICKED || _is_reactive ) {
         _current_child_index = 0;
         // Create a random order.
         _child_node_order.clear();
@@ -59,7 +61,7 @@ int UtilityAIBTRandomSequence::tick(Variant user_data, double delta) {
         }
         _child_node_order.shuffle();
     }
-
+    set_internal_status(BT_INTERNAL_STATUS_TICKED);
     while( _current_child_index < _child_node_order.size() ) {
         UtilityAIBehaviourTreeNodes* btnode = godot::Object::cast_to<UtilityAIBehaviourTreeNodes>(get_child(_child_node_order[_current_child_index]));
         if( btnode != nullptr ) {
@@ -67,8 +69,9 @@ int UtilityAIBTRandomSequence::tick(Variant user_data, double delta) {
             //    continue;
             //} 
             int result = btnode->tick(user_data, delta);
+            set_tick_result(result);
             if( result == BT_FAILURE ) {
-                _current_child_index = -1;
+                set_internal_status(BT_INTERNAL_STATUS_COMPLETED);
                 return BT_FAILURE;
             } else if ( result == BT_RUNNING ) {
                 return BT_RUNNING;
@@ -76,7 +79,9 @@ int UtilityAIBTRandomSequence::tick(Variant user_data, double delta) {
         }//endif node was of correct type
         ++_current_child_index;
     }//endwhile children to tick
-    _current_child_index = -1;
+    //_current_child_index = -1;
+    set_internal_status(BT_INTERNAL_STATUS_COMPLETED);
+    set_tick_result(BT_SUCCESS);
     return BT_SUCCESS;
 }
 

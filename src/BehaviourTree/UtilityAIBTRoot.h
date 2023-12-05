@@ -1,15 +1,15 @@
-#ifndef UtilityAIBTAgent_H_INCLUDED
-#define UtilityAIBTAgent_H_INCLUDED 
+#ifndef UtilityAIBTRoot_H_INCLUDED
+#define UtilityAIBTRoot_H_INCLUDED 
 
-#include "UtilityAI.h"
+#include "UtilityAIBehaviourTreeNodes.h"
 #include <godot_cpp/classes/node.hpp>
 
 
 
 namespace godot {
 
-class UtilityAIBTAgent : public UtilityAI {
-    GDCLASS(UtilityAIBTAgent, UtilityAI)
+class UtilityAIBTRoot : public UtilityAIBehaviourTreeNodes {
+    GDCLASS(UtilityAIBTRoot, UtilityAIBehaviourTreeNodes)
 
 private:
     uint64_t            _total_tick_usec;    
@@ -17,8 +17,8 @@ protected:
     static void _bind_methods();
 
 public:
-    UtilityAIBTAgent();
-    ~UtilityAIBTAgent();
+    UtilityAIBTRoot();
+    ~UtilityAIBTRoot();
     
     
     // Getters and setters for attributes.
@@ -28,7 +28,7 @@ public:
 
     // Handling functions.
 
-    int tick(Variant user_data, double delta);
+    virtual int tick(Variant user_data, double delta) override;
 };
 
 }
