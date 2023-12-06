@@ -1,15 +1,15 @@
 #ifndef UtilityAIBTInverter_H_INCLUDED
 #define UtilityAIBTInverter_H_INCLUDED 
 
-#include "UtilityAIBehaviourTreeNodes.h"
+#include "UtilityAIBTDecoratorNodes.h"
 #include <godot_cpp/classes/node.hpp>
 
 
 
 namespace godot {
 
-class UtilityAIBTInverter : public UtilityAIBehaviourTreeNodes {
-    GDCLASS(UtilityAIBTInverter, UtilityAIBehaviourTreeNodes)
+class UtilityAIBTInverter : public UtilityAIBTDecoratorNodes {
+    GDCLASS(UtilityAIBTInverter, UtilityAIBTDecoratorNodes)
 
 private:
     

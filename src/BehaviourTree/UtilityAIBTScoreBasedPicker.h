@@ -1,15 +1,15 @@
 #ifndef UtilityAIBTScoreBasedPicker_H_INCLUDED
 #define UtilityAIBTScoreBasedPicker_H_INCLUDED 
 
-#include "UtilityAIBehaviourTreeNodes.h"
+#include "UtilityAIBTCompositeNodes.h"
 #include <godot_cpp/classes/node.hpp>
 
 
 
 namespace godot {
 
-class UtilityAIBTScoreBasedPicker : public UtilityAIBehaviourTreeNodes {
-    GDCLASS(UtilityAIBTScoreBasedPicker, UtilityAIBehaviourTreeNodes )
+class UtilityAIBTScoreBasedPicker : public UtilityAIBTCompositeNodes {
+    GDCLASS(UtilityAIBTScoreBasedPicker, UtilityAIBTCompositeNodes )
 
 private:
     bool _is_reactive;

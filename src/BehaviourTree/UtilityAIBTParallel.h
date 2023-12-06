@@ -1,15 +1,15 @@
 #ifndef UtilityAIBTParallel_H_INCLUDED
 #define UtilityAIBTParallel_H_INCLUDED 
 
-#include "UtilityAIBehaviourTreeNodes.h"
+#include "UtilityAIBTCompositeNodes.h"
 #include <godot_cpp/classes/node.hpp>
 
 
 
 namespace godot {
 
-class UtilityAIBTParallel : public UtilityAIBehaviourTreeNodes {
-    GDCLASS(UtilityAIBTParallel, UtilityAIBehaviourTreeNodes )
+class UtilityAIBTParallel : public UtilityAIBTCompositeNodes {
+    GDCLASS(UtilityAIBTParallel, UtilityAIBTCompositeNodes )
 
 private:
     //bool _is_reactive;

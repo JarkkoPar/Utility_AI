@@ -1,15 +1,15 @@
 #ifndef UtilityAIBTLimiter_H_INCLUDED
 #define UtilityAIBTLimiter_H_INCLUDED 
 
-#include "UtilityAIBehaviourTreeNodes.h"
+#include "UtilityAIBTDecoratorNodes.h"
 #include <godot_cpp/classes/node.hpp>
 
 
 
 namespace godot {
 
-class UtilityAIBTLimiter : public UtilityAIBehaviourTreeNodes {
-    GDCLASS(UtilityAIBTLimiter, UtilityAIBehaviourTreeNodes)
+class UtilityAIBTLimiter : public UtilityAIBTDecoratorNodes {
+    GDCLASS(UtilityAIBTLimiter, UtilityAIBTDecoratorNodes)
 
 private:
     int            _max_repeat_times;    
@@ -31,6 +31,7 @@ public:
     //void set_tick_result( int tick_result );
 
     // Handling functions.
+    virtual void reset_for_looping() override;
 
     virtual int tick(Variant user_data, double delta) override;
 };

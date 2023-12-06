@@ -243,3 +243,9 @@ src/BehaviourTree/UtilityAIBTRepeater.windows.template_debug.x86_64.obj
 src/BehaviourTree/UtilityAIBTRepeater.windows.template_release.x86_64.obj
 src/BehaviourTree/UtilityAIBTRepeatUntil.windows.template_debug.x86_64.obj
 src/BehaviourTree/UtilityAIBTRepeatUntil.windows.template_release.x86_64.obj
+src/BehaviourTree/UtilityAIBTCompositeNodes.windows.template_debug.x86_64.obj
+src/BehaviourTree/UtilityAIBTCompositeNodes.windows.template_release.x86_64.obj
+src/BehaviourTree/UtilityAIBTDecoratorNodes.windows.template_debug.x86_64.obj
+src/BehaviourTree/UtilityAIBTDecoratorNodes.windows.template_release.x86_64.obj
+src/BehaviourTree/UtilityAIBTTaskNodes.windows.template_debug.x86_64.obj
+src/BehaviourTree/UtilityAIBTTaskNodes.windows.template_release.x86_64.obj

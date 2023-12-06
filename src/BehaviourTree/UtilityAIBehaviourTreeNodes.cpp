@@ -101,6 +101,15 @@ void UtilityAIBehaviourTreeNodes::reset() {
     }
 }
 
+void UtilityAIBehaviourTreeNodes::reset_for_looping() {
+    _internal_status = BT_INTERNAL_STATUS_UNTICKED;
+    for( int i = 0; i < get_child_count(); ++i ) {
+        if( UtilityAIBehaviourTreeNodes* btnode = godot::Object::cast_to<UtilityAIBehaviourTreeNodes>(get_child(i)) ) {
+            btnode->reset_for_looping();
+        }
+    }
+}
+
 
 double UtilityAIBehaviourTreeNodes::evaluate() {
     if( !get_is_active() ) return 0.0;

@@ -1,15 +1,15 @@
 #ifndef UtilityAIBTCooldownTicks_H_INCLUDED
 #define UtilityAIBTCooldownTicks_H_INCLUDED 
 
-#include "UtilityAIBehaviourTreeNodes.h"
+#include "UtilityAIBTDecoratorNodes.h"
 #include <godot_cpp/classes/node.hpp>
 
 
 
 namespace godot {
 
-class UtilityAIBTCooldownTicks : public UtilityAIBehaviourTreeNodes {
-    GDCLASS(UtilityAIBTCooldownTicks, UtilityAIBehaviourTreeNodes)
+class UtilityAIBTCooldownTicks : public UtilityAIBTDecoratorNodes {
+    GDCLASS(UtilityAIBTCooldownTicks, UtilityAIBTDecoratorNodes)
 
 private:
     

@@ -1,15 +1,15 @@
 #ifndef UtilityAIBTLeaf_H_INCLUDED
 #define UtilityAIBTLeaf_H_INCLUDED 
 
-#include "UtilityAIBehaviourTreeNodes.h"
+#include "UtilityAIBTTaskNodes.h"
 #include <godot_cpp/classes/node.hpp>
 #include <godot_cpp/core/method_ptrcall.hpp>
 
 
 namespace godot {
 
-class UtilityAIBTLeaf : public UtilityAIBehaviourTreeNodes {
-    GDCLASS(UtilityAIBTLeaf, UtilityAIBehaviourTreeNodes)
+class UtilityAIBTLeaf : public UtilityAIBTTaskNodes {
+    GDCLASS(UtilityAIBTLeaf, UtilityAIBTTaskNodes)
 
 private:
     //Callable _tick_method;

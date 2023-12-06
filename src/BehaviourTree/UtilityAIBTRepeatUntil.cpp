@@ -14,7 +14,7 @@ using namespace godot;
 void UtilityAIBTRepeatUntil::_bind_methods() {
     ClassDB::bind_method(D_METHOD("set_max_repeat_times", "max_repeat_times"), &UtilityAIBTRepeatUntil::set_max_repeat_times);
     ClassDB::bind_method(D_METHOD("get_max_repeat_times"), &UtilityAIBTRepeatUntil::get_max_repeat_times);
-    ADD_PROPERTY(PropertyInfo(Variant::INT, "max_repeat_times", PROPERTY_HINT_RANGE, "0,100,or_greater"), "set_max_repeat_times","get_max_repeat_times");
+    ADD_PROPERTY(PropertyInfo(Variant::INT, "max_repeat_times", PROPERTY_HINT_RANGE, "-1,100,or_greater"), "set_max_repeat_times","get_max_repeat_times");
 
     ClassDB::bind_method(D_METHOD("set_expected_tick_result", "expected_tick_result"), &UtilityAIBTRepeatUntil::set_expected_tick_result);
     ClassDB::bind_method(D_METHOD("get_expected_tick_result"), &UtilityAIBTRepeatUntil::get_expected_tick_result);
@@ -28,6 +28,7 @@ void UtilityAIBTRepeatUntil::_bind_methods() {
 UtilityAIBTRepeatUntil::UtilityAIBTRepeatUntil() {
     _max_repeat_times = 3;
     _current_max_repeat_times = -1;
+    _expected_tick_result = BT_SUCCESS;
 }
 
 

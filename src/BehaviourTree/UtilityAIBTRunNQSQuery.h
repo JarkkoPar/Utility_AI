@@ -1,15 +1,15 @@
 #ifndef UtilityAIBTRunNQSQuery_H_INCLUDED
 #define UtilityAIBTRunNQSQuery_H_INCLUDED 
 
-#include "UtilityAIBehaviourTreeNodes.h"
+#include "UtilityAIBTTaskNodes.h"
 #include <godot_cpp/classes/node.hpp>
 #include "../NodeQuerySystem/SearchSpaces/UtilityAINQSSearchSpaces.h"
 
 
 namespace godot {
 
-class UtilityAIBTRunNQSQuery : public UtilityAIBehaviourTreeNodes {
-    GDCLASS(UtilityAIBTRunNQSQuery, UtilityAIBehaviourTreeNodes)
+class UtilityAIBTRunNQSQuery : public UtilityAIBTTaskNodes {
+    GDCLASS(UtilityAIBTRunNQSQuery, UtilityAIBTTaskNodes)
 
 private:
     NodePath _nqs_search_space_node_path;

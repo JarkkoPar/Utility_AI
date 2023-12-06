@@ -1,15 +1,15 @@
 #ifndef UtilityAIBTSequence_H_INCLUDED
 #define UtilityAIBTSequence_H_INCLUDED 
 
-#include "UtilityAIBehaviourTreeNodes.h"
+#include "UtilityAIBTCompositeNodes.h"
 #include <godot_cpp/classes/node.hpp>
 
 
 
 namespace godot {
 
-class UtilityAIBTSequence : public UtilityAIBehaviourTreeNodes {
-    GDCLASS(UtilityAIBTSequence, UtilityAIBehaviourTreeNodes )
+class UtilityAIBTSequence : public UtilityAIBTCompositeNodes {
+    GDCLASS(UtilityAIBTSequence, UtilityAIBTCompositeNodes )
 
 private:
     bool _is_reactive;

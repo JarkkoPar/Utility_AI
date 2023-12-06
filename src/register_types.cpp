@@ -33,18 +33,22 @@
 #include "BehaviourTree/UtilityAIBehaviourTreeNodes.h"
 #include "BehaviourTree/UtilityAIBTRoot.h"
 
+#include "BehaviourTree/UtilityAIBTCompositeNodes.h"
 #include "BehaviourTree/UtilityAIBTRandomSequence.h"
 #include "BehaviourTree/UtilityAIBTRandomSelector.h"
 #include "BehaviourTree/UtilityAIBTSequence.h"
 #include "BehaviourTree/UtilityAIBTSelector.h"
 #include "BehaviourTree/UtilityAIBTParallel.h"
+#include "BehaviourTree/UtilityAIBTScoreBasedPicker.h"
+
+#include "BehaviourTree/UtilityAIBTDecoratorNodes.h"
 #include "BehaviourTree/UtilityAIBTRepeater.h"
 #include "BehaviourTree/UtilityAIBTRepeatUntil.h"
 #include "BehaviourTree/UtilityAIBTLimiter.h"
-#include "BehaviourTree/UtilityAIBTScoreBasedPicker.h"
-
 #include "BehaviourTree/UtilityAIBTInverter.h"
 #include "BehaviourTree/UtilityAIBTFixedResult.h"
+#include "BehaviourTree/UtilityAIBTPassThrough.h"
+
 
 #include "BehaviourTree/UtilityAIBTCooldownTicks.h"
 #include "BehaviourTree/UtilityAIBTCooldownMsec.h"
@@ -53,7 +57,6 @@
 #include "BehaviourTree/UtilityAIBTRunNQSQuery.h"
 #include "BehaviourTree/UtilityAIBTNodeReference.h"
 #include "BehaviourTree/UtilityAIBTPassBy.h"
-#include "BehaviourTree/UtilityAIBTPassThrough.h"
 
 
 // Node Query System.
@@ -139,27 +142,32 @@ void initialize_utility_ai_module(ModuleInitializationLevel p_level) {
     ClassDB::register_class<UtilityAIBehaviourTreeNodes>(true);
     ClassDB::register_class<UtilityAIBTRoot>();
 
+    ClassDB::register_class<UtilityAIBTCompositeNodes>(true);
     ClassDB::register_class<UtilityAIBTSequence>();
     ClassDB::register_class<UtilityAIBTSelector>();
     ClassDB::register_class<UtilityAIBTParallel>();
+    ClassDB::register_class<UtilityAIBTRandomSequence>();
+    ClassDB::register_class<UtilityAIBTRandomSelector>();
+    
+    ClassDB::register_class<UtilityAIBTDecoratorNodes>(true);
     ClassDB::register_class<UtilityAIBTRepeater>();
     ClassDB::register_class<UtilityAIBTRepeatUntil>();
     ClassDB::register_class<UtilityAIBTLimiter>();
-    ClassDB::register_class<UtilityAIBTRandomSequence>();
-    ClassDB::register_class<UtilityAIBTRandomSelector>();
     ClassDB::register_class<UtilityAIBTScoreBasedPicker>();
-
+    ClassDB::register_class<UtilityAIBTNodeReference>();
     ClassDB::register_class<UtilityAIBTFixedResult>();
     ClassDB::register_class<UtilityAIBTInverter>();
+    ClassDB::register_class<UtilityAIBTPassThrough>();
+
     
     ClassDB::register_class<UtilityAIBTCooldownTicks>();
     ClassDB::register_class<UtilityAIBTCooldownMsec>();
-    ClassDB::register_class<UtilityAIBTCooldownUsec>();
+    ClassDB::register_class<UtilityAIBTCooldownUsec>(); 
+
+    ClassDB::register_class<UtilityAIBTTaskNodes>(true);
     ClassDB::register_class<UtilityAIBTLeaf>();
     ClassDB::register_class<UtilityAIBTRunNQSQuery>();
-    ClassDB::register_class<UtilityAIBTNodeReference>();
     ClassDB::register_class<UtilityAIBTPassBy>();
-    ClassDB::register_class<UtilityAIBTPassThrough>();
     
 
     // Node Query System.

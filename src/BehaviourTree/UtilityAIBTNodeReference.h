@@ -1,15 +1,15 @@
 #ifndef UtilityAIBTNodeReference_H_INCLUDED
 #define UtilityAIBTNodeReference_H_INCLUDED 
 
-#include "UtilityAIBehaviourTreeNodes.h"
+#include "UtilityAIBTTaskNodes.h"
 #include <godot_cpp/classes/node.hpp>
 
 
 
 namespace godot {
 
-class UtilityAIBTNodeReference : public UtilityAIBehaviourTreeNodes {
-    GDCLASS(UtilityAIBTNodeReference, UtilityAIBehaviourTreeNodes)
+class UtilityAIBTNodeReference : public UtilityAIBTTaskNodes {
+    GDCLASS(UtilityAIBTNodeReference, UtilityAIBTTaskNodes)
 
 private:
     

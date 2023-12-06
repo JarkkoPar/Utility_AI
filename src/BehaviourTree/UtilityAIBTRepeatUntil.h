@@ -1,15 +1,15 @@
 #ifndef UtilityAIBTRepeatUntil_H_INCLUDED
 #define UtilityAIBTRepeatUntil_H_INCLUDED 
 
-#include "UtilityAIBehaviourTreeNodes.h"
+#include "UtilityAIBTDecoratorNodes.h"
 #include <godot_cpp/classes/node.hpp>
 
 
 
 namespace godot {
 
-class UtilityAIBTRepeatUntil : public UtilityAIBehaviourTreeNodes {
-    GDCLASS(UtilityAIBTRepeatUntil, UtilityAIBehaviourTreeNodes)
+class UtilityAIBTRepeatUntil : public UtilityAIBTDecoratorNodes {
+    GDCLASS(UtilityAIBTRepeatUntil, UtilityAIBTDecoratorNodes)
 
 private:
     int            _max_repeat_times;    

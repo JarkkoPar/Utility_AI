@@ -93,7 +93,7 @@ int UtilityAIBTRepeater::tick(Variant user_data, double delta) {
             --_current_repeat_times;
             btnode->tick(user_data, delta);
             if( _current_repeat_times < 0 ) {
-                btnode->reset();
+                btnode->reset_for_looping();
             }
             break;
         }

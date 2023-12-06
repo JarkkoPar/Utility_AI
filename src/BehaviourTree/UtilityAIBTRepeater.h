@@ -1,15 +1,15 @@
 #ifndef UtilityAIBTRepeater_H_INCLUDED
 #define UtilityAIBTRepeater_H_INCLUDED 
 
-#include "UtilityAIBehaviourTreeNodes.h"
+#include "UtilityAIBTDecoratorNodes.h"
 #include <godot_cpp/classes/node.hpp>
 
 
 
 namespace godot {
 
-class UtilityAIBTRepeater : public UtilityAIBehaviourTreeNodes {
-    GDCLASS(UtilityAIBTRepeater, UtilityAIBehaviourTreeNodes)
+class UtilityAIBTRepeater : public UtilityAIBTDecoratorNodes {
+    GDCLASS(UtilityAIBTRepeater, UtilityAIBTDecoratorNodes)
 
 private:
     int            _repeat_times;    

@@ -56,6 +56,8 @@ public:
     virtual int tick( Variant user_data, double delta );
 
     virtual void reset();
+    virtual void reset_for_looping();
+
 
     inline virtual bool has_completed() { return (_internal_status == BT_INTERNAL_STATUS_COMPLETED); };
 

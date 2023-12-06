@@ -1,15 +1,15 @@
 #ifndef UtilityAIBTRandomSelector_H_INCLUDED
 #define UtilityAIBTRandomSelector_H_INCLUDED 
 
-#include "UtilityAIBehaviourTreeNodes.h"
+#include "UtilityAIBTCompositeNodes.h"
 #include <godot_cpp/classes/node.hpp>
 
 
 
 namespace godot {
 
-class UtilityAIBTRandomSelector : public UtilityAIBehaviourTreeNodes {
-    GDCLASS(UtilityAIBTRandomSelector, UtilityAIBehaviourTreeNodes)
+class UtilityAIBTRandomSelector : public UtilityAIBTCompositeNodes {
+    GDCLASS(UtilityAIBTRandomSelector, UtilityAIBTCompositeNodes)
 
 private:
     TypedArray<int> _child_node_order;    

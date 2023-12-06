@@ -1,15 +1,15 @@
 #ifndef UtilityAIBTFixedResult_H_INCLUDED
 #define UtilityAIBTFixedResult_H_INCLUDED 
 
-#include "UtilityAIBehaviourTreeNodes.h"
+#include "UtilityAIBTDecoratorNodes.h"
 #include <godot_cpp/classes/node.hpp>
 
 
 
 namespace godot {
 
-class UtilityAIBTFixedResult : public UtilityAIBehaviourTreeNodes {
-    GDCLASS(UtilityAIBTFixedResult, UtilityAIBehaviourTreeNodes)
+class UtilityAIBTFixedResult : public UtilityAIBTDecoratorNodes {
+    GDCLASS(UtilityAIBTFixedResult, UtilityAIBTDecoratorNodes)
 
 private:
     

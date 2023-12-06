@@ -1,15 +1,15 @@
 #ifndef UtilityAIBTPassThrough_H_INCLUDED
 #define UtilityAIBTPassThrough_H_INCLUDED 
 
-#include "UtilityAIBehaviourTreeNodes.h"
+#include "UtilityAIBTDecoratorNodes.h"
 #include <godot_cpp/classes/node.hpp>
 #include <godot_cpp/core/method_ptrcall.hpp>
 
 
 namespace godot {
 
-class UtilityAIBTPassThrough : public UtilityAIBehaviourTreeNodes {
-    GDCLASS(UtilityAIBTPassThrough, UtilityAIBehaviourTreeNodes)
+class UtilityAIBTPassThrough : public UtilityAIBTDecoratorNodes {
+    GDCLASS(UtilityAIBTPassThrough, UtilityAIBTDecoratorNodes)
 
 private:
     int _tick_result;

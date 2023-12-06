@@ -1,15 +1,15 @@
 #ifndef UtilityAIBTSelector_H_INCLUDED
 #define UtilityAIBTSelector_H_INCLUDED 
 
-#include "UtilityAIBehaviourTreeNodes.h"
+#include "UtilityAIBTCompositeNodes.h"
 #include <godot_cpp/classes/node.hpp>
 
 
 
 namespace godot {
 
-class UtilityAIBTSelector : public UtilityAIBehaviourTreeNodes {
-    GDCLASS(UtilityAIBTSelector, UtilityAIBehaviourTreeNodes)
+class UtilityAIBTSelector : public UtilityAIBTCompositeNodes {
+    GDCLASS(UtilityAIBTSelector, UtilityAIBTCompositeNodes)
 
 private:
     

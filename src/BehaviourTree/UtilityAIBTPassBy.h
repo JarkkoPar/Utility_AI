@@ -1,7 +1,7 @@
 #ifndef UtilityAIBTPassBy_H_INCLUDED
 #define UtilityAIBTPassBy_H_INCLUDED 
 
-#include "UtilityAIBehaviourTreeNodes.h"
+#include "UtilityAIBTTaskNodes.h"
 #include <godot_cpp/classes/node.hpp>
 #include <godot_cpp/core/method_ptrcall.hpp>
 
@@ -9,8 +9,8 @@
 
 namespace godot {
 
-class UtilityAIBTPassBy : public UtilityAIBehaviourTreeNodes {
-    GDCLASS(UtilityAIBTPassBy, UtilityAIBehaviourTreeNodes)
+class UtilityAIBTPassBy : public UtilityAIBTTaskNodes {
+    GDCLASS(UtilityAIBTPassBy, UtilityAIBTTaskNodes)
 
 private:
     //int _tick_result;
