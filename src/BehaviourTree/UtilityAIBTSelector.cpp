@@ -10,9 +10,9 @@ using namespace godot;
 
 void UtilityAIBTSelector::_bind_methods() {
 
-    ClassDB::bind_method(D_METHOD("set_is_reactive", "is_reactive"), &UtilityAIBTSelector::set_is_reactive);
-    ClassDB::bind_method(D_METHOD("get_is_reactive"), &UtilityAIBTSelector::get_is_reactive);
-    ADD_PROPERTY(PropertyInfo(Variant::BOOL, "is_reactive", PROPERTY_HINT_NONE), "set_is_reactive","get_is_reactive");
+    //ClassDB::bind_method(D_METHOD("set_is_reactive", "is_reactive"), &UtilityAIBTSelector::set_is_reactive);
+    //ClassDB::bind_method(D_METHOD("get_is_reactive"), &UtilityAIBTSelector::get_is_reactive);
+    //ADD_PROPERTY(PropertyInfo(Variant::BOOL, "is_reactive", PROPERTY_HINT_NONE), "set_is_reactive","get_is_reactive");
     
 
     /**
@@ -20,6 +20,11 @@ void UtilityAIBTSelector::_bind_methods() {
     ClassDB::bind_method(D_METHOD("get_score"), &UtilityAIBTSelector::get_score);
     ADD_PROPERTY(PropertyInfo(Variant::FLOAT, "score", PROPERTY_HINT_NONE ), "set_score","get_score");
     /**/
+
+    ClassDB::bind_method(D_METHOD("set_reset_rule", "reset_rule"), &UtilityAIBTSelector::set_reset_rule);
+    ClassDB::bind_method(D_METHOD("get_reset_rule"), &UtilityAIBTSelector::get_reset_rule);
+    ADD_PROPERTY(PropertyInfo(Variant::INT, "reset_rule", PROPERTY_HINT_ENUM, "WhenTicked:0,WhenCompleted:1,WhenTickedAfterBeingCompleted:2,Never:3" ), "set_reset_rule","get_reset_rule");
+ 
 
 }
 
@@ -60,9 +65,15 @@ double UtilityAIBTSelector::get_score() const {
 }
 */
 
+
+void UtilityAIBTSelector::reset_bt_node() {
+    _current_child_index = 0;
+}
+
+
 int UtilityAIBTSelector::tick(Variant user_data, double delta) { 
-    if( get_internal_status() == BT_INTERNAL_STATUS_UNTICKED || _is_reactive ) {
-        _current_child_index = 0;
+    if( get_internal_status() == BT_INTERNAL_STATUS_UNTICKED ) {
+        reset_bt_node();
     }
     set_internal_status(BT_INTERNAL_STATUS_TICKED);
     while( _current_child_index < get_child_count() ) {
@@ -72,7 +83,6 @@ int UtilityAIBTSelector::tick(Variant user_data, double delta) {
                 int result = btnode->tick(user_data, delta);
                 set_tick_result(result);
                 if( result == BT_SUCCESS && _current_child_index == get_child_count() - 1 ) {
-                    //_current_child_index = -1;
                     set_internal_status(BT_INTERNAL_STATUS_COMPLETED);
                     return BT_SUCCESS;
                 } else if ( result == BT_RUNNING ) {

@@ -10,9 +10,9 @@ using namespace godot;
 
 void UtilityAIBTSequence::_bind_methods() {
     
-    ClassDB::bind_method(D_METHOD("set_is_reactive", "is_reactive"), &UtilityAIBTSequence::set_is_reactive);
-    ClassDB::bind_method(D_METHOD("get_is_reactive"), &UtilityAIBTSequence::get_is_reactive);
-    ADD_PROPERTY(PropertyInfo(Variant::BOOL, "is_reactive", PROPERTY_HINT_NONE), "set_is_reactive","get_is_reactive");
+    //ClassDB::bind_method(D_METHOD("set_is_reactive", "is_reactive"), &UtilityAIBTSequence::set_is_reactive);
+    //ClassDB::bind_method(D_METHOD("get_is_reactive"), &UtilityAIBTSequence::get_is_reactive);
+    //ADD_PROPERTY(PropertyInfo(Variant::BOOL, "is_reactive", PROPERTY_HINT_NONE), "set_is_reactive","get_is_reactive");
     
     /*
     ClassDB::bind_method(D_METHOD("set_score", "score"), &UtilityAIBTSequence::set_score);
@@ -20,6 +20,10 @@ void UtilityAIBTSequence::_bind_methods() {
     ADD_PROPERTY(PropertyInfo(Variant::FLOAT, "score", PROPERTY_HINT_NONE ), "set_score","get_score");
     /**/
 
+    ClassDB::bind_method(D_METHOD("set_reset_rule", "reset_rule"), &UtilityAIBTSequence::set_reset_rule);
+    ClassDB::bind_method(D_METHOD("get_reset_rule"), &UtilityAIBTSequence::get_reset_rule);
+    ADD_PROPERTY(PropertyInfo(Variant::INT, "reset_rule", PROPERTY_HINT_ENUM, "WhenTicked:0,WhenCompleted:1,WhenTickedAfterBeingCompleted:2,Never:3" ), "set_reset_rule","get_reset_rule");
+ 
 }
 
 
@@ -49,6 +53,10 @@ bool UtilityAIBTSequence::get_is_reactive() const {
     return _is_reactive;
 }
 
+void UtilityAIBTSequence::reset_bt_node() {
+    _current_child_index = 0;
+}
+
 
 int UtilityAIBTSequence::tick(Variant user_data, double delta) {
     if( get_internal_status() == BT_INTERNAL_STATUS_UNTICKED || _is_reactive ) {
@@ -63,7 +71,6 @@ int UtilityAIBTSequence::tick(Variant user_data, double delta) {
                 int result = btnode->tick(user_data, delta);
                 set_tick_result(result);
                 if( result == BT_FAILURE ) {
-                    //_current_child_index = -1;
                     set_internal_status(BT_INTERNAL_STATUS_COMPLETED);
                     return BT_FAILURE;
                 } else if ( result == BT_RUNNING ) {
@@ -73,7 +80,7 @@ int UtilityAIBTSequence::tick(Variant user_data, double delta) {
         }//endif node was of correct type
         ++_current_child_index;
     }//endwhile children to tick
-    //_current_child_index = -1;
+    
     set_internal_status(BT_INTERNAL_STATUS_COMPLETED);
     return BT_SUCCESS;
 }

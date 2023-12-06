@@ -20,6 +20,10 @@ void UtilityAIBTRepeatUntil::_bind_methods() {
     ClassDB::bind_method(D_METHOD("get_expected_tick_result"), &UtilityAIBTRepeatUntil::get_expected_tick_result);
     ADD_PROPERTY(PropertyInfo(Variant::INT, "expected_tick_result", PROPERTY_HINT_ENUM, "Running:0,Success:1,Failure:-1" ), "set_expected_tick_result","get_expected_tick_result");
 
+    ClassDB::bind_method(D_METHOD("set_reset_rule", "reset_rule"), &UtilityAIBTRepeatUntil::set_reset_rule);
+    ClassDB::bind_method(D_METHOD("get_reset_rule"), &UtilityAIBTRepeatUntil::get_reset_rule);
+    ADD_PROPERTY(PropertyInfo(Variant::INT, "reset_rule", PROPERTY_HINT_ENUM, "WhenTicked:0,WhenCompleted:1,WhenTickedAfterBeingCompleted:2,Never:3" ), "set_reset_rule","get_reset_rule");
+ 
 }
 
 
@@ -67,13 +71,17 @@ int  UtilityAIBTRepeatUntil::get_expected_tick_result() const {
 
 // Handling functions.
 
+void UtilityAIBTRepeatUntil::reset_bt_node() {
+    _current_max_repeat_times = _max_repeat_times;
+}
+
 
 int UtilityAIBTRepeatUntil::tick(Variant user_data, double delta) { 
     if( !get_is_active() ) return BT_FAILURE;
     if( Engine::get_singleton()->is_editor_hint() ) return BT_FAILURE;
 
     if( get_internal_status() == BT_INTERNAL_STATUS_UNTICKED && _max_repeat_times > 0 ) {
-        _current_max_repeat_times = _max_repeat_times;
+        reset_bt_node();
     }
     
     if( _current_max_repeat_times == 0 ) {

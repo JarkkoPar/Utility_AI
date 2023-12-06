@@ -28,6 +28,8 @@ public:
     bool get_is_reactive() const;
 
     // Handling functions.
+    
+    virtual void reset_bt_node() override;
 
     virtual int tick(Variant user_data, double delta) override;
 };

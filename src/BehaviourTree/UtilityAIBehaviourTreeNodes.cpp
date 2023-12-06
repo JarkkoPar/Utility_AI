@@ -39,6 +39,7 @@ UtilityAIBehaviourTreeNodes::UtilityAIBehaviourTreeNodes() {
     _invert_score = false;
     _tick_result = BT_SUCCESS;
     _internal_status = BT_INTERNAL_STATUS_UNTICKED;
+    _reset_rule = UtilityAIBehaviourTreeNodesResetRule::WHEN_TICKED_AFTER_BEING_COMPLETED;
 }
 
 
@@ -81,6 +82,22 @@ int  UtilityAIBehaviourTreeNodes::get_tick_result() const {
 }
 
 void UtilityAIBehaviourTreeNodes::set_internal_status( int internal_status ) {
+    if( _internal_status != BT_INTERNAL_STATUS_UNTICKED ) {
+        if( internal_status == BT_INTERNAL_STATUS_TICKED ) {
+            if( _reset_rule == UtilityAIBehaviourTreeNodesResetRule::WHEN_TICKED && _internal_status != BT_INTERNAL_STATUS_UNTICKED ) {
+                reset_bt_node();
+            } else if ( _reset_rule == UtilityAIBehaviourTreeNodesResetRule::WHEN_TICKED_AFTER_BEING_COMPLETED && _internal_status == BT_INTERNAL_STATUS_COMPLETED ) {
+                reset_bt_node();
+            }
+        } else if ( internal_status == BT_INTERNAL_STATUS_COMPLETED ) {
+            if( _reset_rule == UtilityAIBehaviourTreeNodesResetRule::WHEN_COMPLETED ) {
+                reset_bt_node();
+            }
+        } else if ( internal_status == BT_INTERNAL_STATUS_UNTICKED ) {
+            reset_bt_node();
+        }
+    }
+    
     _internal_status = internal_status;
 }
 
@@ -89,6 +106,15 @@ int  UtilityAIBehaviourTreeNodes::get_internal_status() const {
     return _internal_status;
 }
 
+
+void UtilityAIBehaviourTreeNodes::set_reset_rule( int reset_rule ) {
+    _reset_rule = reset_rule;
+}
+
+
+int  UtilityAIBehaviourTreeNodes::get_reset_rule() const {
+    return _reset_rule;
+}
 
 // Handling methods.
 
@@ -101,6 +127,7 @@ void UtilityAIBehaviourTreeNodes::reset() {
     }
 }
 
+/**
 void UtilityAIBehaviourTreeNodes::reset_for_looping() {
     _internal_status = BT_INTERNAL_STATUS_UNTICKED;
     for( int i = 0; i < get_child_count(); ++i ) {
@@ -109,7 +136,7 @@ void UtilityAIBehaviourTreeNodes::reset_for_looping() {
         }
     }
 }
-
+/**/
 
 double UtilityAIBehaviourTreeNodes::evaluate() {
     if( !get_is_active() ) return 0.0;

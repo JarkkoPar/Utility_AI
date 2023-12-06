@@ -18,6 +18,7 @@ private:
     bool   _invert_score;
     int    _tick_result;
     int    _internal_status;
+    int     _reset_rule;
 protected:
     static void _bind_methods();
 public:
@@ -49,6 +50,16 @@ public:
     void set_internal_status( int internal_status );
     int  get_internal_status() const;
 
+    void set_reset_rule( int reset_rule );
+    int  get_reset_rule() const;
+    
+    enum UtilityAIBehaviourTreeNodesResetRule {
+        WHEN_TICKED = 0,
+        WHEN_COMPLETED,
+        WHEN_TICKED_AFTER_BEING_COMPLETED,
+        NEVER,
+    };
+
     // Handling functions.
     
     virtual double evaluate();
@@ -56,13 +67,13 @@ public:
     virtual int tick( Variant user_data, double delta );
 
     virtual void reset();
-    virtual void reset_for_looping();
-
+    //virtual void reset_for_looping();
+    virtual void reset_bt_node() {};
 
     inline virtual bool has_completed() { return (_internal_status == BT_INTERNAL_STATUS_COMPLETED); };
 
     // Godot virtuals.
-
+    // none.
     
 };
 

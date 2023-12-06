@@ -148,12 +148,12 @@ void initialize_utility_ai_module(ModuleInitializationLevel p_level) {
     ClassDB::register_class<UtilityAIBTParallel>();
     ClassDB::register_class<UtilityAIBTRandomSequence>();
     ClassDB::register_class<UtilityAIBTRandomSelector>();
-    
+    ClassDB::register_class<UtilityAIBTScoreBasedPicker>();
+
     ClassDB::register_class<UtilityAIBTDecoratorNodes>(true);
     ClassDB::register_class<UtilityAIBTRepeater>();
     ClassDB::register_class<UtilityAIBTRepeatUntil>();
     ClassDB::register_class<UtilityAIBTLimiter>();
-    ClassDB::register_class<UtilityAIBTScoreBasedPicker>();
     ClassDB::register_class<UtilityAIBTFixedResult>();
     ClassDB::register_class<UtilityAIBTInverter>();
     ClassDB::register_class<UtilityAIBTPassThrough>();

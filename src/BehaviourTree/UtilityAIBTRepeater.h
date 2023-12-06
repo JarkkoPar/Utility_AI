@@ -31,7 +31,7 @@ public:
     //void set_tick_result( int tick_result );
 
     // Handling functions.
-
+    virtual void reset_bt_node() override;
     virtual int tick(Variant user_data, double delta) override;
 };
 

@@ -31,6 +31,8 @@ public:
     void set_expected_tick_result( int expected_tick_result );
 
     // Handling functions.
+    
+    virtual void reset_bt_node() override;
 
     virtual int tick(Variant user_data, double delta) override;
 };
