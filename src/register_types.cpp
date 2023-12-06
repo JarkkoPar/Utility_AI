@@ -154,12 +154,9 @@ void initialize_utility_ai_module(ModuleInitializationLevel p_level) {
     ClassDB::register_class<UtilityAIBTRepeatUntil>();
     ClassDB::register_class<UtilityAIBTLimiter>();
     ClassDB::register_class<UtilityAIBTScoreBasedPicker>();
-    ClassDB::register_class<UtilityAIBTNodeReference>();
     ClassDB::register_class<UtilityAIBTFixedResult>();
     ClassDB::register_class<UtilityAIBTInverter>();
     ClassDB::register_class<UtilityAIBTPassThrough>();
-
-    
     ClassDB::register_class<UtilityAIBTCooldownTicks>();
     ClassDB::register_class<UtilityAIBTCooldownMsec>();
     ClassDB::register_class<UtilityAIBTCooldownUsec>(); 
@@ -168,6 +165,7 @@ void initialize_utility_ai_module(ModuleInitializationLevel p_level) {
     ClassDB::register_class<UtilityAIBTLeaf>();
     ClassDB::register_class<UtilityAIBTRunNQSQuery>();
     ClassDB::register_class<UtilityAIBTPassBy>();
+    ClassDB::register_class<UtilityAIBTNodeReference>();
     
 
     // Node Query System.
