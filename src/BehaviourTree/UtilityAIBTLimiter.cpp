@@ -16,9 +16,9 @@ void UtilityAIBTLimiter::_bind_methods() {
     ClassDB::bind_method(D_METHOD("get_max_repeat_times"), &UtilityAIBTLimiter::get_max_repeat_times);
     ADD_PROPERTY(PropertyInfo(Variant::INT, "max_repeat_times", PROPERTY_HINT_RANGE, "0,100,or_greater"), "set_max_repeat_times","get_max_repeat_times");
 
-    ClassDB::bind_method(D_METHOD("set_reset_rule", "reset_rule"), &UtilityAIBTLimiter::set_reset_rule);
-    ClassDB::bind_method(D_METHOD("get_reset_rule"), &UtilityAIBTLimiter::get_reset_rule);
-    ADD_PROPERTY(PropertyInfo(Variant::INT, "reset_rule", PROPERTY_HINT_ENUM, "WhenTicked:0,WhenCompleted:1,WhenTickedAfterBeingCompleted:2,Never:3" ), "set_reset_rule","get_reset_rule");
+    //ClassDB::bind_method(D_METHOD("set_reset_rule", "reset_rule"), &UtilityAIBTLimiter::set_reset_rule);
+    //ClassDB::bind_method(D_METHOD("get_reset_rule"), &UtilityAIBTLimiter::get_reset_rule);
+    //ADD_PROPERTY(PropertyInfo(Variant::INT, "reset_rule", PROPERTY_HINT_ENUM, "WhenTicked:0,WhenCompleted:1,WhenTickedAfterBeingCompleted:2,Never:3" ), "set_reset_rule","get_reset_rule");
  
 }
 
@@ -77,15 +77,13 @@ int UtilityAIBTLimiter::tick(Variant user_data, double delta) {
     if( get_internal_status() == BT_INTERNAL_STATUS_UNTICKED ) {
         reset_bt_node();
     }
-    
-    
+    set_internal_status(BT_INTERNAL_STATUS_TICKED);
+
     if( _current_repeat_times == 0 ){
         set_internal_status(BT_INTERNAL_STATUS_COMPLETED);
         set_tick_result(BT_FAILURE);
         return BT_FAILURE;
     } 
-    
-    set_internal_status(BT_INTERNAL_STATUS_TICKED);
 
     for( int i = 0; i < get_child_count(); ++i ) {
         if( UtilityAIBehaviourTreeNodes* btnode = godot::Object::cast_to<UtilityAIBehaviourTreeNodes>(get_child(i)) ) {

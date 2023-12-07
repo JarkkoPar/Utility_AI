@@ -20,9 +20,9 @@ void UtilityAIBTRepeatUntil::_bind_methods() {
     ClassDB::bind_method(D_METHOD("get_expected_tick_result"), &UtilityAIBTRepeatUntil::get_expected_tick_result);
     ADD_PROPERTY(PropertyInfo(Variant::INT, "expected_tick_result", PROPERTY_HINT_ENUM, "Running:0,Success:1,Failure:-1" ), "set_expected_tick_result","get_expected_tick_result");
 
-    ClassDB::bind_method(D_METHOD("set_reset_rule", "reset_rule"), &UtilityAIBTRepeatUntil::set_reset_rule);
-    ClassDB::bind_method(D_METHOD("get_reset_rule"), &UtilityAIBTRepeatUntil::get_reset_rule);
-    ADD_PROPERTY(PropertyInfo(Variant::INT, "reset_rule", PROPERTY_HINT_ENUM, "WhenTicked:0,WhenCompleted:1,WhenTickedAfterBeingCompleted:2,Never:3" ), "set_reset_rule","get_reset_rule");
+    //ClassDB::bind_method(D_METHOD("set_reset_rule", "reset_rule"), &UtilityAIBTRepeatUntil::set_reset_rule);
+    //ClassDB::bind_method(D_METHOD("get_reset_rule"), &UtilityAIBTRepeatUntil::get_reset_rule);
+    //ADD_PROPERTY(PropertyInfo(Variant::INT, "reset_rule", PROPERTY_HINT_ENUM, "WhenTicked:0,WhenCompleted:1,WhenTickedAfterBeingCompleted:2,Never:3" ), "set_reset_rule","get_reset_rule");
  
 }
 
@@ -30,7 +30,7 @@ void UtilityAIBTRepeatUntil::_bind_methods() {
 // Constructor and destructor.
 
 UtilityAIBTRepeatUntil::UtilityAIBTRepeatUntil() {
-    _max_repeat_times = 3;
+    _max_repeat_times = -1;
     _current_max_repeat_times = -1;
     _expected_tick_result = BT_SUCCESS;
 }
@@ -80,17 +80,17 @@ int UtilityAIBTRepeatUntil::tick(Variant user_data, double delta) {
     if( !get_is_active() ) return BT_FAILURE;
     if( Engine::get_singleton()->is_editor_hint() ) return BT_FAILURE;
 
-    if( get_internal_status() == BT_INTERNAL_STATUS_UNTICKED && _max_repeat_times > 0 ) {
+    if( get_internal_status() == BT_INTERNAL_STATUS_UNTICKED ) {
         reset_bt_node();
     }
+
+    set_internal_status(BT_INTERNAL_STATUS_TICKED);
     
     if( _current_max_repeat_times == 0 ) {
         set_internal_status(BT_INTERNAL_STATUS_COMPLETED);
         set_tick_result(_expected_tick_result);
         return _expected_tick_result;
     }
-
-    set_internal_status(BT_INTERNAL_STATUS_TICKED);
 
     for( int i = 0; i < get_child_count(); ++i ) {
         if( UtilityAIBehaviourTreeNodes* btnode = godot::Object::cast_to<UtilityAIBehaviourTreeNodes>(get_child(i)) ) {

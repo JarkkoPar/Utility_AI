@@ -22,9 +22,9 @@ void UtilityAIBTRandomSelector::_bind_methods() {
     /**/
 
     //ClassDB::bind_method(D_METHOD("_tick", "user_data", "delta"), &UtilityAIBTRandomSelector::tick);
-    ClassDB::bind_method(D_METHOD("set_reset_rule", "reset_rule"), &UtilityAIBTRandomSelector::set_reset_rule);
-    ClassDB::bind_method(D_METHOD("get_reset_rule"), &UtilityAIBTRandomSelector::get_reset_rule);
-    ADD_PROPERTY(PropertyInfo(Variant::INT, "reset_rule", PROPERTY_HINT_ENUM, "WhenTicked:0,WhenCompleted:1,WhenTickedAfterBeingCompleted:2,Never:3" ), "set_reset_rule","get_reset_rule");
+    //ClassDB::bind_method(D_METHOD("set_reset_rule", "reset_rule"), &UtilityAIBTRandomSelector::set_reset_rule);
+    //ClassDB::bind_method(D_METHOD("get_reset_rule"), &UtilityAIBTRandomSelector::get_reset_rule);
+    //ADD_PROPERTY(PropertyInfo(Variant::INT, "reset_rule", PROPERTY_HINT_ENUM, "WhenTicked:0,WhenCompleted:1,WhenTickedAfterBeingCompleted:2,Never:3" ), "set_reset_rule","get_reset_rule");
  
 }
 

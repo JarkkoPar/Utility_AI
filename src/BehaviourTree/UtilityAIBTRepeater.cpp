@@ -19,10 +19,10 @@ void UtilityAIBTRepeater::_bind_methods() {
 //    ClassDB::bind_method(D_METHOD("set_tick_result", "tick_result"), &UtilityAIBTRepeater::set_tick_result);
 //    ClassDB::bind_method(D_METHOD("get_tick_result"), &UtilityAIBTRepeater::get_tick_result);
 //    ADD_PROPERTY(PropertyInfo(Variant::INT, "tick_result", PROPERTY_HINT_ENUM, "Running:0,Success:1,Failure:-1" ), "set_tick_result","get_tick_result");
-    ClassDB::bind_method(D_METHOD("set_reset_rule", "reset_rule"), &UtilityAIBTRepeater::set_reset_rule);
-    ClassDB::bind_method(D_METHOD("get_reset_rule"), &UtilityAIBTRepeater::get_reset_rule);
-    ADD_PROPERTY(PropertyInfo(Variant::INT, "reset_rule", PROPERTY_HINT_ENUM, "WhenTicked:0,WhenCompleted:1,WhenTickedAfterBeingCompleted:2,Never:3" ), "set_reset_rule","get_reset_rule");
- 
+    //ClassDB::bind_method(D_METHOD("set_reset_rule", "reset_rule"), &UtilityAIBTRepeater::set_reset_rule);
+    //ClassDB::bind_method(D_METHOD("get_reset_rule"), &UtilityAIBTRepeater::get_reset_rule);
+    //ADD_PROPERTY(PropertyInfo(Variant::INT, "reset_rule", PROPERTY_HINT_ENUM, "WhenTicked:0,WhenCompleted:1,WhenTickedAfterBeingCompleted:2,Never:3" ), "set_reset_rule","get_reset_rule");
+    
 }
 
 
@@ -76,6 +76,13 @@ void UtilityAIBTRepeater::reset_bt_node() {
 int UtilityAIBTRepeater::tick(Variant user_data, double delta) { 
     if( !get_is_active() ) return BT_FAILURE;
     if( Engine::get_singleton()->is_editor_hint() ) return BT_FAILURE;
+
+    if( get_internal_status() == BT_INTERNAL_STATUS_UNTICKED ) {
+        reset_bt_node();
+    }
+    set_internal_status(BT_INTERNAL_STATUS_TICKED);
+
+
     if( _repeat_times == 0 ){
         set_internal_status(BT_INTERNAL_STATUS_COMPLETED);
         set_tick_result(BT_SUCCESS);
@@ -86,11 +93,7 @@ int UtilityAIBTRepeater::tick(Variant user_data, double delta) {
         return BT_SUCCESS;
     } 
 
-    if( get_internal_status() == BT_INTERNAL_STATUS_UNTICKED ) {
-        reset_bt_node();
-    }
-    set_internal_status(BT_INTERNAL_STATUS_TICKED);
-
+  
     for( int i = 0; i < get_child_count(); ++i ) {
         if( UtilityAIBehaviourTreeNodes* btnode = godot::Object::cast_to<UtilityAIBehaviourTreeNodes>(get_child(i)) ) {
             if( !btnode->get_is_active() ) {

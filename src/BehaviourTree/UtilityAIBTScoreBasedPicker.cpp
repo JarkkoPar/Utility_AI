@@ -20,9 +20,9 @@ void UtilityAIBTScoreBasedPicker::_bind_methods() {
     ADD_PROPERTY(PropertyInfo(Variant::FLOAT, "score", PROPERTY_HINT_NONE ), "set_score","get_score");
     /**/
 
-    ClassDB::bind_method(D_METHOD("set_reset_rule", "reset_rule"), &UtilityAIBTScoreBasedPicker::set_reset_rule);
-    ClassDB::bind_method(D_METHOD("get_reset_rule"), &UtilityAIBTScoreBasedPicker::get_reset_rule);
-    ADD_PROPERTY(PropertyInfo(Variant::INT, "reset_rule", PROPERTY_HINT_ENUM, "WhenTicked:0,WhenCompleted:1,WhenTickedAfterBeingCompleted:2,Never:3" ), "set_reset_rule","get_reset_rule");
+    //ClassDB::bind_method(D_METHOD("set_reset_rule", "reset_rule"), &UtilityAIBTScoreBasedPicker::set_reset_rule);
+    //ClassDB::bind_method(D_METHOD("get_reset_rule"), &UtilityAIBTScoreBasedPicker::get_reset_rule);
+    //ADD_PROPERTY(PropertyInfo(Variant::INT, "reset_rule", PROPERTY_HINT_ENUM, "WhenTicked:0,WhenCompleted:1,WhenTickedAfterBeingCompleted:2,Never:3" ), "set_reset_rule","get_reset_rule");
  
 }
 
@@ -81,13 +81,15 @@ int UtilityAIBTScoreBasedPicker::tick(Variant user_data, double delta) {
         reset_bt_node();    
     }
 
+    set_internal_status(BT_INTERNAL_STATUS_TICKED);
+    
     if( _current_child_index < 0 ) {
         set_internal_status(BT_INTERNAL_STATUS_COMPLETED);
         set_tick_result(BT_FAILURE);
         return BT_FAILURE; // No valid child found.
     }
 
-    set_internal_status(BT_INTERNAL_STATUS_TICKED);
+    
     UtilityAIBehaviourTreeNodes* btnode = godot::Object::cast_to<UtilityAIBehaviourTreeNodes>(get_child(_current_child_index));
     if( btnode != nullptr ) {
         int return_value = btnode->tick(user_data, delta);
