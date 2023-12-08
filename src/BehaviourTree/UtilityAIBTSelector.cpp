@@ -33,7 +33,7 @@ void UtilityAIBTSelector::_bind_methods() {
 
 UtilityAIBTSelector::UtilityAIBTSelector() {
     _current_child_index = 0;
-    _is_reactive = true;
+    //_is_reactive = true;
 }
 
 
@@ -46,7 +46,7 @@ UtilityAIBTSelector::~UtilityAIBTSelector() {
 
 // Getters and Setters.
 
-
+/**
 void UtilityAIBTSelector::set_is_reactive( bool is_reactive ) {
     _is_reactive = is_reactive;
 }

@@ -15,6 +15,7 @@ private:
     int            _max_repeat_times;    
     int            _current_max_repeat_times;
     int            _expected_tick_result;
+    bool           _is_expected_tick_result_reached;
 protected:
     static void _bind_methods();
 
@@ -27,6 +28,8 @@ public:
     
     int get_max_repeat_times() const;
     void set_max_repeat_times( int max_repeat_times );
+    int get_current_max_repeat_times() const;
+    void set_current_max_repeat_times( int current_max_repeat_times );
     int get_expected_tick_result() const;
     void set_expected_tick_result( int expected_tick_result );
 

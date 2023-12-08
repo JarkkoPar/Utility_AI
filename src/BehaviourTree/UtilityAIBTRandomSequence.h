@@ -12,7 +12,7 @@ class UtilityAIBTRandomSequence : public UtilityAIBTCompositeNodes {
     GDCLASS(UtilityAIBTRandomSequence, UtilityAIBTCompositeNodes )
 
 private:
-    bool _is_reactive;
+    //bool _is_reactive;
     int _current_child_index;
     TypedArray<int> _child_node_order;
 protected:
@@ -24,8 +24,8 @@ public:
     
     
     // Getters and setters for attributes.
-    void set_is_reactive( bool is_reactive );
-    bool get_is_reactive() const;
+    //void set_is_reactive( bool is_reactive );
+    //bool get_is_reactive() const;
 
     // Handling functions.
 

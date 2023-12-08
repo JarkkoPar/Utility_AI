@@ -29,7 +29,7 @@ void UtilityAIBTRepeater::_bind_methods() {
 // Constructor and destructor.
 
 UtilityAIBTRepeater::UtilityAIBTRepeater() {
-    _repeat_times = 3;
+    _repeat_times = -1;
     _current_repeat_times = -1;
 }
 
@@ -47,6 +47,15 @@ void UtilityAIBTRepeater::set_repeat_times( int repeat_times ) {
 
 int UtilityAIBTRepeater::get_repeat_times() const {
     return _repeat_times;
+}
+
+
+void UtilityAIBTRepeater::set_current_repeat_times( int current_repeat_times ) {
+    _current_repeat_times = current_repeat_times;
+}
+
+int UtilityAIBTRepeater::get_current_repeat_times() const {
+    return _current_repeat_times;
 }
 
 
@@ -83,7 +92,7 @@ int UtilityAIBTRepeater::tick(Variant user_data, double delta) {
     set_internal_status(BT_INTERNAL_STATUS_TICKED);
 
 
-    if( _repeat_times == 0 ){
+    if( _current_repeat_times == 0 ){
         set_internal_status(BT_INTERNAL_STATUS_COMPLETED);
         set_tick_result(BT_SUCCESS);
         return BT_SUCCESS;

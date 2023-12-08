@@ -45,6 +45,7 @@ UtilityAIBehaviourTreeNodes::UtilityAIBehaviourTreeNodes() {
     _tick_result = BT_SUCCESS;
     _internal_status = BT_INTERNAL_STATUS_UNTICKED;
     _reset_rule = UtilityAIBehaviourTreeNodesResetRule::WHEN_TICKED_AFTER_BEING_COMPLETED;
+    _has_reset_rule_changed = false;
 }
 
 
@@ -102,7 +103,7 @@ void UtilityAIBehaviourTreeNodes::set_internal_status( int internal_status ) {
         }
         break;
         case UtilityAIBehaviourTreeNodesResetRule::WHEN_TICKED: {
-            if( internal_status == BT_INTERNAL_STATUS_TICKED && _internal_status != BT_INTERNAL_STATUS_UNTICKED ) {
+            if( internal_status == BT_INTERNAL_STATUS_TICKED && (_internal_status != BT_INTERNAL_STATUS_UNTICKED || _has_reset_rule_changed ) ) {
                 reset_bt_node();
             }
         }
@@ -113,8 +114,8 @@ void UtilityAIBehaviourTreeNodes::set_internal_status( int internal_status ) {
         break;
     }
    
-    
     _internal_status = internal_status;
+    _has_reset_rule_changed = false;
 }
 
 
@@ -124,6 +125,7 @@ int  UtilityAIBehaviourTreeNodes::get_internal_status() const {
 
 
 void UtilityAIBehaviourTreeNodes::set_reset_rule( int reset_rule ) {
+    _has_reset_rule_changed = (reset_rule != _reset_rule);
     _reset_rule = reset_rule;
 }
 

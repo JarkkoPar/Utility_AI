@@ -31,7 +31,7 @@ void UtilityAIBTScoreBasedPicker::_bind_methods() {
 
 UtilityAIBTScoreBasedPicker::UtilityAIBTScoreBasedPicker() {
     _current_child_index = -1;
-    _is_reactive = true;
+    //_is_reactive = true;
 }
 
 
@@ -43,7 +43,7 @@ UtilityAIBTScoreBasedPicker::~UtilityAIBTScoreBasedPicker() {
 
 
 // Getters and Setters.
-/**/
+/**
 void UtilityAIBTScoreBasedPicker::set_is_reactive( bool is_reactive ) {
     _is_reactive = is_reactive;
 }

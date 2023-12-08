@@ -18,7 +18,8 @@ private:
     bool   _invert_score;
     int    _tick_result;
     int    _internal_status;
-    int     _reset_rule;
+    int    _reset_rule;
+    bool   _has_reset_rule_changed;
 protected:
     static void _bind_methods();
 public:

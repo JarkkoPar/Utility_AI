@@ -33,7 +33,7 @@ public:
     //int  get_tick_result() const;
 
     // Handling functions.
-
+    virtual void reset() override;
     virtual int tick(Variant user_data, double delta) override;
 
     // Godot virtuals.

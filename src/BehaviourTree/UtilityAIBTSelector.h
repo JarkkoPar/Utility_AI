@@ -13,7 +13,7 @@ class UtilityAIBTSelector : public UtilityAIBTCompositeNodes {
 
 private:
     
-    bool _is_reactive;
+    //bool _is_reactive;
     int _current_child_index;
 protected:
     static void _bind_methods();
@@ -25,8 +25,8 @@ public:
     
     // Getters and setters for attributes.
         
-    void  set_is_reactive( bool is_reactive );
-    bool  get_is_reactive() const;
+    //void  set_is_reactive( bool is_reactive );
+    //bool  get_is_reactive() const;
 
     //void set_score( double score );
     //double get_score() const;

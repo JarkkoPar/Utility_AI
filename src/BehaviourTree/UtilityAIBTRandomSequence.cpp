@@ -27,7 +27,7 @@ void UtilityAIBTRandomSequence::_bind_methods() {
 
 UtilityAIBTRandomSequence::UtilityAIBTRandomSequence() {
     _current_child_index = 0;
-    _is_reactive = true;
+    //_is_reactive = true;
 }
 
 
@@ -40,7 +40,7 @@ UtilityAIBTRandomSequence::~UtilityAIBTRandomSequence() {
 
 // Getters and Setters.
 
-
+/**
 void UtilityAIBTRandomSequence::set_is_reactive( bool is_reactive ) {
     _is_reactive = is_reactive;
 }
@@ -48,7 +48,7 @@ void UtilityAIBTRandomSequence::set_is_reactive( bool is_reactive ) {
 bool UtilityAIBTRandomSequence::get_is_reactive() const {
     return _is_reactive;
 }
-
+/**/
 
 void UtilityAIBTRandomSequence::reset_bt_node() {
     _current_child_index = 0;

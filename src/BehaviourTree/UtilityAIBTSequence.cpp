@@ -31,7 +31,7 @@ void UtilityAIBTSequence::_bind_methods() {
 
 UtilityAIBTSequence::UtilityAIBTSequence() {
     _current_child_index = 0;
-    _is_reactive = true;
+    //_is_reactive = true;
 }
 
 
@@ -44,7 +44,7 @@ UtilityAIBTSequence::~UtilityAIBTSequence() {
 
 // Getters and Setters.
 
-
+/**
 void UtilityAIBTSequence::set_is_reactive( bool is_reactive ) {
     _is_reactive = is_reactive;
 }
@@ -52,6 +52,7 @@ void UtilityAIBTSequence::set_is_reactive( bool is_reactive ) {
 bool UtilityAIBTSequence::get_is_reactive() const {
     return _is_reactive;
 }
+/**/
 
 void UtilityAIBTSequence::reset_bt_node() {
     _current_child_index = 0;
@@ -59,7 +60,7 @@ void UtilityAIBTSequence::reset_bt_node() {
 
 
 int UtilityAIBTSequence::tick(Variant user_data, double delta) {
-    if( get_internal_status() == BT_INTERNAL_STATUS_UNTICKED || _is_reactive ) {
+    if( get_internal_status() == BT_INTERNAL_STATUS_UNTICKED ) {
         _current_child_index = 0;
     }
     set_internal_status(BT_INTERNAL_STATUS_TICKED);

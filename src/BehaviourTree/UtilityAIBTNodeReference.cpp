@@ -63,6 +63,20 @@ int  UtilityAIBTNodeReference::get_tick_result() const {
 
 // Handling methods.
 
+void UtilityAIBTNodeReference::reset() {
+    if(_cache.is_null()) {
+        return;
+    }
+    if( !_cache.is_valid() ) {
+        return;
+    }
+    UtilityAIBehaviourTreeNodes* btnode = Object::cast_to<UtilityAIBehaviourTreeNodes>(ObjectDB::get_instance(_cache));
+    if( btnode == nullptr ) {
+        return;
+    }
+    btnode->reset();
+}
+
 void UtilityAIBTNodeReference::_update_cache() {
     _cache = ObjectID();
 	if (has_node(_node_reference_nodepath)) {

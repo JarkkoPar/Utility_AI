@@ -51,7 +51,11 @@ uint64_t  UtilityAIBTRoot::get_total_tick_usec() const {
 int UtilityAIBTRoot::tick(Variant user_data, double delta) { 
     if( !get_is_active() ) return BT_FAILURE;
     if( Engine::get_singleton()->is_editor_hint() ) return BT_FAILURE;
-    if( get_internal_status() == BT_INTERNAL_STATUS_COMPLETED ) return get_tick_result(); 
+
+    if(get_reset_rule() == UtilityAIBehaviourTreeNodesResetRule::NEVER) {
+        if( get_internal_status() == BT_INTERNAL_STATUS_COMPLETED ) return get_tick_result(); 
+    } 
+    
     set_internal_status(BT_INTERNAL_STATUS_TICKED);
     uint64_t method_start_time_usec = godot::Time::get_singleton()->get_ticks_usec();
     for( int i = 0; i < get_child_count(); ++i ) {
@@ -79,6 +83,13 @@ int UtilityAIBTRoot::tick(Variant user_data, double delta) {
     set_internal_status(BT_INTERNAL_STATUS_COMPLETED);
     _total_tick_usec = godot::Time::get_singleton()->get_ticks_usec() - method_start_time_usec;
     return BT_FAILURE; // We shouldn't get here. If we do, there were no child nodes.
+}
+
+
+// Godot virtuals.
+void UtilityAIBTRoot::_ready() {
+    if( Engine::get_singleton()->is_editor_hint() ) return;
+    reset();
 }
 
 
