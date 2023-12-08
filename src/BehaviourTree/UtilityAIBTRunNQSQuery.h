@@ -5,6 +5,9 @@
 #include <godot_cpp/classes/node.hpp>
 #include "../NodeQuerySystem/SearchSpaces/UtilityAINQSSearchSpaces.h"
 
+#define QS_IDLE         0
+#define QS_RUNNING      1
+#define QS_COMPLETED    2
 
 namespace godot {
 
@@ -16,6 +19,8 @@ private:
     UtilityAINQSSearchSpaces* _nqs_search_space_node;
     int _time_budget_usec;
     int _top_n_to_find;
+
+    int _query_state;
 protected:
     static void _bind_methods();
 
@@ -37,12 +42,13 @@ public:
 
 
     // Handling functions.
-
+    virtual void reset_bt_node() override;
     virtual int tick(Variant user_data, double delta) override;
 
     // Godot virtuals.
 
     void _ready();
+    void _physics_process(float delta );
     //void _exit_tree();
 };
 

@@ -168,6 +168,46 @@ void UtilityAINQSSearchSpaces::initialize_search_space() {
     _initialize_search_space();
 }
 
+void UtilityAINQSSearchSpaces::reset_query_variables() {
+    // Query was not running already, so initialize a new one.
+    _current_query_runtime_usec = 0;
+    _current_query_node_visits = 0;
+    _current_query_call_count = 0;
+    _average_call_runtime_usec = 0;
+    _current_criterion_index = 0;
+    _current_node_index = 0;
+    _work_in_progress_num_added_nodes = 0;
+    
+    // Get the search space nodes and set the score to 1.0 for all of them.
+    _search_space = get_searchspace_nodes();
+    _num_search_space_nodes = _search_space.size();
+    _scores.resize(_num_search_space_nodes);
+    _scores.fill(1.0);
+
+    // Create the work-in-progress search space we will be swapping with.
+    _work_in_progress_search_space = _search_space.duplicate();
+    _work_in_progress_scores = _scores.duplicate();
+    _work_in_progress_num_added_nodes = 0;
+
+    _ptr_current_search_space = &_search_space;
+    _ptr_current_scores = &_scores;
+
+    _ptr_current_work_in_progress_search_space = &_work_in_progress_search_space;
+    _ptr_current_work_in_progress_scores = &_work_in_progress_scores;
+
+    _is_query_still_running = true; // Set the query as running.
+}
+
+void UtilityAINQSSearchSpaces::start_query( uint64_t time_budget_usec ) {
+    if( !get_is_active() ) return;
+    if( Engine::get_singleton()->is_editor_hint() ) return;
+    if( get_child_count() < 1 ) {
+        WARN_PRINT("UtilityAINodeQuerySystem::start_query() - No search criteria nodes added.");
+        return;
+    }
+    reset_query_variables();
+}
+
 
 bool UtilityAINQSSearchSpaces::execute_query(uint64_t time_budget_usec) {
     uint64_t method_start_time_usec = godot::Time::get_singleton()->get_ticks_usec();
@@ -179,34 +219,7 @@ bool UtilityAINQSSearchSpaces::execute_query(uint64_t time_budget_usec) {
     }
 
     if( !_is_query_still_running ) {
-        // Query was not running already, so initialize a new one.
-        _current_query_runtime_usec = 0;
-        _current_query_node_visits = 0;
-        _current_query_call_count = 0;
-        _average_call_runtime_usec = 0;
-        _current_criterion_index = 0;
-        _current_node_index = 0;
-        _work_in_progress_num_added_nodes = 0;
-        
-        // Get the search space nodes and set the score to 1.0 for all of them.
-        _search_space = get_searchspace_nodes();
-        _num_search_space_nodes = _search_space.size();
-        _scores.resize(_num_search_space_nodes);
-        _scores.fill(1.0);
-
-        // Create the work-in-progress search space we will be swapping with.
-        _work_in_progress_search_space = _search_space.duplicate();
-        _work_in_progress_scores = _scores.duplicate();
-        _work_in_progress_num_added_nodes = 0;
-
-        _ptr_current_search_space = &_search_space;
-        _ptr_current_scores = &_scores;
-
-        _ptr_current_work_in_progress_search_space = &_work_in_progress_search_space;
-        _ptr_current_work_in_progress_scores = &_work_in_progress_scores;
-
-        _is_query_still_running = true; // Set the query as running.
-
+        reset_query_variables();
     }//endif query is not running
     ++_current_query_call_count;
 

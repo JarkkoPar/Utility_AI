@@ -92,7 +92,9 @@ public:
     // Handling methods.
 
     void initialize_search_space();
-
+    void reset_query_variables(); 
+    
+    virtual void start_query( uint64_t time_budget_usec = 0 );
     virtual bool execute_query(uint64_t time_budget_usec = 0 );
 
     //void apply_criterion( UtilityAISearchCriteria* criteria, TypedArray<Node> search_space, TypedArray<double> current_scores, TypedArray<Node>& result_space, TypedArray<double>& result_scores );
