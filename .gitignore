@@ -249,3 +249,15 @@ src/BehaviourTree/UtilityAIBTDecoratorNodes.windows.template_debug.x86_64.obj
 src/BehaviourTree/UtilityAIBTDecoratorNodes.windows.template_release.x86_64.obj
 src/BehaviourTree/UtilityAIBTTaskNodes.windows.template_debug.x86_64.obj
 src/BehaviourTree/UtilityAIBTTaskNodes.windows.template_release.x86_64.obj
+src/BehaviourTree/UtilityAIBTCompositeNodes.os
+src/BehaviourTree/UtilityAIBTCooldownMsec.os
+src/BehaviourTree/UtilityAIBTCooldownTicks.os
+src/BehaviourTree/UtilityAIBTCooldownUsec.os
+src/BehaviourTree/UtilityAIBTDecoratorNodes.os
+src/BehaviourTree/UtilityAIBTLimiter.os
+src/BehaviourTree/UtilityAIBTPassBy.os
+src/BehaviourTree/UtilityAIBTPassThrough.os
+src/BehaviourTree/UtilityAIBTRepeater.os
+src/BehaviourTree/UtilityAIBTRepeatUntil.os
+src/BehaviourTree/UtilityAIBTRoot.os
+src/BehaviourTree/UtilityAIBTTaskNodes.os
