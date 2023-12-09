@@ -12,6 +12,9 @@ using namespace godot;
 // Method binds.
 
 void UtilityAIBTRoot::_bind_methods() {
+
+    ADD_SUBGROUP("Debugging","");
+
     ClassDB::bind_method(D_METHOD("set_total_tick_usec", "total_tick_usec"), &UtilityAIBTRoot::set_total_tick_usec);
     ClassDB::bind_method(D_METHOD("get_total_tick_usec"), &UtilityAIBTRoot::get_total_tick_usec);
     ADD_PROPERTY(PropertyInfo(Variant::INT, "total_tick_usec", PROPERTY_HINT_NONE), "set_total_tick_usec","get_total_tick_usec");

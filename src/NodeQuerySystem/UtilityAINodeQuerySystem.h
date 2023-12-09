@@ -16,7 +16,7 @@ class UtilityAINodeQuerySystem : public UtilityAI {
 
 private:
     godot::TypedArray<UtilityAINQSSearchSpaces> _high_priority_queries;
-    godot::TypedArray<UtilityAINQSSearchSpaces> _reqular_queries;
+    godot::TypedArray<UtilityAINQSSearchSpaces> _regular_queries;
     int _current_high_priority_query_index;
     int _current_regular_query_index;
     uint64_t _time_budget_per_frame;

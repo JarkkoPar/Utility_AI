@@ -14,15 +14,15 @@ void UtilityAIBTCooldownMsec::_bind_methods() {
     ClassDB::bind_method(D_METHOD("get_cooldown_msec"), &UtilityAIBTCooldownMsec::get_cooldown_msec);
     ADD_PROPERTY(PropertyInfo(Variant::INT, "cooldown_msec", PROPERTY_HINT_RANGE, "0,1000,or_greater" ), "set_cooldown_msec","get_cooldown_msec");
 
-    ClassDB::bind_method(D_METHOD("set_cooldown_start_timestamp", "cooldown_start_timestamp"), &UtilityAIBTCooldownMsec::set_cooldown_start_timestamp);
-    ClassDB::bind_method(D_METHOD("get_cooldown_start_timestamp"), &UtilityAIBTCooldownMsec::get_cooldown_start_timestamp);
-    ADD_PROPERTY(PropertyInfo(Variant::INT, "cooldown_start_timestamp", PROPERTY_HINT_RANGE, "0,1000,or_greater" ), "set_cooldown_start_timestamp","get_cooldown_start_timestamp");
-
     ClassDB::bind_method(D_METHOD("set_cooldown_return_value", "cooldown_return_value"), &UtilityAIBTCooldownMsec::set_cooldown_return_value);
     ClassDB::bind_method(D_METHOD("get_cooldown_return_value"), &UtilityAIBTCooldownMsec::get_cooldown_return_value);
     ADD_PROPERTY(PropertyInfo(Variant::INT, "cooldown_return_value", PROPERTY_HINT_ENUM, "Running:0,Success:1,Failure:-1" ), "set_cooldown_return_value","get_cooldown_return_value");
 
-    //ClassDB::bind_method(D_METHOD("_tick", "user_data", "delta"), &UtilityAIBTCooldownMsec::tick);
+    ADD_SUBGROUP("Debugging","");
+
+    ClassDB::bind_method(D_METHOD("set_cooldown_start_timestamp", "cooldown_start_timestamp"), &UtilityAIBTCooldownMsec::set_cooldown_start_timestamp);
+    ClassDB::bind_method(D_METHOD("get_cooldown_start_timestamp"), &UtilityAIBTCooldownMsec::get_cooldown_start_timestamp);
+    ADD_PROPERTY(PropertyInfo(Variant::INT, "cooldown_start_timestamp", PROPERTY_HINT_RANGE, "0,1000,or_greater" ), "set_cooldown_start_timestamp","get_cooldown_start_timestamp");
 
 }
 

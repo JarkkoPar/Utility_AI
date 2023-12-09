@@ -14,13 +14,15 @@ void UtilityAIBTCooldownTicks::_bind_methods() {
     ClassDB::bind_method(D_METHOD("get_cooldown_ticks"), &UtilityAIBTCooldownTicks::get_cooldown_ticks);
     ADD_PROPERTY(PropertyInfo(Variant::INT, "cooldown_ticks", PROPERTY_HINT_RANGE, "0,1000,or_greater" ), "set_cooldown_ticks","get_cooldown_ticks");
 
-    ClassDB::bind_method(D_METHOD("set_current_cooldown_ticks", "current_cooldown_ticks"), &UtilityAIBTCooldownTicks::set_current_cooldown_ticks);
-    ClassDB::bind_method(D_METHOD("get_current_cooldown_ticks"), &UtilityAIBTCooldownTicks::get_current_cooldown_ticks);
-    ADD_PROPERTY(PropertyInfo(Variant::INT, "current_cooldown_ticks", PROPERTY_HINT_RANGE, "0,1000,or_greater" ), "set_current_cooldown_ticks","get_current_cooldown_ticks");
-
     ClassDB::bind_method(D_METHOD("set_cooldown_return_value", "cooldown_return_value"), &UtilityAIBTCooldownTicks::set_cooldown_return_value);
     ClassDB::bind_method(D_METHOD("get_cooldown_return_value"), &UtilityAIBTCooldownTicks::get_cooldown_return_value);
     ADD_PROPERTY(PropertyInfo(Variant::INT, "cooldown_return_value", PROPERTY_HINT_ENUM, "Running:0,Success:1,Failure:-1" ), "set_cooldown_return_value","get_cooldown_return_value");
+
+    ADD_SUBGROUP("Debugging","");
+
+    ClassDB::bind_method(D_METHOD("set_current_cooldown_ticks", "current_cooldown_ticks"), &UtilityAIBTCooldownTicks::set_current_cooldown_ticks);
+    ClassDB::bind_method(D_METHOD("get_current_cooldown_ticks"), &UtilityAIBTCooldownTicks::get_current_cooldown_ticks);
+    ADD_PROPERTY(PropertyInfo(Variant::INT, "current_cooldown_ticks", PROPERTY_HINT_RANGE, "0,1000,or_greater" ), "set_current_cooldown_ticks","get_current_cooldown_ticks");
 
     //ClassDB::bind_method(D_METHOD("_tick", "user_data", "delta"), &UtilityAIBTCooldownTicks::tick);
 

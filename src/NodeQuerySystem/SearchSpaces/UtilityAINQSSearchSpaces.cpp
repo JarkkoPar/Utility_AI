@@ -39,6 +39,12 @@ void UtilityAINQSSearchSpaces::_bind_methods() {
     ClassDB::bind_method(D_METHOD("get_query_result_scores"), &UtilityAINQSSearchSpaces::get_query_result_scores);
     ADD_PROPERTY(PropertyInfo(Variant::ARRAY, "query_result_scores", PROPERTY_HINT_NONE), "set_query_result_scores","get_query_result_scores");
 
+    ADD_SUBGROUP("Debugging","");
+
+    ClassDB::bind_method(D_METHOD("set_is_query_still_running", "is_query_still_running"), &UtilityAINQSSearchSpaces::set_is_query_still_running);
+    ClassDB::bind_method(D_METHOD("get_is_query_still_running"), &UtilityAINQSSearchSpaces::get_is_query_still_running);
+    ADD_PROPERTY(PropertyInfo(Variant::BOOL, "is_query_still_running", PROPERTY_HINT_NONE), "set_is_query_still_running","get_is_query_still_running");
+
     ClassDB::bind_method(D_METHOD("set_average_call_runtime_usec", "average_call_runtime_usec"), &UtilityAINQSSearchSpaces::set_average_call_runtime_usec);
     ClassDB::bind_method(D_METHOD("get_average_call_runtime_usec"), &UtilityAINQSSearchSpaces::get_average_call_runtime_usec);
     ADD_PROPERTY(PropertyInfo(Variant::INT, "average_call_runtime_usec", PROPERTY_HINT_NONE), "set_average_call_runtime_usec","get_average_call_runtime_usec");
@@ -58,6 +64,8 @@ void UtilityAINQSSearchSpaces::_bind_methods() {
     //PROPERTY_HINT_ARRAY_TYPE, vformat("%s/%s:%s", Variant::FLOAT, PROPERTY_HINT_NONE)
     ClassDB::bind_method(D_METHOD("initialize_search_space"), &UtilityAINQSSearchSpaces::initialize_search_space);
     ClassDB::bind_method(D_METHOD("execute_query", "time_budget_usec"), &UtilityAINQSSearchSpaces::execute_query);
+
+    ADD_SIGNAL(MethodInfo("query_completed", PropertyInfo(Variant::OBJECT, "search_space")));
 }
 
 
@@ -276,7 +284,8 @@ bool UtilityAINQSSearchSpaces::execute_query(uint64_t time_budget_usec) {
     _current_query_runtime_usec += _current_call_runtime_usec; 
     _total_query_runtime_usec = _current_query_runtime_usec;
 
-
+    // Emit the signal that this query completed.
+    emit_signal("query_completed", this);
     return true;
     /**
     // Query not running, so start a new one.

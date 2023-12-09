@@ -20,7 +20,8 @@ void UtilityAIBTRepeatUntil::_bind_methods() {
     ClassDB::bind_method(D_METHOD("get_expected_tick_result"), &UtilityAIBTRepeatUntil::get_expected_tick_result);
     ADD_PROPERTY(PropertyInfo(Variant::INT, "expected_tick_result", PROPERTY_HINT_ENUM, "Running:0,Success:1,Failure:-1" ), "set_expected_tick_result","get_expected_tick_result");
 
-
+    ADD_SUBGROUP("Debugging","");
+    
     ClassDB::bind_method(D_METHOD("set_current_repeat_times", "current_repeat_times"), &UtilityAIBTRepeatUntil::set_current_max_repeat_times);
     ClassDB::bind_method(D_METHOD("get_current_repeat_times"), &UtilityAIBTRepeatUntil::get_current_max_repeat_times);
     ADD_PROPERTY(PropertyInfo(Variant::INT, "current_repeat_times", PROPERTY_HINT_RANGE, "-1,100,or_greater"), "set_current_repeat_times","get_current_repeat_times");

@@ -7,12 +7,12 @@ using namespace godot;
 
 
 UtilityAINodeQuerySystem::UtilityAINodeQuerySystem() {
-    _time_budget_per_frame = 200;
+    _time_budget_per_frame = 1000;
     _current_high_priority_query_index = 0;
     _current_regular_query_index = 0;
 
     _time_allocation_pct_to_high_priority_queries = 0.8f;
-    _time_budget_per_frame_high_priority_queries = (uint64_t)(_time_allocation_pct_to_high_priority_queries * (float)_time_budget_per_frame);
+    _time_budget_per_frame_high_priority_queries = (uint64_t)(_time_allocation_pct_to_high_priority_queries * ((float)_time_budget_per_frame));
     _time_budget_per_frame_regular_queries = _time_budget_per_frame - _time_budget_per_frame_high_priority_queries;
 
     _is_performance_counter_initialized = false;
@@ -30,7 +30,7 @@ void UtilityAINodeQuerySystem::_bind_methods() {
     
     ClassDB::bind_method(D_METHOD("set_time_allocation_pct_to_high_priority_queries", "time_allocation_pct_to_high_priority_queries"), &UtilityAINodeQuerySystem::set_time_allocation_pct_to_high_priority_queries);
     ClassDB::bind_method(D_METHOD("get_time_allocation_pct_to_high_priority_queries"), &UtilityAINodeQuerySystem::get_time_allocation_pct_to_high_priority_queries);
-    ADD_PROPERTY(PropertyInfo(Variant::FLOAT, "time_allocation_pct_to_high_priority_queries", PROPERTY_HINT_RANGE, "1,10000,or_greater"), "set_time_allocation_pct_to_high_priority_queries","get_time_allocation_pct_to_high_priority_queries");
+    ADD_PROPERTY(PropertyInfo(Variant::FLOAT, "time_allocation_pct_to_high_priority_queries", PROPERTY_HINT_RANGE, "0.0,1.0"), "set_time_allocation_pct_to_high_priority_queries","get_time_allocation_pct_to_high_priority_queries");
     
     ClassDB::bind_method(D_METHOD("post_query", "search_space", "is_high_priority"), &UtilityAINodeQuerySystem::post_query);
     ClassDB::bind_method(D_METHOD("run_queries"), &UtilityAINodeQuerySystem::run_queries);
@@ -80,51 +80,88 @@ void UtilityAINodeQuerySystem::initialize_performance_counters() {
 
 
 void UtilityAINodeQuerySystem::run_queries() {
-    uint64_t method_start_time_usec = 0;
-    if( _is_performance_counter_initialized ) {
-        method_start_time_usec = godot::Time::get_singleton()->get_ticks_usec();
-    } 
-    std::vector<int> high_priority_queries_to_delete;
+    uint64_t method_start_time_usec = godot::Time::get_singleton()->get_ticks_usec();
     uint64_t time_left_high_priority = _time_budget_per_frame_high_priority_queries;
+    
+    std::vector<int> high_priority_queries_to_delete;
     while( time_left_high_priority > 0 && _high_priority_queries.size() > 0) {
+        uint64_t start_time_usec = godot::Time::get_singleton()->get_ticks_usec();
+        // If we have a valid index, see if we can run the query.
         if( _current_high_priority_query_index < _high_priority_queries.size() ) {
             UtilityAINQSSearchSpaces* current_query = godot::Object::cast_to<UtilityAINQSSearchSpaces>(_high_priority_queries[_current_high_priority_query_index]);
             if( current_query == nullptr ) {
+                // Invalid pointer, delete it.
                 high_priority_queries_to_delete.push_back(_current_high_priority_query_index);
                 ++_current_high_priority_query_index;
+                time_left_high_priority -= godot::Time::get_singleton()->get_ticks_usec() - start_time_usec;
                 continue;
             }
 
-            bool is_completed = current_query->execute_query(1);
-            time_left_high_priority -= current_query->get_current_call_runtime_usec();
+            bool is_completed = current_query->execute_query(10);
             if( is_completed ) {
+                // Query is complete, delete it.
                 high_priority_queries_to_delete.push_back(_current_high_priority_query_index);
-            }
+            }            
         }//endif index is valid
         
+        // Go to the next query.
         ++_current_high_priority_query_index;
         if( _current_high_priority_query_index >= _high_priority_queries.size()) {
-            // Delete the queries that have completed.
+            // Delete the queries that have completed or were null.
             for( int i = high_priority_queries_to_delete.size() - 1; i > -1; --i ) {
                 _high_priority_queries.remove_at(high_priority_queries_to_delete[i]);
             }
             _current_high_priority_query_index = 0;
             high_priority_queries_to_delete.clear();
         }//endif index is at or over top limit
+        time_left_high_priority -= (godot::Time::get_singleton()->get_ticks_usec() - start_time_usec);
     }//endwhile time left to use
     
-    /**
-    uint64_t time_left_regular = _time_budget_per_frame_regular_queries;
-    while( time_left_regular > 0 ) {
-        UtilityAINQSSearchSpaces* current_query = _high_priority_queries[_current_high_priority_query_index];
-        if( current_query == nullptr ) {
-            ++_current_high_priority_query_index;
-            continue;
+    // Then the regular queries - if we have time left.
+    uint64_t time_used_so_far = godot::Time::get_singleton()->get_ticks_usec() - method_start_time_usec;
+    uint64_t time_left_regular_priority = _time_budget_per_frame - time_used_so_far;
+    if( time_left_regular_priority <= 0 ) {
+        if( _is_performance_counter_initialized ) {
+            _run_queries_time_elapsed_usec = time_used_so_far;
         }
-        bool is_completed = current_query->execute_query(1);
-        time_left_regular -= current_query->get_current_call_runtime_usec();
-    }
-    /**/
+        return; // No time for regular priority queries left.
+    } //endif no time left for regular queries
+
+    // Start running the regular queries for the rest of the time.
+    std::vector<int> regular_queries_to_delete;
+    while( time_left_regular_priority > 0 && _regular_queries.size() > 0) {
+        uint64_t start_time_usec = godot::Time::get_singleton()->get_ticks_usec();
+        // If we have a valid index, see if we can run the query.
+        if( _current_regular_query_index < _regular_queries.size() ) {
+            UtilityAINQSSearchSpaces* current_query = godot::Object::cast_to<UtilityAINQSSearchSpaces>(_regular_queries[_current_regular_query_index]);
+            if( current_query == nullptr ) {
+                // Invalid pointer, delete it.
+                regular_queries_to_delete.push_back(_current_regular_query_index);
+                ++_current_regular_query_index;
+                time_left_regular_priority -= godot::Time::get_singleton()->get_ticks_usec() - start_time_usec;
+                continue;
+            }
+
+            bool is_completed = current_query->execute_query(10);
+            if( is_completed ) {
+                // Query is complete, delete it.
+                regular_queries_to_delete.push_back(_current_regular_query_index);
+            }            
+        }//endif index is valid
+        
+        // Go to the next query.
+        ++_current_regular_query_index;
+        if( _current_regular_query_index >= _regular_queries.size()) {
+            // Delete the queries that have completed or were null.
+            for( int i = regular_queries_to_delete.size() - 1; i > -1; --i ) {
+                _regular_queries.remove_at(regular_queries_to_delete[i]);
+            }
+            _current_regular_query_index = 0;
+            regular_queries_to_delete.clear();
+        }//endif index is at or over top limit
+        time_left_regular_priority -= (godot::Time::get_singleton()->get_ticks_usec() - start_time_usec);
+    }//endwhile time left to use
+    
     if( _is_performance_counter_initialized ) {
         _run_queries_time_elapsed_usec = godot::Time::get_singleton()->get_ticks_usec() - method_start_time_usec;
     }
@@ -154,5 +191,5 @@ int UtilityAINodeQuerySystem::post_query( UtilityAINQSSearchSpaces* search_space
 
 void UtilityAINodeQuerySystem::clear_queries() {
     _high_priority_queries.clear();
-    _reqular_queries.clear();
+    _regular_queries.clear();
 }
