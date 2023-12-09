@@ -18,6 +18,7 @@ UtilityAINQSSearchSpaces::UtilityAINQSSearchSpaces() {
     _current_query_node_visits = 0;
     _current_query_runtime_usec = 0;
     _average_call_runtime_usec = 0;
+    _current_call_runtime_usec = 0;
 }
 
 
@@ -123,6 +124,13 @@ int  UtilityAINQSSearchSpaces::get_top_n_to_find() const {
     return _top_n_to_find;
 }
 
+void UtilityAINQSSearchSpaces::set_current_call_runtime_usec( uint64_t current_call_runtime_usec ) {
+    _current_call_runtime_usec = current_call_runtime_usec;
+}
+uint64_t  UtilityAINQSSearchSpaces::get_current_call_runtime_usec() const {
+    return _current_call_runtime_usec;
+}
+
 void UtilityAINQSSearchSpaces::set_average_call_runtime_usec( int average_call_runtime_usec ) {
     _average_call_runtime_usec = average_call_runtime_usec;
 }
@@ -161,6 +169,13 @@ int  UtilityAINQSSearchSpaces::get_total_query_call_count() const {
     return _total_query_call_count;
 }
 
+void UtilityAINQSSearchSpaces::set_is_query_still_running( bool is_query_still_running ) {
+    _is_query_still_running = is_query_still_running;
+}
+bool UtilityAINQSSearchSpaces::get_is_query_still_running() const {
+    return _is_query_still_running;
+}
+
 
 // Handling methods.
 
@@ -174,6 +189,7 @@ void UtilityAINQSSearchSpaces::reset_query_variables() {
     _current_query_node_visits = 0;
     _current_query_call_count = 0;
     _average_call_runtime_usec = 0;
+    _current_call_runtime_usec = 0;
     _current_criterion_index = 0;
     _current_node_index = 0;
     _work_in_progress_num_added_nodes = 0;
@@ -197,6 +213,7 @@ void UtilityAINQSSearchSpaces::reset_query_variables() {
 
     _is_query_still_running = true; // Set the query as running.
 }
+
 
 void UtilityAINQSSearchSpaces::start_query( uint64_t time_budget_usec ) {
     if( !get_is_active() ) return;
@@ -254,9 +271,9 @@ bool UtilityAINQSSearchSpaces::execute_query(uint64_t time_budget_usec) {
     _total_query_node_visits = _current_query_node_visits;
     
     // All the criterions are processed and results sorted. Store the total time used for processing.
-    uint64_t time_used = (godot::Time::get_singleton()->get_ticks_usec() - method_start_time_usec);
-    _average_call_runtime_usec = _average_call_runtime_usec * 0.5 + 0.5 * time_used;
-    _current_query_runtime_usec += time_used; 
+    _current_call_runtime_usec = (godot::Time::get_singleton()->get_ticks_usec() - method_start_time_usec);
+    _average_call_runtime_usec = _average_call_runtime_usec * 0.5 + 0.5 * _current_call_runtime_usec;
+    _current_query_runtime_usec += _current_call_runtime_usec; 
     _total_query_runtime_usec = _current_query_runtime_usec;
 
 
@@ -339,10 +356,10 @@ bool UtilityAINQSSearchSpaces::apply_criterion_with_time_budget( UtilityAINQSSea
         // check if we are out of time and must stop.
         ++_current_node_index;
         if( time_budget_usec > 0 ) {
-            uint64_t time_used = godot::Time::get_singleton()->get_ticks_usec() - start_time_usec;
-            if( time_used >= time_budget_usec ) {
-                _current_query_runtime_usec += time_used;
-                _average_call_runtime_usec = _average_call_runtime_usec * 0.5 + 0.5 * time_used;
+            _current_call_runtime_usec = godot::Time::get_singleton()->get_ticks_usec() - start_time_usec;
+            if( _current_call_runtime_usec >= time_budget_usec ) {
+                _current_query_runtime_usec += _current_call_runtime_usec;
+                _average_call_runtime_usec = _average_call_runtime_usec * 0.5 + 0.5 * _current_call_runtime_usec;
                 return false; // Still running
             } // endif timebudget used up
         }//endif timebudget is applied

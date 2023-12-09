@@ -4,6 +4,7 @@
 #include "UtilityAIBTTaskNodes.h"
 #include <godot_cpp/classes/node.hpp>
 #include "../NodeQuerySystem/SearchSpaces/UtilityAINQSSearchSpaces.h"
+#include "../NodeQuerySystem/UtilityAINodeQuerySystem.h"
 
 #define QS_IDLE         0
 #define QS_RUNNING      1
@@ -17,6 +18,8 @@ class UtilityAIBTRunNQSQuery : public UtilityAIBTTaskNodes {
 private:
     NodePath _nqs_search_space_node_path;
     UtilityAINQSSearchSpaces* _nqs_search_space_node;
+    UtilityAINodeQuerySystem* _nqs;
+
     int _time_budget_usec;
     int _top_n_to_find;
 

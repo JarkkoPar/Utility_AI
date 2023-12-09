@@ -24,6 +24,7 @@ private:
     //uint64_t            _query_time_budget_per_frame_usec;
     uint64_t            _total_query_runtime_usec;
     uint64_t            _current_query_runtime_usec;
+    uint64_t            _current_call_runtime_usec;
     uint64_t            _average_call_runtime_usec;
     unsigned int        _current_query_node_visits;
     unsigned int        _current_query_call_count;
@@ -80,6 +81,10 @@ public:
     void set_average_call_runtime_usec( int average_call_runtime_usec );
     int  get_average_call_runtime_usec() const;
 
+    void set_current_call_runtime_usec( uint64_t current_call_runtime_usec );
+    uint64_t  get_current_call_runtime_usec() const;
+
+
     void set_total_query_runtime_usec( int total_query_runtime_usec );
     int  get_total_query_runtime_usec() const;
 
@@ -89,6 +94,9 @@ public:
     void set_total_query_call_count( int total_query_call_count );
     int  get_total_query_call_count() const;
 
+    void set_is_query_still_running( bool is_query_still_running );
+    bool get_is_query_still_running() const;
+    
     // Handling methods.
 
     void initialize_search_space();

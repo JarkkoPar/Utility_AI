@@ -1,4 +1,5 @@
 #include "register_types.h"
+#include <godot_cpp/classes/engine.hpp>
 
 // Classes to include in to the gdextension module.
 #include "UtilityAIBehaviour.h"
@@ -60,6 +61,7 @@
 
 
 // Node Query System.
+#include "NodeQuerySystem/UtilityAINodeQuerySystem.h"
 
 #include "NodeQuerySystem/SearchSpaces/UtilityAINQSSearchSpaces.h"
 #include "NodeQuerySystem/SearchSpaces/UtilityAINodeGroupSearchSpace.h"
@@ -102,6 +104,8 @@
 #include <godot_cpp/godot.hpp>
 
 using namespace godot;
+
+static UtilityAINodeQuerySystem* gpNodeQuerySystem;
 
 void initialize_utility_ai_module(ModuleInitializationLevel p_level) {
     if (p_level != MODULE_INITIALIZATION_LEVEL_SCENE) {
@@ -169,6 +173,8 @@ void initialize_utility_ai_module(ModuleInitializationLevel p_level) {
     
 
     // Node Query System.
+    ClassDB::register_class<UtilityAINodeQuerySystem>();
+
     ClassDB::register_class<UtilityAINQSSearchSpaces>(true);
     ClassDB::register_class<UtilityAINodeGroupSearchSpace>();
     ClassDB::register_class<UtilityAINodeChildrenSearchSpace>();
@@ -198,12 +204,18 @@ void initialize_utility_ai_module(ModuleInitializationLevel p_level) {
     ClassDB::register_class<UtilityAIDotProductToPositionVector3SearchCriterion>();
     ClassDB::register_class<UtilityAIDotProductToPositionVector2SearchCriterion>();
 
+    // Add singletons.
+    gpNodeQuerySystem = memnew(UtilityAINodeQuerySystem);
+    Engine::get_singleton()->register_singleton("NodeQuerySystem", gpNodeQuerySystem);
 }
 
 void uninitialize_utility_ai_module(ModuleInitializationLevel p_level) {
     if (p_level != MODULE_INITIALIZATION_LEVEL_SCENE) {
         return;
     }
+
+    Engine::get_singleton()->unregister_singleton("NodeQuerySystem");
+    memdelete(gpNodeQuerySystem);
 }
 
 extern "C" {
