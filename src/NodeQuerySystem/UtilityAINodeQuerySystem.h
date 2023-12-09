@@ -23,7 +23,8 @@ private:
     uint64_t _time_budget_per_frame_high_priority_queries;
     uint64_t _time_budget_per_frame_regular_queries;
     float    _time_allocation_pct_to_high_priority_queries;
-
+    bool     _is_performance_counter_initialized;
+    uint64_t _run_queries_time_elapsed_usec;
 protected:
     static void _bind_methods();
 
@@ -40,16 +41,19 @@ public:
     void set_time_allocation_pct_to_high_priority_queries( float time_allocation_pct_to_high_priority_queries );
     float get_time_allocation_pct_to_high_priority_queries() const;
 
+    int  get_run_queries_time_elapsed_usec() const;
 
     // Handling methods.
+    void initialize_performance_counters();
     
     int post_query( UtilityAINQSSearchSpaces* search_space, bool is_high_priority = true );
-    //virtual bool execute_query(uint64_t time_budget_usec = 0 );
+    void run_queries();
+    void clear_queries();
+
 
     
     // Godot virtuals.
     //void _ready();
-    void _physics_process(float delta );
     //void _exit_tree();
 };
 

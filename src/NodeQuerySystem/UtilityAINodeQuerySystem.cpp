@@ -1,4 +1,6 @@
 #include "UtilityAINodeQuerySystem.h"
+#include <godot_cpp/classes/time.hpp>
+#include <godot_cpp/classes/performance.hpp>
 
 
 using namespace godot;
@@ -12,6 +14,8 @@ UtilityAINodeQuerySystem::UtilityAINodeQuerySystem() {
     _time_allocation_pct_to_high_priority_queries = 0.8f;
     _time_budget_per_frame_high_priority_queries = (uint64_t)(_time_allocation_pct_to_high_priority_queries * (float)_time_budget_per_frame);
     _time_budget_per_frame_regular_queries = _time_budget_per_frame - _time_budget_per_frame_high_priority_queries;
+
+    _is_performance_counter_initialized = false;
 }
 
 
@@ -29,7 +33,10 @@ void UtilityAINodeQuerySystem::_bind_methods() {
     ADD_PROPERTY(PropertyInfo(Variant::FLOAT, "time_allocation_pct_to_high_priority_queries", PROPERTY_HINT_RANGE, "1,10000,or_greater"), "set_time_allocation_pct_to_high_priority_queries","get_time_allocation_pct_to_high_priority_queries");
     
     ClassDB::bind_method(D_METHOD("post_query", "search_space", "is_high_priority"), &UtilityAINodeQuerySystem::post_query);
-    
+    ClassDB::bind_method(D_METHOD("run_queries"), &UtilityAINodeQuerySystem::run_queries);
+    ClassDB::bind_method(D_METHOD("clear_queries"), &UtilityAINodeQuerySystem::clear_queries);
+    ClassDB::bind_method(D_METHOD("initialize_performance_counters"), &UtilityAINodeQuerySystem::initialize_performance_counters);
+    ClassDB::bind_method(D_METHOD("get_run_queries_time_elapsed_usec"), &UtilityAINodeQuerySystem::get_run_queries_time_elapsed_usec );
 }
 
 
@@ -56,26 +63,44 @@ float UtilityAINodeQuerySystem::get_time_allocation_pct_to_high_priority_queries
     return _time_allocation_pct_to_high_priority_queries;
 }
 
+int  UtilityAINodeQuerySystem::get_run_queries_time_elapsed_usec() const {
+    return _run_queries_time_elapsed_usec;
+}
 
 
-// Godot virtuals.
+// Handling methods.
 
-void UtilityAINodeQuerySystem::_physics_process(float delta ) {
+void UtilityAINodeQuerySystem::initialize_performance_counters() {
+    if( _is_performance_counter_initialized ) return;
+    Performance* perf = godot::Performance::get_singleton();
+    if( perf == nullptr ) return;
+    perf->add_custom_monitor("NodeQuerySystem/Run_Queries_Time_usec", Callable(this, "get_run_queries_time_elapsed_usec"));
+    _is_performance_counter_initialized = true;
+}
+
+
+void UtilityAINodeQuerySystem::run_queries() {
+    uint64_t method_start_time_usec = 0;
+    if( _is_performance_counter_initialized ) {
+        method_start_time_usec = godot::Time::get_singleton()->get_ticks_usec();
+    } 
     std::vector<int> high_priority_queries_to_delete;
     uint64_t time_left_high_priority = _time_budget_per_frame_high_priority_queries;
-    while( time_left_high_priority > 0 ) {
-        UtilityAINQSSearchSpaces* current_query = godot::Object::cast_to<UtilityAINQSSearchSpaces>(_high_priority_queries[_current_high_priority_query_index]);
-        if( current_query == nullptr ) {
-            high_priority_queries_to_delete.push_back(_current_high_priority_query_index);
-            ++_current_high_priority_query_index;
-            continue;
-        }
+    while( time_left_high_priority > 0 && _high_priority_queries.size() > 0) {
+        if( _current_high_priority_query_index < _high_priority_queries.size() ) {
+            UtilityAINQSSearchSpaces* current_query = godot::Object::cast_to<UtilityAINQSSearchSpaces>(_high_priority_queries[_current_high_priority_query_index]);
+            if( current_query == nullptr ) {
+                high_priority_queries_to_delete.push_back(_current_high_priority_query_index);
+                ++_current_high_priority_query_index;
+                continue;
+            }
 
-        bool is_completed = current_query->execute_query(1);
-        time_left_high_priority -= current_query->get_current_call_runtime_usec();
-        if( is_completed ) {
-            high_priority_queries_to_delete.push_back(_current_high_priority_query_index);
-        }
+            bool is_completed = current_query->execute_query(1);
+            time_left_high_priority -= current_query->get_current_call_runtime_usec();
+            if( is_completed ) {
+                high_priority_queries_to_delete.push_back(_current_high_priority_query_index);
+            }
+        }//endif index is valid
         
         ++_current_high_priority_query_index;
         if( _current_high_priority_query_index >= _high_priority_queries.size()) {
@@ -85,9 +110,9 @@ void UtilityAINodeQuerySystem::_physics_process(float delta ) {
             }
             _current_high_priority_query_index = 0;
             high_priority_queries_to_delete.clear();
-        }
-    }
-
+        }//endif index is at or over top limit
+    }//endwhile time left to use
+    
     /**
     uint64_t time_left_regular = _time_budget_per_frame_regular_queries;
     while( time_left_regular > 0 ) {
@@ -100,21 +125,34 @@ void UtilityAINodeQuerySystem::_physics_process(float delta ) {
         time_left_regular -= current_query->get_current_call_runtime_usec();
     }
     /**/
+    if( _is_performance_counter_initialized ) {
+        _run_queries_time_elapsed_usec = godot::Time::get_singleton()->get_ticks_usec() - method_start_time_usec;
+    }
     
 }
 
 
-// Handling methods.
+
 
 
 int UtilityAINodeQuerySystem::post_query( UtilityAINQSSearchSpaces* search_space, bool is_high_priority ) {
+    if( search_space == nullptr ) {
+        return -1;
+    }
     if( is_high_priority ) {
         if( _high_priority_queries.has( search_space ) ){
             return -1;
         }
+        search_space->start_query(1);
         _high_priority_queries.push_back(search_space);
         return 1;
     }
 
     return -1;
+}
+
+
+void UtilityAINodeQuerySystem::clear_queries() {
+    _high_priority_queries.clear();
+    _reqular_queries.clear();
 }
