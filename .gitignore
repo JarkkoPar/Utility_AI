@@ -261,3 +261,4 @@ src/BehaviourTree/UtilityAIBTRepeater.os
 src/BehaviourTree/UtilityAIBTRepeatUntil.os
 src/BehaviourTree/UtilityAIBTRoot.os
 src/BehaviourTree/UtilityAIBTTaskNodes.os
+src/NodeQuerySystem/UtilityAINodeQuerySystem.os
