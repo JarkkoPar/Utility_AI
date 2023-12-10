@@ -16,9 +16,9 @@ void UtilityAIBTRepeater::_bind_methods() {
     ClassDB::bind_method(D_METHOD("get_repeat_times"), &UtilityAIBTRepeater::get_repeat_times);
     ADD_PROPERTY(PropertyInfo(Variant::INT, "repeat_times", PROPERTY_HINT_RANGE, "-1,100,or_greater"), "set_repeat_times","get_repeat_times");
 
-//    ClassDB::bind_method(D_METHOD("set_tick_result", "tick_result"), &UtilityAIBTRepeater::set_tick_result);
-//    ClassDB::bind_method(D_METHOD("get_tick_result"), &UtilityAIBTRepeater::get_tick_result);
-//    ADD_PROPERTY(PropertyInfo(Variant::INT, "tick_result", PROPERTY_HINT_ENUM, "Running:0,Success:1,Failure:-1" ), "set_tick_result","get_tick_result");
+    //ClassDB::bind_method(D_METHOD("set_current_repeat_times", "current_repeat_times"), &UtilityAIBTRepeater::set_current_repeat_times);
+    //ClassDB::bind_method(D_METHOD("get_current_repeat_times"), &UtilityAIBTRepeater::get_current_repeat_times);
+    //ADD_PROPERTY(PropertyInfo(Variant::INT, "current_repeat_times", PROPERTY_HINT_NONE ), "set_current_repeat_times","get_current_repeat_times");
     //ClassDB::bind_method(D_METHOD("set_reset_rule", "reset_rule"), &UtilityAIBTRepeater::set_reset_rule);
     //ClassDB::bind_method(D_METHOD("get_reset_rule"), &UtilityAIBTRepeater::get_reset_rule);
     //ADD_PROPERTY(PropertyInfo(Variant::INT, "reset_rule", PROPERTY_HINT_ENUM, "WhenTicked:0,WhenCompleted:1,WhenTickedAfterBeingCompleted:2,Never:3" ), "set_reset_rule","get_reset_rule");

@@ -10,9 +10,9 @@ using namespace godot;
 
 void UtilityAIBTPassThrough::_bind_methods() {
     
-    ClassDB::bind_method(D_METHOD("set_tick_result", "tick_result"), &UtilityAIBTPassThrough::set_tick_result);
-    ClassDB::bind_method(D_METHOD("get_tick_result"), &UtilityAIBTPassThrough::get_tick_result);
-    ADD_PROPERTY(PropertyInfo(Variant::INT, "tick_result", PROPERTY_HINT_ENUM, "Running:0,Success:1,Failure:-1" ), "set_tick_result","get_tick_result");
+    //ClassDB::bind_method(D_METHOD("set_tick_result", "tick_result"), &UtilityAIBTPassThrough::set_tick_result);
+    //ClassDB::bind_method(D_METHOD("get_tick_result"), &UtilityAIBTPassThrough::get_tick_result);
+    //ADD_PROPERTY(PropertyInfo(Variant::INT, "tick_result", PROPERTY_HINT_ENUM, "Running:0,Success:1,Failure:-1" ), "set_tick_result","get_tick_result");
 
     //ClassDB::bind_method(D_METHOD("_tick", "user_data", "delta"), &UtilityAIBTPassThrough::tick);
 

@@ -18,9 +18,9 @@ void UtilityAIBTRunNQSQuery::_bind_methods() {
     ClassDB::bind_method(D_METHOD("get_top_n_to_find"), &UtilityAIBTRunNQSQuery::get_top_n_to_find);
     ADD_PROPERTY(PropertyInfo(Variant::INT, "top_n_to_find", PROPERTY_HINT_RANGE, "1,32,or_greater"), "set_top_n_to_find","get_top_n_to_find");
 
-    ClassDB::bind_method(D_METHOD("set_time_budget_usec", "time_budget_usec"), &UtilityAIBTRunNQSQuery::set_time_budget_usec);
-    ClassDB::bind_method(D_METHOD("get_time_budget_usec"), &UtilityAIBTRunNQSQuery::get_time_budget_usec);
-    ADD_PROPERTY(PropertyInfo(Variant::INT, "time_budget_usec", PROPERTY_HINT_RANGE, "0,10000,or_greater"), "set_time_budget_usec","get_time_budget_usec");
+    //ClassDB::bind_method(D_METHOD("set_time_budget_usec", "time_budget_usec"), &UtilityAIBTRunNQSQuery::set_time_budget_usec);
+    //ClassDB::bind_method(D_METHOD("get_time_budget_usec"), &UtilityAIBTRunNQSQuery::get_time_budget_usec);
+    //ADD_PROPERTY(PropertyInfo(Variant::INT, "time_budget_usec", PROPERTY_HINT_RANGE, "0,10000,or_greater"), "set_time_budget_usec","get_time_budget_usec");
     
 }
 
