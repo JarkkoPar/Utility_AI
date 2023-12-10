@@ -77,7 +77,7 @@ int  UtilityAIBTCooldownTicks::get_cooldown_return_value() const {
 
 int UtilityAIBTCooldownTicks::tick(Variant user_data, double delta) { 
     set_internal_status(BT_INTERNAL_STATUS_TICKED);
-    if( _current_cooldown_ticks > 0 ) {
+    if( _current_cooldown_ticks > 1 ) {
         --_current_cooldown_ticks;
         return _cooldown_return_value;
     }
