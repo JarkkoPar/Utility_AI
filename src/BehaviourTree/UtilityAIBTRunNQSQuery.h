@@ -20,8 +20,9 @@ private:
     UtilityAINQSSearchSpaces* _nqs_search_space_node;
     UtilityAINodeQuerySystem* _nqs;
 
-    int _time_budget_usec;
-    int _top_n_to_find;
+    int  _time_budget_usec;
+    int  _top_n_to_find;
+    bool _is_high_priority;
 
     int _query_state;
 protected:
@@ -43,6 +44,8 @@ public:
     void set_top_n_to_find( int top_n_to_find );
     int  get_top_n_to_find() const;
 
+    void set_is_high_priority( bool is_high_priority );
+    bool get_is_high_priority() const;
 
     // Handling functions.
     virtual void reset_bt_node() override;

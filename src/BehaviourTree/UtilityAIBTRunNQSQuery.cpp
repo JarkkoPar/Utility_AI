@@ -18,9 +18,9 @@ void UtilityAIBTRunNQSQuery::_bind_methods() {
     ClassDB::bind_method(D_METHOD("get_top_n_to_find"), &UtilityAIBTRunNQSQuery::get_top_n_to_find);
     ADD_PROPERTY(PropertyInfo(Variant::INT, "top_n_to_find", PROPERTY_HINT_RANGE, "1,32,or_greater"), "set_top_n_to_find","get_top_n_to_find");
 
-    //ClassDB::bind_method(D_METHOD("set_time_budget_usec", "time_budget_usec"), &UtilityAIBTRunNQSQuery::set_time_budget_usec);
-    //ClassDB::bind_method(D_METHOD("get_time_budget_usec"), &UtilityAIBTRunNQSQuery::get_time_budget_usec);
-    //ADD_PROPERTY(PropertyInfo(Variant::INT, "time_budget_usec", PROPERTY_HINT_RANGE, "0,10000,or_greater"), "set_time_budget_usec","get_time_budget_usec");
+    ClassDB::bind_method(D_METHOD("set_is_high_priority", "is_high_priority"), &UtilityAIBTRunNQSQuery::set_is_high_priority);
+    ClassDB::bind_method(D_METHOD("get_is_high_priority"), &UtilityAIBTRunNQSQuery::get_is_high_priority);
+    ADD_PROPERTY(PropertyInfo(Variant::BOOL, "is_high_priority", PROPERTY_HINT_NONE), "set_is_high_priority","get_is_high_priority");
     
 }
 
@@ -29,10 +29,11 @@ void UtilityAIBTRunNQSQuery::_bind_methods() {
 
 UtilityAIBTRunNQSQuery::UtilityAIBTRunNQSQuery() {
     _nqs_search_space_node = nullptr;
+    _nqs = nullptr;
     _time_budget_usec = 200;
     _top_n_to_find = 1;
     _query_state = QS_IDLE;
-    _nqs = nullptr;
+    _is_high_priority = true;
 }
 
 
@@ -73,6 +74,13 @@ int  UtilityAIBTRunNQSQuery::get_top_n_to_find() const {
     return _top_n_to_find;
 }
 
+void UtilityAIBTRunNQSQuery::set_is_high_priority( bool is_high_priority ) {
+    _is_high_priority = is_high_priority;
+}
+
+bool UtilityAIBTRunNQSQuery::get_is_high_priority() const {
+    return _is_high_priority;
+}
 
 // Handling methods.
 
@@ -93,7 +101,7 @@ int UtilityAIBTRunNQSQuery::tick(Variant user_data, double delta) {
         case QS_IDLE: {
             _nqs_search_space_node->set_top_n_to_find(_top_n_to_find);
             //_nqs_search_space_node->start_query(_time_budget_usec);
-            _nqs->post_query(_nqs_search_space_node, true );
+            _nqs->post_query(_nqs_search_space_node, _is_high_priority );
             _query_state = QS_RUNNING;
             set_tick_result(BT_RUNNING);
             return BT_RUNNING;

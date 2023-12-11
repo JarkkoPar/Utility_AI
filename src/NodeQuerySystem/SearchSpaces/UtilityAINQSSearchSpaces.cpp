@@ -9,6 +9,7 @@ using namespace godot;
 UtilityAINQSSearchSpaces::UtilityAINQSSearchSpaces() {
     _top_n_to_find = 1;
     _is_query_still_running = false;
+    _is_search_space_fetched = false;
     _current_criterion_index = 0;
     _total_query_runtime_usec = 0;
     _work_in_progress_num_added_nodes = 0;
@@ -19,6 +20,7 @@ UtilityAINQSSearchSpaces::UtilityAINQSSearchSpaces() {
     _current_query_runtime_usec = 0;
     _average_call_runtime_usec = 0;
     _current_call_runtime_usec = 0;
+    _search_space_fetch_time_usec = 0;
 }
 
 
@@ -48,6 +50,10 @@ void UtilityAINQSSearchSpaces::_bind_methods() {
     ClassDB::bind_method(D_METHOD("set_average_call_runtime_usec", "average_call_runtime_usec"), &UtilityAINQSSearchSpaces::set_average_call_runtime_usec);
     ClassDB::bind_method(D_METHOD("get_average_call_runtime_usec"), &UtilityAINQSSearchSpaces::get_average_call_runtime_usec);
     ADD_PROPERTY(PropertyInfo(Variant::INT, "average_call_runtime_usec", PROPERTY_HINT_NONE), "set_average_call_runtime_usec","get_average_call_runtime_usec");
+
+    ClassDB::bind_method(D_METHOD("set_search_space_fetch_time_usec", "average_call_runtime_usec"), &UtilityAINQSSearchSpaces::set_search_space_fetch_time_usec);
+    ClassDB::bind_method(D_METHOD("get_search_space_fetch_time_usec"), &UtilityAINQSSearchSpaces::get_search_space_fetch_time_usec);
+    ADD_PROPERTY(PropertyInfo(Variant::INT, "search_space_fetch_time_usec", PROPERTY_HINT_NONE), "set_search_space_fetch_time_usec","get_search_space_fetch_time_usec");
 
     ClassDB::bind_method(D_METHOD("set_total_query_runtime_usec", "total_query_runtime_usec"), &UtilityAINQSSearchSpaces::set_total_query_runtime_usec);
     ClassDB::bind_method(D_METHOD("get_total_query_runtime_usec"), &UtilityAINQSSearchSpaces::get_total_query_runtime_usec);
@@ -132,11 +138,19 @@ int  UtilityAINQSSearchSpaces::get_top_n_to_find() const {
     return _top_n_to_find;
 }
 
-void UtilityAINQSSearchSpaces::set_current_call_runtime_usec( uint64_t current_call_runtime_usec ) {
+void UtilityAINQSSearchSpaces::set_current_call_runtime_usec( int current_call_runtime_usec ) {
     _current_call_runtime_usec = current_call_runtime_usec;
 }
-uint64_t  UtilityAINQSSearchSpaces::get_current_call_runtime_usec() const {
+int  UtilityAINQSSearchSpaces::get_current_call_runtime_usec() const {
     return _current_call_runtime_usec;
+}
+
+void UtilityAINQSSearchSpaces::set_search_space_fetch_time_usec( int search_space_fetch_time_usec ) {
+    _search_space_fetch_time_usec = search_space_fetch_time_usec;
+}
+
+int  UtilityAINQSSearchSpaces::get_search_space_fetch_time_usec() const {
+    return _search_space_fetch_time_usec;
 }
 
 void UtilityAINQSSearchSpaces::set_average_call_runtime_usec( int average_call_runtime_usec ) {
@@ -191,6 +205,7 @@ void UtilityAINQSSearchSpaces::initialize_search_space() {
     _initialize_search_space();
 }
 
+
 void UtilityAINQSSearchSpaces::reset_query_variables() {
     // Query was not running already, so initialize a new one.
     _current_query_runtime_usec = 0;
@@ -198,32 +213,18 @@ void UtilityAINQSSearchSpaces::reset_query_variables() {
     _current_query_call_count = 0;
     _average_call_runtime_usec = 0;
     _current_call_runtime_usec = 0;
+    _search_space_fetch_time_usec = 0;
     _current_criterion_index = 0;
     _current_node_index = 0;
     _work_in_progress_num_added_nodes = 0;
-    
-    // Get the search space nodes and set the score to 1.0 for all of them.
-    _search_space = get_searchspace_nodes();
-    _num_search_space_nodes = _search_space.size();
-    _scores.resize(_num_search_space_nodes);
-    _scores.fill(1.0);
 
-    // Create the work-in-progress search space we will be swapping with.
-    _work_in_progress_search_space = _search_space.duplicate();
-    _work_in_progress_scores = _scores.duplicate();
-    _work_in_progress_num_added_nodes = 0;
-
-    _ptr_current_search_space = &_search_space;
-    _ptr_current_scores = &_scores;
-
-    _ptr_current_work_in_progress_search_space = &_work_in_progress_search_space;
-    _ptr_current_work_in_progress_scores = &_work_in_progress_scores;
+    _is_search_space_fetched = false; 
 
     _is_query_still_running = true; // Set the query as running.
 }
 
 
-void UtilityAINQSSearchSpaces::start_query( uint64_t time_budget_usec ) {
+void UtilityAINQSSearchSpaces::start_query() {
     if( !get_is_active() ) return;
     if( Engine::get_singleton()->is_editor_hint() ) return;
     if( get_child_count() < 1 ) {
@@ -236,6 +237,8 @@ void UtilityAINQSSearchSpaces::start_query( uint64_t time_budget_usec ) {
 
 bool UtilityAINQSSearchSpaces::execute_query(uint64_t time_budget_usec) {
     uint64_t method_start_time_usec = godot::Time::get_singleton()->get_ticks_usec();
+    uint64_t time_budget_remaining_usec = time_budget_usec;
+
     if( !get_is_active() ) return true;
     if( Engine::get_singleton()->is_editor_hint() ) return true;
     if( get_child_count() < 1 ) {
@@ -248,13 +251,45 @@ bool UtilityAINQSSearchSpaces::execute_query(uint64_t time_budget_usec) {
     }//endif query is not running
     ++_current_query_call_count;
 
+    if( !_is_search_space_fetched ) {
+        // Get the search space nodes and set the score to 1.0 for all of them.
+        _search_space = get_searchspace_nodes();
+        _num_search_space_nodes = _search_space.size();
+        _scores.resize(_num_search_space_nodes);
+        _scores.fill(1.0);
+
+        // Create the work-in-progress search space we will be swapping with.
+        _work_in_progress_search_space = _search_space.duplicate();
+        _work_in_progress_scores = _scores.duplicate();
+        _work_in_progress_num_added_nodes = 0;
+
+        _ptr_current_search_space = &_search_space;
+        _ptr_current_scores = &_scores;
+
+        _ptr_current_work_in_progress_search_space = &_work_in_progress_search_space;
+        _ptr_current_work_in_progress_scores = &_work_in_progress_scores;
+        
+        _is_search_space_fetched = true;
+
+        _search_space_fetch_time_usec = (godot::Time::get_singleton()->get_ticks_usec() - method_start_time_usec);
+        time_budget_remaining_usec -= _search_space_fetch_time_usec;
+        if( time_budget_usec > 0 && time_budget_remaining_usec <= 0) {
+            // Update the debug counters before exiting.
+            _current_call_runtime_usec = _search_space_fetch_time_usec; //(godot::Time::get_singleton()->get_ticks_usec() - method_start_time_usec);
+            _average_call_runtime_usec = _average_call_runtime_usec * 0.5 + 0.5 * _current_call_runtime_usec;
+            _current_query_runtime_usec += _current_call_runtime_usec; 
+            
+            return false; // Search space fetching used the time budget.
+        }
+    }
+
     while( _current_criterion_index < get_child_count() ) {
         UtilityAINQSSearchCriteria* criterion = godot::Object::cast_to<UtilityAINQSSearchCriteria>(get_child(_current_criterion_index));
         if( criterion == nullptr ) continue;
         if( !criterion->get_is_active() ) continue;
         bool is_criterion_complete = apply_criterion_with_time_budget(criterion,
                                                             method_start_time_usec,
-                                                            time_budget_usec );
+                                                            time_budget_remaining_usec );
         if( !is_criterion_complete) {
             return false; // The criterion did not complete, so it timed out.
         }
@@ -348,7 +383,10 @@ bool UtilityAINQSSearchSpaces::apply_criterion_with_time_budget( UtilityAINQSSea
     double score = 0.0;
     while( _current_node_index < _num_search_space_nodes ) {
         Node* node = godot::Object::cast_to<Node>((*_ptr_current_search_space)[_current_node_index]);
-        if( node == nullptr ) continue;
+        if( node == nullptr ){
+            ++_current_node_index;
+            continue;
+        } 
         double previous_score = 1.0;
         if( _current_node_index < (*_ptr_current_scores).size() ) {
             previous_score = (*_ptr_current_scores)[_current_node_index];

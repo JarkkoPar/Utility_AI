@@ -17,6 +17,7 @@ private:
     int                 _top_n_to_find;
     unsigned int        _current_criterion_index;
     unsigned int        _current_node_index;
+    bool                _is_search_space_fetched;
     bool                _is_query_still_running;
     TypedArray<Node>    _query_results;
     PackedFloat64Array  _query_result_scores;
@@ -26,6 +27,7 @@ private:
     uint64_t            _current_query_runtime_usec;
     uint64_t            _current_call_runtime_usec;
     uint64_t            _average_call_runtime_usec;
+    uint64_t            _search_space_fetch_time_usec;
     unsigned int        _current_query_node_visits;
     unsigned int        _current_query_call_count;
     unsigned int        _total_query_node_visits;
@@ -81,8 +83,11 @@ public:
     void set_average_call_runtime_usec( int average_call_runtime_usec );
     int  get_average_call_runtime_usec() const;
 
-    void set_current_call_runtime_usec( uint64_t current_call_runtime_usec );
-    uint64_t  get_current_call_runtime_usec() const;
+    void set_current_call_runtime_usec( int current_call_runtime_usec );
+    int  get_current_call_runtime_usec() const;
+
+    void set_search_space_fetch_time_usec( int search_space_fetch_time_usec );
+    int  get_search_space_fetch_time_usec() const;
 
 
     void set_total_query_runtime_usec( int total_query_runtime_usec );
@@ -102,7 +107,7 @@ public:
     void initialize_search_space();
     void reset_query_variables(); 
     
-    virtual void start_query( uint64_t time_budget_usec = 0 );
+    virtual void start_query();
     virtual bool execute_query(uint64_t time_budget_usec = 0 );
 
     //void apply_criterion( UtilityAISearchCriteria* criteria, TypedArray<Node> search_space, TypedArray<double> current_scores, TypedArray<Node>& result_space, TypedArray<double>& result_scores );
