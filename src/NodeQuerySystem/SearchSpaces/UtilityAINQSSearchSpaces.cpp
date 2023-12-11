@@ -10,6 +10,8 @@ UtilityAINQSSearchSpaces::UtilityAINQSSearchSpaces() {
     _top_n_to_find = 1;
     _is_query_still_running = false;
     _is_search_space_fetched = false;
+    _is_criteria_handled = false;
+    _is_results_copied = false;
     _current_criterion_index = 0;
     _total_query_runtime_usec = 0;
     _work_in_progress_num_added_nodes = 0;
@@ -21,6 +23,7 @@ UtilityAINQSSearchSpaces::UtilityAINQSSearchSpaces() {
     _average_call_runtime_usec = 0;
     _current_call_runtime_usec = 0;
     _search_space_fetch_time_usec = 0;
+    _completed_signal_time_usec = 0;
 }
 
 
@@ -58,6 +61,10 @@ void UtilityAINQSSearchSpaces::_bind_methods() {
     ClassDB::bind_method(D_METHOD("set_total_query_runtime_usec", "total_query_runtime_usec"), &UtilityAINQSSearchSpaces::set_total_query_runtime_usec);
     ClassDB::bind_method(D_METHOD("get_total_query_runtime_usec"), &UtilityAINQSSearchSpaces::get_total_query_runtime_usec);
     ADD_PROPERTY(PropertyInfo(Variant::INT, "total_query_runtime_usec", PROPERTY_HINT_NONE), "set_total_query_runtime_usec","get_total_query_runtime_usec");
+
+    ClassDB::bind_method(D_METHOD("set_completed_signal_time_usec", "total_query_runtime_usec"), &UtilityAINQSSearchSpaces::set_completed_signal_time_usec);
+    ClassDB::bind_method(D_METHOD("get_completed_signal_time_usec"), &UtilityAINQSSearchSpaces::get_completed_signal_time_usec);
+    ADD_PROPERTY(PropertyInfo(Variant::INT, "completed_signal_time_usec", PROPERTY_HINT_NONE), "set_completed_signal_time_usec","get_completed_signal_time_usec");
 
     ClassDB::bind_method(D_METHOD("set_total_query_node_visits", "total_query_node_visits"), &UtilityAINQSSearchSpaces::set_total_query_node_visits);
     ClassDB::bind_method(D_METHOD("get_total_query_node_visits"), &UtilityAINQSSearchSpaces::get_total_query_node_visits);
@@ -199,6 +206,15 @@ bool UtilityAINQSSearchSpaces::get_is_query_still_running() const {
 }
 
 
+void UtilityAINQSSearchSpaces::set_completed_signal_time_usec( int completed_signal_time_usec ) {
+    _completed_signal_time_usec = completed_signal_time_usec;
+}
+
+int  UtilityAINQSSearchSpaces::get_completed_signal_time_usec() const {
+    return _completed_signal_time_usec;
+}
+
+
 // Handling methods.
 
 void UtilityAINQSSearchSpaces::initialize_search_space() {
@@ -216,9 +232,12 @@ void UtilityAINQSSearchSpaces::reset_query_variables() {
     _search_space_fetch_time_usec = 0;
     _current_criterion_index = 0;
     _current_node_index = 0;
+    _current_result_index = 0;
     _work_in_progress_num_added_nodes = 0;
 
     _is_search_space_fetched = false; 
+    _is_criteria_handled = false;
+    _is_results_copied = false;
 
     _is_query_still_running = true; // Set the query as running.
 }
@@ -281,46 +300,74 @@ bool UtilityAINQSSearchSpaces::execute_query(uint64_t time_budget_usec) {
             
             return false; // Search space fetching used the time budget.
         }
-    }
+    }//endif is searchspace fetched
 
-    while( _current_criterion_index < get_child_count() ) {
-        UtilityAINQSSearchCriteria* criterion = godot::Object::cast_to<UtilityAINQSSearchCriteria>(get_child(_current_criterion_index));
-        if( criterion == nullptr ) continue;
-        if( !criterion->get_is_active() ) continue;
-        bool is_criterion_complete = apply_criterion_with_time_budget(criterion,
-                                                            method_start_time_usec,
-                                                            time_budget_remaining_usec );
-        if( !is_criterion_complete) {
-            return false; // The criterion did not complete, so it timed out.
-        }
-        ++_current_criterion_index;
-    }//endwhile criterions left to process
-
+    if( !_is_criteria_handled ) {
+        while( _current_criterion_index < get_child_count() ) {
+            UtilityAINQSSearchCriteria* criterion = godot::Object::cast_to<UtilityAINQSSearchCriteria>(get_child(_current_criterion_index));
+            if( criterion == nullptr ) continue;
+            if( !criterion->get_is_active() ) continue;
+            bool is_criterion_complete = apply_criterion_with_time_budget(criterion,
+                                                                method_start_time_usec,
+                                                                time_budget_remaining_usec );
+            if( !is_criterion_complete) {
+                return false; // The criterion did not complete, so it timed out.
+            }
+            ++_current_criterion_index;
+        }//endwhile criterions left to process
+        _is_criteria_handled = true;
+        _current_query_results.clear();
+        _current_query_result_scores.clear();
+    }//endif is criteria handled
+    uint64_t copy_start_time_usec = godot::Time::get_singleton()->get_ticks_usec();
+    time_budget_remaining_usec = time_budget_usec - (copy_start_time_usec - method_start_time_usec);
+    
     // Put all the remaining scores to the search results in order.
-    _query_results.clear();
-    _query_result_scores.clear();
-    for( int n = 0; n < _num_search_space_nodes; ++n ) {
-        Node* node = godot::Object::cast_to<Node>((*_ptr_current_search_space)[n]);
-        place_to_query_results_based_on_score(node, (*_ptr_current_scores)[n]);
-    }
+    if( !_is_results_copied ) {
+        //_query_results.clear();
+        //_query_result_scores.clear();
+        //for( int n = 0; n < _num_search_space_nodes; ++n ) {
+        while( _current_result_index < _num_search_space_nodes ) {
+            uint64_t time_used = godot::Time::get_singleton()->get_ticks_usec() - copy_start_time_usec;
+            if( time_used >= time_budget_remaining_usec) {
+                _current_call_runtime_usec = (godot::Time::get_singleton()->get_ticks_usec() - method_start_time_usec);
+                _average_call_runtime_usec = _average_call_runtime_usec * 0.5 + 0.5 * _current_call_runtime_usec;
+                _current_query_runtime_usec += _current_call_runtime_usec; 
+                return false;
+            }
+
+            Node* node = godot::Object::cast_to<Node>((*_ptr_current_search_space)[_current_result_index]);
+            place_to_query_results_based_on_score(node, (*_ptr_current_scores)[_current_result_index]);
+            ++_current_result_index;
+            
+        }
+        _query_results = _current_query_results;
+        _query_result_scores = _current_query_result_scores;
+        _is_results_copied = true;
+    }//endif results are copied
+    
 
     // Clear everything to be ready for the next query.
     _current_criterion_index = 0;
     _current_node_index = 0;
+    _current_result_index = 0;
     _work_in_progress_num_added_nodes = 0;
     _num_search_space_nodes = 0;
     _is_query_still_running = false;
     _total_query_call_count = _current_query_call_count;
     _total_query_node_visits = _current_query_node_visits;
-    
+
+    // Emit the signal that this query completed.
+    uint64_t signal_start_timestamp = godot::Time::get_singleton()->get_ticks_usec();
+    emit_signal("query_completed", this);
+    _completed_signal_time_usec = godot::Time::get_singleton()->get_ticks_usec() - signal_start_timestamp;
+
     // All the criterions are processed and results sorted. Store the total time used for processing.
     _current_call_runtime_usec = (godot::Time::get_singleton()->get_ticks_usec() - method_start_time_usec);
     _average_call_runtime_usec = _average_call_runtime_usec * 0.5 + 0.5 * _current_call_runtime_usec;
     _current_query_runtime_usec += _current_call_runtime_usec; 
     _total_query_runtime_usec = _current_query_runtime_usec;
 
-    // Emit the signal that this query completed.
-    emit_signal("query_completed", this);
     return true;
     /**
     // Query not running, so start a new one.
@@ -459,30 +506,30 @@ void UtilityAINQSSearchSpaces::apply_criterion( UtilityAINQSSearchCriteria* crit
 
 
 void UtilityAINQSSearchSpaces::place_to_query_results_based_on_score( Node* node, double score ) {
-    if( _query_result_scores.size() == 0 ) {
-        _query_results.push_back(node);
-        _query_result_scores.push_back(score);
+    if( _current_query_result_scores.size() == 0 ) {
+        _current_query_results.push_back(node);
+        _current_query_result_scores.push_back(score);
         return;
-    } else if( _query_result_scores.size() == _top_n_to_find ) {
-        if( score < _query_result_scores[_top_n_to_find - 1]) return; // Worse than the worst on the list.
+    } else if( _current_query_result_scores.size() == _top_n_to_find ) {
+        if( score < _current_query_result_scores[_top_n_to_find - 1]) return; // Worse than the worst on the list.
     }
     
     int i = 0; 
-    while( i < _query_result_scores.size() && _query_result_scores[i] > score ) {
+    while( i < _current_query_result_scores.size() && _current_query_result_scores[i] > score ) {
         ++i;
     }
 
-    if( i < _query_result_scores.size() ) {
-        _query_results.insert(i, node);
-        _query_result_scores.insert(i, score);
+    if( i < _current_query_result_scores.size() ) {
+        _current_query_results.insert(i, node);
+        _current_query_result_scores.insert(i, score);
         
     } else if( i < _top_n_to_find ) {
-        _query_results.push_back(node);
-        _query_result_scores.push_back(score);
+        _current_query_results.push_back(node);
+        _current_query_result_scores.push_back(score);
     }
-    if( _query_result_scores.size() > _top_n_to_find ) {
-        _query_result_scores.remove_at(_top_n_to_find);
-        _query_results.remove_at(_top_n_to_find);
+    if( _current_query_result_scores.size() > _top_n_to_find ) {
+        _current_query_result_scores.remove_at(_top_n_to_find);
+        _current_query_results.remove_at(_top_n_to_find);
     }
 }
 

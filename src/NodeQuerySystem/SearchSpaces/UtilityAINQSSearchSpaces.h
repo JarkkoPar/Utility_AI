@@ -17,8 +17,13 @@ private:
     int                 _top_n_to_find;
     unsigned int        _current_criterion_index;
     unsigned int        _current_node_index;
+    unsigned int        _current_result_index;
     bool                _is_search_space_fetched;
+    bool                _is_criteria_handled;
+    bool                _is_results_copied;
     bool                _is_query_still_running;
+    TypedArray<Node>    _current_query_results;
+    PackedFloat64Array  _current_query_result_scores;
     TypedArray<Node>    _query_results;
     PackedFloat64Array  _query_result_scores;
     //double              _query_time_budget_per_frame_sec;
@@ -28,6 +33,7 @@ private:
     uint64_t            _current_call_runtime_usec;
     uint64_t            _average_call_runtime_usec;
     uint64_t            _search_space_fetch_time_usec;
+    uint64_t            _completed_signal_time_usec;
     unsigned int        _current_query_node_visits;
     unsigned int        _current_query_call_count;
     unsigned int        _total_query_node_visits;
@@ -89,9 +95,11 @@ public:
     void set_search_space_fetch_time_usec( int search_space_fetch_time_usec );
     int  get_search_space_fetch_time_usec() const;
 
-
     void set_total_query_runtime_usec( int total_query_runtime_usec );
     int  get_total_query_runtime_usec() const;
+
+    void set_completed_signal_time_usec( int completed_signal_time_usec );
+    int  get_completed_signal_time_usec() const;
 
     void set_total_query_node_visits( int total_query_node_visits );
     int  get_total_query_node_visits() const;

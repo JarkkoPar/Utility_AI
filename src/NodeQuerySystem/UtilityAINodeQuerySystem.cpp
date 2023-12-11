@@ -83,81 +83,87 @@ void UtilityAINodeQuerySystem::run_queries() {
     uint64_t method_start_time_usec = godot::Time::get_singleton()->get_ticks_usec();
     uint64_t frame_time_left = _time_budget_per_frame;
     if( _high_priority_queries.size() == 0 && _regular_queries.size() == 0 ) {
-        if( _is_performance_counter_initialized ) {
-            _run_queries_time_elapsed_usec = godot::Time::get_singleton()->get_ticks_usec() - method_start_time_usec;
-        }
+        _run_queries_time_elapsed_usec = godot::Time::get_singleton()->get_ticks_usec() - method_start_time_usec;
         return;
     }
 
     std::vector<int> queries_to_delete;
-    while(true) {
-        if( _current_high_priority_query_index >= _high_priority_queries.size() ) {
-            _current_high_priority_query_index = 0;
-            for( int i = queries_to_delete.size() - 1; i > -1; --i ) {
-                _high_priority_queries.remove_at(queries_to_delete[i]);
+    if( _high_priority_queries.size() > 0 ) {
+        while(true) {
+            if( _current_high_priority_query_index >= _high_priority_queries.size() ) {
+                _current_high_priority_query_index = 0;
+                for( int i = queries_to_delete.size() - 1; i > -1; --i ) {
+                    _high_priority_queries.remove_at(queries_to_delete[i]);
+                }
+                queries_to_delete.clear();
+                if( _high_priority_queries.size() == 0 ) {
+                    break;
+                }
             }
-            queries_to_delete.clear();
-            if( _high_priority_queries.size() == 0 ) {
+
+            UtilityAINQSSearchSpaces* current_query = godot::Object::cast_to<UtilityAINQSSearchSpaces>(_high_priority_queries[_current_high_priority_query_index]);
+            if( current_query != nullptr ) {
+                bool is_completed = current_query->execute_query(10);
+                if( is_completed ) {
+                    queries_to_delete.push_back(_current_high_priority_query_index);
+                }
+            }
+
+            ++_current_high_priority_query_index;
+            uint64_t time_used = godot::Time::get_singleton()->get_ticks_usec() - method_start_time_usec;
+            if( time_used >= _time_budget_per_frame_high_priority_queries ) {
                 break;
             }
         }
 
-        UtilityAINQSSearchSpaces* current_query = godot::Object::cast_to<UtilityAINQSSearchSpaces>(_high_priority_queries[_current_high_priority_query_index]);
-        if( current_query != nullptr ) {
-            bool is_completed = current_query->execute_query(10);
-            if( is_completed ) {
-                queries_to_delete.push_back(_current_high_priority_query_index);
-            }
-        }
-
-        ++_current_high_priority_query_index;
-        uint64_t time_used = godot::Time::get_singleton()->get_ticks_usec() - method_start_time_usec;
-        if( time_used >= _time_budget_per_frame_high_priority_queries ) {
+        if( queries_to_delete.size() > 0 ) {
             for( int i = queries_to_delete.size() - 1; i > -1; --i ) {
                 _high_priority_queries.remove_at(queries_to_delete[i]);
             }
-            queries_to_delete.clear();
-            break;
+            queries_to_delete.clear();    
         }
     }
-
     uint64_t regular_query_start_time_usec = godot::Time::get_singleton()->get_ticks_usec();
-    frame_time_left -= (regular_query_start_time_usec - method_start_time_usec);
-    if( frame_time_left <= 0 ) {
-        _run_queries_time_elapsed_usec = godot::Time::get_singleton()->get_ticks_usec() - method_start_time_usec;
-        return; // Too bad, no time left for regular priority queries :(
-    }
+    
+    if( _regular_queries.size() > 0 ) {
+        frame_time_left -= (regular_query_start_time_usec - method_start_time_usec);
+        if( frame_time_left <= 0  ) {
+            _run_queries_time_elapsed_usec = godot::Time::get_singleton()->get_ticks_usec() - method_start_time_usec;
+            return; // Too bad, no time left for regular priority queries :(
+        }
 
-    while(true) {
-        if( _current_regular_query_index >= _regular_queries.size() ) {
-            _current_regular_query_index = 0;
-            for( int i = queries_to_delete.size() - 1; i > -1; --i ) {
-                _regular_queries.remove_at(queries_to_delete[i]);
+        while(true) {
+            if( _current_regular_query_index >= _regular_queries.size() ) {
+                _current_regular_query_index = 0;
+                for( int i = queries_to_delete.size() - 1; i > -1; --i ) {
+                    _regular_queries.remove_at(queries_to_delete[i]);
+                }
+                queries_to_delete.clear();
+                if( _regular_queries.size() == 0 ) {
+                    break;
+                }
+
             }
-            queries_to_delete.clear();
-            if( _regular_queries.size() == 0 ) {
+
+            UtilityAINQSSearchSpaces* current_query = godot::Object::cast_to<UtilityAINQSSearchSpaces>(_regular_queries[_current_regular_query_index]);
+            if( current_query != nullptr ) {
+                bool is_completed = current_query->execute_query(10);
+                if( is_completed ) {
+                    queries_to_delete.push_back(_current_regular_query_index);
+                }
+            }
+
+            ++_current_regular_query_index;
+            uint64_t time_used = godot::Time::get_singleton()->get_ticks_usec() - regular_query_start_time_usec;
+            if( time_used >= frame_time_left ) {
                 break;
-            }
+            }        
         }
 
-        UtilityAINQSSearchSpaces* current_query = godot::Object::cast_to<UtilityAINQSSearchSpaces>(_regular_queries[_current_regular_query_index]);
-        if( current_query != nullptr ) {
-            bool is_completed = current_query->execute_query(10);
-            if( is_completed ) {
-                queries_to_delete.push_back(_current_regular_query_index);
-            }
-        }
+        for( int i = queries_to_delete.size() - 1; i > -1; --i ) {
+            _regular_queries.remove_at(queries_to_delete[i]);
+        }    
 
-        ++_current_regular_query_index;
-        uint64_t time_used = godot::Time::get_singleton()->get_ticks_usec() - regular_query_start_time_usec;
-        if( time_used >= frame_time_left ) {
-            for( int i = queries_to_delete.size() - 1; i > -1; --i ) {
-                _regular_queries.remove_at(queries_to_delete[i]);
-            }
-            queries_to_delete.clear();
-            break;
-        }
-        
     }
 
     _run_queries_time_elapsed_usec = godot::Time::get_singleton()->get_ticks_usec() - method_start_time_usec;
@@ -177,6 +183,13 @@ int UtilityAINodeQuerySystem::post_query( UtilityAINQSSearchSpaces* search_space
         }
         search_space->start_query();
         _high_priority_queries.push_back(search_space);
+        return 1;
+    } else {
+        if( _regular_queries.has( search_space ) ){
+            return -1;
+        }
+        search_space->start_query();
+        _regular_queries.push_back(search_space);
         return 1;
     }
 
