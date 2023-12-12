@@ -320,17 +320,15 @@ bool UtilityAINQSSearchSpaces::execute_query(uint64_t time_budget_usec) {
         _current_query_result_scores.clear();
     }//endif is criteria handled
     uint64_t copy_start_time_usec = godot::Time::get_singleton()->get_ticks_usec();
-    time_budget_remaining_usec = time_budget_usec - (copy_start_time_usec - method_start_time_usec);
-    
+    //time_budget_remaining_usec = time_budget_usec - (copy_start_time_usec - method_start_time_usec);
+    uint64_t end_time_usec = copy_start_time_usec + time_budget_usec - (copy_start_time_usec - method_start_time_usec);
+
     // Put all the remaining scores to the search results in order.
     if( !_is_results_copied ) {
-        //_query_results.clear();
-        //_query_result_scores.clear();
-        //for( int n = 0; n < _num_search_space_nodes; ++n ) {
         while( _current_result_index < _num_search_space_nodes ) {
-            uint64_t time_used = godot::Time::get_singleton()->get_ticks_usec() - copy_start_time_usec;
-            if( time_used >= time_budget_remaining_usec) {
-                _current_call_runtime_usec = (godot::Time::get_singleton()->get_ticks_usec() - method_start_time_usec);
+            uint64_t current_time_usec = godot::Time::get_singleton()->get_ticks_usec();
+            if( current_time_usec >= end_time_usec) {
+                _current_call_runtime_usec = (current_time_usec - method_start_time_usec);
                 _average_call_runtime_usec = _average_call_runtime_usec * 0.5 + 0.5 * _current_call_runtime_usec;
                 _current_query_runtime_usec += _current_call_runtime_usec; 
                 return false;
@@ -339,7 +337,6 @@ bool UtilityAINQSSearchSpaces::execute_query(uint64_t time_budget_usec) {
             Node* node = godot::Object::cast_to<Node>((*_ptr_current_search_space)[_current_result_index]);
             place_to_query_results_based_on_score(node, (*_ptr_current_scores)[_current_result_index]);
             ++_current_result_index;
-            
         }
         _query_results = _current_query_results;
         _query_result_scores = _current_query_result_scores;
@@ -428,7 +425,25 @@ bool UtilityAINQSSearchSpaces::apply_criterion_with_time_budget( UtilityAINQSSea
                                                                  uint64_t time_budget_usec ) {
     bool filter_out = false;
     double score = 0.0;
+    uint64_t end_time_usec = start_time_usec + time_budget_usec;
+    uint64_t current_time_usec = 0;
     while( _current_node_index < _num_search_space_nodes ) {
+        uint64_t current_time_usec = godot::Time::get_singleton()->get_ticks_usec();
+        if( time_budget_usec > 0 ) {
+            if( current_time_usec >= end_time_usec ) {
+                _current_call_runtime_usec = current_time_usec - start_time_usec;
+                _average_call_runtime_usec = _average_call_runtime_usec * 0.5 + 0.5 * _current_call_runtime_usec;
+                return false;
+            }//endif time budget reached.
+            /*_current_call_runtime_usec = godot::Time::get_singleton()->get_ticks_usec() - start_time_usec;
+            if( _current_call_runtime_usec >= time_budget_usec ) {
+                _current_query_runtime_usec += _current_call_runtime_usec;
+                _average_call_runtime_usec = _average_call_runtime_usec * 0.5 + 0.5 * _current_call_runtime_usec;
+                return false; // Still running
+            } // endif timebudget used up
+            /**/
+        }//endif timebudget is applied
+
         Node* node = godot::Object::cast_to<Node>((*_ptr_current_search_space)[_current_node_index]);
         if( node == nullptr ){
             ++_current_node_index;
@@ -446,10 +461,9 @@ bool UtilityAINQSSearchSpaces::apply_criterion_with_time_budget( UtilityAINQSSea
             ++_work_in_progress_num_added_nodes;
         }
 
-        // Move to the next node and if we havea time budget,
-        // check if we are out of time and must stop.
+        // Move to the next node.
         ++_current_node_index;
-        if( time_budget_usec > 0 ) {
+        /* if( time_budget_usec > 0 ) {
             _current_call_runtime_usec = godot::Time::get_singleton()->get_ticks_usec() - start_time_usec;
             if( _current_call_runtime_usec >= time_budget_usec ) {
                 _current_query_runtime_usec += _current_call_runtime_usec;
@@ -457,6 +471,7 @@ bool UtilityAINQSSearchSpaces::apply_criterion_with_time_budget( UtilityAINQSSea
                 return false; // Still running
             } // endif timebudget used up
         }//endif timebudget is applied
+        /**/
     }
 
     TypedArray<Node>* temparray = _ptr_current_search_space;
@@ -506,30 +521,31 @@ void UtilityAINQSSearchSpaces::apply_criterion( UtilityAINQSSearchCriteria* crit
 
 
 void UtilityAINQSSearchSpaces::place_to_query_results_based_on_score( Node* node, double score ) {
-    if( _current_query_result_scores.size() == 0 ) {
+    int num_entries = _current_query_result_scores.size();
+    if( num_entries == 0 ) {
         _current_query_results.push_back(node);
         _current_query_result_scores.push_back(score);
         return;
-    } else if( _current_query_result_scores.size() == _top_n_to_find ) {
+    } else if( num_entries == _top_n_to_find ) {
         if( score < _current_query_result_scores[_top_n_to_find - 1]) return; // Worse than the worst on the list.
     }
     
-    int i = 0; 
-    while( i < _current_query_result_scores.size() && _current_query_result_scores[i] > score ) {
+    int i = 0;//_current_query_result_scores.bsearch(score); 
+    while( i < num_entries && _current_query_result_scores[i] > score ) {
         ++i;
     }
 
-    if( i < _current_query_result_scores.size() ) {
+    if( i < num_entries ) {
         _current_query_results.insert(i, node);
         _current_query_result_scores.insert(i, score);
-        
-    } else if( i < _top_n_to_find ) {
+        if( num_entries + 1 > _top_n_to_find ) {
+            _current_query_result_scores = _current_query_result_scores.slice(0, _top_n_to_find-1);//.remove_at(_top_n_to_find);
+            _current_query_results = _current_query_results.slice(0, _top_n_to_find-1); //.remove_at(_top_n_to_find);
+        }
+    }
+    if( i < _top_n_to_find ) {
         _current_query_results.push_back(node);
         _current_query_result_scores.push_back(score);
-    }
-    if( _current_query_result_scores.size() > _top_n_to_find ) {
-        _current_query_result_scores.remove_at(_top_n_to_find);
-        _current_query_results.remove_at(_top_n_to_find);
     }
 }
 
