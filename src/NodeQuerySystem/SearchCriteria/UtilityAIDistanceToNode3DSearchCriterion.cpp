@@ -11,20 +11,20 @@ UtilityAIDistanceToNode3DSearchCriterion::UtilityAIDistanceToNode3DSearchCriteri
     _max_distance_squared = _max_distance * _max_distance;
     _span_length = _max_distance_squared - _min_distance_squared;
     _one_over_span_length = 1.0 / _span_length;
-    _distance_to_node = nullptr;
+    _distance_to = nullptr;
 }
 
 
 UtilityAIDistanceToNode3DSearchCriterion::~UtilityAIDistanceToNode3DSearchCriterion() {
-    _distance_to_node = nullptr;
+    _distance_to = nullptr;
 }
 
 
 void UtilityAIDistanceToNode3DSearchCriterion::_bind_methods() {
     
-    ClassDB::bind_method(D_METHOD("set_distance_to_nodepath", "distance_to_nodepath"), &UtilityAIDistanceToNode3DSearchCriterion::set_distance_to_nodepath);
-    ClassDB::bind_method(D_METHOD("get_distance_to_nodepath"), &UtilityAIDistanceToNode3DSearchCriterion::get_distance_to_nodepath);
-    ADD_PROPERTY(PropertyInfo(Variant::NODE_PATH, "distance_to_nodepath", PROPERTY_HINT_NODE_PATH_VALID_TYPES, "Node3D"), "set_distance_to_nodepath","get_distance_to_nodepath");
+    ClassDB::bind_method(D_METHOD("set_distance_to", "distance_to"), &UtilityAIDistanceToNode3DSearchCriterion::set_distance_to);
+    ClassDB::bind_method(D_METHOD("get_distance_to"), &UtilityAIDistanceToNode3DSearchCriterion::get_distance_to);
+    ADD_PROPERTY(PropertyInfo(Variant::OBJECT, "distance_to", PROPERTY_HINT_NODE_TYPE, "Node3D"), "set_distance_to", "get_distance_to");
     
     ClassDB::bind_method(D_METHOD("set_min_distance", "min_distance"), &UtilityAIDistanceToNode3DSearchCriterion::set_min_distance);
     ClassDB::bind_method(D_METHOD("get_min_distance"), &UtilityAIDistanceToNode3DSearchCriterion::get_min_distance);
@@ -39,21 +39,18 @@ void UtilityAIDistanceToNode3DSearchCriterion::_bind_methods() {
 
 
 void UtilityAIDistanceToNode3DSearchCriterion::_initialize_criterion() {
-    Node* node = get_node_or_null(_distance_to_nodepath);
-    if( node == nullptr ) return;
-    _distance_to_node = godot::Object::cast_to<Node3D>(node);
 }
 
 
 // Getters and setters.
 
-void UtilityAIDistanceToNode3DSearchCriterion::set_distance_to_nodepath( NodePath distance_to_nodepath ) {
-    _distance_to_nodepath = distance_to_nodepath;
+void UtilityAIDistanceToNode3DSearchCriterion::set_distance_to( Node3D* distance_to ) {
+    _distance_to = distance_to;
 }
 
 
-NodePath UtilityAIDistanceToNode3DSearchCriterion::get_distance_to_nodepath() const {
-    return _distance_to_nodepath;
+Node3D* UtilityAIDistanceToNode3DSearchCriterion::get_distance_to() const {
+    return _distance_to;
 }
 
 
@@ -92,14 +89,14 @@ double UtilityAIDistanceToNode3DSearchCriterion::get_max_distance() const {
 // Handing methods.
 
 void UtilityAIDistanceToNode3DSearchCriterion::apply_criterion( Node* node, bool& filter_out, double& score ) {
-    if( _distance_to_node == nullptr ) return;
+    if( _distance_to == nullptr ) return;
     Node3D* node3d = godot::Object::cast_to<Node3D>(node);
     if( node3d == nullptr ) return;
     
     _is_filtered = false;
     _score = 0.0;
 
-    Vector3 from_to = node3d->get_global_position() - _distance_to_node->get_global_position();
+    Vector3 from_to = node3d->get_global_position() - _distance_to->get_global_position();
     double distance_squared = from_to.length_squared();
     
     if( get_use_for_filtering() ) {

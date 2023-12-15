@@ -10,7 +10,6 @@ class UtilityAICustomPropertyConsideration : public UtilityAIConsiderations {
     GDCLASS(UtilityAICustomPropertyConsideration, UtilityAIConsiderations )
 
 private:
-    NodePath    _node_with_property_nodepath;
     Node*       _node_with_property;
     StringName  _property_name;
     double      _property_max_value;    
@@ -30,8 +29,8 @@ public:
     void set_activation_curve( Ref<Curve> activation_curve );
     Ref<Curve> get_activation_curve() const;
 
-    void set_node_with_property_nodepath( NodePath node_with_property );
-    NodePath get_node_with_property_nodepath() const;
+    void set_node_with_property( Node* node_with_property );
+    Node* get_node_with_property() const;
 
     void set_property_max_value( double true_score_value );
     double get_property_max_value() const;

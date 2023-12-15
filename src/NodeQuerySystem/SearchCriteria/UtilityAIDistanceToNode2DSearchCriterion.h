@@ -20,8 +20,7 @@ private:
     double _span_length;
     double _one_over_span_length;
 
-    NodePath _distance_to_nodepath;
-    Node2D*  _distance_to_node;
+    Node2D*  _distance_to;
 
 protected:
     static void _bind_methods();
@@ -33,8 +32,8 @@ public:
     
     // Getters and setters for attributes.
 
-    void set_distance_to_nodepath( NodePath distance_to_nodepath );
-    NodePath get_distance_to_nodepath() const;
+    void set_distance_to( Node2D* distance_to );
+    Node2D* get_distance_to() const;
 
 
     void set_min_distance( double min_distance );

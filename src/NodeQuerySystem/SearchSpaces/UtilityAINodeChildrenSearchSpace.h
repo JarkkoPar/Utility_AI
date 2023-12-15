@@ -10,7 +10,6 @@ class UtilityAINodeChildrenSearchSpace : public UtilityAINQSSearchSpaces {
     GDCLASS(UtilityAINodeChildrenSearchSpace, UtilityAINQSSearchSpaces)
 
 private:
-    NodePath _parent_node_path;
     Node*   _parent_node;
 protected:
     static void _bind_methods();
@@ -23,8 +22,8 @@ public:
     
     
     // Getters and setters for attributes.
-    void set_parent_node_path( NodePath parent_node_path );
-    NodePath get_parent_node_path() const;
+    void set_parent_node( Node* parent );
+    Node* get_parent_node() const;
 
     virtual TypedArray<Node> get_searchspace_nodes() const override;
 

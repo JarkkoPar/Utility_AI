@@ -10,8 +10,7 @@ class UtilityAIArea2DSearchSpace : public UtilityAINQSSearchSpaces {
     GDCLASS(UtilityAIArea2DSearchSpace, UtilityAINQSSearchSpaces)
 
 private:
-    NodePath _area2d_nodepath;
-    Area2D* _area2d_node;
+    Area2D* _area2d;
 
     TypedArray<Area2D> _intersecting_areas;
 protected:
@@ -28,8 +27,8 @@ public:
     
     // Getters and setters for attributes.
 
-    void set_area2d_nodepath( NodePath area2d_nodepath );
-    NodePath get_area2d_nodepath() const;
+    void set_area2d( Area2D* area2d );
+    Area2D* get_area2d() const;
 
     void set_intersecting_areas( TypedArray<Area2D> intersecting_areas );
     TypedArray<Area2D> get_intersecting_areas() const;

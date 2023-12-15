@@ -11,9 +11,9 @@ using namespace godot;
 
 void UtilityAIConsideration::_bind_methods() {
 
-    ClassDB::bind_method(D_METHOD("set_input_sensor_node_path", "input_sensor_node_path"), &UtilityAIConsideration::set_input_sensor_node_path);
-    ClassDB::bind_method(D_METHOD("get_input_sensor_node_path"), &UtilityAIConsideration::get_input_sensor_node_path);
-    ADD_PROPERTY(PropertyInfo(Variant::NODE_PATH, "input_sensor_node_path", PROPERTY_HINT_NODE_PATH_VALID_TYPES, "UtilityAISensors"), "set_input_sensor_node_path", "get_input_sensor_node_path");
+    ClassDB::bind_method(D_METHOD("set_input_sensor", "input_sensor"), &UtilityAIConsideration::set_input_sensor);
+    ClassDB::bind_method(D_METHOD("get_input_sensor"), &UtilityAIConsideration::get_input_sensor);
+    ADD_PROPERTY(PropertyInfo(Variant::OBJECT, "input_sensor", PROPERTY_HINT_NODE_TYPE, "UtilityAISensors"), "set_input_sensor", "get_input_sensor");
 
     ClassDB::bind_method(D_METHOD("set_activation_curve", "activation_curve"), &UtilityAIConsideration::set_activation_curve);
     ClassDB::bind_method(D_METHOD("get_activation_curve"), &UtilityAIConsideration::get_activation_curve);
@@ -24,7 +24,6 @@ void UtilityAIConsideration::_bind_methods() {
     ADD_PROPERTY(PropertyInfo(Variant::FLOAT, "activation_input_value", PROPERTY_HINT_RANGE, "0.0,1.0,or_less,or_greater"), "set_activation_input_value","get_activation_input_value");
 
     ClassDB::bind_method(D_METHOD("sample_activation_curve", "input_value"), &UtilityAIConsideration::sample_activation_curve);
-    ClassDB::bind_method(D_METHOD("initialize_consideration"), &UtilityAIConsideration::initialize_consideration);
 }
 
 
@@ -45,17 +44,12 @@ UtilityAIConsideration::~UtilityAIConsideration() {
 
 // Getters and Setters.
 
-UtilityAISensors* UtilityAIConsideration::get_input_sensor_node() const {
+void UtilityAIConsideration::set_input_sensor( UtilityAISensors* input_sensor ) {
+    _input_sensor = input_sensor;
+}
+
+UtilityAISensors* UtilityAIConsideration::get_input_sensor() const {
     return _input_sensor;
-}
-
-
-void UtilityAIConsideration::set_input_sensor_node_path( NodePath input_sensor_node_path ) {
-    _input_sensor_node_path = input_sensor_node_path;
-}
-
-NodePath UtilityAIConsideration::get_input_sensor_node_path() const {
-    return _input_sensor_node_path;
 }
 
 
@@ -76,12 +70,6 @@ double UtilityAIConsideration::get_activation_input_value() const {
     return _activation_input_value;
 }
 
-// Godot virtuals.
-
-void UtilityAIConsideration::_ready() {
-    initialize_consideration();
-}
-
 /**
 void UtilityAIConsideration::_notification(int p_what) {
 	switch (p_what) {
@@ -96,29 +84,6 @@ void UtilityAIConsideration::_notification(int p_what) {
 /**/
 
 // Handling functions.
-
-void UtilityAIConsideration::initialize_consideration() {
-    if( !get_is_active() ) return;
-    if( Engine::get_singleton()->is_editor_hint() ) return;
-
-    _has_custom_evaluation_method = has_method("eval");
-    if( _input_sensor_node_path.is_empty()) {
-        return;
-    }
-    Node* node = get_node_or_null(_input_sensor_node_path);
-    // As this is not always needed, error out without a message.
-    if( node == nullptr ) {
-        return;
-    } 
-
-    UtilityAISensors* sensor = godot::Object::cast_to<UtilityAISensors>(node);
-    if( sensor == nullptr ) {
-        return;
-    }
-    _input_sensor = sensor;
-    //ERR_FAIL_COND_MSG( _input_sensor == nullptr, "UtilityAIConsideration::intialize_consideration(): Error, the assigned node's type was not a UtilityAISensors type for UtilityAIConsideration '" + get_name() + "'.");
-}
-    
 
 double UtilityAIConsideration::evaluate() { 
     if( !get_is_active() ) return 0.0;

@@ -10,9 +10,9 @@ using namespace godot;
 
 void UtilityAIBTNodeReference::_bind_methods() {
     
-    ClassDB::bind_method(D_METHOD("set_node_reference_nodepath", "node_reference_nodepath"), &UtilityAIBTNodeReference::set_node_reference_nodepath);
-    ClassDB::bind_method(D_METHOD("get_node_reference_nodepath"), &UtilityAIBTNodeReference::get_node_reference_nodepath);
-    ADD_PROPERTY(PropertyInfo(Variant::NODE_PATH, "node_reference_nodepath", PROPERTY_HINT_NODE_PATH_VALID_TYPES, "UtilityAIBehaviourTreeNodes" ), "set_node_reference_nodepath","get_node_reference_nodepath");
+    ClassDB::bind_method(D_METHOD("set_node_reference", "node_reference"), &UtilityAIBTNodeReference::set_node_reference);
+    ClassDB::bind_method(D_METHOD("get_node_reference"), &UtilityAIBTNodeReference::get_node_reference);
+    ADD_PROPERTY(PropertyInfo(Variant::OBJECT, "node_reference", PROPERTY_HINT_NODE_TYPE, "UtilityAIBehaviourTreeNodes" ), "set_node_reference","get_node_reference");
 
     //ClassDB::bind_method(D_METHOD("_tick", "user_data", "delta"), &UtilityAIBTNodeReference::tick);
 
@@ -23,6 +23,7 @@ void UtilityAIBTNodeReference::_bind_methods() {
 
 UtilityAIBTNodeReference::UtilityAIBTNodeReference() {
     //_tick_result = 1;
+    _node_reference = nullptr;
 }
 
 
@@ -32,22 +33,16 @@ UtilityAIBTNodeReference::~UtilityAIBTNodeReference() {
 
 // Getters and Setters.
 
-void UtilityAIBTNodeReference::set_node_reference_nodepath(const NodePath &node_reference_nodepath) {
-    if( _node_reference_nodepath == node_reference_nodepath ) {
+void UtilityAIBTNodeReference::set_node_reference(UtilityAIBehaviourTreeNodes* node_reference) {
+    if( _node_reference == node_reference || (node_reference != nullptr && (this == node_reference || node_reference->is_ancestor_of(this) || this->is_ancestor_of(node_reference))) ) {
         return;
     }
 
-    _node_reference_nodepath = node_reference_nodepath;
-    if( Engine::get_singleton()->is_editor_hint() ) return;
-    
-    if( is_inside_tree() ) {
-        _update_cache();
-    }
-
+    _node_reference = node_reference;
 }
 
-NodePath UtilityAIBTNodeReference::get_node_reference_nodepath() const {
-    return _node_reference_nodepath;
+UtilityAIBehaviourTreeNodes* UtilityAIBTNodeReference::get_node_reference() const {
+    return _node_reference;
 }
 
 /**
@@ -64,61 +59,25 @@ int  UtilityAIBTNodeReference::get_tick_result() const {
 // Handling methods.
 
 void UtilityAIBTNodeReference::reset() {
-    if(_cache.is_null()) {
+    if(!_node_reference) {
         return;
     }
-    if( !_cache.is_valid() ) {
-        return;
-    }
-    UtilityAIBehaviourTreeNodes* btnode = Object::cast_to<UtilityAIBehaviourTreeNodes>(ObjectDB::get_instance(_cache));
-    if( btnode == nullptr ) {
-        return;
-    }
-    btnode->reset();
-}
-
-void UtilityAIBTNodeReference::_update_cache() {
-    _cache = ObjectID();
-	if (has_node(_node_reference_nodepath)) {
-		UtilityAIBehaviourTreeNodes* btnode = get_node<UtilityAIBehaviourTreeNodes>(_node_reference_nodepath);
-		if (!btnode || this == btnode || btnode->is_ancestor_of(this) || this->is_ancestor_of(btnode)) {
-			return;
-		}
-		_cache = btnode->get_instance_id();
-	}
+    _node_reference->reset();
 }
 
 
 int UtilityAIBTNodeReference::tick(Variant user_data, double delta) { 
     set_internal_status(BT_INTERNAL_STATUS_TICKED);
-    if(_cache.is_null()) {
-        set_internal_status(BT_INTERNAL_STATUS_COMPLETED);
-        set_tick_result(BT_FAILURE);
-		return BT_FAILURE;
-	}
-    if( !_cache.is_valid() ) {
+    if( !_node_reference ) {
         set_internal_status(BT_INTERNAL_STATUS_COMPLETED);
         set_tick_result(BT_FAILURE);
         return BT_FAILURE;
     }
-    
-    UtilityAIBehaviourTreeNodes* btnode = Object::cast_to<UtilityAIBehaviourTreeNodes>(ObjectDB::get_instance(_cache));
-    if( btnode == nullptr ) {
-        set_internal_status(BT_INTERNAL_STATUS_COMPLETED);
-        set_tick_result(BT_FAILURE);
-        return BT_FAILURE;
-    }
-    int result = btnode->tick( user_data, delta );
+    int result = _node_reference->tick( user_data, delta );
     set_tick_result(result);
     if( result != BT_RUNNING) {
         set_internal_status(BT_INTERNAL_STATUS_COMPLETED);
     }
     return result;
-}
-
-// Godot virtuals.
-
-void UtilityAIBTNodeReference::_enter_tree() {
-    _update_cache();
 }
 

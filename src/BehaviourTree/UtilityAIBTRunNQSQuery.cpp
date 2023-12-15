@@ -10,9 +10,9 @@ using namespace godot;
 
 void UtilityAIBTRunNQSQuery::_bind_methods() {
 
-    ClassDB::bind_method(D_METHOD("set_nqs_search_space_node_path", "nqs_search_space_node_path"), &UtilityAIBTRunNQSQuery::set_nqs_search_space_node_path);
-    ClassDB::bind_method(D_METHOD("get_nqs_search_space_node_path"), &UtilityAIBTRunNQSQuery::get_nqs_search_space_node_path);
-    ADD_PROPERTY(PropertyInfo(Variant::NODE_PATH, "nqs_search_space_node_path", PROPERTY_HINT_NODE_PATH_VALID_TYPES, "UtilityAINQSSearchSpaces"), "set_nqs_search_space_node_path","get_nqs_search_space_node_path");
+    ClassDB::bind_method(D_METHOD("set_nqs_search_space", "nqs_search_space"), &UtilityAIBTRunNQSQuery::set_nqs_search_space);
+    ClassDB::bind_method(D_METHOD("get_nqs_search_space"), &UtilityAIBTRunNQSQuery::get_nqs_search_space);
+    ADD_PROPERTY(PropertyInfo(Variant::OBJECT, "nqs_search_space_node_path", PROPERTY_HINT_NODE_TYPE, "UtilityAINQSSearchSpaces"), "set_nqs_search_space","get_nqs_search_space");
 
     ClassDB::bind_method(D_METHOD("set_top_n_to_find", "top_n_to_find"), &UtilityAIBTRunNQSQuery::set_top_n_to_find);
     ClassDB::bind_method(D_METHOD("get_top_n_to_find"), &UtilityAIBTRunNQSQuery::get_top_n_to_find);
@@ -28,7 +28,7 @@ void UtilityAIBTRunNQSQuery::_bind_methods() {
 // Constructor and destructor.
 
 UtilityAIBTRunNQSQuery::UtilityAIBTRunNQSQuery() {
-    _nqs_search_space_node = nullptr;
+    _nqs_search_space = nullptr;
     _nqs = nullptr;
     _time_budget_usec = 200;
     _top_n_to_find = 1;
@@ -38,20 +38,20 @@ UtilityAIBTRunNQSQuery::UtilityAIBTRunNQSQuery() {
 
 
 UtilityAIBTRunNQSQuery::~UtilityAIBTRunNQSQuery() {
-    _nqs_search_space_node = nullptr;
+    _nqs_search_space = nullptr;
     _nqs = nullptr;
 }
 
 
 // Getters and Setters.
 
-void UtilityAIBTRunNQSQuery::set_nqs_search_space_node_path( NodePath nqs_search_space_node_path ) {
-    _nqs_search_space_node_path = nqs_search_space_node_path;
+void UtilityAIBTRunNQSQuery::set_nqs_search_space( UtilityAINQSSearchSpaces* nqs_search_space ) {
+    _nqs_search_space = nqs_search_space;
 }
 
 
-NodePath UtilityAIBTRunNQSQuery::get_nqs_search_space_node_path() const {
-    return _nqs_search_space_node_path;
+UtilityAINQSSearchSpaces* UtilityAIBTRunNQSQuery::get_nqs_search_space() const {
+    return _nqs_search_space;
 }
 
 
@@ -86,11 +86,11 @@ bool UtilityAIBTRunNQSQuery::get_is_high_priority() const {
 
 void UtilityAIBTRunNQSQuery::reset_bt_node() {
     _query_state = QS_IDLE;
-    _nqs_search_space_node->reset_query_variables();
+    _nqs_search_space->reset_query_variables();
 }
 
 int UtilityAIBTRunNQSQuery::tick(Variant user_data, double delta) { 
-    if( _nqs_search_space_node == nullptr ) {
+    if( _nqs_search_space == nullptr ) {
         set_internal_status(BT_INTERNAL_STATUS_COMPLETED);
         set_tick_result(BT_FAILURE);
         return BT_FAILURE;
@@ -99,9 +99,9 @@ int UtilityAIBTRunNQSQuery::tick(Variant user_data, double delta) {
     switch (_query_state)
     {
         case QS_IDLE: {
-            _nqs_search_space_node->set_top_n_to_find(_top_n_to_find);
+            _nqs_search_space->set_top_n_to_find(_top_n_to_find);
             //_nqs_search_space_node->start_query(_time_budget_usec);
-            _nqs->post_query(_nqs_search_space_node, _is_high_priority );
+            _nqs->post_query(_nqs_search_space, _is_high_priority );
             _query_state = QS_RUNNING;
             set_tick_result(BT_RUNNING);
             return BT_RUNNING;
@@ -128,17 +128,16 @@ int UtilityAIBTRunNQSQuery::tick(Variant user_data, double delta) {
 
 void UtilityAIBTRunNQSQuery::_ready() {
     if( Engine::get_singleton()->is_editor_hint() ) return;
-    _nqs_search_space_node = godot::Object::cast_to<UtilityAINQSSearchSpaces>(get_node_or_null(_nqs_search_space_node_path));
     _nqs = godot::Object::cast_to<UtilityAINodeQuerySystem>(Engine::get_singleton()->get_singleton("NodeQuerySystem"));
     // godot::Object::cast_to<UtilityAINodeQuerySystem>(godot::Engine::get_singleton("NodeQuerySystem"));
 }
 
 
 void UtilityAIBTRunNQSQuery::_physics_process(float delta ) {
-    if( _nqs_search_space_node == nullptr ) return;
+    if( _nqs_search_space == nullptr ) return;
     if( _nqs == nullptr ) return;
     if( _query_state == QS_RUNNING ) {
-        bool is_still_running = _nqs_search_space_node->get_is_query_still_running();//->execute_query(_time_budget_usec);
+        bool is_still_running = _nqs_search_space->get_is_query_still_running();//->execute_query(_time_budget_usec);
         if( !is_still_running ) {
             _query_state = QS_COMPLETED;
         }
