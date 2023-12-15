@@ -14,8 +14,8 @@ env = SConscript("godot-cpp/SConstruct")
 
 # tweak this if you want to use different folders, or more folders, to store your source code in.
 # Edit: Added the specialsensors subfolder.
-env.Append(CPPPATH=["src/","src/SpecialSensors/","src/SpecialConsiderations", "src/NodeQuerySystem", "src/NodeQuerySystem/SearchSpaces", "src/NodeQuerySystem/SearchCriteria", "src/NodeQuerySystem/SearchSpaces/PointGridSearchSpaces", "src/BehaviourTree"])
-sources = Glob("src/*.cpp") + Glob("src/SpecialSensors/*.cpp") + Glob("src/SpecialConsiderations/*.cpp") + Glob("src/NodeQuerySystem/*.cpp") + Glob("src/NodeQuerySystem/SearchSpaces/*.cpp") + Glob("src/NodeQuerySystem/SearchCriteria/*.cpp") + Glob("src/NodeQuerySystem/SearchSpaces/PointGridSearchSpaces/*.cpp") + Glob("src/BehaviourTree/*.cpp")
+env.Append(CPPPATH=["src/","src/sensors","src/considerations", "src/node_query_system", "src/node_query_system/search_spaces", "src/node_query_system/search_criteria", "src/node_query_system/search_spaces/point_grid", "src/behaviour_tree"])
+sources = Glob("src/*.cpp") + Glob("src/*/*.cpp") + Glob("src/*/*/*.cpp") + Glob("src/*/*/*/*.cpp")
 
 if env["platform"] == "macos":
     library = env.SharedLibrary(
