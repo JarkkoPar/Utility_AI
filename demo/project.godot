@@ -10,6 +10,10 @@ config_version=5
 
 [application]
 
-config/name="Demo"
-config/features=PackedStringArray("4.2", "Forward Plus")
+config/name="UtilityAI Demo"
+config/features=PackedStringArray("4.1", "GL Compatibility")
 config/icon="res://icon.svg"
+
+[rendering]
+
+renderer/rendering_method="gl_compatibility"
