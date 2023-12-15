@@ -16,8 +16,7 @@ class UtilityAIBTRunNQSQuery : public UtilityAIBTTaskNodes {
     GDCLASS(UtilityAIBTRunNQSQuery, UtilityAIBTTaskNodes)
 
 private:
-    NodePath _nqs_search_space_node_path;
-    UtilityAINQSSearchSpaces* _nqs_search_space_node;
+    UtilityAINQSSearchSpaces* _nqs_search_space;
     UtilityAINodeQuerySystem* _nqs;
 
     int  _time_budget_usec;
@@ -35,8 +34,8 @@ public:
     
     // Getters and setters for attributes.
         
-    void set_nqs_search_space_node_path( NodePath nqs_search_space_node_path );
-    NodePath get_nqs_search_space_node_path() const;
+    void set_nqs_search_space( UtilityAINQSSearchSpaces* nqs_search_space );
+    UtilityAINQSSearchSpaces* get_nqs_search_space() const;
 
     void set_time_budget_usec( int time_budget_usec );
     int  get_time_budget_usec() const;

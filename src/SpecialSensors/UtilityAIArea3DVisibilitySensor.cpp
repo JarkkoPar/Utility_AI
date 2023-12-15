@@ -26,9 +26,9 @@ void UtilityAIArea3DVisibilitySensor::_bind_methods() {
     ADD_PROPERTY(PropertyInfo(Variant::VECTOR2, "offset_vector", PROPERTY_HINT_NONE), "set_offset_vector","get_offset_vector");
 
 
-    ClassDB::bind_method(D_METHOD("set_visibility_volume_nodepath", "visibility_volume_nodepath"), &UtilityAIArea3DVisibilitySensor::set_visibility_volume_nodepath);
-    ClassDB::bind_method(D_METHOD("get_visibility_volume_nodepath"), &UtilityAIArea3DVisibilitySensor::get_visibility_volume_nodepath);
-    ADD_PROPERTY(PropertyInfo(Variant::NODE_PATH, "visibility_volume_nodepath", PROPERTY_HINT_NODE_PATH_VALID_TYPES, "Area3D"), "set_visibility_volume_nodepath","get_visibility_volume_nodepath");
+    ClassDB::bind_method(D_METHOD("set_visibility_volume", "visibility_volume"), &UtilityAIArea3DVisibilitySensor::set_visibility_volume);
+    ClassDB::bind_method(D_METHOD("get_visibility_volume"), &UtilityAIArea3DVisibilitySensor::get_visibility_volume);
+    ADD_PROPERTY(PropertyInfo(Variant::OBJECT, "visibility_volume", PROPERTY_HINT_NODE_TYPE, "Area3D"), "set_visibility_volume","get_visibility_volume");
     
     ClassDB::bind_method(D_METHOD("set_max_expected_entities_found", "max_expected_entities_found"), &UtilityAIArea3DVisibilitySensor::set_max_expected_entities_found);
     ClassDB::bind_method(D_METHOD("get_max_expected_entities_found"), &UtilityAIArea3DVisibilitySensor::get_max_expected_entities_found);
@@ -100,7 +100,7 @@ void UtilityAIArea3DVisibilitySensor::_bind_methods() {
 // Constructor and destructor.
 
 UtilityAIArea3DVisibilitySensor::UtilityAIArea3DVisibilitySensor() {
-    _visibility_volume_node = nullptr;
+    _visibility_volume = nullptr;
     _do_occlusion_test = true;
     _collision_mask = 1;
     _expected_number_of_areas_to_track = 16;
@@ -149,28 +149,25 @@ void UtilityAIArea3DVisibilitySensor::initialize_sensor() {
     //if( !get_is_active() ) return;
     if( Engine::get_singleton()->is_editor_hint() ) return;
 
-    Node* node = get_node_or_null(_visibility_volume_nodepath);
-    ERR_FAIL_COND_MSG( node == nullptr, "UtilityAIArea3DVisibilitySensor::initialize_sensor() - Error, the nodepath for the Area3D has not been set.");
-    _visibility_volume_node = godot::Object::cast_to<Area3D>(node);
-    ERR_FAIL_COND_MSG( _visibility_volume_node == nullptr, "UtilityAIArea3DVisibilitySensor::initialize_sensor() - Error, the node set as the Area3D is not of type Area3D.");
+    ERR_FAIL_COND_MSG( _visibility_volume == nullptr, "UtilityAIArea3DVisibilitySensor::initialize_sensor() - Error, the node set as the Area3D is not of type Area3D.");
     
     // Connect to the area entered and exited signals.
-    Error error_visibility_volume_on_entered = _visibility_volume_node->connect("area_entered", Callable(this, "on_area_entered"));
-    Error error_visibility_volume_on_exited  = _visibility_volume_node->connect("area_exited", Callable(this, "on_area_exited"));
+    Error error_visibility_volume_on_entered = _visibility_volume->connect("area_entered", Callable(this, "on_area_entered"));
+    Error error_visibility_volume_on_exited  = _visibility_volume->connect("area_exited", Callable(this, "on_area_exited"));
 }
 
 
 void UtilityAIArea3DVisibilitySensor::uninitialize_sensor() {
-    if( _visibility_volume_node != nullptr ) {
-        _visibility_volume_node->disconnect("area_entered", Callable(this, "on_area_entered"));
-        _visibility_volume_node->disconnect("area_exited", Callable(this, "on_area_exited"));
-        _visibility_volume_node = nullptr;
+    if( _visibility_volume != nullptr ) {
+        _visibility_volume->disconnect("area_entered", Callable(this, "on_area_entered"));
+        _visibility_volume->disconnect("area_exited", Callable(this, "on_area_exited"));
+        _visibility_volume = nullptr;
     }
 }
 
 
 double UtilityAIArea3DVisibilitySensor::evaluate_sensor_value() {
-    if( _visibility_volume_node == nullptr ) {
+    if( _visibility_volume == nullptr ) {
         return get_sensor_value();
     }
 
@@ -179,7 +176,7 @@ double UtilityAIArea3DVisibilitySensor::evaluate_sensor_value() {
     PhysicsDirectSpaceState3D *dss = nullptr;
     
     if( _do_occlusion_test ) {
-        dss = PhysicsServer3D::get_singleton()->space_get_direct_state(PhysicsServer3D::get_singleton()->area_get_space(_visibility_volume_node->get_rid()));
+        dss = PhysicsServer3D::get_singleton()->space_get_direct_state(PhysicsServer3D::get_singleton()->area_get_space(_visibility_volume->get_rid()));
         //PhysicsDirectSpaceState3D *dss = PhysicsServer3D::get_singleton()->space_get_direct_state(w3d->get_space());
         ERR_FAIL_NULL_V(dss, get_sensor_value());
     }
@@ -328,23 +325,13 @@ Vector3 UtilityAIArea3DVisibilitySensor::get_offset_vector3() const {
 }
 
 
-void UtilityAIArea3DVisibilitySensor::set_visibility_volume_nodepath( NodePath area3d_nodepath ) {
-    _visibility_volume_nodepath = area3d_nodepath;
+void UtilityAIArea3DVisibilitySensor::set_visibility_volume( Area3D* visibility_volume ) {
+    _visibility_volume = visibility_volume;
 }
 
 
-NodePath UtilityAIArea3DVisibilitySensor::get_visibility_volume_nodepath() const {
-    return _visibility_volume_nodepath;
-}
-
-
-void UtilityAIArea3DVisibilitySensor::set_visibility_volume_node( Area3D* node ) {
-    _visibility_volume_node = node;
-}
-
-
-Area3D* UtilityAIArea3DVisibilitySensor::get_visibility_volume_node() const {
-    return _visibility_volume_node;
+Area3D* UtilityAIArea3DVisibilitySensor::get_visibility_volume() const {
+    return _visibility_volume;
 }
 
 

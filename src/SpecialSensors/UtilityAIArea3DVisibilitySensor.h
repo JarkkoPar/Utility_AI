@@ -10,8 +10,7 @@ class UtilityAIArea3DVisibilitySensor : public UtilityAISensor {
     GDCLASS(UtilityAIArea3DVisibilitySensor, UtilityAISensor )
 
 private:
-    NodePath _visibility_volume_nodepath;
-    Area3D* _visibility_volume_node;
+    Area3D* _visibility_volume;
 
     Vector3 _from_vector;
     Vector3 _offset_vector;
@@ -69,11 +68,8 @@ public:
     void set_offset_vector3( Vector3 offset );
     Vector3 get_offset_vector3() const;
 
-    void set_visibility_volume_nodepath( NodePath visibility_volume_nodepath );
-    NodePath get_visibility_volume_nodepath() const;
-
-    void set_visibility_volume_node( Area3D* node );
-    Area3D* get_visibility_volume_node() const;
+    void set_visibility_volume( Area3D* visibility_volume );
+    Area3D* get_visibility_volume() const;
 
     void set_do_occlusion_test( bool do_occlusion_test );
     bool get_do_occlusion_test() const;

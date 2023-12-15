@@ -18,7 +18,6 @@ protected:
     static void _bind_methods();
 
     UtilityAISensors* _input_sensor;
-    NodePath          _input_sensor_node_path;
     Ref<Curve>        _activation_curve;
     double            _activation_input_value;
     bool              _has_custom_evaluation_method;
@@ -31,10 +30,8 @@ public:
     
     // Getters and setters for attributes.
 
-    virtual UtilityAISensors* get_input_sensor_node() const;
-
-    void set_input_sensor_node_path( NodePath input_sensor_node_path );
-    NodePath get_input_sensor_node_path() const;
+    void set_input_sensor( UtilityAISensors* input_sensor );
+    virtual UtilityAISensors* get_input_sensor() const;
 
     void set_activation_curve( Ref<Curve> activation_curve );
     Ref<Curve> get_activation_curve() const;
@@ -44,12 +41,10 @@ public:
 
             
     // Godot virtuals.
-    void _ready();
     //void _notification( int p_what );
    
     // Handling functions.
     
-    void initialize_consideration();
     virtual double evaluate() override;
     virtual double sample_activation_curve( double input_value ) const;
 };

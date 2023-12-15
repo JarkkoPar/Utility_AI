@@ -4,7 +4,7 @@ using namespace godot;
 
 
 UtilityAIArea2DSearchSpace::UtilityAIArea2DSearchSpace() {
-    _area2d_node = nullptr;
+    _area2d = nullptr;
 }
 
 
@@ -16,9 +16,9 @@ void UtilityAIArea2DSearchSpace::_bind_methods() {
 
     ADD_SUBGROUP("Configuration","");
 
-    ClassDB::bind_method(D_METHOD("set_area2d_nodepath", "area2D_nodepath"), &UtilityAIArea2DSearchSpace::set_area2d_nodepath);
-    ClassDB::bind_method(D_METHOD("get_area2d_nodepath"), &UtilityAIArea2DSearchSpace::get_area2d_nodepath);
-    ADD_PROPERTY(PropertyInfo(Variant::NODE_PATH, "area2d_nodepath", PROPERTY_HINT_NODE_PATH_VALID_TYPES, "Area2D"), "set_area2d_nodepath","get_area2d_nodepath");
+    ClassDB::bind_method(D_METHOD("set_area2d", "area2D"), &UtilityAIArea2DSearchSpace::set_area2d);
+    ClassDB::bind_method(D_METHOD("get_area2d"), &UtilityAIArea2DSearchSpace::get_area2d);
+    ADD_PROPERTY(PropertyInfo(Variant::OBJECT, "area2d", PROPERTY_HINT_NODE_TYPE, "Area2D"), "set_area2d", "get_area2d");
 
     ClassDB::bind_method(D_METHOD("on_area_entered", "area"), &UtilityAIArea2DSearchSpace::on_area_entered);
     ClassDB::bind_method(D_METHOD("on_area_exited", "area"), &UtilityAIArea2DSearchSpace::on_area_exited);
@@ -58,13 +58,13 @@ void UtilityAIArea2DSearchSpace::on_area_exited(Area2D* area ) {
     
 // Getters and setters for attributes.
 
-void UtilityAIArea2DSearchSpace::set_area2d_nodepath( NodePath area2d_nodepath ) {
-    _area2d_nodepath = area2d_nodepath;
+void UtilityAIArea2DSearchSpace::set_area2d( Area2D* area2d ) {
+    _area2d = area2d;
 }
 
 
-NodePath UtilityAIArea2DSearchSpace::get_area2d_nodepath() const {
-    return _area2d_nodepath;
+Area2D* UtilityAIArea2DSearchSpace::get_area2d() const {
+    return _area2d;
 }
 
 
@@ -86,24 +86,21 @@ TypedArray<Node> UtilityAIArea2DSearchSpace::get_searchspace_nodes() const {
 
 
 void UtilityAIArea2DSearchSpace::_initialize_search_space() {
-    Node* node = get_node_or_null(_area2d_nodepath);
-    ERR_FAIL_COND_MSG( node == nullptr, "UtilityAIArea2DSearchSpace::_initialize_search_space() - Error, the nodepath for the Area2D has not been set.");
-    _area2d_node = godot::Object::cast_to<Area2D>(node);
-    ERR_FAIL_COND_MSG( _area2d_node == nullptr, "UtilityAIArea2DSearchSpace::_initialize_sensor() - Error, the node set as the Area2D is not of type Area2D.");
+    ERR_FAIL_COND_MSG( _area2d == nullptr, "UtilityAIArea2DSearchSpace::_initialize_search_space() - Error, the node for the Area2D has not been set.");
     
     // Connect to the area entered and exited signals.
-    Error error_visibility_volume_on_entered = _area2d_node->connect("area_entered", Callable(this, "on_area_entered"));
-    Error error_visibility_volume_on_exited  = _area2d_node->connect("area_exited", Callable(this, "on_area_exited"));
+    Error error_visibility_volume_on_entered = _area2d->connect("area_entered", Callable(this, "on_area_entered"));
+    Error error_visibility_volume_on_exited  = _area2d->connect("area_exited", Callable(this, "on_area_exited"));
 
 }
 
 
 
 void UtilityAIArea2DSearchSpace::_uninitialize_search_space() {
-    if( _area2d_node != nullptr ) {
-        _area2d_node->disconnect("area_entered", Callable(this, "on_area_entered"));
-        _area2d_node->disconnect("area_exited", Callable(this, "on_area_exited"));
+    if( _area2d != nullptr ) {
+        _area2d->disconnect("area_entered", Callable(this, "on_area_entered"));
+        _area2d->disconnect("area_exited", Callable(this, "on_area_exited"));
     }
-    _area2d_node = nullptr;
+    _area2d = nullptr;
 }
 

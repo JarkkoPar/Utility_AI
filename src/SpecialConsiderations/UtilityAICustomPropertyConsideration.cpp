@@ -10,9 +10,9 @@ using namespace godot;
 
 void UtilityAICustomPropertyConsideration::_bind_methods() {
 
-    ClassDB::bind_method(D_METHOD("set_node_with_property_nodepath", "node_with_property_nodepath"), &UtilityAICustomPropertyConsideration::set_node_with_property_nodepath);
-    ClassDB::bind_method(D_METHOD("get_node_with_property_nodepath"), &UtilityAICustomPropertyConsideration::get_node_with_property_nodepath);
-    ADD_PROPERTY(PropertyInfo(Variant::NODE_PATH, "node_with_property_nodepath", PROPERTY_HINT_NONE), "set_node_with_property_nodepath","get_node_with_property_nodepath");
+    ClassDB::bind_method(D_METHOD("set_node_with_property", "node_with_property"), &UtilityAICustomPropertyConsideration::set_node_with_property);
+    ClassDB::bind_method(D_METHOD("get_node_with_property"), &UtilityAICustomPropertyConsideration::get_node_with_property);
+    ADD_PROPERTY(PropertyInfo(Variant::OBJECT, "node_with_property", PROPERTY_HINT_NODE_TYPE, "Node"), "set_node_with_property", "get_node_with_property");
 
     ClassDB::bind_method(D_METHOD("set_property_name", "property_name"), &UtilityAICustomPropertyConsideration::set_property_name);
     ClassDB::bind_method(D_METHOD("get_property_name"), &UtilityAICustomPropertyConsideration::get_property_name);
@@ -51,11 +51,11 @@ Ref<Curve> UtilityAICustomPropertyConsideration::get_activation_curve() const {
     return _activation_curve;
 }
 
-void UtilityAICustomPropertyConsideration::set_node_with_property_nodepath( NodePath node_with_property_nodepath ) {
-    _node_with_property_nodepath = node_with_property_nodepath;
+void UtilityAICustomPropertyConsideration::set_node_with_property( Node* node_with_property ) {
+    _node_with_property = node_with_property;
 }
-NodePath UtilityAICustomPropertyConsideration::get_node_with_property_nodepath() const {
-    return _node_with_property_nodepath;
+Node* UtilityAICustomPropertyConsideration::get_node_with_property() const {
+    return _node_with_property;
 }
 
 void UtilityAICustomPropertyConsideration::set_property_max_value( double property_max_value ) {
@@ -103,7 +103,6 @@ void UtilityAICustomPropertyConsideration::_notification(int p_what) {
 
 void UtilityAICustomPropertyConsideration::initialize_consideration() {
     if( Engine::get_singleton()->is_editor_hint() ) return;
-    _node_with_property = get_node_or_null(_node_with_property_nodepath);
     if( _property_max_value != 0.0 ) {
         _one_over_property_max_value = _property_max_value;
     }
