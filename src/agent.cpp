@@ -76,6 +76,8 @@ UtilityAIAgent::UtilityAIAgent() {
     _rng.set_seed(time(0));
 
     _total_evaluate_options_usec = 0;
+
+    
 }
 
 
@@ -106,6 +108,7 @@ void UtilityAIAgent::evaluate_options(double delta) {
         UtilityAIBehaviour* behaviour_node = godot::Object::cast_to<UtilityAIBehaviour>(_current_behaviour_node);
         if( !behaviour_node->get_can_be_interrupted() ) {
             _total_evaluate_options_usec = godot::Time::get_singleton()->get_ticks_usec() - method_start_time_usec;
+            UtilityAIPerformanceMonitorSingleton::get_singleton()->increment_total_time_elapsed_ai_agents_usec(_total_evaluate_options_usec);
             return;
         }
     }
@@ -217,6 +220,7 @@ void UtilityAIAgent::evaluate_options(double delta) {
     _thinking_delay_in_seconds_current_timer = _thinking_delay_in_seconds;
     
     _total_evaluate_options_usec = godot::Time::get_singleton()->get_ticks_usec() - method_start_time_usec;
+    UtilityAIPerformanceMonitorSingleton::get_singleton()->increment_total_time_elapsed_ai_agents_usec(_total_evaluate_options_usec);
 }
 
 

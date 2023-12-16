@@ -2,6 +2,11 @@
 #include <godot_cpp/classes/engine.hpp>
 
 // Classes to include in to the gdextension module.
+
+// Performance monitor singleton.
+#include "performance_monitor_singleton.h"
+
+// AI Agent behaviours.
 #include "behaviour.h"
 #include "behaviour_group.h"
 #include "considerations.h"
@@ -106,6 +111,7 @@
 using namespace godot;
 
 static UtilityAINodeQuerySystem* gpNodeQuerySystem;
+static UtilityAIPerformanceMonitorSingleton* gdAIPerformanceMonitor;
 
 void initialize_utility_ai_module(ModuleInitializationLevel p_level) {
     if (p_level != MODULE_INITIALIZATION_LEVEL_SCENE) {
@@ -204,9 +210,14 @@ void initialize_utility_ai_module(ModuleInitializationLevel p_level) {
     ClassDB::register_class<UtilityAIDotProductToPositionVector3SearchCriterion>();
     ClassDB::register_class<UtilityAIDotProductToPositionVector2SearchCriterion>();
 
+    ClassDB::register_class<UtilityAIPerformanceMonitorSingleton>();
+
     // Add singletons.
     gpNodeQuerySystem = memnew(UtilityAINodeQuerySystem);
     Engine::get_singleton()->register_singleton("NodeQuerySystem", gpNodeQuerySystem);
+
+    gdAIPerformanceMonitor = memnew(UtilityAIPerformanceMonitorSingleton);
+    Engine::get_singleton()->register_singleton("AIPerformanceMonitor", gdAIPerformanceMonitor);
 }
 
 void uninitialize_utility_ai_module(ModuleInitializationLevel p_level) {
@@ -216,6 +227,8 @@ void uninitialize_utility_ai_module(ModuleInitializationLevel p_level) {
 
     Engine::get_singleton()->unregister_singleton("NodeQuerySystem");
     memdelete(gpNodeQuerySystem);
+    Engine::get_singleton()->unregister_singleton("AIPerformanceMonitor");
+    memdelete(gdAIPerformanceMonitor);
 }
 
 extern "C" {

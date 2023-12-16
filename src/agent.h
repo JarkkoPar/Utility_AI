@@ -5,6 +5,7 @@
 
 #include <godot_cpp/classes/node.hpp>
 #include <godot_cpp/classes/random_number_generator.hpp>
+#include "performance_monitor_singleton.h"
 
 
 #define UTILITYAIAGENT_MAX_TOP_SCORING_BEHAVIOURS 16
@@ -31,6 +32,7 @@ private:
     double _thinking_delay_in_seconds_current_timer;
 
     uint64_t _total_evaluate_options_usec;
+
 protected:
     static void _bind_methods();
     void place_into_top_n_behaviour_list(Node* behaviour, float score );

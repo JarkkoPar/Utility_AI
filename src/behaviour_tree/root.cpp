@@ -5,6 +5,7 @@
 #include <godot_cpp/core/class_db.hpp>
 #include <godot_cpp/classes/engine.hpp>
 #include <godot_cpp/classes/time.hpp>
+#include "../performance_monitor_singleton.h"
 
 
 using namespace godot;
@@ -52,15 +53,28 @@ uint64_t  UtilityAIBTRoot::get_total_tick_usec() const {
 
 
 int UtilityAIBTRoot::tick(Variant user_data, double delta) { 
-    if( !get_is_active() ) return BT_FAILURE;
-    if( Engine::get_singleton()->is_editor_hint() ) return BT_FAILURE;
+    uint64_t method_start_time_usec = godot::Time::get_singleton()->get_ticks_usec();
+    if( !get_is_active() ){
+        _total_tick_usec = godot::Time::get_singleton()->get_ticks_usec() - method_start_time_usec;
+        UtilityAIPerformanceMonitorSingleton::get_singleton()->increment_total_time_elapsed_behaviour_trees_usec(_total_tick_usec);
+        return BT_FAILURE;
+    } 
+    if( Engine::get_singleton()->is_editor_hint() ) {
+        _total_tick_usec = godot::Time::get_singleton()->get_ticks_usec() - method_start_time_usec;
+        UtilityAIPerformanceMonitorSingleton::get_singleton()->increment_total_time_elapsed_behaviour_trees_usec(_total_tick_usec);
+        return BT_FAILURE;
+    } 
 
     if(get_reset_rule() == UtilityAIBehaviourTreeNodesResetRule::NEVER) {
-        if( get_internal_status() == BT_INTERNAL_STATUS_COMPLETED ) return get_tick_result(); 
+        if( get_internal_status() == BT_INTERNAL_STATUS_COMPLETED ){
+            _total_tick_usec = godot::Time::get_singleton()->get_ticks_usec() - method_start_time_usec;
+            UtilityAIPerformanceMonitorSingleton::get_singleton()->increment_total_time_elapsed_behaviour_trees_usec(_total_tick_usec);
+            return get_tick_result();
+        }  
     } 
     
     set_internal_status(BT_INTERNAL_STATUS_TICKED);
-    uint64_t method_start_time_usec = godot::Time::get_singleton()->get_ticks_usec();
+    
     for( int i = 0; i < get_child_count(); ++i ) {
         Node* node = get_child(i);
         if( UtilityAISensors* sensor = godot::Object::cast_to<UtilityAISensors>(node) ) {
@@ -80,11 +94,13 @@ int UtilityAIBTRoot::tick(Variant user_data, double delta) {
                 set_internal_status(BT_INTERNAL_STATUS_COMPLETED);
             }
             _total_tick_usec = godot::Time::get_singleton()->get_ticks_usec() - method_start_time_usec;
+            UtilityAIPerformanceMonitorSingleton::get_singleton()->increment_total_time_elapsed_behaviour_trees_usec(_total_tick_usec);
             return result;
         }
     }
     set_internal_status(BT_INTERNAL_STATUS_COMPLETED);
     _total_tick_usec = godot::Time::get_singleton()->get_ticks_usec() - method_start_time_usec;
+    UtilityAIPerformanceMonitorSingleton::get_singleton()->increment_total_time_elapsed_behaviour_trees_usec(_total_tick_usec);
     return BT_FAILURE; // We shouldn't get here. If we do, there were no child nodes.
 }
 
