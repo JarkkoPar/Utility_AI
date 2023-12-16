@@ -64,6 +64,13 @@
 #include "behaviour_tree/node_reference.h"
 #include "behaviour_tree/pass_by.h"
 
+// State trees.
+
+//#include "state_tree/leaf.h"
+#include "state_tree/nodes.h"
+#include "state_tree/root.h"
+#include "state_tree/selector.h"
+
 
 // Node Query System.
 #include "node_query_system/node_query_system.h"
@@ -176,7 +183,11 @@ void initialize_utility_ai_module(ModuleInitializationLevel p_level) {
     ClassDB::register_class<UtilityAIBTRunNQSQuery>();
     ClassDB::register_class<UtilityAIBTPassBy>();
     ClassDB::register_class<UtilityAIBTNodeReference>();
-    
+
+    // State tree.
+    ClassDB::register_class<UtilityAIStateTreeNodes>(true);
+    ClassDB::register_class<UtilityAISTRoot>();
+    ClassDB::register_class<UtilityAISTSelector>();
 
     // Node Query System.
     ClassDB::register_class<UtilityAINodeQuerySystem>();

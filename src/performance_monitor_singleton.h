@@ -16,9 +16,11 @@ private:
 
     uint64_t _total_time_elapsed_ai_agents_usec;
     uint64_t _total_time_elapsed_behaviour_trees_usec;
+    uint64_t _total_time_elapsed_state_trees_usec;
 
     uint64_t _current_total_time_elapsed_ai_agents_usec;
     uint64_t _current_total_time_elapsed_behaviour_trees_usec;
+    uint64_t _current_total_time_elapsed_state_trees_usec;
 
     
 protected:
@@ -34,14 +36,17 @@ public:
 
     int  get_total_time_elapsed_ai_agents_usec() const;
     int  get_total_time_elapsed_behaviour_trees_usec() const;
+    int  get_total_time_elapsed_state_trees_usec() const;
 
     int  get_current_total_time_elapsed_ai_agents_usec() const;
     int  get_current_total_time_elapsed_behaviour_trees_usec() const;
+    int  get_current_total_time_elapsed_state_trees_usec() const;
 
     // Handling methods.
 
     void increment_total_time_elapsed_ai_agents_usec( uint64_t time_usec );
     void increment_total_time_elapsed_behaviour_trees_usec( uint64_t time_usec );
+    void increment_total_time_elapsed_state_trees_usec( uint64_t time_usec );
 
     void initialize_performance_counters();
     void update_performance_counters();
