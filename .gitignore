@@ -122,3 +122,7 @@ config.log
 
 compile_commands.json
 *.os
+
+# Visual Studio code config files
+utility_ai.code-workspace
+.vscode/settings.json
