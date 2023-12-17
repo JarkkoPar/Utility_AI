@@ -43,14 +43,14 @@ UtilityAISTSelector::~UtilityAISTSelector() {
 // Handling functions.
 
 
-UtilityAIStateTreeNodes* UtilityAISTSelector::tick(Variant user_data, double delta) { 
+UtilityAIStateTreeNodes* UtilityAISTSelector::_tick(Variant user_data, double delta) { 
 
     // The selector will only consider the state tree nodes.
     UtilityAIStateTreeNodes* result_state = nullptr;
     for( int i = 0; i < get_child_count(); ++i ) {
         if( UtilityAIStateTreeNodes* stnode = godot::Object::cast_to<UtilityAIStateTreeNodes>(get_child(i)) ) {
             if( stnode->on_enter_condition( user_data, delta ) ) {
-                result_state = stnode->tick(user_data, delta);
+                result_state = stnode->_tick(user_data, delta);
                 if( result_state != nullptr ) {
                     return result_state;
                 }

@@ -28,6 +28,9 @@ void UtilityAIBehaviour::_bind_methods() {
     ClassDB::bind_method(D_METHOD("get_cooldown_turns"), &UtilityAIBehaviour::get_cooldown_turns);
     ADD_PROPERTY(PropertyInfo(Variant::INT, "cooldown_turns", PROPERTY_HINT_RANGE, "0,64,or_greater,suffix:turns"), "set_cooldown_turns","get_cooldown_turns");
 
+    ClassDB::bind_method(D_METHOD("set_considerations", "considerations"), &UtilityAIBehaviour::set_considerations);
+    ClassDB::bind_method(D_METHOD("get_considerations"), &UtilityAIBehaviour::get_considerations);
+    ADD_PROPERTY(PropertyInfo(Variant::ARRAY, "considerations", PROPERTY_HINT_ARRAY_TYPE,vformat("%s/%s:%s", Variant::OBJECT, PROPERTY_HINT_RESOURCE_TYPE, "UtilityAIConsiderationResources") ), "set_considerations","get_considerations");
 
     ADD_SUBGROUP("Debugging","");
 
@@ -106,6 +109,13 @@ int  UtilityAIBehaviour::get_current_action_index() const {
     return _current_action_index;
 }
 
+void UtilityAIBehaviour::set_considerations( TypedArray<UtilityAIConsiderationResources> considerations ) {
+    _considerations = considerations;
+}
+
+TypedArray<UtilityAIConsiderationResources> UtilityAIBehaviour::get_considerations() const {
+    return _considerations;
+}
 
 
 // Godot virtuals.

@@ -39,6 +39,7 @@ void UtilityAIBTNodeReference::set_node_reference(UtilityAIBehaviourTreeNodes* n
     }
 
     _node_reference = node_reference;
+    _update_cache();
 }
 
 UtilityAIBehaviourTreeNodes* UtilityAIBTNodeReference::get_node_reference() const {
@@ -58,6 +59,14 @@ int  UtilityAIBTNodeReference::get_tick_result() const {
 
 // Handling methods.
 
+void UtilityAIBTNodeReference::_update_cache() {
+    _cache = ObjectID();
+    if( _node_reference != nullptr ) {
+    	_cache = _node_reference->get_instance_id();
+    }
+}
+
+
 void UtilityAIBTNodeReference::reset() {
     if(!_node_reference) {
         return;
@@ -68,6 +77,12 @@ void UtilityAIBTNodeReference::reset() {
 
 int UtilityAIBTNodeReference::tick(Variant user_data, double delta) { 
     set_internal_status(BT_INTERNAL_STATUS_TICKED);
+    if( _cache.is_null() || !_cache.is_valid() ) {
+        _node_reference = nullptr; // Cache shows that the node reference has become invalid.
+        set_internal_status(BT_INTERNAL_STATUS_COMPLETED);
+        set_tick_result(BT_FAILURE);
+        return BT_FAILURE;
+    }
     if( !_node_reference ) {
         set_internal_status(BT_INTERNAL_STATUS_COMPLETED);
         set_tick_result(BT_FAILURE);

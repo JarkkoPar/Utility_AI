@@ -1,7 +1,7 @@
 #ifndef UtilityAIConsiderations_H_INCLUDED
 #define UtilityAIConsiderations_H_INCLUDED 
 
-#include "utility_ai.h"
+#include "../utility_ai.h"
 #include "agent.h"
 #include <godot_cpp/classes/node.hpp>
 

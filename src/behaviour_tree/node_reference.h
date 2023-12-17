@@ -15,8 +15,11 @@ private:
     
     //int _tick_result;
     UtilityAIBehaviourTreeNodes* _node_reference;
+    ObjectID                     _cache;
 protected:
     static void _bind_methods();
+
+    void _update_cache();
 public:
     UtilityAIBTNodeReference();
     ~UtilityAIBTNodeReference();

@@ -83,7 +83,7 @@ void UtilityAIConsideration::_notification(int p_what) {
 }
 /**/
 
-// Handling functions.
+// Handling methods.
 
 double UtilityAIConsideration::evaluate() { 
     if( !get_is_active() ) return 0.0;

@@ -7,7 +7,7 @@
 
 #include "action.h"
 #include "action_group.h"
-
+#include "../resources/considerations/consideration_resources.h"
 
 
 namespace godot {
@@ -27,7 +27,7 @@ private:
     //UtilityAIAction*  _current_action_node;
     
     bool   _can_be_interrupted;
-
+    TypedArray<UtilityAIConsiderationResources> _considerations;
 protected:
     static void _bind_methods();
 
@@ -52,6 +52,9 @@ public:
 
     void  set_current_action_index( int current_action_index );
     int   get_current_action_index() const;
+
+    void set_considerations( TypedArray<UtilityAIConsiderationResources> considerations );
+    TypedArray<UtilityAIConsiderationResources> get_considerations() const;
 
     //UtilityAIAction* get_current_action_node() const { return _current_action_node;};
 

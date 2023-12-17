@@ -1,7 +1,7 @@
 #ifndef UtilityAISensors_H_INCLUDED
 #define UtilityAISensors_H_INCLUDED 
 
-#include "utility_ai.h"
+#include "../utility_ai.h"
 #include <godot_cpp/classes/node.hpp>
 
 

@@ -49,7 +49,7 @@ UtilityAIStateTreeNodes* UtilityAISTTransition::get_target_state() const {
 // Handling functions.
 
 
-UtilityAIStateTreeNodes* UtilityAISTTransition::tick(Variant user_data, double delta) { 
+UtilityAIStateTreeNodes* UtilityAISTTransition::_tick(Variant user_data, double delta) { 
     /**
     uint64_t method_start_time_usec = godot::Time::get_singleton()->get_ticks_usec();
     if( !get_is_active() ){

@@ -1,6 +1,6 @@
 #include "root.h"
 #include "nodes.h"
-#include "../sensors.h"
+#include "../agent_behaviours/sensors.h"
 
 #include <godot_cpp/core/class_db.hpp>
 #include <godot_cpp/classes/engine.hpp>
@@ -46,30 +46,39 @@ uint64_t  UtilityAISTRoot::get_total_tick_usec() const {
     return _total_tick_usec;
 }
 
-UtilityAIStateTreeNodes* UtilityAISTRoot::get_active_state() const {
-    return _active_state;
-}
+//UtilityAIStateTreeNodes* UtilityAISTRoot::get_active_state() const {
+//    return _active_state;
+//}
 
 
 // Handling functions.
 
 
-UtilityAIStateTreeNodes* UtilityAISTRoot::tick(Variant user_data, double delta) { 
+
+void UtilityAISTRoot::tick(Variant user_data, double delta) { 
     uint64_t method_start_time_usec = godot::Time::get_singleton()->get_ticks_usec();
     
-    if( _active_state ) {
-        // Tick the active state.
-        _active_state->tick(user_data, delta);
+    // If there are active states, tick their custom method.
+    if( _active_states.size() > 0 ) {
+        for( int i = 0; i < _active_states.size(); ++i ) {
+            if( UtilityAIStateTreeNodes* stnode = godot::Object::cast_to<UtilityAIStateTreeNodes>(_active_states[i]) ) {
+                stnode->on_tick(user_data, delta);
+            }
+        }
     }
+    //if( _active_state ) {
+        // Tick the active state.
+    //    _active_state->tick(user_data, delta);
+    //}
     if( !get_is_active() ){
         _total_tick_usec = godot::Time::get_singleton()->get_ticks_usec() - method_start_time_usec;
         UtilityAIPerformanceMonitorSingleton::get_singleton()->increment_total_time_elapsed_behaviour_trees_usec(_total_tick_usec);
-        return nullptr;
+        return;
     } 
     if( Engine::get_singleton()->is_editor_hint() ) {
         _total_tick_usec = godot::Time::get_singleton()->get_ticks_usec() - method_start_time_usec;
         UtilityAIPerformanceMonitorSingleton::get_singleton()->increment_total_time_elapsed_behaviour_trees_usec(_total_tick_usec);
-        return nullptr;
+        return;
     } 
 
     
@@ -87,16 +96,16 @@ UtilityAIStateTreeNodes* UtilityAISTRoot::tick(Variant user_data, double delta) 
             if( !stnode->get_is_active() ) {
                 continue;
             } 
-            result_state = stnode->tick(user_data, delta);
+            result_state = stnode->_tick(user_data, delta);
             
             _total_tick_usec = godot::Time::get_singleton()->get_ticks_usec() - method_start_time_usec;
             UtilityAIPerformanceMonitorSingleton::get_singleton()->increment_total_time_elapsed_state_trees_usec(_total_tick_usec);
-            return result_state;
+            return;// result_state;
         }
     }
     _total_tick_usec = godot::Time::get_singleton()->get_ticks_usec() - method_start_time_usec;
     UtilityAIPerformanceMonitorSingleton::get_singleton()->increment_total_time_elapsed_state_trees_usec(_total_tick_usec);
-    return nullptr; // We shouldn't get here. If we do, there were no child nodes.
+    return;// nullptr; // We shouldn't get here. If we do, there were no child nodes.
 }
 
 

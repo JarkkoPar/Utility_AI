@@ -7,33 +7,39 @@
 #include "performance_monitor_singleton.h"
 
 // AI Agent behaviours.
-#include "behaviour.h"
-#include "behaviour_group.h"
-#include "considerations.h"
-#include "consideration_group.h"
-#include "consideration.h"
-#include "actions.h"
-#include "action.h"
-#include "action_group.h"
-#include "agent.h"
-#include "sensors.h"
-#include "sensor.h"
-#include "sensor_group.h"
+#include "agent_behaviours/behaviour.h"
+#include "agent_behaviours/behaviour_group.h"
+#include "agent_behaviours/considerations.h"
+#include "agent_behaviours/consideration_group.h"
+#include "agent_behaviours/consideration.h"
+#include "agent_behaviours/actions.h"
+#include "agent_behaviours/action.h"
+#include "agent_behaviours/action_group.h"
+#include "agent_behaviours/agent.h"
+#include "agent_behaviours/sensors.h"
+#include "agent_behaviours/sensor.h"
+#include "agent_behaviours/sensor_group.h"
 
 // Special sensors.
-#include "sensors/boolean.h"
-#include "sensors/float_range.h"
-#include "sensors/int_range.h"
-#include "sensors/angle_vector2.h"
-#include "sensors/angle_vector3.h"
-#include "sensors/distance_vector2.h"
-#include "sensors/distance_vector3.h"
-#include "sensors/area2d_visibility.h"
-#include "sensors/area3d_visibility.h"
+#include "agent_behaviours/sensors/boolean.h"
+#include "agent_behaviours/sensors/float_range.h"
+#include "agent_behaviours/sensors/int_range.h"
+#include "agent_behaviours/sensors/angle_vector2.h"
+#include "agent_behaviours/sensors/angle_vector3.h"
+#include "agent_behaviours/sensors/distance_vector2.h"
+#include "agent_behaviours/sensors/distance_vector3.h"
+#include "agent_behaviours/sensors/area2d_visibility.h"
+#include "agent_behaviours/sensors/area3d_visibility.h"
 
 // Special considerations.
-#include "considerations/boolean.h"
-#include "considerations/custom_property.h"
+#include "agent_behaviours/considerations/boolean.h"
+#include "agent_behaviours/considerations/custom_property.h"
+
+// Resource-based considerations
+#include "resources/considerations/consideration_resources.h"
+#include "resources/considerations/consideration_resource.h"
+#include "resources/considerations/consideration_group_resource.h"
+
 
 // Behaviour tree.
 #include "behaviour_tree/nodes.h"
@@ -154,6 +160,11 @@ void initialize_utility_ai_module(ModuleInitializationLevel p_level) {
     // Special considerations.
     ClassDB::register_class<UtilityAIBooleanConsideration>();
     ClassDB::register_class<UtilityAICustomPropertyConsideration>();
+
+    // Resource-based considerations.
+    ClassDB::register_class<UtilityAIConsiderationResources>(true);
+    ClassDB::register_class<UtilityAIConsiderationResource>();
+    ClassDB::register_class<UtilityAIConsiderationGroupResource>();
 
     // Behaviour tree.
     ClassDB::register_class<UtilityAIBehaviourTreeNodes>(true);

@@ -26,7 +26,7 @@ public:
 
     // Handling functions.
 
-    virtual UtilityAIStateTreeNodes* tick(Variant user_data, double delta) override;
+    virtual UtilityAIStateTreeNodes* _tick(Variant user_data, double delta) override;
 
     // Godot virtuals.
     void _ready();

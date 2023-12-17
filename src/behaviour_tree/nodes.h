@@ -1,7 +1,7 @@
 #ifndef UtilityAIBehaviourTreeNodes_H_INCLUDED
 #define UtilityAIBehaviourTreeNodes_H_INCLUDED 
 
-#include "utility_ai.h"
+#include "../utility_ai.h"
 #include "definitions.h"
 #include <godot_cpp/classes/node.hpp>
 

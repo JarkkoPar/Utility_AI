@@ -1,5 +1,5 @@
 #include "nodes.h"
-#include "../considerations.h"
+#include "../agent_behaviours/considerations.h"
 #include <godot_cpp/core/class_db.hpp>
 #include <godot_cpp/classes/engine.hpp>
 
@@ -9,7 +9,12 @@ using namespace godot;
 // Method binds.
 
 void UtilityAIStateTreeNodes::_bind_methods() {
-    
+
+    ClassDB::bind_method(D_METHOD("set_resource_array", "resource_array"), &UtilityAIStateTreeNodes::set_resource_array);
+    ClassDB::bind_method(D_METHOD("get_resource_array"), &UtilityAIStateTreeNodes::get_resource_array);
+    ADD_PROPERTY(PropertyInfo(Variant::ARRAY, "resource_array", PROPERTY_HINT_ARRAY_TYPE,vformat("%s/%s:%s", Variant::OBJECT, PROPERTY_HINT_RESOURCE_TYPE, "UtilityAIResourceConsideration") ), "set_resource_array","get_resource_array");
+
+
     ClassDB::bind_method(D_METHOD("set_evaluation_method", "evaluation_method"), &UtilityAIStateTreeNodes::set_evaluation_method);
     ClassDB::bind_method(D_METHOD("get_evaluation_method"), &UtilityAIStateTreeNodes::get_evaluation_method);
     ADD_PROPERTY(PropertyInfo(Variant::INT, "evaluation_method", PROPERTY_HINT_ENUM, "Sum:0,Min:1,Max:2,Mean:3,Multiply:4,FirstNonZero:5"), "set_evaluation_method","get_evaluation_method");
@@ -32,7 +37,7 @@ void UtilityAIStateTreeNodes::_bind_methods() {
     ClassDB::bind_method(D_METHOD("get_internal_status"), &UtilityAIStateTreeNodes::get_internal_status);
     ADD_PROPERTY(PropertyInfo(Variant::INT, "internal_status", PROPERTY_HINT_ENUM, "Unticked:0,Ticked:1,Completed:2" ), "set_internal_status","get_internal_status");
 
-    ClassDB::bind_method(D_METHOD("_tick", "user_data", "delta" ), &UtilityAIStateTreeNodes::tick);
+    ClassDB::bind_method(D_METHOD("_tick", "user_data", "delta" ), &UtilityAIStateTreeNodes::_tick);
 
 }
 
@@ -56,6 +61,13 @@ UtilityAIStateTreeNodes::~UtilityAIStateTreeNodes() {
 
 // Getters and Setters.
 
+void UtilityAIStateTreeNodes::set_resource_array( TypedArray<Resource> resource_array ) {
+    _considerations = resource_array;
+}
+
+TypedArray<Resource> UtilityAIStateTreeNodes::get_resource_array() const {
+    return _considerations;
+}
 
 void UtilityAIStateTreeNodes::set_evaluation_method( int evaluation_method ) {
     _evaluation_method = evaluation_method;
@@ -234,8 +246,43 @@ bool UtilityAIStateTreeNodes::on_enter_condition( Variant user_data, double delt
     return false;
 }
 
-UtilityAIStateTreeNodes* UtilityAIStateTreeNodes::tick(Variant user_data, double delta ) { 
+void UtilityAIStateTreeNodes::on_enter_state( Variant user_data, double delta ) {
+    if( has_method("on_enter_state")){
+        call("on_enter_state", user_data, delta );
+    }
+}
+
+void UtilityAIStateTreeNodes::on_exit_state( Variant user_data, double delta ) {
+    if( has_method("on_exit_state")){
+        call("on_exit_state", user_data, delta );
+    }
+}
+
+
+void UtilityAIStateTreeNodes::on_tick( Variant user_data, double delta ) {
+    if( has_method("on_tick")){
+        call("on_tick", user_data, delta );
+    }
+}
+
+//TypedArray<UtilityAIStateTreeNodes> UtilityAIStateTreeNodes::_tick(Variant user_data, double delta, TypedArray<UtilityAIStateTreeNodes> states ) { 
+UtilityAIStateTreeNodes* UtilityAIStateTreeNodes::_tick( Variant user_data, double delta ) {
+    for( int i = 0; i < get_child_count(); ++i ) {
+        if( UtilityAIStateTreeNodes* stnode = godot::Object::cast_to<UtilityAIStateTreeNodes>(get_child(i)) ) {
+            if( !stnode->get_is_active() ) {
+                continue;
+            } 
+            if( !stnode->on_enter_condition(user_data, delta) ) {
+                continue;
+            }
+            if( UtilityAIStateTreeNodes* result = stnode->_tick(user_data, delta) ) {
+                return result;
+            }//endif result is not nullptr
+        }//endif valid node type
+    }//endfor child nodes
+    
     return nullptr;
 }
+
 
 

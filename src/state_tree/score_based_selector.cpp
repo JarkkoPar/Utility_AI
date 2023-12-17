@@ -43,7 +43,7 @@ UtilityAISTScoreBasedSelector::~UtilityAISTScoreBasedSelector() {
 // Handling functions.
 
 
-UtilityAIStateTreeNodes* UtilityAISTScoreBasedSelector::tick(Variant user_data, double delta) { 
+UtilityAIStateTreeNodes* UtilityAISTScoreBasedSelector::_tick(Variant user_data, double delta) { 
     // Evaluate the scores and pick the child with the highest
     // score to run.
     int current_child_index = -1;
@@ -69,7 +69,7 @@ UtilityAIStateTreeNodes* UtilityAISTScoreBasedSelector::tick(Variant user_data, 
     
     // The selector will only consider the state tree nodes.
     if( UtilityAIStateTreeNodes* stnode = godot::Object::cast_to<UtilityAIStateTreeNodes>(get_child(current_child_index)) ) {
-        return stnode->tick(user_data, delta);
+        return stnode->_tick(user_data, delta);
     }
     return nullptr; // We shouldn't get here. If we do, there were no valid child nodes.
 }

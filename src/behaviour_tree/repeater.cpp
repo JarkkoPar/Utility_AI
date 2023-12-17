@@ -1,6 +1,6 @@
 #include "repeater.h"
 #include "nodes.h"
-#include "../sensors.h"
+//#include "../sensors.h"
 
 #include <godot_cpp/core/class_db.hpp>
 #include <godot_cpp/classes/engine.hpp>

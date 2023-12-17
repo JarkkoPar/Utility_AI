@@ -4,7 +4,7 @@
 #include "utility_ai.h"
 #include "definitions.h"
 #include <godot_cpp/classes/node.hpp>
-
+#include <godot_cpp/classes/resource.hpp>
 
 
 namespace godot {
@@ -20,6 +20,8 @@ private:
     int    _internal_status;
     int    _reset_rule;
     bool   _has_reset_rule_changed;
+
+    TypedArray<Resource>    _considerations;
 protected:
     static void _bind_methods();
 public:
@@ -28,6 +30,9 @@ public:
     
     
     // Getters and setters for attributes.
+
+    void set_resource_array( TypedArray<Resource> resource_array );
+    TypedArray<Resource> get_resource_array() const;
     
     void set_evaluation_method( int evaluation_method );
     int  get_evaluation_method() const;
@@ -65,8 +70,11 @@ public:
     
     virtual double evaluate();
     virtual bool   on_enter_condition( Variant user_data, double delta );
+    virtual void   on_enter_state( Variant user_data, double delta );
+    virtual void   on_exit_state( Variant user_data, double delta );
+    virtual void   on_tick( Variant user_data, double delta );
 
-    virtual UtilityAIStateTreeNodes* tick( Variant user_data, double delta );
+    virtual UtilityAIStateTreeNodes* _tick( Variant user_data, double delta );
 
     virtual void reset();
     //virtual void reset_for_looping();
