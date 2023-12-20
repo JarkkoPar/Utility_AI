@@ -46,7 +46,8 @@ bool  UtilityAIConsiderationResources::get_has_vetoed() const {
 
 // Handling methods.
 
-double UtilityAIConsiderationResources::evaluate() { 
+double UtilityAIConsiderationResources::evaluate(bool& has_vetoed, Node* parent_node ) {
+    has_vetoed = false; 
     return 0.0;
 }
 

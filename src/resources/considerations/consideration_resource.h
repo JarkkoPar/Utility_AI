@@ -15,7 +15,7 @@ private:
     bool                _is_active;
     Ref<Curve>          _activation_curve;
     UtilityAISensors*   _input_sensor;
-    NodePath            _input_sensor_nodepath;
+    NodePath            _input_sensor_nodepath; // Node pointer doesn't seem to get saved for a resource, so a node path needs to be used.
 protected:
     static void _bind_methods();
 
@@ -25,13 +25,7 @@ public:
     
     
     // Getters and setters for attributes.
-    /**/
-    //void  set_is_active( bool is_active );
-    //bool  get_is_active() const;
-
-    //void set_input_sensor( UtilityAISensors* input_sensor );
-    //UtilityAISensors* get_input_sensor() const;
-
+   
     void set_input_sensor_nodepath( NodePath input_sensor_nodepath );
     NodePath get_input_sensor_nodepath() const;
 
@@ -39,30 +33,13 @@ public:
     void set_activation_curve( Ref<Curve> activation_curve );
     Ref<Curve> get_activation_curve() const;
 
-    /**
-    void set_node_with_property( Node* node_with_property );
-    Node* get_node_with_property() const;
-
-    void set_property_max_value( double true_score_value );
-    double get_property_max_value() const;
-
-    void set_property_name( StringName property_name );
-    StringName get_property_name() const;
-    /**/     
-    // Godot virtuals.
-    //void _ready();
-    //void _notification( int p_what );
-   
-    // Handling functions.
-    // Handling functions.
     
-    virtual double evaluate() override;
+    // Handling methods.
+    
+    virtual double evaluate(bool& has_vetoed, Node* parent_node) override;
     virtual double sample_activation_curve( double input_value ) const;
 
-    //void initialize_consideration();
-    //virtual double evaluate() override;
-    //virtual double sample_activation_curve( double input_value ) const;
-    //virtual double sample_activation_curve( double input_value ) const;
+
 };
 
 }

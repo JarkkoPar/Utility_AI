@@ -145,7 +145,7 @@ void UtilityAIAgent::evaluate_options(double delta) {
         // If it is a behaviour group, see if it evaluates so that it should be used.
         UtilityAIBehaviourGroup* behaviourGroupNode = godot::Object::cast_to<UtilityAIBehaviourGroup>(node);
         if( behaviourGroupNode != nullptr ) {
-            bool is_behaviour_group_valid = behaviourGroupNode->evaluate();
+            bool is_behaviour_group_valid = behaviourGroupNode->evaluate();//this);
             if( is_behaviour_group_valid ) {
                 // Go through the group children and find their place in the top_n list.
                 for( int bgi = 0; bgi < behaviourGroupNode->get_child_count(); ++bgi ) {
@@ -155,7 +155,7 @@ void UtilityAIAgent::evaluate_options(double delta) {
                     if( bgiBehaviourNode == nullptr ) continue;
                     if( !bgiBehaviourNode->get_is_active()) continue;
 
-                    score = bgiBehaviourNode->evaluate();
+                    score = bgiBehaviourNode->evaluate();//this);
                     if( score > 0.0 ) {
                         place_into_top_n_behaviour_list( bgiBehaviourNode, score );
                     }
@@ -169,7 +169,7 @@ void UtilityAIAgent::evaluate_options(double delta) {
         if( behaviourNode == nullptr ) continue;
         if( !behaviourNode->get_is_active()) continue;
 
-        score = behaviourNode->evaluate();
+        score = behaviourNode->evaluate();//this);
         if( score > 0.0 ) {
             place_into_top_n_behaviour_list( behaviourNode, score );
         }

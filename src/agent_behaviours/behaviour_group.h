@@ -2,11 +2,9 @@
 #define UtilityAIBEHAVIOURGROUP_H_INCLUDED 
 
 #include "utility_ai.h"
-//#include "agent.h"
+#include "agent.h"
 #include <godot_cpp/classes/node.hpp>
-
-//#include "action.h"
-//#include "action_group.h"
+#include "resources/considerations/consideration_resources.h"
 
 
 
@@ -18,6 +16,7 @@ class UtilityAIBehaviourGroup : public UtilityAI {
 private:
     double  _score;
     double  _activation_score;
+    TypedArray<UtilityAIConsiderationResources> _considerations;
 protected:
     static void _bind_methods();
 
@@ -33,10 +32,14 @@ public:
 
     void  set_score( double score );
     double get_score() const;
+
+    void set_considerations( TypedArray<UtilityAIConsiderationResources> considerations );
+    TypedArray<UtilityAIConsiderationResources> get_considerations() const;
+
     
     // Handling functions.
 
-    bool evaluate();
+    bool evaluate();//UtilityAIAgent* agent);
 
 };
 

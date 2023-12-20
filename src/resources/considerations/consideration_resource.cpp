@@ -1,5 +1,6 @@
 #include "consideration_resource.h"
-
+//#include "godot_cpp/classes/scene_tree.hpp"
+#include "godot_cpp/classes/window.hpp"
 
 using namespace godot;
 
@@ -16,9 +17,6 @@ UtilityAIConsiderationResource::~UtilityAIConsiderationResource() {
 
 
 void UtilityAIConsiderationResource::_bind_methods() {
-    //ClassDB::bind_method(D_METHOD("set_input_sensor", "input_sensor"), &UtilityAIConsiderationResource::set_input_sensor);
-    //ClassDB::bind_method(D_METHOD("get_input_sensor"), &UtilityAIConsiderationResource::get_input_sensor);
-    //ADD_PROPERTY(PropertyInfo(Variant::OBJECT, "input_sensor", PROPERTY_HINT_NODE_TYPE, "UtilityAISensors"), "set_input_sensor", "get_input_sensor");
 
     ClassDB::bind_method(D_METHOD("set_input_sensor_nodepath", "input_sensor_nodepath"), &UtilityAIConsiderationResource::set_input_sensor_nodepath);
     ClassDB::bind_method(D_METHOD("get_input_sensor_nodepath"), &UtilityAIConsiderationResource::get_input_sensor_nodepath);
@@ -33,16 +31,6 @@ void UtilityAIConsiderationResource::_bind_methods() {
 }
 
 // Getters and setters.
-
-/**
-void UtilityAIConsiderationResource::set_input_sensor( UtilityAISensors* input_sensor ) {
-    _input_sensor = input_sensor;
-}
-
-UtilityAISensors* UtilityAIConsiderationResource::get_input_sensor() const {
-    return _input_sensor;
-}
-/**/
 
 void UtilityAIConsiderationResource::set_input_sensor_nodepath( NodePath input_sensor_nodepath ) {
     _input_sensor_nodepath = input_sensor_nodepath;
@@ -64,9 +52,10 @@ Ref<Curve> UtilityAIConsiderationResource::get_activation_curve() const {
 
 // Handling methods.
 
-double UtilityAIConsiderationResource::evaluate() { 
-    if( !get_is_active() ) return 0.0;
-    //if( get_has_vetoed() ) return 0.0;
+double UtilityAIConsiderationResource::evaluate(bool& has_vetoed, Node* parent_node) { 
+    if( _input_sensor == nullptr ) {
+        _input_sensor = godot::Object::cast_to<UtilityAISensors>(parent_node->get_node_or_null(_input_sensor_nodepath));
+    }
 
     double input_value = 0.0;
     if( _input_sensor != nullptr ) {
@@ -75,7 +64,18 @@ double UtilityAIConsiderationResource::evaluate() {
 
     double score = 0.0;
     if( has_method("eval")) {
-        score = call("eval", input_value);
+        Variant return_value = call("eval", input_value);
+        if( return_value.get_type() == Variant::Type::ARRAY ) {
+            Array retarray = return_value;
+            if( retarray.size() > 0 ) {
+                score = retarray[0];
+            }
+            if( retarray.size() > 1 ) {
+                has_vetoed = retarray[1];
+            }
+        } else if( return_value.get_type() == Variant::Type::FLOAT) {
+            score = return_value;
+        }
         return score;
     }
 

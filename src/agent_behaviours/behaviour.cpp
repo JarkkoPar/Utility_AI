@@ -152,9 +152,9 @@ void UtilityAIBehaviour::_process(double delta ) {
 
 // Handling functions.
 
-double UtilityAIBehaviour::evaluate() { 
-    if( !get_is_active() ) return 0.0;
-    if( Engine::get_singleton()->is_editor_hint() ) return 0.0;
+double UtilityAIBehaviour::evaluate(){ //UtilityAIAgent* agent) { 
+    //if( !get_is_active() ) return 0.0;
+    //if( Engine::get_singleton()->is_editor_hint() ) return 0.0;
 
     // If the behaviour is on cooldown, it cannot be chosen.
     if( _current_cooldown_seconds > 0.0 ) return 0.0;
@@ -164,8 +164,25 @@ double UtilityAIBehaviour::evaluate() {
     }
 
     _score = 0.0;
+    bool has_vetoed = false;
+    // Evaluate the consideration resources (if any).
+    int num_resources = _considerations.size();
+    for( int i = 0; i < num_resources; ++i ) {
+        UtilityAIConsiderationResources* consideration_resource = godot::Object::cast_to<UtilityAIConsiderationResources>(_considerations[i]);
+        if( consideration_resource == nullptr ) {
+            continue;
+        }
+        if( !consideration_resource->get_is_active() ) {
+            continue;
+        }
+        double score = consideration_resource->evaluate( has_vetoed, this );
+        if( has_vetoed ) {
+            return 0.0; // A consideration vetoed.
+        }
+        _score += score;
+    }
 
-    // Evaluate the children.
+    // Evaluate the child nodes.
     int num_children = get_child_count();
     for( int i = 0; i < num_children; ++i ) {
         UtilityAIConsiderations* considerationNode = godot::Object::cast_to<UtilityAIConsiderations>(get_child(i));

@@ -10,6 +10,11 @@ using namespace godot;
 // Method binds.
 
 void UtilityAIConsiderationGroupResource::_bind_methods() {
+
+    ClassDB::bind_method(D_METHOD("set_child_nodes", "child_nodes"), &UtilityAIConsiderationGroupResource::set_child_nodes);
+    ClassDB::bind_method(D_METHOD("get_child_nodes"), &UtilityAIConsiderationGroupResource::get_child_nodes);
+    ADD_PROPERTY(PropertyInfo(Variant::ARRAY, "child_nodes", PROPERTY_HINT_ARRAY_TYPE,vformat("%s/%s:%s", Variant::OBJECT, PROPERTY_HINT_RESOURCE_TYPE, "UtilityAIConsiderationResources") ), "set_child_nodes","get_child_nodes");
+
    
     ClassDB::bind_method(D_METHOD("set_evaluation_method", "evaluation_method"), &UtilityAIConsiderationGroupResource::set_evaluation_method);
     ClassDB::bind_method(D_METHOD("get_evaluation_method"), &UtilityAIConsiderationGroupResource::get_evaluation_method);
@@ -62,10 +67,8 @@ TypedArray<UtilityAIConsiderationResources> UtilityAIConsiderationGroupResource:
 
 // Handling functions.
 
-double UtilityAIConsiderationGroupResource::evaluate() { 
-    if( !get_is_active() ) return 0.0;
-    if( Engine::get_singleton()->is_editor_hint() ) return 0.0;
-
+double UtilityAIConsiderationGroupResource::evaluate(bool& has_vetoed, Node* parent_node) { 
+    
     double score = 0.0;
     for( int i = 0; i < _child_nodes.size(); ++i ) {
         UtilityAIConsiderationResources* consideration = godot::Object::cast_to<UtilityAIConsiderationResources>(_child_nodes[i]);
@@ -75,9 +78,10 @@ double UtilityAIConsiderationGroupResource::evaluate() {
         if( !consideration->get_is_active() ) {
             continue;
         }
-        
-        double child_score = consideration->evaluate();
-        if( consideration->get_has_vetoed() ) {
+        bool child_has_vetoed = false;
+        double child_score = consideration->evaluate(child_has_vetoed, parent_node);
+        if( child_has_vetoed ) {
+            has_vetoed = true;
             return 0.0;
         }
 

@@ -19,6 +19,10 @@ void UtilityAIBehaviourGroup::_bind_methods() {
     ClassDB::bind_method(D_METHOD("get_activation_score"), &UtilityAIBehaviourGroup::get_activation_score);
     ADD_PROPERTY(PropertyInfo(Variant::FLOAT, "activation_score", PROPERTY_HINT_RANGE, "0.0,1.0"), "set_activation_score","get_activation_score");
 
+    ClassDB::bind_method(D_METHOD("set_considerations", "considerations"), &UtilityAIBehaviourGroup::set_considerations);
+    ClassDB::bind_method(D_METHOD("get_considerations"), &UtilityAIBehaviourGroup::get_considerations);
+    ADD_PROPERTY(PropertyInfo(Variant::ARRAY, "considerations", PROPERTY_HINT_ARRAY_TYPE,vformat("%s/%s:%s", Variant::OBJECT, PROPERTY_HINT_RESOURCE_TYPE, "UtilityAIConsiderationResources") ), "set_considerations","get_considerations");
+
     
     ADD_SUBGROUP("Debugging","");
     ClassDB::bind_method(D_METHOD("set_score", "score"), &UtilityAIBehaviourGroup::set_score);
@@ -58,11 +62,17 @@ double UtilityAIBehaviourGroup::get_score() const {
     return _score;
 }
 
+void UtilityAIBehaviourGroup::set_considerations( TypedArray<UtilityAIConsiderationResources> considerations ) {
+    _considerations = considerations;
+}
 
+TypedArray<UtilityAIConsiderationResources> UtilityAIBehaviourGroup::get_considerations() const {
+    return _considerations;
+}
 
 // Handling functions.
 
-bool UtilityAIBehaviourGroup::evaluate() { 
+bool UtilityAIBehaviourGroup::evaluate(){ //UtilityAIAgent* agent) { 
     if( !get_is_active() ) return false;
     if( Engine::get_singleton()->is_editor_hint() ) return false;
     int num_children = get_child_count();
@@ -73,6 +83,26 @@ bool UtilityAIBehaviourGroup::evaluate() {
     // within the group should be evaluated.
     _score = 0.0;
     int num_consideration_nodes_handled = 0;
+
+    bool has_vetoed = false;
+    // Evaluate the consideration resources (if any).
+    int num_resources = _considerations.size();
+    for( int i = 0; i < num_resources; ++i ) {
+        UtilityAIConsiderationResources* consideration_resource = godot::Object::cast_to<UtilityAIConsiderationResources>(_considerations[i]);
+        if( consideration_resource == nullptr ) {
+            continue;
+        }
+        if( !consideration_resource->get_is_active() ) {
+            continue;
+        }
+        double score = consideration_resource->evaluate( has_vetoed, this );
+        ++num_consideration_nodes_handled;
+        if( has_vetoed ) {
+            _score = 0.0; // A consideration vetoed.
+            return false;
+        }
+        _score += score;
+    }
 
     // Evaluate the children.
     for( int i = 0; i < num_children; ++i ) {

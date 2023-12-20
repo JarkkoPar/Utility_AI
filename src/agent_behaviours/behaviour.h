@@ -66,7 +66,7 @@ public:
 
     // Handling functions.
 
-    double evaluate();
+    double evaluate();//UtilityAIAgent* agent);
     void  start_behaviour();
     void  end_behaviour();
     UtilityAIAction* update_behaviour();
