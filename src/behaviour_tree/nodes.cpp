@@ -9,14 +9,18 @@ using namespace godot;
 // Method binds.
 
 void UtilityAIBehaviourTreeNodes::_bind_methods() {
+    ClassDB::bind_method(D_METHOD("set_reset_rule", "reset_rule"), &UtilityAIBehaviourTreeNodes::set_reset_rule);
+    ClassDB::bind_method(D_METHOD("get_reset_rule"), &UtilityAIBehaviourTreeNodes::get_reset_rule);
+    ADD_PROPERTY(PropertyInfo(Variant::INT, "reset_rule", PROPERTY_HINT_ENUM, "WhenTicked:0,WhenCompleted:1,WhenTickedAfterBeingCompleted:2,Never:3" ), "set_reset_rule","get_reset_rule");
     
     ClassDB::bind_method(D_METHOD("set_evaluation_method", "evaluation_method"), &UtilityAIBehaviourTreeNodes::set_evaluation_method);
     ClassDB::bind_method(D_METHOD("get_evaluation_method"), &UtilityAIBehaviourTreeNodes::get_evaluation_method);
     ADD_PROPERTY(PropertyInfo(Variant::INT, "evaluation_method", PROPERTY_HINT_ENUM, "Sum:0,Min:1,Max:2,Mean:3,Multiply:4,FirstNonZero:5"), "set_evaluation_method","get_evaluation_method");
 
-    ClassDB::bind_method(D_METHOD("set_reset_rule", "reset_rule"), &UtilityAIBehaviourTreeNodes::set_reset_rule);
-    ClassDB::bind_method(D_METHOD("get_reset_rule"), &UtilityAIBehaviourTreeNodes::get_reset_rule);
-    ADD_PROPERTY(PropertyInfo(Variant::INT, "reset_rule", PROPERTY_HINT_ENUM, "WhenTicked:0,WhenCompleted:1,WhenTickedAfterBeingCompleted:2,Never:3" ), "set_reset_rule","get_reset_rule");
+    ClassDB::bind_method(D_METHOD("set_considerations", "considerations"), &UtilityAIBehaviourTreeNodes::set_considerations);
+    ClassDB::bind_method(D_METHOD("get_considerations"), &UtilityAIBehaviourTreeNodes::get_considerations);
+    ADD_PROPERTY(PropertyInfo(Variant::ARRAY, "considerations", PROPERTY_HINT_ARRAY_TYPE,vformat("%s/%s:%s", Variant::OBJECT, PROPERTY_HINT_RESOURCE_TYPE, "UtilityAIConsiderationResources") ), "set_considerations","get_considerations");
+
 
     ADD_SUBGROUP("Debugging","");
 
@@ -135,6 +139,15 @@ int  UtilityAIBehaviourTreeNodes::get_reset_rule() const {
     return _reset_rule;
 }
 
+void UtilityAIBehaviourTreeNodes::set_considerations( TypedArray<UtilityAIConsiderationResources> considerations ) {
+    _considerations = considerations;
+}
+
+TypedArray<UtilityAIConsiderationResources> UtilityAIBehaviourTreeNodes::get_considerations() const {
+    return _considerations;
+}
+
+
 // Handling methods.
 
 void UtilityAIBehaviourTreeNodes::reset() {
@@ -162,10 +175,27 @@ double UtilityAIBehaviourTreeNodes::evaluate() {
     if( Engine::get_singleton()->is_editor_hint() ) return 0.0;
 
     _score = 0.0;
+    bool has_vetoed = false;
+    // Evaluate the consideration resources (if any).
+    int num_resources = _considerations.size();
+    for( int i = 0; i < num_resources; ++i ) {
+        UtilityAIConsiderationResources* consideration_resource = godot::Object::cast_to<UtilityAIConsiderationResources>(_considerations[i]);
+        if( consideration_resource == nullptr ) {
+            continue;
+        }
+        if( !consideration_resource->get_is_active() ) {
+            continue;
+        }
+        double score = consideration_resource->evaluate( has_vetoed, this );
+        if( has_vetoed ) {
+            return 0.0; // A consideration vetoed.
+        }
+        _score += score;
+    }
     
     // Evaluate the children.
     int num_children = get_child_count();
-    if( num_children < 1 ) return 0.0;
+    if( num_children < 1 && num_resources < 1 ) return 0.0;
     double child_score = 0.0;
     for( int i = 0; i < num_children; ++i ) {
         Node* node = get_child(i);

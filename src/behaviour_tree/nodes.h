@@ -4,6 +4,7 @@
 #include "../utility_ai.h"
 #include "definitions.h"
 #include <godot_cpp/classes/node.hpp>
+#include "../resources/considerations/consideration_resources.h"
 
 
 
@@ -20,6 +21,9 @@ private:
     int    _internal_status;
     int    _reset_rule;
     bool   _has_reset_rule_changed;
+
+    TypedArray<UtilityAIConsiderationResources> _considerations;
+
 protected:
     static void _bind_methods();
 public:
@@ -28,6 +32,10 @@ public:
     
     
     // Getters and setters for attributes.
+
+    void set_considerations( TypedArray<UtilityAIConsiderationResources> considerations );
+    TypedArray<UtilityAIConsiderationResources> get_considerations() const;
+
     
     void set_evaluation_method( int evaluation_method );
     int  get_evaluation_method() const;
