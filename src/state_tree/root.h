@@ -17,7 +17,7 @@ private:
     uint64_t                 _total_transition_usec;
     //UtilityAIStateTreeNodes* _active_state;
     TypedArray<UtilityAIStateTreeNodes> _active_states;
-    godot::Dictionary        _state_tree_nodes;
+    //godot::Dictionary        _state_tree_nodes;
 protected:
     static void _bind_methods();
 
@@ -36,7 +36,7 @@ public:
 
     // Handling functions.
     //virtual TypedArray<UtilityAIStateTreeNodes> _tick( Variant user_data, double delta) override;
-    virtual void transition_to( godot::String new_state_name, Variant user_data, double delta ) override;
+    virtual void transition_to( NodePath path_to_node, Variant user_data, double delta ) override;
     bool try_transition( UtilityAIStateTreeNodes* transition_target_node, Variant user_data, double delta );
 
     void tick(Variant user_data, double delta);

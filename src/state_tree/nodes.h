@@ -49,7 +49,8 @@ public:
     void set_child_state_selection_rule( int child_state_selection_rule );
     int  get_child_state_selection_rule() const;
 
-    Dictionary get_child_nodes_as_dictionary(UtilityAIStateTreeNodes* tree_root_node );
+    virtual inline void set_root_node( UtilityAIStateTreeNodes* tree_root_node );
+    //Dictionary get_child_nodes_as_dictionary(UtilityAIStateTreeNodes* tree_root_node );
 
     //inline virtual bool get_is_leaf() const { return false; };
     
@@ -65,7 +66,7 @@ public:
     virtual void   on_enter_state( Variant user_data, double delta );
     virtual void   on_exit_state( Variant user_data, double delta );
     virtual void   on_tick( Variant user_data, double delta );
-    virtual void   transition_to( godot::String new_state_name, Variant user_data, double delta );
+    virtual void   transition_to( NodePath path_to_node, Variant user_data, double delta );
 
     virtual UtilityAIStateTreeNodes* evaluate_state_activation( Variant user_data, double delta );
     

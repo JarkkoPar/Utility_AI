@@ -86,6 +86,15 @@ int  UtilityAIStateTreeNodes::get_child_state_selection_rule() const {
 }
 
 
+inline void UtilityAIStateTreeNodes::set_root_node( UtilityAIStateTreeNodes* tree_root_node ) { 
+    _tree_root_node = tree_root_node; 
+    for( int i = 0; i < get_child_count(); ++i ) {
+        if( UtilityAIStateTreeNodes* stnode = godot::Object::cast_to<UtilityAIStateTreeNodes>(get_child(i)) ) {
+            stnode->set_root_node( tree_root_node );
+        }
+    }//endfor children 
+}
+/**
 Dictionary UtilityAIStateTreeNodes::get_child_nodes_as_dictionary(UtilityAIStateTreeNodes* tree_root_node ) {
     _tree_root_node = tree_root_node;
     Dictionary results;
@@ -97,6 +106,7 @@ Dictionary UtilityAIStateTreeNodes::get_child_nodes_as_dictionary(UtilityAIState
     }
     return results;
 }
+/**/
 
 
 // Handling methods.
@@ -225,11 +235,11 @@ void UtilityAIStateTreeNodes::on_tick( Variant user_data, double delta ) {
     }
 }
 
-void UtilityAIStateTreeNodes::transition_to( godot::String new_state_name, Variant user_data, double delta ) {
+void UtilityAIStateTreeNodes::transition_to( NodePath path_to_node, Variant user_data, double delta ) {
     if( _tree_root_node == nullptr ) {
         return;
     }
-    _tree_root_node->transition_to(new_state_name, user_data, delta);
+    _tree_root_node->transition_to(path_to_node, user_data, delta);
 }
 
 

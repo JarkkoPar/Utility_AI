@@ -29,7 +29,7 @@ void UtilityAISTRoot::_bind_methods() {
 UtilityAISTRoot::UtilityAISTRoot() {
     _total_tick_usec = 0;
     _total_transition_usec = 0;
-    _state_tree_nodes = Dictionary();
+    //_state_tree_nodes = Dictionary();
 }
 
 
@@ -50,10 +50,11 @@ uint64_t  UtilityAISTRoot::get_total_tick_usec() const {
 
 // Handling methods.
 
-void UtilityAISTRoot::transition_to( godot::String new_state_name, Variant user_data, double delta ) {
-    UtilityAIStateTreeNodes* new_state = godot::Object::cast_to<UtilityAIStateTreeNodes>(_state_tree_nodes[new_state_name]);
-    if( new_state == nullptr ) return;
-    
+void UtilityAISTRoot::transition_to( NodePath path_to_node, Variant user_data, double delta ) {
+    UtilityAIStateTreeNodes* new_state = get_node<UtilityAIStateTreeNodes>(path_to_node);
+    if( new_state == nullptr ){
+        return;
+    } 
     bool result = try_transition(new_state, user_data, delta );
 }
 
@@ -147,10 +148,10 @@ void UtilityAISTRoot::tick(Variant user_data, double delta) {
 
 // Godot virtuals.
 
+/**/
 void UtilityAISTRoot::_ready() {
     if( Engine::get_singleton()->is_editor_hint() ) return;
-
-    // All the tree nodes are fetched to a dictionary so that the travel_to
-    // method can be used to transition between states.
-    _state_tree_nodes = get_child_nodes_as_dictionary(this);
+    set_root_node(this);
 }
+/**/
+
