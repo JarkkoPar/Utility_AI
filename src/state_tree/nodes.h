@@ -2,9 +2,8 @@
 #define UtilityAIStateTreeNodes_H_INCLUDED 
 
 #include "utility_ai.h"
-#include "definitions.h"
 #include <godot_cpp/classes/node.hpp>
-#include <godot_cpp/classes/resource.hpp>
+#include "../resources/considerations/consideration_resources.h"
 
 
 namespace godot {
@@ -16,12 +15,9 @@ private:
     double _score;
     int    _evaluation_method;
     bool   _invert_score;
-    int    _tick_result;
-    int    _internal_status;
-    int    _reset_rule;
-    bool   _has_reset_rule_changed;
-
-    TypedArray<Resource>    _considerations;
+    int    _child_state_selection_rule;
+    UtilityAIStateTreeNodes* _tree_root_node;
+    TypedArray<UtilityAIConsiderationResources>    _considerations;
 protected:
     static void _bind_methods();
 public:
@@ -31,8 +27,8 @@ public:
     
     // Getters and setters for attributes.
 
-    void set_resource_array( TypedArray<Resource> resource_array );
-    TypedArray<Resource> get_resource_array() const;
+    void set_considerations( TypedArray<UtilityAIConsiderationResources> considerations );
+    TypedArray<UtilityAIConsiderationResources> get_considerations() const;
     
     void set_evaluation_method( int evaluation_method );
     int  get_evaluation_method() const;
@@ -50,20 +46,16 @@ public:
     void set_score( double score );
     double get_score() const;
 
-    void set_tick_result( int tick_result );
-    int  get_tick_result() const;
+    void set_child_state_selection_rule( int child_state_selection_rule );
+    int  get_child_state_selection_rule() const;
 
-    void set_internal_status( int internal_status );
-    int  get_internal_status() const;
+    Dictionary get_child_nodes_as_dictionary(UtilityAIStateTreeNodes* tree_root_node );
 
-    void set_reset_rule( int reset_rule );
-    int  get_reset_rule() const;
+    //inline virtual bool get_is_leaf() const { return false; };
     
-    enum UtilityAIStateTreeNodesResetRule {
-        WHEN_TICKED = 0,
-        WHEN_COMPLETED,
-        WHEN_TICKED_AFTER_BEING_COMPLETED,
-        NEVER,
+    enum UtilityAIStateTreeNodeChildStateSelectionRule {
+        ON_ENTER_CONDITION_METHOD = 0,
+        UTILITY_SCORING = 1,
     };
 
     // Handling functions.
@@ -73,14 +65,10 @@ public:
     virtual void   on_enter_state( Variant user_data, double delta );
     virtual void   on_exit_state( Variant user_data, double delta );
     virtual void   on_tick( Variant user_data, double delta );
+    virtual void   transition_to( godot::String new_state_name, Variant user_data, double delta );
 
-    virtual UtilityAIStateTreeNodes* _tick( Variant user_data, double delta );
-
-    virtual void reset();
-    //virtual void reset_for_looping();
-    virtual void reset_st_node() {};
-
-    inline virtual bool has_completed() { return (_internal_status == ST_INTERNAL_STATUS_COMPLETED); };
+    virtual UtilityAIStateTreeNodes* evaluate_state_activation( Variant user_data, double delta );
+    
 
     // Godot virtuals.
     // none.

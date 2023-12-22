@@ -75,7 +75,7 @@
 //#include "state_tree/leaf.h"
 #include "state_tree/nodes.h"
 #include "state_tree/root.h"
-#include "state_tree/selector.h"
+#include "state_tree/node.h"
 
 
 // Node Query System.
@@ -198,7 +198,7 @@ void initialize_utility_ai_module(ModuleInitializationLevel p_level) {
     // State tree.
     ClassDB::register_class<UtilityAIStateTreeNodes>(true);
     ClassDB::register_class<UtilityAISTRoot>();
-    ClassDB::register_class<UtilityAISTSelector>();
+    ClassDB::register_class<UtilityAISTNode>();
 
     // Node Query System.
     ClassDB::register_class<UtilityAINodeQuerySystem>();

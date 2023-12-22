@@ -11,8 +11,10 @@ UtilityAIPerformanceMonitorSingleton::UtilityAIPerformanceMonitorSingleton() {
     set_is_active(false);
     _total_time_elapsed_ai_agents_usec = 0;
     _total_time_elapsed_behaviour_trees_usec = 0;
+    _total_time_elapsed_state_trees_usec = 0;
     _current_total_time_elapsed_ai_agents_usec = 0;
     _current_total_time_elapsed_behaviour_trees_usec = 0;
+    _current_total_time_elapsed_state_trees_usec = 0;
     _singleton = this;
 }
 

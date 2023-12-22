@@ -188,6 +188,7 @@ double UtilityAIBehaviourTreeNodes::evaluate() {
         }
         double score = consideration_resource->evaluate( has_vetoed, this );
         if( has_vetoed ) {
+            _score = 0.0;
             return 0.0; // A consideration vetoed.
         }
         _score += score;
