@@ -28,7 +28,7 @@ void UtilityAIStateTreeNodes::_bind_methods() {
     ClassDB::bind_method(D_METHOD("get_score"), &UtilityAIStateTreeNodes::get_score);
     ADD_PROPERTY(PropertyInfo(Variant::FLOAT, "score", PROPERTY_HINT_NONE ), "set_score","get_score");
 
-    ClassDB::bind_method(D_METHOD("transition_to", "new_state_name", "user_data", "delta" ), &UtilityAIStateTreeNodes::transition_to);
+    ClassDB::bind_method(D_METHOD("transition_to", "new_state_nodepath", "user_data", "delta" ), &UtilityAIStateTreeNodes::transition_to);
 
 }
 
