@@ -77,3 +77,7 @@ UtilityAIBTCooldownUsec = "res://addons/utility_ai/icons/UtilityAIBTCooldownTime
 UtilityAIBTCooldownMsec = "res://addons/utility_ai/icons/UtilityAIBTCooldownTime.svg"
 UtilityAIBTCooldownTicks = "res://addons/utility_ai/icons/UtilityAIBTCooldownTicks.svg"
 UtilityAIBTLimiter = "res://addons/utility_ai/icons/UtilityAIDefault.svg"
+UtilityAIStateTreeNodes = "res://addons/utility_ai/icons/UtilityAIStateTreeNodes.svg"
+UtilityAISTRoot = "res://addons/utility_ai/icons/UtilityAIStateTreeNodes.svg"
+UtilityAISTNode = "res://addons/utility_ai/icons/UtilityAIStateTreeNode.svg"
+
