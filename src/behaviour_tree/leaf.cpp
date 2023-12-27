@@ -49,7 +49,13 @@ int  UtilityAIBTLeaf::get_tick_result() const {
 
 int UtilityAIBTLeaf::tick(Variant user_data, double delta) { 
     set_internal_status(BT_INTERNAL_STATUS_TICKED);
-    if( has_method("tick")) {
+    if( has_method("on_tick")) {
+        godot::Variant return_value = call("on_tick", user_data, delta);
+        if( return_value.get_type() == godot::Variant::Type::INT) {
+            set_tick_result((int)return_value);
+        }
+        
+    } else if( has_method("tick")) {
         godot::Variant return_value = call("tick", user_data, delta);
         if( return_value.get_type() == godot::Variant::Type::INT) {
             set_tick_result((int)return_value);

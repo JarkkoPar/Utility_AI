@@ -39,7 +39,7 @@ void UtilityAIDistanceVector2Sensor::_bind_methods() {
 
     ClassDB::bind_method(D_METHOD("set_direction_vector", "direction_vector"), &UtilityAIDistanceVector2Sensor::set_direction_vector2);
     ClassDB::bind_method(D_METHOD("get_direction_vector"), &UtilityAIDistanceVector2Sensor::get_direction_vector2);
-    ADD_PROPERTY(PropertyInfo(Variant::VECTOR3, "direction_vector", PROPERTY_HINT_NONE), "set_direction_vector","get_direction_vector");
+    ADD_PROPERTY(PropertyInfo(Variant::VECTOR2, "direction_vector", PROPERTY_HINT_NONE), "set_direction_vector","get_direction_vector");
 
     ClassDB::bind_method(D_METHOD("set_distance", "distance"), &UtilityAIDistanceVector2Sensor::set_distance);
     ClassDB::bind_method(D_METHOD("get_distance"), &UtilityAIDistanceVector2Sensor::get_distance);

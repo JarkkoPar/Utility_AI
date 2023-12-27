@@ -82,7 +82,7 @@ int UtilityAIBTSelector::tick(Variant user_data, double delta) {
             if( btnode->get_is_active() ) {
                 int result = btnode->tick(user_data, delta);
                 set_tick_result(result);
-                if( result == BT_SUCCESS && _current_child_index == get_child_count() - 1 ) {
+                if( result == BT_SUCCESS ) { //&& _current_child_index == get_child_count() - 1 ) {
                     set_internal_status(BT_INTERNAL_STATUS_COMPLETED);
                     return BT_SUCCESS;
                 } else if ( result == BT_RUNNING ) {
