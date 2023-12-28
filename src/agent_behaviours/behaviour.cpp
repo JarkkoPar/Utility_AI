@@ -60,6 +60,7 @@ UtilityAIBehaviour::UtilityAIBehaviour() {
     _current_cooldown_turns = 0;
     _current_action_index = 0;
     _can_be_interrupted = true;
+    _behaviour_id = 0;
 }
 
 
