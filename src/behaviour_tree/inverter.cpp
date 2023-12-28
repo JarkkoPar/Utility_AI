@@ -29,7 +29,7 @@ UtilityAIBTInverter::~UtilityAIBTInverter() {
 
 // Handling methods.
 
-int UtilityAIBTInverter::tick(Variant user_data, double delta) { 
+int UtilityAIBTInverter::tick(Variant user_data, float delta) { 
     set_internal_status(BT_INTERNAL_STATUS_TICKED);
             
     for( int i = 0; i < get_child_count(); ++i ) {

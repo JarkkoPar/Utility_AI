@@ -50,7 +50,7 @@ uint64_t  UtilityAISTRoot::get_total_tick_usec() const {
 
 // Handling methods.
 
-void UtilityAISTRoot::transition_to( NodePath path_to_node, Variant user_data, double delta ) {
+void UtilityAISTRoot::transition_to( NodePath path_to_node, Variant user_data, float delta ) {
     UtilityAIStateTreeNodes* new_state = get_node<UtilityAIStateTreeNodes>(path_to_node);
     if( new_state == nullptr ){
         return;
@@ -59,7 +59,7 @@ void UtilityAISTRoot::transition_to( NodePath path_to_node, Variant user_data, d
 }
 
 
-bool UtilityAISTRoot::try_transition( UtilityAIStateTreeNodes* transition_target_node, Variant user_data, double delta) {
+bool UtilityAISTRoot::try_transition( UtilityAIStateTreeNodes* transition_target_node, Variant user_data, float delta) {
     uint64_t method_start_time_usec = godot::Time::get_singleton()->get_ticks_usec();
     
     // Check that this is a valid transition for this tree.
@@ -117,7 +117,7 @@ bool UtilityAISTRoot::try_transition( UtilityAIStateTreeNodes* transition_target
 
 }
 
-void UtilityAISTRoot::tick(Variant user_data, double delta) { 
+void UtilityAISTRoot::tick(Variant user_data, float delta) { 
     //WARN_PRINT("root->tick()");
     uint64_t method_start_time_usec = godot::Time::get_singleton()->get_ticks_usec();
     
@@ -127,6 +127,20 @@ void UtilityAISTRoot::tick(Variant user_data, double delta) {
         try_transition(this, user_data, delta);
         //WARN_PRINT("tick: try transition completed!");
     }
+
+    // Update the sensors.
+    for( int i = 0; i < get_child_count(); ++i ) {
+        Node* node = get_child(i);
+        if( UtilityAISensors* sensor = godot::Object::cast_to<UtilityAISensors>(node) ) {
+            if( !sensor-> get_is_active() ) {
+                continue;
+            }
+            sensor->evaluate_sensor_value();
+        } else {
+            break; // No more sensors.
+        }
+    }//endfor sensors
+    
 
     // If there are active states, tick their custom method from the 
     // root to the active leaf.

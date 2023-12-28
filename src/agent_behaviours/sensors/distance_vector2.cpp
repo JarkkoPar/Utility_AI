@@ -70,7 +70,7 @@ UtilityAIDistanceVector2Sensor::~UtilityAIDistanceVector2Sensor() {
 
 // Handling functions.
 
-double UtilityAIDistanceVector2Sensor::evaluate_sensor_value() {
+float UtilityAIDistanceVector2Sensor::evaluate_sensor_value() {
     _from_to_vector = _from_vector - _to_vector;
     _distance_squared = _from_to_vector.length_squared();
     if( _is_distance_calculated || _is_direction_vector_calculated ) {
@@ -113,13 +113,13 @@ Vector2 UtilityAIDistanceVector2Sensor::get_from_Vector2() const {
     return _from_vector;
 }
 
-void UtilityAIDistanceVector2Sensor::set_max_distance( double max_distance ) {
+void UtilityAIDistanceVector2Sensor::set_max_distance( float max_distance ) {
     _max_distance = max_distance;
     _max_distance_squared = _max_distance * _max_distance;
     _one_over_max_distance_squared = 1.0 / _max_distance_squared;
 }
 
-double UtilityAIDistanceVector2Sensor::get_max_distance() const {
+float UtilityAIDistanceVector2Sensor::get_max_distance() const {
     return _max_distance;
 }
 
@@ -157,19 +157,19 @@ Vector2 UtilityAIDistanceVector2Sensor::get_direction_vector2() const {
     return _direction_vector;
 }
 
-void UtilityAIDistanceVector2Sensor::set_distance( double distance ) {
+void UtilityAIDistanceVector2Sensor::set_distance( float distance ) {
     _distance = distance;
 }
 
-double UtilityAIDistanceVector2Sensor::get_distance() const {
+float UtilityAIDistanceVector2Sensor::get_distance() const {
     return _distance;
 }
 
-void UtilityAIDistanceVector2Sensor::set_distance_squared( double distance_squared ) {
+void UtilityAIDistanceVector2Sensor::set_distance_squared( float distance_squared ) {
     _distance_squared = distance_squared;
 }
 
-double UtilityAIDistanceVector2Sensor::get_distance_squared() const {
+float UtilityAIDistanceVector2Sensor::get_distance_squared() const {
     return _distance_squared;
 }
 

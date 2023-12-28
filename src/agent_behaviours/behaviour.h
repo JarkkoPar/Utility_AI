@@ -2,7 +2,7 @@
 #define UtilityAIBehaviour_H_INCLUDED 
 
 #include "utility_ai.h"
-#include "agent.h"
+//#include "agent.h"
 #include <godot_cpp/classes/node.hpp>
 
 #include "action.h"
@@ -16,11 +16,11 @@ class UtilityAIBehaviour : public UtilityAI {
     GDCLASS(UtilityAIBehaviour, UtilityAI )
 
 private:
-    double _cooldown_seconds;
-    double _current_cooldown_seconds;
+    float _cooldown_seconds;
+    float _current_cooldown_seconds;
     int    _cooldown_turns;
     int    _current_cooldown_turns;
-    double  _score;
+    float  _score;
 
     int    _current_action_index;
 
@@ -41,11 +41,11 @@ public:
     void  set_can_be_interrupted( bool can_be_interrupted );
     bool  get_can_be_interrupted() const;
     
-    void  set_score( double score );
-    double get_score() const;
+    void  set_score( float score );
+    float get_score() const;
     
-    void  set_cooldown_seconds( double cooldown_seconds );
-    double get_cooldown_seconds() const;
+    void  set_cooldown_seconds( float cooldown_seconds );
+    float get_cooldown_seconds() const;
 
     void  set_cooldown_turns( int cooldown_turns );
     int   get_cooldown_turns() const;
@@ -61,12 +61,12 @@ public:
     // Godot virtuals.
     void _ready();
     
-    void _process(double delta);
+    void _process(float delta);
     void _notification(int p_what);
 
     // Handling functions.
 
-    double evaluate();//UtilityAIAgent* agent);
+    float evaluate();//UtilityAIAgent* agent);
     void  start_behaviour();
     void  end_behaviour();
     UtilityAIAction* update_behaviour();

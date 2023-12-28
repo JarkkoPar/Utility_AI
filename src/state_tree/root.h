@@ -35,11 +35,11 @@ public:
     //_active_states
 
     // Handling functions.
-    //virtual TypedArray<UtilityAIStateTreeNodes> _tick( Variant user_data, double delta) override;
-    virtual void transition_to( NodePath path_to_node, Variant user_data, double delta ) override;
-    bool try_transition( UtilityAIStateTreeNodes* transition_target_node, Variant user_data, double delta );
+    //virtual TypedArray<UtilityAIStateTreeNodes> _tick( Variant user_data, float delta) override;
+    virtual void transition_to( NodePath path_to_node, Variant user_data, float delta ) override;
+    bool try_transition( UtilityAIStateTreeNodes* transition_target_node, Variant user_data, float delta );
 
-    void tick(Variant user_data, double delta);
+    void tick(Variant user_data, float delta);
 
     // Godot virtuals.
     void _ready();

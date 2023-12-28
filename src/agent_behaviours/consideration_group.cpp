@@ -54,7 +54,7 @@ bool UtilityAIConsiderationGroup::get_invert_score() const {
 
 // Handling functions.
 
-double UtilityAIConsiderationGroup::evaluate() { 
+float UtilityAIConsiderationGroup::evaluate() { 
     if( !get_is_active() ) return 0.0;
     if( Engine::get_singleton()->is_editor_hint() ) return 0.0;
 
@@ -64,7 +64,7 @@ double UtilityAIConsiderationGroup::evaluate() {
     // Evaluate the children.
     int num_children = get_child_count();
     if( num_children < 1 ) return 0.0;
-    double child_score = 0.0;
+    float child_score = 0.0;
     for( int i = 0; i < num_children; ++i ) {
         Node* node = get_child(i);
         if( node == nullptr ) continue;
@@ -123,7 +123,7 @@ double UtilityAIConsiderationGroup::evaluate() {
     }//endfor children
 
     if( _evaluation_method == UtilityAIConsiderationGroupEvaluationMethod::Mean ) {
-        _score = _score / ((double)num_children);
+        _score = _score / ((float)num_children);
     }
 
     if( _invert_score ) {

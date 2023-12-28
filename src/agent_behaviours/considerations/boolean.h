@@ -10,8 +10,8 @@ class UtilityAIBooleanConsideration : public UtilityAIConsideration {
     GDCLASS(UtilityAIBooleanConsideration, UtilityAIConsideration )
 
 private:
-    double _true_score_value;
-    double _false_score_value;    
+    float _true_score_value;
+    float _false_score_value;    
 protected:
     static void _bind_methods();
 
@@ -23,11 +23,11 @@ public:
     
     // Getters and setters for attributes.
 
-    void set_true_score_value( double true_score_value );
-    double get_true_score_value() const;
+    void set_true_score_value( float true_score_value );
+    float get_true_score_value() const;
 
-    void set_false_score_value( double false_score_value );
-    double get_false_score_value() const;
+    void set_false_score_value( float false_score_value );
+    float get_false_score_value() const;
             
     // Godot virtuals.
     //void _ready();
@@ -35,7 +35,7 @@ public:
    
     // Handling functions.
     
-    virtual double sample_activation_curve( double input_value ) const;
+    virtual float sample_activation_curve( float input_value ) const;
 };
 
 }

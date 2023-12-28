@@ -107,7 +107,7 @@ UtilityAIArea3DVisibilitySensor::UtilityAIArea3DVisibilitySensor() {
     _expected_number_of_bodies_to_track = 16;
     _num_entities_found = 0;
     _max_expected_entities_found = 16;
-    _one_over_max_expected_entities_found = 1.0 / ((double)_max_expected_entities_found);
+    _one_over_max_expected_entities_found = 1.0 / ((float)_max_expected_entities_found);
 
     _unoccluded_areas.resize(_expected_number_of_areas_to_track);
     //_unoccluded_bodies.resize(_expected_number_of_bodies_to_track);
@@ -166,7 +166,7 @@ void UtilityAIArea3DVisibilitySensor::uninitialize_sensor() {
 }
 
 
-double UtilityAIArea3DVisibilitySensor::evaluate_sensor_value() {
+float UtilityAIArea3DVisibilitySensor::evaluate_sensor_value() {
     if( _visibility_volume == nullptr ) {
         return get_sensor_value();
     }
@@ -254,10 +254,10 @@ double UtilityAIArea3DVisibilitySensor::evaluate_sensor_value() {
     }//endfor entered areas.
     /**
     if( get_use_absolute_value() ) {
-        set_sensor_value(((double)_num_entities_found));
+        set_sensor_value(((float)_num_entities_found));
     } else {
     /**/
-    set_sensor_value(((double)_num_entities_found) * _one_over_max_expected_entities_found);
+    set_sensor_value(((float)_num_entities_found) * _one_over_max_expected_entities_found);
     /*}*/
     return get_sensor_value();
 }
@@ -370,7 +370,7 @@ void UtilityAIArea3DVisibilitySensor::set_max_expected_entities_found( int max_e
         return;
     }
     _max_expected_entities_found = max_expected_entities_found;
-    _one_over_max_expected_entities_found = 1.0 / ((double)_max_expected_entities_found);
+    _one_over_max_expected_entities_found = 1.0 / ((float)_max_expected_entities_found);
 }
 
 

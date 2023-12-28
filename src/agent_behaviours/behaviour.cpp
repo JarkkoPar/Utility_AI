@@ -55,7 +55,7 @@ UtilityAIBehaviour::UtilityAIBehaviour() {
     _cooldown_turns = 0;
     _current_cooldown_turns = 0;
     _current_action_index = 0;
-    _can_be_interrupted = false;
+    _can_be_interrupted = true;
 }
 
 
@@ -77,19 +77,19 @@ bool  UtilityAIBehaviour::get_can_be_interrupted() const {
     return _can_be_interrupted;
 }
 
-void UtilityAIBehaviour::set_score( double score ) {
+void UtilityAIBehaviour::set_score( float score ) {
     _score = score;
 }
 
-double UtilityAIBehaviour::get_score() const {
+float UtilityAIBehaviour::get_score() const {
     return _score;
 }
 
-void UtilityAIBehaviour::set_cooldown_seconds( double cooldown_seconds ) {
+void UtilityAIBehaviour::set_cooldown_seconds( float cooldown_seconds ) {
     _cooldown_seconds = cooldown_seconds;
 }
 
-double UtilityAIBehaviour::get_cooldown_seconds() const {
+float UtilityAIBehaviour::get_cooldown_seconds() const {
     return _cooldown_seconds;
 }
 
@@ -139,7 +139,7 @@ void UtilityAIBehaviour::_ready() {
     
 }
 
-void UtilityAIBehaviour::_process(double delta ) {
+void UtilityAIBehaviour::_process(float delta ) {
     if( !get_is_active() ) return;
     if( Engine::get_singleton()->is_editor_hint() ) return;
     if( _current_cooldown_seconds > 0.0 ) {
@@ -152,7 +152,7 @@ void UtilityAIBehaviour::_process(double delta ) {
 
 // Handling functions.
 
-double UtilityAIBehaviour::evaluate(){ //UtilityAIAgent* agent) { 
+float UtilityAIBehaviour::evaluate(){ //UtilityAIAgent* agent) { 
     //if( !get_is_active() ) return 0.0;
     //if( Engine::get_singleton()->is_editor_hint() ) return 0.0;
 
@@ -175,7 +175,7 @@ double UtilityAIBehaviour::evaluate(){ //UtilityAIAgent* agent) {
         if( !consideration_resource->get_is_active() ) {
             continue;
         }
-        double score = consideration_resource->evaluate( has_vetoed, this );
+        float score = consideration_resource->evaluate( has_vetoed, this );
         if( has_vetoed ) {
             return 0.0; // A consideration vetoed.
         }

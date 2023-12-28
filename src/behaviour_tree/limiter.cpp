@@ -71,7 +71,7 @@ void UtilityAIBTLimiter::reset_bt_node() {
 }
 
 
-int UtilityAIBTLimiter::tick(Variant user_data, double delta) { 
+int UtilityAIBTLimiter::tick(Variant user_data, float delta) { 
     //if( !get_is_active() ) return BT_SKIP;
     if( Engine::get_singleton()->is_editor_hint() ) return BT_FAILURE;
     if( get_internal_status() == BT_INTERNAL_STATUS_UNTICKED ) {

@@ -12,11 +12,11 @@ class UtilityAIFloatRangeSensor : public UtilityAISensor {
     GDCLASS(UtilityAIFloatRangeSensor, UtilityAISensor )
 
 private:
-    double _range_min_value;
-    double _range_max_value;
-    double _range_length;
-    double _one_over_range_length;
-    double _range_value;
+    float _range_min_value;
+    float _range_max_value;
+    float _range_length;
+    float _one_over_range_length;
+    float _range_value;
 protected:
     static void _bind_methods();
 
@@ -26,18 +26,18 @@ public:
     
     // Handling functions. 
 
-    virtual double evaluate_sensor_value() override;
+    virtual float evaluate_sensor_value() override;
 
     // Getters and setters for attributes.
     
-    void   set_range_min_value( double range_min_value );
-    double get_range_min_value() const; 
+    void   set_range_min_value( float range_min_value );
+    float get_range_min_value() const; 
 
-    void   set_range_max_value( double range_max_value );
-    double get_range_max_value() const; 
+    void   set_range_max_value( float range_max_value );
+    float get_range_max_value() const; 
 
-    void   set_range_value( double range_value );
-    double get_range_value() const; 
+    void   set_range_value( float range_value );
+    float get_range_value() const; 
 
 };
 

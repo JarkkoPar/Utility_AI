@@ -59,7 +59,7 @@ void UtilityAIBTSequence::reset_bt_node() {
 }
 
 
-int UtilityAIBTSequence::tick(Variant user_data, double delta) {
+int UtilityAIBTSequence::tick(Variant user_data, float delta) {
     if( get_internal_status() == BT_INTERNAL_STATUS_UNTICKED ) {
         _current_child_index = 0;
     }

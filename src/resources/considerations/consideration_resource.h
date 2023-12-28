@@ -36,8 +36,8 @@ public:
     
     // Handling methods.
     
-    virtual double evaluate(bool& has_vetoed, Node* parent_node) override;
-    virtual double sample_activation_curve( double input_value ) const;
+    virtual float evaluate(bool& has_vetoed, Node* parent_node) override;
+    virtual float sample_activation_curve( float input_value ) const;
 
 
 };

@@ -89,7 +89,7 @@ void UtilityAIBTRunNQSQuery::reset_bt_node() {
     _nqs_search_space->reset_query_variables();
 }
 
-int UtilityAIBTRunNQSQuery::tick(Variant user_data, double delta) { 
+int UtilityAIBTRunNQSQuery::tick(Variant user_data, float delta) { 
     if( _nqs_search_space == nullptr ) {
         set_internal_status(BT_INTERNAL_STATUS_COMPLETED);
         set_tick_result(BT_FAILURE);

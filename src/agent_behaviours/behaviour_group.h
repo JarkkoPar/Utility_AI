@@ -14,8 +14,8 @@ class UtilityAIBehaviourGroup : public UtilityAI {
     GDCLASS(UtilityAIBehaviourGroup, UtilityAI )
 
 private:
-    double  _score;
-    double  _activation_score;
+    float  _score;
+    float  _activation_score;
     TypedArray<UtilityAIConsiderationResources> _considerations;
 protected:
     static void _bind_methods();
@@ -27,11 +27,11 @@ public:
     
     // Getters and setters for attributes.
 
-    void set_activation_score( double score );
-    double get_activation_score() const;
+    void set_activation_score( float score );
+    float get_activation_score() const;
 
-    void  set_score( double score );
-    double get_score() const;
+    void  set_score( float score );
+    float get_score() const;
 
     void set_considerations( TypedArray<UtilityAIConsiderationResources> considerations );
     TypedArray<UtilityAIConsiderationResources> get_considerations() const;

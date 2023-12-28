@@ -14,7 +14,7 @@ class UtilityAIBehaviourTreeNodes : public UtilityAI {
     GDCLASS(UtilityAIBehaviourTreeNodes, UtilityAI)
 
 private:
-    double _score;
+    float _score;
     int    _evaluation_method;
     bool   _invert_score;
     int    _tick_result;
@@ -50,8 +50,8 @@ public:
         //OneMinusScore=6
     };
     
-    void set_score( double score );
-    double get_score() const;
+    void set_score( float score );
+    float get_score() const;
 
     void set_tick_result( int tick_result );
     int  get_tick_result() const;
@@ -71,9 +71,9 @@ public:
 
     // Handling functions.
     
-    virtual double evaluate();
+    virtual float evaluate();
 
-    virtual int tick( Variant user_data, double delta );
+    virtual int tick( Variant user_data, float delta );
 
     virtual void reset();
     //virtual void reset_for_looping();

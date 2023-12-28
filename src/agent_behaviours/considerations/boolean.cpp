@@ -36,19 +36,19 @@ UtilityAIBooleanConsideration::~UtilityAIBooleanConsideration() {
 
 // Getters and Setters.
 
-void UtilityAIBooleanConsideration::set_true_score_value( double true_score_value ) {
+void UtilityAIBooleanConsideration::set_true_score_value( float true_score_value ) {
     _true_score_value = true_score_value;
 }
 
-double UtilityAIBooleanConsideration::get_true_score_value() const {
+float UtilityAIBooleanConsideration::get_true_score_value() const {
     return _true_score_value;
 }
 
-void UtilityAIBooleanConsideration::set_false_score_value( double false_score_value ) {
+void UtilityAIBooleanConsideration::set_false_score_value( float false_score_value ) {
     _false_score_value = false_score_value;
 }
 
-double UtilityAIBooleanConsideration::get_false_score_value() const {
+float UtilityAIBooleanConsideration::get_false_score_value() const {
     return _false_score_value;
 }
 
@@ -79,7 +79,7 @@ void UtilityAIBooleanConsideration::_evaluate_consideration() {
     _score = sample_activation_curve(get_activation_input_value());
 }
 
-double UtilityAIBooleanConsideration::sample_activation_curve( double input_value ) const {
+float UtilityAIBooleanConsideration::sample_activation_curve( float input_value ) const {
     if( input_value < 0.5 ) return _false_score_value;
     return _true_score_value;
 }

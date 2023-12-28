@@ -57,7 +57,7 @@ void UtilityAIBTScoreBasedPicker::reset_bt_node() {
     // Evaluate the scores and pick the child with the highest
     // score to run.
     _current_child_index = -1;
-    double current_highest_score = -99999999.9999;
+    float current_highest_score = -99999999.9999;
     for( int i = 0; i < get_child_count(); ++i ) {
         UtilityAIBehaviourTreeNodes* btnode = godot::Object::cast_to<UtilityAIBehaviourTreeNodes>(get_child(i));
         if( btnode == nullptr ) {
@@ -67,7 +67,7 @@ void UtilityAIBTScoreBasedPicker::reset_bt_node() {
             continue;
         } 
         // Evaluate the node to get its score.
-        double score = btnode->evaluate();
+        float score = btnode->evaluate();
         if( score > current_highest_score ) {
             _current_child_index = i;
             current_highest_score = score;
@@ -76,7 +76,7 @@ void UtilityAIBTScoreBasedPicker::reset_bt_node() {
     
 }
 
-int UtilityAIBTScoreBasedPicker::tick(Variant user_data, double delta) {
+int UtilityAIBTScoreBasedPicker::tick(Variant user_data, float delta) {
     if( get_internal_status() == BT_INTERNAL_STATUS_UNTICKED ) {
         reset_bt_node();    
     }

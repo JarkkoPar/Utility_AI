@@ -75,7 +75,7 @@ int  UtilityAIBTCooldownUsec::get_cooldown_return_value() const {
 
 // Handling methods.
 
-int UtilityAIBTCooldownUsec::tick(Variant user_data, double delta) {
+int UtilityAIBTCooldownUsec::tick(Variant user_data, float delta) {
     set_internal_status(BT_INTERNAL_STATUS_TICKED);
             
     uint64_t wait_time = godot::Time::get_singleton()->get_ticks_usec() - _cooldown_start_timestamp;

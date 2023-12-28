@@ -68,12 +68,12 @@ int UtilityAIStateTreeNodes::get_evaluation_method() const {
     return _evaluation_method;
 }
 
-void UtilityAIStateTreeNodes::set_score( double score ) {
+void UtilityAIStateTreeNodes::set_score( float score ) {
     _score = score;
 }
 
 
-double UtilityAIStateTreeNodes::get_score() const {
+float UtilityAIStateTreeNodes::get_score() const {
     return _score;
 }
 
@@ -111,7 +111,7 @@ Dictionary UtilityAIStateTreeNodes::get_child_nodes_as_dictionary(UtilityAIState
 
 // Handling methods.
 
-double UtilityAIStateTreeNodes::evaluate() {
+float UtilityAIStateTreeNodes::evaluate() {
     if( !get_is_active() ) return 0.0;
     if( Engine::get_singleton()->is_editor_hint() ) return 0.0;
 
@@ -127,7 +127,7 @@ double UtilityAIStateTreeNodes::evaluate() {
         if( !consideration_resource->get_is_active() ) {
             continue;
         }
-        double score = consideration_resource->evaluate( has_vetoed, this );
+        float score = consideration_resource->evaluate( has_vetoed, this );
         if( has_vetoed ) {
             _score = 0.0;
             return 0.0; // A consideration vetoed.
@@ -138,7 +138,7 @@ double UtilityAIStateTreeNodes::evaluate() {
     // Evaluate the children.
     int num_children = get_child_count();
     if( num_children < 1 && num_resources < 1 ) return 0.0;
-    double child_score = 0.0;
+    float child_score = 0.0;
     for( int i = 0; i < num_children; ++i ) {
         Node* node = get_child(i);
         if( node == nullptr ) continue;
@@ -198,7 +198,7 @@ double UtilityAIStateTreeNodes::evaluate() {
     }//endfor children
 
     if( _evaluation_method == UtilityAIStateTreeNodesEvaluationMethod::Mean ) {
-        _score = _score / ((double)num_children);
+        _score = _score / ((float)num_children);
     }
 
     if( _invert_score ) {
@@ -209,33 +209,33 @@ double UtilityAIStateTreeNodes::evaluate() {
 }
 
 
-bool UtilityAIStateTreeNodes::on_enter_condition( Variant user_data, double delta ) {
+bool UtilityAIStateTreeNodes::on_enter_condition( Variant user_data, float delta ) {
     if( has_method("on_enter_condition")){
         return call("on_enter_condition", user_data, delta );
     }
     return true;
 }
 
-void UtilityAIStateTreeNodes::on_enter_state( Variant user_data, double delta ) {
+void UtilityAIStateTreeNodes::on_enter_state( Variant user_data, float delta ) {
     if( has_method("on_enter_state")){
         call("on_enter_state", user_data, delta );
     }
 }
 
-void UtilityAIStateTreeNodes::on_exit_state( Variant user_data, double delta ) {
+void UtilityAIStateTreeNodes::on_exit_state( Variant user_data, float delta ) {
     if( has_method("on_exit_state")){
         call("on_exit_state", user_data, delta );
     }
 }
 
 
-void UtilityAIStateTreeNodes::on_tick( Variant user_data, double delta ) {
+void UtilityAIStateTreeNodes::on_tick( Variant user_data, float delta ) {
     if( has_method("on_tick")){
         call("on_tick", user_data, delta );
     }
 }
 
-void UtilityAIStateTreeNodes::transition_to( NodePath path_to_node, Variant user_data, double delta ) {
+void UtilityAIStateTreeNodes::transition_to( NodePath path_to_node, Variant user_data, float delta ) {
     if( _tree_root_node == nullptr ) {
         return;
     }
@@ -243,7 +243,7 @@ void UtilityAIStateTreeNodes::transition_to( NodePath path_to_node, Variant user
 }
 
 
-UtilityAIStateTreeNodes* UtilityAIStateTreeNodes::evaluate_state_activation( Variant user_data, double delta ) {
+UtilityAIStateTreeNodes* UtilityAIStateTreeNodes::evaluate_state_activation( Variant user_data, float delta ) {
     unsigned int num_state_tree_childs = 0;
 
     if( get_child_state_selection_rule() == UtilityAIStateTreeNodeChildStateSelectionRule::ON_ENTER_CONDITION_METHOD ) {
@@ -267,7 +267,7 @@ UtilityAIStateTreeNodes* UtilityAIStateTreeNodes::evaluate_state_activation( Var
     } else {
         // Childs are evaluated by using Utility-based scoring.
         UtilityAIStateTreeNodes* highest_scoring_state_to_activate;
-        double highest_score = -9999999.9999;
+        float highest_score = -9999999.9999;
         for( int i = 0; i < get_child_count(); ++i ) {
             if( UtilityAIStateTreeNodes* stnode = godot::Object::cast_to<UtilityAIStateTreeNodes>(get_child(i)) ) {
                 if( !stnode->get_is_active() ) {
@@ -275,7 +275,7 @@ UtilityAIStateTreeNodes* UtilityAIStateTreeNodes::evaluate_state_activation( Var
                 }
 
                 ++num_state_tree_childs;
-                double score = stnode->evaluate();
+                float score = stnode->evaluate();
                 if( score > highest_score ) {
                     if( UtilityAIStateTreeNodes* result = stnode->evaluate_state_activation(user_data, delta) ) {
                         highest_score = score;

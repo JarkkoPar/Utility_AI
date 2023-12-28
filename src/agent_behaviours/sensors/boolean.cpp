@@ -26,9 +26,9 @@ UtilityAIBooleanSensor::~UtilityAIBooleanSensor() {
 
 // Handling functions.
 
-double UtilityAIBooleanSensor::evaluate_sensor_value() {
+float UtilityAIBooleanSensor::evaluate_sensor_value() {
     // Here the absolute and relative are the same, so no calculation needed.
-    set_sensor_value((double)_boolean_value);
+    set_sensor_value((float)_boolean_value);
     return get_sensor_value();
 }
 

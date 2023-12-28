@@ -50,15 +50,15 @@ bool UtilityAIConsiderations::get_has_vetoed() const {
 }
 
 
-void UtilityAIConsiderations::set_score( double score ) {
+void UtilityAIConsiderations::set_score( float score ) {
     _score = score;
 }
 
-double UtilityAIConsiderations::get_score() const {
+float UtilityAIConsiderations::get_score() const {
     return _score;
 }
 
-double UtilityAIConsiderations::evaluate() { 
+float UtilityAIConsiderations::evaluate() { 
     return 0.0;
 }
 

@@ -47,7 +47,7 @@ int  UtilityAIBTLeaf::get_tick_result() const {
 
 // Handling methods.
 
-int UtilityAIBTLeaf::tick(Variant user_data, double delta) { 
+int UtilityAIBTLeaf::tick(Variant user_data, float delta) { 
     set_internal_status(BT_INTERNAL_STATUS_TICKED);
     if( has_method("on_tick")) {
         godot::Variant return_value = call("on_tick", user_data, delta);

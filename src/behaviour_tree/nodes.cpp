@@ -69,12 +69,12 @@ int UtilityAIBehaviourTreeNodes::get_evaluation_method() const {
     return _evaluation_method;
 }
 
-void UtilityAIBehaviourTreeNodes::set_score( double score ) {
+void UtilityAIBehaviourTreeNodes::set_score( float score ) {
     _score = score;
 }
 
 
-double UtilityAIBehaviourTreeNodes::get_score() const {
+float UtilityAIBehaviourTreeNodes::get_score() const {
     return _score;
 }
 
@@ -170,7 +170,7 @@ void UtilityAIBehaviourTreeNodes::reset_for_looping() {
 }
 /**/
 
-double UtilityAIBehaviourTreeNodes::evaluate() {
+float UtilityAIBehaviourTreeNodes::evaluate() {
     if( !get_is_active() ) return 0.0;
     if( Engine::get_singleton()->is_editor_hint() ) return 0.0;
 
@@ -186,7 +186,7 @@ double UtilityAIBehaviourTreeNodes::evaluate() {
         if( !consideration_resource->get_is_active() ) {
             continue;
         }
-        double score = consideration_resource->evaluate( has_vetoed, this );
+        float score = consideration_resource->evaluate( has_vetoed, this );
         if( has_vetoed ) {
             _score = 0.0;
             return 0.0; // A consideration vetoed.
@@ -197,7 +197,7 @@ double UtilityAIBehaviourTreeNodes::evaluate() {
     // Evaluate the children.
     int num_children = get_child_count();
     if( num_children < 1 && num_resources < 1 ) return 0.0;
-    double child_score = 0.0;
+    float child_score = 0.0;
     for( int i = 0; i < num_children; ++i ) {
         Node* node = get_child(i);
         if( node == nullptr ) continue;
@@ -257,7 +257,7 @@ double UtilityAIBehaviourTreeNodes::evaluate() {
     }//endfor children
 
     if( _evaluation_method == UtilityAIBehaviourTreeNodesEvaluationMethod::Mean ) {
-        _score = _score / ((double)num_children);
+        _score = _score / ((float)num_children);
     }
 
     if( _invert_score ) {
@@ -268,7 +268,7 @@ double UtilityAIBehaviourTreeNodes::evaluate() {
 }
 
 
-int UtilityAIBehaviourTreeNodes::tick(Variant user_data, double delta ) { 
+int UtilityAIBehaviourTreeNodes::tick(Variant user_data, float delta ) { 
     return 0;
 }
 

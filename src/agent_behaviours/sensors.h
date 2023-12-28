@@ -13,7 +13,7 @@ class UtilityAISensors : public UtilityAI {
 
 private:
     
-    double _sensor_value;
+    float _sensor_value;
     //bool   _use_absolute_value; // Place holder for when in Godot the Curve X-value can be adjusted to any range other than 0..1.
     
 protected:
@@ -37,14 +37,14 @@ public:
     // Getters and setters for attributes.
     
     
-    void set_sensor_value( double sensor_value );
-    double get_sensor_value() const;
+    void set_sensor_value( float sensor_value );
+    float get_sensor_value() const;
 
     //void set_use_absolute_value( bool use_absolute_value );
     //bool get_use_absolute_value() const;
 
 
-    virtual double evaluate_sensor_value();
+    virtual float evaluate_sensor_value();
  
 };
 

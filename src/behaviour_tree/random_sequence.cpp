@@ -66,7 +66,7 @@ void UtilityAIBTRandomSequence::reset_bt_node() {
 }
 
 
-int UtilityAIBTRandomSequence::tick(Variant user_data, double delta) {
+int UtilityAIBTRandomSequence::tick(Variant user_data, float delta) {
     if( get_internal_status() == BT_INTERNAL_STATUS_UNTICKED  ) {
         reset_bt_node();
     }

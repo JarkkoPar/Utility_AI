@@ -48,17 +48,17 @@ void UtilityAISensors::initialize_sensor() {
 
 }
 
-double UtilityAISensors::evaluate_sensor_value() {
+float UtilityAISensors::evaluate_sensor_value() {
     return 0.0;
 }
 
 // Getters and Setters.
 
-void UtilityAISensors::set_sensor_value( double sensor_value) {
+void UtilityAISensors::set_sensor_value( float sensor_value) {
     _sensor_value = sensor_value;
 }
 
-double UtilityAISensors::get_sensor_value() const {
+float UtilityAISensors::get_sensor_value() const {
     return _sensor_value;
 }
 

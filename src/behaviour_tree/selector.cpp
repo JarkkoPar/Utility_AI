@@ -56,11 +56,11 @@ bool UtilityAIBTSelector::get_is_reactive() const {
 }
 
 /**
-void UtilityAIBTSelector::set_score( double score ) {
+void UtilityAIBTSelector::set_score( float score ) {
     _score = score;
 }
 
-double UtilityAIBTSelector::get_score() const {
+float UtilityAIBTSelector::get_score() const {
     return _score;
 }
 */
@@ -71,7 +71,7 @@ void UtilityAIBTSelector::reset_bt_node() {
 }
 
 
-int UtilityAIBTSelector::tick(Variant user_data, double delta) { 
+int UtilityAIBTSelector::tick(Variant user_data, float delta) { 
     if( get_internal_status() == BT_INTERNAL_STATUS_UNTICKED ) {
         reset_bt_node();
     }

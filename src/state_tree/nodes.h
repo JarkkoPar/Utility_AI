@@ -12,7 +12,7 @@ class UtilityAIStateTreeNodes : public UtilityAI {
     GDCLASS(UtilityAIStateTreeNodes, UtilityAI)
 
 private:
-    double _score;
+    float _score;
     int    _evaluation_method;
     bool   _invert_score;
     int    _child_state_selection_rule;
@@ -43,8 +43,8 @@ public:
         //OneMinusScore=6
     };
     
-    void set_score( double score );
-    double get_score() const;
+    void set_score( float score );
+    float get_score() const;
 
     void set_child_state_selection_rule( int child_state_selection_rule );
     int  get_child_state_selection_rule() const;
@@ -61,14 +61,14 @@ public:
 
     // Handling functions.
     
-    virtual double evaluate();
-    virtual bool   on_enter_condition( Variant user_data, double delta );
-    virtual void   on_enter_state( Variant user_data, double delta );
-    virtual void   on_exit_state( Variant user_data, double delta );
-    virtual void   on_tick( Variant user_data, double delta );
-    virtual void   transition_to( NodePath path_to_node, Variant user_data, double delta );
+    virtual float evaluate();
+    virtual bool   on_enter_condition( Variant user_data, float delta );
+    virtual void   on_enter_state( Variant user_data, float delta );
+    virtual void   on_exit_state( Variant user_data, float delta );
+    virtual void   on_tick( Variant user_data, float delta );
+    virtual void   transition_to( NodePath path_to_node, Variant user_data, float delta );
 
-    virtual UtilityAIStateTreeNodes* evaluate_state_activation( Variant user_data, double delta );
+    virtual UtilityAIStateTreeNodes* evaluate_state_activation( Variant user_data, float delta );
     
 
     // Godot virtuals.

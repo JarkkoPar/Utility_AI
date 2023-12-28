@@ -42,7 +42,7 @@ public:
 
     // Handling functions.
 
-    virtual double evaluate_sensor_value() override;
+    virtual float evaluate_sensor_value() override;
     
 };
 

@@ -38,11 +38,11 @@ UtilityAIFloatRangeSensor::~UtilityAIFloatRangeSensor() {
 
 // Handling functions.
 
-double UtilityAIFloatRangeSensor::evaluate_sensor_value() {
+float UtilityAIFloatRangeSensor::evaluate_sensor_value() {
     /**
     if( get_use_absolute_value() ) {
         // Absolute value, so make sure that it is within the interval.
-        double range_result = _range_value;
+        float range_result = _range_value;
         if( range_result < _range_min_value ) {
             range_result = _range_min_value;
         }else if( range_result > _range_max_value ) {
@@ -53,7 +53,7 @@ double UtilityAIFloatRangeSensor::evaluate_sensor_value() {
     }
     /**/
     // Relative value, so calculate the position within the interval.
-    double range_result = ((_range_value - _range_min_value)) * _one_over_range_length;
+    float range_result = ((_range_value - _range_min_value)) * _one_over_range_length;
     if( range_result < 0.0 ) {
         range_result = 0.0;
     } else if( range_result > 1.0 ) {
@@ -65,7 +65,7 @@ double UtilityAIFloatRangeSensor::evaluate_sensor_value() {
 
 // Getters and Setters.
 
-void UtilityAIFloatRangeSensor::set_range_min_value( double range_min_value ) {
+void UtilityAIFloatRangeSensor::set_range_min_value( float range_min_value ) {
     if( _range_min_value == _range_max_value ) {
         return;
     }
@@ -78,11 +78,11 @@ void UtilityAIFloatRangeSensor::set_range_min_value( double range_min_value ) {
     }
 }
 
-double UtilityAIFloatRangeSensor::get_range_min_value() const {
+float UtilityAIFloatRangeSensor::get_range_min_value() const {
     return _range_min_value;
 }
 
-void UtilityAIFloatRangeSensor::set_range_max_value( double range_max_value ) {
+void UtilityAIFloatRangeSensor::set_range_max_value( float range_max_value ) {
     if( _range_min_value == _range_max_value ) {
         return;
     }
@@ -95,11 +95,11 @@ void UtilityAIFloatRangeSensor::set_range_max_value( double range_max_value ) {
     }
 }
 
-double UtilityAIFloatRangeSensor::get_range_max_value() const {
+float UtilityAIFloatRangeSensor::get_range_max_value() const {
     return _range_max_value;
 }
 
-void UtilityAIFloatRangeSensor::set_range_value( double range_value ) {
+void UtilityAIFloatRangeSensor::set_range_value( float range_value ) {
     _range_value = range_value;
     if( _range_value < _range_min_value ) {
         _range_value = _range_min_value;
@@ -108,7 +108,7 @@ void UtilityAIFloatRangeSensor::set_range_value( double range_value ) {
     }
 }
 
-double UtilityAIFloatRangeSensor::get_range_value() const {
+float UtilityAIFloatRangeSensor::get_range_value() const {
     return _range_value;
 }
 

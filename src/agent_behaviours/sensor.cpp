@@ -27,7 +27,7 @@ UtilityAISensor::~UtilityAISensor() {
 
 // Handling functions.
 
-double UtilityAISensor::evaluate_sensor_value() {
+float UtilityAISensor::evaluate_sensor_value() {
     return get_sensor_value();
 }
 

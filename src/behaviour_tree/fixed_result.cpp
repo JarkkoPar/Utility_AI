@@ -43,7 +43,7 @@ int  UtilityAIBTFixedResult::get_fixed_result() const {
 
 // Handling methods.
 
-int UtilityAIBTFixedResult::tick(Variant user_data, double delta) {
+int UtilityAIBTFixedResult::tick(Variant user_data, float delta) {
     set_internal_status(BT_INTERNAL_STATUS_TICKED);
     set_tick_result(_fixed_result);
     for( int i = 0; i < get_child_count(); ++i ) {

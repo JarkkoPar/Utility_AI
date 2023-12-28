@@ -75,7 +75,7 @@ void UtilityAIBTNodeReference::reset() {
 }
 
 
-int UtilityAIBTNodeReference::tick(Variant user_data, double delta) { 
+int UtilityAIBTNodeReference::tick(Variant user_data, float delta) { 
     set_internal_status(BT_INTERNAL_STATUS_TICKED);
     if( _cache.is_null() || !_cache.is_valid() ) {
         _node_reference = nullptr; // Cache shows that the node reference has become invalid.

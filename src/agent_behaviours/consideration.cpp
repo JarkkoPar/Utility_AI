@@ -62,11 +62,11 @@ Ref<Curve> UtilityAIConsideration::get_activation_curve() const {
 }
 
 
-void UtilityAIConsideration::set_activation_input_value( double activation_input_value ) {
+void UtilityAIConsideration::set_activation_input_value( float activation_input_value ) {
     _activation_input_value = activation_input_value;
 }
 
-double UtilityAIConsideration::get_activation_input_value() const {
+float UtilityAIConsideration::get_activation_input_value() const {
     return _activation_input_value;
 }
 
@@ -85,7 +85,7 @@ void UtilityAIConsideration::_notification(int p_what) {
 
 // Handling methods.
 
-double UtilityAIConsideration::evaluate() { 
+float UtilityAIConsideration::evaluate() { 
     if( !get_is_active() ) return 0.0;
     if( Engine::get_singleton()->is_editor_hint() ) return 0.0;
     if( get_has_vetoed() ) return 0.0;
@@ -98,7 +98,7 @@ double UtilityAIConsideration::evaluate() {
     return _score;
 }
 
-double UtilityAIConsideration::sample_activation_curve( double input_value ) const {
+float UtilityAIConsideration::sample_activation_curve( float input_value ) const {
     if(_activation_curve.is_valid()) {
 		return _activation_curve->sample( input_value );
     }

@@ -58,13 +58,13 @@ Node* UtilityAICustomPropertyConsideration::get_node_with_property() const {
     return _node_with_property;
 }
 
-void UtilityAICustomPropertyConsideration::set_property_max_value( double property_max_value ) {
+void UtilityAICustomPropertyConsideration::set_property_max_value( float property_max_value ) {
     if( _property_max_value == 0.0 ) return;
     _property_max_value = property_max_value;
     _one_over_property_max_value = 1.0 / _property_max_value;
 }
 
-double UtilityAICustomPropertyConsideration::get_property_max_value() const {
+float UtilityAICustomPropertyConsideration::get_property_max_value() const {
     return _property_max_value;
 }
 
@@ -117,7 +117,7 @@ void UtilityAICustomPropertyConsideration::_evaluate_consideration() {
 /**/
 
 
-double UtilityAICustomPropertyConsideration::evaluate() { 
+float UtilityAICustomPropertyConsideration::evaluate() { 
     if( Engine::get_singleton()->is_editor_hint() ) return 0.0;
     if( !get_is_active() ) return 0.0;
     if( _node_with_property == nullptr ) return 0.0;
@@ -133,7 +133,7 @@ double UtilityAICustomPropertyConsideration::evaluate() {
     return _score;
 }
 
-double UtilityAICustomPropertyConsideration::sample_activation_curve( double input_value ) const {
+float UtilityAICustomPropertyConsideration::sample_activation_curve( float input_value ) const {
     if(_activation_curve.is_valid()) {
 		return _activation_curve->sample( input_value );
     }

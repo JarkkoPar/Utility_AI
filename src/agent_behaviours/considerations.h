@@ -19,7 +19,7 @@ private:
 protected:
     static void _bind_methods();
 
-    double _score;
+    float _score;
     bool _has_vetoed;
 
 public:
@@ -32,12 +32,12 @@ public:
     void  set_has_vetoed( bool has_vetoed );
     bool  get_has_vetoed() const;
 
-    void set_score( double score );
-    double get_score() const;
+    void set_score( float score );
+    float get_score() const;
 
     // Handling functions.
 
-    virtual double evaluate();
+    virtual float evaluate();
 };
 
 }

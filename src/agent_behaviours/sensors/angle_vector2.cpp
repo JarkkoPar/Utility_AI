@@ -65,7 +65,7 @@ UtilityAIAngleVector2Sensor::~UtilityAIAngleVector2Sensor() {
 
 // Handling functions.
 
-double UtilityAIAngleVector2Sensor::evaluate_sensor_value() {
+float UtilityAIAngleVector2Sensor::evaluate_sensor_value() {
     _angle_radian = _from_vector.angle_to(_to_vector);
     if( _angle_radian < _min_angle_radian ) {
         _angle_radian = _min_angle_radian;
@@ -104,61 +104,61 @@ Vector2 UtilityAIAngleVector2Sensor::get_from_vector2() const {
     return _from_vector;
 }
 
-void UtilityAIAngleVector2Sensor::set_min_angle_radian( double min_angle_radian ) {
+void UtilityAIAngleVector2Sensor::set_min_angle_radian( float min_angle_radian ) {
     _min_angle_radian = min_angle_radian;
     _min_angle_degrees = godot::Math::rad_to_deg(_min_angle_radian);
 }
 
-double UtilityAIAngleVector2Sensor::get_min_angle_radian() const {
+float UtilityAIAngleVector2Sensor::get_min_angle_radian() const {
     return _min_angle_radian;
 }
 
-void UtilityAIAngleVector2Sensor::set_min_angle_degrees( double min_angle_degrees ) {
+void UtilityAIAngleVector2Sensor::set_min_angle_degrees( float min_angle_degrees ) {
     _min_angle_degrees = min_angle_degrees;
     _min_angle_radian = godot::Math::deg_to_rad(_min_angle_degrees);
 }
 
-double UtilityAIAngleVector2Sensor::get_min_angle_degrees() const {
+float UtilityAIAngleVector2Sensor::get_min_angle_degrees() const {
     return _min_angle_degrees;
 }
 
 
-void UtilityAIAngleVector2Sensor::set_max_angle_radian( double max_angle_radian ) {
+void UtilityAIAngleVector2Sensor::set_max_angle_radian( float max_angle_radian ) {
     _max_angle_radian = max_angle_radian;
     _max_angle_degrees = godot::Math::rad_to_deg(_max_angle_radian);
 }
 
-double UtilityAIAngleVector2Sensor::get_max_angle_radian() const {
+float UtilityAIAngleVector2Sensor::get_max_angle_radian() const {
     return _max_angle_radian;
 }
 
-void UtilityAIAngleVector2Sensor::set_max_angle_degrees( double max_angle_degrees ) {
+void UtilityAIAngleVector2Sensor::set_max_angle_degrees( float max_angle_degrees ) {
     _max_angle_degrees = max_angle_degrees;
     _max_angle_radian = godot::Math::deg_to_rad(_max_angle_degrees);
 }
 
-double UtilityAIAngleVector2Sensor::get_max_angle_degrees() const {
+float UtilityAIAngleVector2Sensor::get_max_angle_degrees() const {
     return _max_angle_degrees;
 }
 
 // Debugging / current values.
 
 
-void UtilityAIAngleVector2Sensor::set_angle_radian( double angle_radian ) {
+void UtilityAIAngleVector2Sensor::set_angle_radian( float angle_radian ) {
     _angle_radian = angle_radian;
     _angle_degrees = godot::Math::rad_to_deg(angle_radian);
 }
 
-double UtilityAIAngleVector2Sensor::get_angle_radian() const {
+float UtilityAIAngleVector2Sensor::get_angle_radian() const {
     return _angle_radian;
 }
 
-void UtilityAIAngleVector2Sensor::set_angle_degrees( double angle_degrees ) {
+void UtilityAIAngleVector2Sensor::set_angle_degrees( float angle_degrees ) {
     _angle_degrees = angle_degrees;
     _angle_radian = godot::Math::deg_to_rad(_angle_degrees);
 }
 
-double UtilityAIAngleVector2Sensor::get_angle_degrees() const {
+float UtilityAIAngleVector2Sensor::get_angle_degrees() const {
     return _angle_degrees;
 }
 

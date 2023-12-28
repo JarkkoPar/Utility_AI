@@ -14,11 +14,11 @@ private:
     Vector3 _to_vector;
     Vector3 _from_to_vector;
     Vector3 _direction_vector;
-    double  _distance_squared;
-    double  _distance;
-    double  _max_distance_squared;
-    double  _one_over_max_distance_squared;
-    double  _max_distance; 
+    float  _distance_squared;
+    float  _distance;
+    float  _max_distance_squared;
+    float  _one_over_max_distance_squared;
+    float  _max_distance; 
 
     bool    _is_distance_calculated;
     bool    _is_direction_vector_calculated;
@@ -31,7 +31,7 @@ public:
     
     // Handling functions. 
 
-    virtual double evaluate_sensor_value() override;
+    virtual float evaluate_sensor_value() override;
 
     // Getters and setters for attributes.
     
@@ -43,8 +43,8 @@ public:
     void set_from_vector3( Vector3 from );
     Vector3 get_from_vector3() const;
 
-    void set_max_distance( double max_distance );
-    double get_max_distance() const;
+    void set_max_distance( float max_distance );
+    float get_max_distance() const;
 
     void set_is_distance_calculated( bool is_distance_calculated );
     bool get_is_distance_calculated() const;
@@ -60,11 +60,11 @@ public:
     void set_direction_vector3( Vector3 direction );
     Vector3 get_direction_vector3() const;
     
-    void set_distance( double distance );
-    double get_distance() const;
+    void set_distance( float distance );
+    float get_distance() const;
     
-    void set_distance_squared( double distance_squared );
-    double get_distance_squared() const;
+    void set_distance_squared( float distance_squared );
+    float get_distance_squared() const;
 
 };
 

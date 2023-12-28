@@ -34,16 +34,16 @@ UtilityAISensorGroup::~UtilityAISensorGroup() {
 
 // Handling functions.
 
-double UtilityAISensorGroup::evaluate_sensor_value() {
+float UtilityAISensorGroup::evaluate_sensor_value() {
     if( !get_is_active() ) return 0.0;
     if( Engine::get_singleton()->is_editor_hint() ) return 0.0;
 
-    double sensor_value = 0.0;
+    float sensor_value = 0.0;
 
     // Evaluate the children.
     int num_children = get_child_count();
     if( num_children < 1 ) return 0.0;
-    double child_sensor_value = 0.0;
+    float child_sensor_value = 0.0;
     for( int i = 0; i < num_children; ++i ) {
         Node* node = get_child(i);
         if( node == nullptr ) continue;
@@ -92,7 +92,7 @@ double UtilityAISensorGroup::evaluate_sensor_value() {
     }//endfor children
 
     if( _evaluation_method == UtilityAISensorGroupEvaluationMethod::Mean ) {
-        sensor_value = sensor_value / ((double)num_children);
+        sensor_value = sensor_value / ((float)num_children);
     }
 
     if( _invert_sensor_value ) {

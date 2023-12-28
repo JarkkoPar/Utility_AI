@@ -73,7 +73,7 @@ int  UtilityAIBTCooldownMsec::get_cooldown_return_value() const {
 
 // Handling methods.
 
-int UtilityAIBTCooldownMsec::tick(Variant user_data, double delta) {
+int UtilityAIBTCooldownMsec::tick(Variant user_data, float delta) {
     set_internal_status(BT_INTERNAL_STATUS_TICKED);
     uint64_t wait_time = godot::Time::get_singleton()->get_ticks_msec() - _cooldown_start_timestamp;
     if( wait_time < _cooldown_msec ) {

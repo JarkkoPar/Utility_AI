@@ -47,7 +47,7 @@ public:
 
     // Handling functions.
 
-    virtual double evaluate(bool& has_vetoed, Node* parent_node) override;    
+    virtual float evaluate(bool& has_vetoed, Node* parent_node) override;    
 };
 
 }

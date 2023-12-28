@@ -15,7 +15,7 @@ private:
     int _range_min_value;
     int _range_max_value;
     int _range_length;
-    double _one_over_range_length;
+    float _one_over_range_length;
     int _range_value;
 protected:
     static void _bind_methods();
@@ -26,7 +26,7 @@ public:
     
     // Handling functions. 
 
-    virtual double evaluate_sensor_value() override;
+    virtual float evaluate_sensor_value() override;
 
     // Getters and setters for attributes.
     

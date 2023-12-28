@@ -12,7 +12,7 @@ class UtilityAIConsiderationResources : public Resource {
 
 private:
     bool _is_active;
-    bool _has_vetoed;
+    //bool _has_vetoed;
 protected:
     static void _bind_methods();
 
@@ -26,12 +26,12 @@ public:
     void  set_is_active( bool is_active );
     bool  get_is_active() const;
 
-    void  set_has_vetoed( bool has_vetoed );
-    bool  get_has_vetoed() const;
+    //void  set_has_vetoed( bool has_vetoed );
+    //bool  get_has_vetoed() const;
 
     // Handling functions.
     
-    virtual double evaluate(bool& has_vetoed, Node* parent_node );
+    virtual float evaluate(bool& has_vetoed, Node* parent_node );
   
 };
 

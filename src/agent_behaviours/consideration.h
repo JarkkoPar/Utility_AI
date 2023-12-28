@@ -19,7 +19,7 @@ protected:
 
     UtilityAISensors* _input_sensor;
     Ref<Curve>        _activation_curve;
-    double            _activation_input_value;
+    float            _activation_input_value;
     bool              _has_custom_evaluation_method;
 
     virtual void _evaluate_consideration();
@@ -36,8 +36,8 @@ public:
     void set_activation_curve( Ref<Curve> activation_curve );
     Ref<Curve> get_activation_curve() const;
 
-    void set_activation_input_value( double activation_input_value );
-    double get_activation_input_value() const;
+    void set_activation_input_value( float activation_input_value );
+    float get_activation_input_value() const;
 
             
     // Godot virtuals.
@@ -45,8 +45,8 @@ public:
    
     // Handling functions.
     
-    virtual double evaluate() override;
-    virtual double sample_activation_curve( double input_value ) const;
+    virtual float evaluate() override;
+    virtual float sample_activation_curve( float input_value ) const;
 };
 
 }

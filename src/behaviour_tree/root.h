@@ -28,7 +28,7 @@ public:
 
     // Handling functions.
 
-    virtual int tick(Variant user_data, double delta) override;
+    virtual int tick(Variant user_data, float delta) override;
 
     // Godot virtuals.
     void _ready();

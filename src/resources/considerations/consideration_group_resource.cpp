@@ -32,6 +32,7 @@ void UtilityAIConsiderationGroupResource::_bind_methods() {
 UtilityAIConsiderationGroupResource::UtilityAIConsiderationGroupResource() {
     _evaluation_method = 4; // Default to multiplication.
     _invert_score = false;
+    set_local_to_scene(true);
 }
 
 
@@ -67,9 +68,9 @@ TypedArray<UtilityAIConsiderationResources> UtilityAIConsiderationGroupResource:
 
 // Handling functions.
 
-double UtilityAIConsiderationGroupResource::evaluate(bool& has_vetoed, Node* parent_node) { 
+float UtilityAIConsiderationGroupResource::evaluate(bool& has_vetoed, Node* parent_node) { 
     
-    double score = 0.0;
+    float score = 0.0;
     for( int i = 0; i < _child_nodes.size(); ++i ) {
         UtilityAIConsiderationResources* consideration = godot::Object::cast_to<UtilityAIConsiderationResources>(_child_nodes[i]);
         if( consideration == nullptr ) {
@@ -79,7 +80,7 @@ double UtilityAIConsiderationGroupResource::evaluate(bool& has_vetoed, Node* par
             continue;
         }
         bool child_has_vetoed = false;
-        double child_score = consideration->evaluate(child_has_vetoed, parent_node);
+        float child_score = consideration->evaluate(child_has_vetoed, parent_node);
         if( child_has_vetoed ) {
             has_vetoed = true;
             return 0.0;
@@ -129,7 +130,7 @@ double UtilityAIConsiderationGroupResource::evaluate(bool& has_vetoed, Node* par
     }//endfor children
     
     if( _evaluation_method == UtilityAIConsiderationGroupResourceEvaluationMethod::Mean ) {
-        score = score / ((double)_child_nodes.size());
+        score = score / ((float)_child_nodes.size());
     }
 
     if( _invert_score ) {
@@ -144,7 +145,7 @@ double UtilityAIConsiderationGroupResource::evaluate(bool& has_vetoed, Node* par
     // Evaluate the children.
     int num_children = get_child_count();
     if( num_children < 1 ) return 0.0;
-    double child_score = 0.0;
+    float child_score = 0.0;
     for( int i = 0; i < num_children; ++i ) {
         Node* node = get_child(i);
         if( node == nullptr ) continue;
@@ -203,7 +204,7 @@ double UtilityAIConsiderationGroupResource::evaluate(bool& has_vetoed, Node* par
     }//endfor children
 
     if( _evaluation_method == UtilityAIConsiderationGroupResourceEvaluationMethod::Mean ) {
-        _score = _score / ((double)num_children);
+        _score = _score / ((float)num_children);
     }
 
     if( _invert_score ) {

@@ -52,7 +52,7 @@ uint64_t  UtilityAIBTRoot::get_total_tick_usec() const {
 // Handling functions.
 
 
-int UtilityAIBTRoot::tick(Variant user_data, double delta) { 
+int UtilityAIBTRoot::tick(Variant user_data, float delta) { 
     uint64_t method_start_time_usec = godot::Time::get_singleton()->get_ticks_usec();
     if( !get_is_active() ){
         _total_tick_usec = godot::Time::get_singleton()->get_ticks_usec() - method_start_time_usec;

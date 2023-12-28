@@ -46,19 +46,19 @@ UtilityAIBehaviourGroup::~UtilityAIBehaviourGroup() {
 
 // Getters and Setters.
 
-void UtilityAIBehaviourGroup::set_activation_score( double activation_score ) {
+void UtilityAIBehaviourGroup::set_activation_score( float activation_score ) {
     _activation_score = activation_score;
 }
 
-double UtilityAIBehaviourGroup::get_activation_score() const {
+float UtilityAIBehaviourGroup::get_activation_score() const {
     return _activation_score;
 }
 
-void UtilityAIBehaviourGroup::set_score( double score ) {
+void UtilityAIBehaviourGroup::set_score( float score ) {
     _score = score;
 }
 
-double UtilityAIBehaviourGroup::get_score() const {
+float UtilityAIBehaviourGroup::get_score() const {
     return _score;
 }
 
@@ -95,7 +95,7 @@ bool UtilityAIBehaviourGroup::evaluate(){ //UtilityAIAgent* agent) {
         if( !consideration_resource->get_is_active() ) {
             continue;
         }
-        double score = consideration_resource->evaluate( has_vetoed, this );
+        float score = consideration_resource->evaluate( has_vetoed, this );
         ++num_consideration_nodes_handled;
         if( has_vetoed ) {
             _score = 0.0; // A consideration vetoed.

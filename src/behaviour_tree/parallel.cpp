@@ -51,7 +51,7 @@ bool UtilityAIBTParallel::get_is_reactive() const {
 }
 /**/
 
-int UtilityAIBTParallel::tick(Variant user_data, double delta) {
+int UtilityAIBTParallel::tick(Variant user_data, float delta) {
     set_internal_status(BT_INTERNAL_STATUS_TICKED);
     int parallelresult = BT_SUCCESS;
     for( int i = 0; i < get_child_count(); ++i ) {

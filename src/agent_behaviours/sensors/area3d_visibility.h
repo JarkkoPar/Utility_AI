@@ -31,7 +31,7 @@ private:
 
     int _num_entities_found;
     int _max_expected_entities_found;
-    double _one_over_max_expected_entities_found;
+    float _one_over_max_expected_entities_found;
 
     bool _use_owner_global_position;
 protected:
@@ -50,7 +50,7 @@ public:
     virtual void initialize_sensor() override;
     virtual void uninitialize_sensor() override;
 
-    virtual double evaluate_sensor_value() override;
+    virtual float evaluate_sensor_value() override;
 
     void on_area_entered(Area3D* area );
     void on_area_exited(Area3D* area );

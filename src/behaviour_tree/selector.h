@@ -28,13 +28,13 @@ public:
     //void  set_is_reactive( bool is_reactive );
     //bool  get_is_reactive() const;
 
-    //void set_score( double score );
-    //double get_score() const;
+    //void set_score( float score );
+    //float get_score() const;
 
     // Handling functions.
     virtual void reset_bt_node() override;
     
-    virtual int tick(Variant user_data, double delta) override;
+    virtual int tick(Variant user_data, float delta) override;
 };
 
 }

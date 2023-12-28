@@ -92,7 +92,7 @@ void UtilityAIBTRepeatUntil::reset_bt_node() {
 }
 
 
-int UtilityAIBTRepeatUntil::tick(Variant user_data, double delta) { 
+int UtilityAIBTRepeatUntil::tick(Variant user_data, float delta) { 
     //if( !get_is_active() ) return BT_FAILURE;
     if( Engine::get_singleton()->is_editor_hint() ) return BT_FAILURE;
 

@@ -29,7 +29,7 @@ UtilityAIIntRangeSensor::UtilityAIIntRangeSensor() {
     _range_min_value = 0;
     _range_value = 0;
     _range_length = 100;
-    _one_over_range_length = 1.0 / (double)_range_length;
+    _one_over_range_length = 1.0 / (float)_range_length;
 }
 
 
@@ -38,7 +38,7 @@ UtilityAIIntRangeSensor::~UtilityAIIntRangeSensor() {
 
 // Handling functions.
 
-double UtilityAIIntRangeSensor::evaluate_sensor_value() {
+float UtilityAIIntRangeSensor::evaluate_sensor_value() {
     /**
     if( get_use_absolute_value() ) {
         // Absolute value, so make sure that it is within the interval.
@@ -48,12 +48,12 @@ double UtilityAIIntRangeSensor::evaluate_sensor_value() {
         }else if( range_result > _range_max_value ) {
             range_result = _range_max_value;
         }
-        set_sensor_value((double)range_result);
+        set_sensor_value((float)range_result);
         return get_sensor_value();
     }
     /**/
     // Relative value, so calculate the position within the interval.
-    double range_result = ((double)(_range_value - _range_min_value)) * _one_over_range_length;
+    float range_result = ((float)(_range_value - _range_min_value)) * _one_over_range_length;
     if( range_result < 0.0 ) {
         range_result = 0.0;
     } else if( range_result > 1.0 ) {
@@ -72,7 +72,7 @@ void UtilityAIIntRangeSensor::set_range_min_value( int range_min_value ) {
     _range_min_value = range_min_value;
     _range_length = _range_max_value - _range_min_value;
     if( _range_length != 0 ) {
-        _one_over_range_length = 1.0 / (double)_range_length;
+        _one_over_range_length = 1.0 / (float)_range_length;
     } else {
         _one_over_range_length = 0.0;
     }
@@ -89,7 +89,7 @@ void UtilityAIIntRangeSensor::set_range_max_value( int range_max_value ) {
     _range_max_value = range_max_value;
     _range_length = _range_max_value - _range_min_value;
     if( _range_length != 0 ) {
-        _one_over_range_length = 1.0 / (double)_range_length;
+        _one_over_range_length = 1.0 / (float)_range_length;
     } else {
         _one_over_range_length = 0.0;
     }

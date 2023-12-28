@@ -7,7 +7,7 @@ using namespace godot;
 
 UtilityAIConsiderationResource::UtilityAIConsiderationResource() {
     _input_sensor = nullptr;
-
+    set_local_to_scene(true);
 }
 
 
@@ -52,17 +52,17 @@ Ref<Curve> UtilityAIConsiderationResource::get_activation_curve() const {
 
 // Handling methods.
 
-double UtilityAIConsiderationResource::evaluate(bool& has_vetoed, Node* parent_node) { 
+float UtilityAIConsiderationResource::evaluate(bool& has_vetoed, Node* parent_node) { 
     if( _input_sensor == nullptr ) {
         _input_sensor = godot::Object::cast_to<UtilityAISensors>(parent_node->get_node_or_null(_input_sensor_nodepath));
     }
 
-    double input_value = 0.0;
+    float input_value = 0.0;
     if( _input_sensor != nullptr ) {
         input_value = _input_sensor->get_sensor_value();
     }
 
-    double score = 0.0;
+    float score = 0.0;
     if( has_method("eval")) {
         Variant return_value = call("eval", input_value);
         if( return_value.get_type() == Variant::Type::ARRAY ) {
@@ -89,7 +89,7 @@ double UtilityAIConsiderationResource::evaluate(bool& has_vetoed, Node* parent_n
 }
 
 
-double UtilityAIConsiderationResource::sample_activation_curve( double input_value ) const {
+float UtilityAIConsiderationResource::sample_activation_curve( float input_value ) const {
     if(_activation_curve.is_valid()) {
 		return _activation_curve->sample( input_value );
     }
