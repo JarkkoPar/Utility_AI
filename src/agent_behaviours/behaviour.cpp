@@ -16,6 +16,10 @@ void UtilityAIBehaviour::_bind_methods() {
 
     ADD_SUBGROUP("Configuration","");
 
+    ClassDB::bind_method(D_METHOD("set_behaviour_id", "behaviour_id"), &UtilityAIBehaviour::set_behaviour_id);
+    ClassDB::bind_method(D_METHOD("get_behaviour_id"), &UtilityAIBehaviour::get_behaviour_id);
+    ADD_PROPERTY(PropertyInfo(Variant::INT, "behaviour_id", PROPERTY_HINT_NONE), "set_behaviour_id","get_behaviour_id");
+
     ClassDB::bind_method(D_METHOD("set_can_be_interrupted", "can_be_interrupted"), &UtilityAIBehaviour::set_can_be_interrupted);
     ClassDB::bind_method(D_METHOD("get_can_be_interrupted"), &UtilityAIBehaviour::get_can_be_interrupted);
     ADD_PROPERTY(PropertyInfo(Variant::BOOL, "can_be_interrupted", PROPERTY_HINT_NONE), "set_can_be_interrupted","get_can_be_interrupted");
@@ -49,9 +53,9 @@ void UtilityAIBehaviour::_bind_methods() {
 
 UtilityAIBehaviour::UtilityAIBehaviour() {
     //_current_action_node = nullptr;
-    _score = 0.0;
-    _cooldown_seconds = 0.0;
-    _current_cooldown_seconds = 0.0;
+    _score = 0.0f;
+    _cooldown_seconds = 0.0f;
+    _current_cooldown_seconds = 0.0f;
     _cooldown_turns = 0;
     _current_cooldown_turns = 0;
     _current_action_index = 0;
@@ -68,6 +72,14 @@ UtilityAIBehaviour::~UtilityAIBehaviour() {
 
 
 // Getters and Setters.
+
+void  UtilityAIBehaviour::set_behaviour_id( int behaviour_id ) {
+    _behaviour_id = behaviour_id;
+}
+
+int   UtilityAIBehaviour::get_behaviour_id() const {
+    return _behaviour_id;
+}
 
 void  UtilityAIBehaviour::set_can_be_interrupted( bool can_be_interrupted ) {
     _can_be_interrupted = can_be_interrupted;

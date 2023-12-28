@@ -16,12 +16,12 @@ class UtilityAIBehaviour : public UtilityAI {
     GDCLASS(UtilityAIBehaviour, UtilityAI )
 
 private:
-    float _cooldown_seconds;
-    float _current_cooldown_seconds;
+    float  _cooldown_seconds;
+    float  _current_cooldown_seconds;
     int    _cooldown_turns;
     int    _current_cooldown_turns;
     float  _score;
-
+    int    _behaviour_id;
     int    _current_action_index;
 
     //UtilityAIAction*  _current_action_node;
@@ -37,7 +37,10 @@ public:
     
     
     // Getters and setters for attributes.
-    
+
+    void  set_behaviour_id( int behaviour_id );
+    int   get_behaviour_id() const;
+
     void  set_can_be_interrupted( bool can_be_interrupted );
     bool  get_can_be_interrupted() const;
     
