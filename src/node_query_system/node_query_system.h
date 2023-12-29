@@ -63,6 +63,7 @@ public:
     void initialize_performance_counters();
     
     int post_query( UtilityAINQSSearchSpaces* search_space, bool is_high_priority = true );
+    bool stop_query( UtilityAINQSSearchSpaces* search_space );
     void run_queries();
     void clear_queries();
 

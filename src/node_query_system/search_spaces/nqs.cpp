@@ -9,6 +9,7 @@ using namespace godot;
 UtilityAINQSSearchSpaces::UtilityAINQSSearchSpaces() {
     _top_n_to_find = 1;
     _nqs_query_index = -1;
+    _nqs_query_is_high_priority = true;
     _is_query_still_running = false;
     _is_search_space_fetched = false;
     _is_criteria_handled = false;
@@ -119,6 +120,15 @@ void UtilityAINQSSearchSpaces::set_nqs_query_index(int nqs_query_index) {
 
 int  UtilityAINQSSearchSpaces::get_nqs_query_index() const {
     return _nqs_query_index;
+}
+
+void UtilityAINQSSearchSpaces::set_nqs_query_is_high_priority(bool nqs_query_is_high_priority) {
+    _nqs_query_is_high_priority = nqs_query_is_high_priority;
+}
+
+
+bool  UtilityAINQSSearchSpaces::get_nqs_query_is_high_priority() const {
+    return _nqs_query_is_high_priority;
 }
 
 

@@ -42,15 +42,16 @@ void UtilityAINodeQuerySystem::_bind_methods() {
     ClassDB::bind_method(D_METHOD("get_run_queries_time_budget_per_frame"), &UtilityAINodeQuerySystem::get_run_queries_time_budget_per_frame);
     ADD_PROPERTY(PropertyInfo(Variant::INT, "run_queries_time_budget_per_frame", PROPERTY_HINT_RANGE, "1,10000,or_greater"), "set_run_queries_time_budget_per_frame","get_run_queries_time_budget_per_frame");
 
-    ClassDB::bind_method(D_METHOD("set_post_query_time_budget_per_frame", "post_query_time_budget_per_frame"), &UtilityAINodeQuerySystem::set_post_query_time_budget_per_frame);
-    ClassDB::bind_method(D_METHOD("get_post_query_time_budget_per_frame"), &UtilityAINodeQuerySystem::get_post_query_time_budget_per_frame);
-    ADD_PROPERTY(PropertyInfo(Variant::INT, "post_query_time_budget_per_frame", PROPERTY_HINT_RANGE, "1,10000,or_greater"), "set_post_query_time_budget_per_frame","get_post_query_time_budget_per_frame");
+    //ClassDB::bind_method(D_METHOD("set_post_query_time_budget_per_frame", "post_query_time_budget_per_frame"), &UtilityAINodeQuerySystem::set_post_query_time_budget_per_frame);
+    //ClassDB::bind_method(D_METHOD("get_post_query_time_budget_per_frame"), &UtilityAINodeQuerySystem::get_post_query_time_budget_per_frame);
+    //ADD_PROPERTY(PropertyInfo(Variant::INT, "post_query_time_budget_per_frame", PROPERTY_HINT_RANGE, "1,10000,or_greater"), "set_post_query_time_budget_per_frame","get_post_query_time_budget_per_frame");
 
     ClassDB::bind_method(D_METHOD("set_time_allocation_pct_to_high_priority_queries", "time_allocation_pct_to_high_priority_queries"), &UtilityAINodeQuerySystem::set_time_allocation_pct_to_high_priority_queries);
     ClassDB::bind_method(D_METHOD("get_time_allocation_pct_to_high_priority_queries"), &UtilityAINodeQuerySystem::get_time_allocation_pct_to_high_priority_queries);
     ADD_PROPERTY(PropertyInfo(Variant::FLOAT, "time_allocation_pct_to_high_priority_queries", PROPERTY_HINT_RANGE, "0.0,1.0"), "set_time_allocation_pct_to_high_priority_queries","get_time_allocation_pct_to_high_priority_queries");
     
     ClassDB::bind_method(D_METHOD("post_query", "search_space", "is_high_priority"), &UtilityAINodeQuerySystem::post_query);
+    ClassDB::bind_method(D_METHOD("stop_query", "search_space"), &UtilityAINodeQuerySystem::stop_query);
     ClassDB::bind_method(D_METHOD("run_queries"), &UtilityAINodeQuerySystem::run_queries);
     ClassDB::bind_method(D_METHOD("clear_queries"), &UtilityAINodeQuerySystem::clear_queries);
     ClassDB::bind_method(D_METHOD("initialize_performance_counters"), &UtilityAINodeQuerySystem::initialize_performance_counters);
@@ -251,6 +252,7 @@ int UtilityAINodeQuerySystem::post_query( UtilityAINQSSearchSpaces* search_space
             return -1;
         }
         search_space->start_query();
+        search_space->set_nqs_query_is_high_priority(true);
         if( _available_high_priority_query_indexes.size() == 0 ) {
             search_space->set_nqs_query_index(_high_priority_queries.size());
             _high_priority_queries.push_back(search_space);
@@ -279,8 +281,7 @@ int UtilityAINodeQuerySystem::post_query( UtilityAINQSSearchSpaces* search_space
         return -1;
     }
     search_space->start_query();
-    //search_space->set_nqs_query_index(_regular_queries.size());
-    //_regular_queries.push_back(search_space);
+    search_space->set_nqs_query_is_high_priority(false);
     if( _available_regular_query_indexes.size() == 0 ) {
         search_space->set_nqs_query_index(_regular_queries.size());
         _regular_queries.push_back(search_space);
@@ -296,6 +297,26 @@ int UtilityAINodeQuerySystem::post_query( UtilityAINQSSearchSpaces* search_space
 
 }
 
+bool UtilityAINodeQuerySystem::stop_query( UtilityAINQSSearchSpaces* search_space ) {
+    if( search_space == nullptr ) {
+        return false; // Not stopped, nullptr.
+    }
+    if( search_space->get_nqs_query_index() < 0 ) {
+        return false; // Not stopped, invalid index.
+    }
+    if( search_space->get_nqs_query_is_high_priority() ) {
+        _high_priority_queries[search_space->get_nqs_query_index()] = nullptr;
+        _available_high_priority_query_indexes.push_back(search_space->get_nqs_query_index());
+        search_space->set_nqs_query_index(-1);
+        return true;
+    }
+
+    _regular_queries[search_space->get_nqs_query_index()] = nullptr;
+    _available_regular_query_indexes.push_back(search_space->get_nqs_query_index());
+    search_space->set_nqs_query_index(-1);
+    return true;
+    
+}
 
 void UtilityAINodeQuerySystem::clear_queries() {
     _high_priority_queries.clear();

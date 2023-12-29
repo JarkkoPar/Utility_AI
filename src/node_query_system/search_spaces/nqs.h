@@ -54,6 +54,7 @@ private:
     TypedArray<UtilityAINQSSearchCriteria> _filtering_criteria;
 
     int                 _nqs_query_index; // Index of the query in the singleton.
+    bool                _nqs_query_is_high_priority; 
 protected:
     static void _bind_methods();
     virtual void _initialize_search_space(){}
@@ -78,6 +79,9 @@ public:
 
     void set_nqs_query_index(int nqs_query_index);
     int  get_nqs_query_index() const;
+    
+    void set_nqs_query_is_high_priority(bool nqs_query_is_high_priority);
+    bool get_nqs_query_is_high_priority() const;
 
     virtual TypedArray<Node> get_searchspace_nodes() const;
     
