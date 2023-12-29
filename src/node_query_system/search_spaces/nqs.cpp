@@ -8,6 +8,7 @@ using namespace godot;
 
 UtilityAINQSSearchSpaces::UtilityAINQSSearchSpaces() {
     _top_n_to_find = 1;
+    _nqs_query_index = -1;
     _is_query_still_running = false;
     _is_search_space_fetched = false;
     _is_criteria_handled = false;
@@ -24,6 +25,7 @@ UtilityAINQSSearchSpaces::UtilityAINQSSearchSpaces() {
     _current_call_runtime_usec = 0;
     _search_space_fetch_time_usec = 0;
     _completed_signal_time_usec = 0;
+    
 }
 
 
@@ -109,6 +111,16 @@ void UtilityAINQSSearchSpaces::_exit_tree() {
 
 
 // Getters and setters.
+
+void UtilityAINQSSearchSpaces::set_nqs_query_index(int nqs_query_index) {
+    _nqs_query_index = nqs_query_index;
+}
+
+
+int  UtilityAINQSSearchSpaces::get_nqs_query_index() const {
+    return _nqs_query_index;
+}
+
 
 TypedArray<Node> UtilityAINQSSearchSpaces::get_searchspace_nodes() const {
     TypedArray<Node> emptyarray;

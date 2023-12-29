@@ -52,6 +52,8 @@ private:
     PackedFloat64Array* _ptr_current_work_in_progress_scores;
 
     TypedArray<UtilityAINQSSearchCriteria> _filtering_criteria;
+
+    int                 _nqs_query_index; // Index of the query in the singleton.
 protected:
     static void _bind_methods();
     virtual void _initialize_search_space(){}
@@ -73,6 +75,9 @@ public:
     
     
     // Getters and setters.
+
+    void set_nqs_query_index(int nqs_query_index);
+    int  get_nqs_query_index() const;
 
     virtual TypedArray<Node> get_searchspace_nodes() const;
     
