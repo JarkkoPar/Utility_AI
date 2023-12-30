@@ -6,7 +6,9 @@
 // Performance monitor singleton.
 #include "performance_monitor_singleton.h"
 
-// AI Agent behaviours.
+// AI AGENT 
+
+// Core nodes
 #include "agent_behaviours/behaviour.h"
 #include "agent_behaviours/behaviour_group.h"
 #include "agent_behaviours/considerations.h"
@@ -20,7 +22,7 @@
 #include "agent_behaviours/sensor.h"
 #include "agent_behaviours/sensor_group.h"
 
-// Special sensors.
+// Special sensors
 #include "agent_behaviours/sensors/boolean.h"
 #include "agent_behaviours/sensors/float_range.h"
 #include "agent_behaviours/sensors/int_range.h"
@@ -31,7 +33,7 @@
 #include "agent_behaviours/sensors/area2d_visibility.h"
 #include "agent_behaviours/sensors/area3d_visibility.h"
 
-// Special considerations.
+// Special considerations
 #include "agent_behaviours/considerations/boolean.h"
 #include "agent_behaviours/considerations/custom_property.h"
 
@@ -41,10 +43,11 @@
 #include "resources/considerations/consideration_group_resource.h"
 
 
-// Behaviour tree.
+// BEHAVIOUR TREE
 #include "behaviour_tree/nodes.h"
 #include "behaviour_tree/root.h"
 
+// Composites
 #include "behaviour_tree/composite_nodes.h"
 #include "behaviour_tree/random_sequence.h"
 #include "behaviour_tree/random_selector.h"
@@ -53,6 +56,7 @@
 #include "behaviour_tree/parallel.h"
 #include "behaviour_tree/score_based_picker.h"
 
+// Decorators
 #include "behaviour_tree/decorator_nodes.h"
 #include "behaviour_tree/repeater.h"
 #include "behaviour_tree/repeat_until.h"
@@ -60,17 +64,17 @@
 #include "behaviour_tree/inverter.h"
 #include "behaviour_tree/fixed_result.h"
 #include "behaviour_tree/pass_through.h"
-
-
 #include "behaviour_tree/cooldown_ticks.h"
 #include "behaviour_tree/cooldown_msec.h"
 #include "behaviour_tree/cooldown_usec.h"
+
+// Tasks
 #include "behaviour_tree/leaf.h"
 #include "behaviour_tree/run_nqs_query.h"
 #include "behaviour_tree/node_reference.h"
 #include "behaviour_tree/pass_by.h"
 
-// State trees.
+// STATE TREE
 
 //#include "state_tree/leaf.h"
 #include "state_tree/nodes.h"
@@ -78,9 +82,10 @@
 #include "state_tree/node.h"
 
 
-// Node Query System.
+// NODE QUERY SYSTEM
 #include "node_query_system/node_query_system.h"
 
+// Search spaces
 #include "node_query_system/search_spaces/nqs.h"
 #include "node_query_system/search_spaces/node_group.h"
 #include "node_query_system/search_spaces/node_children.h"
@@ -88,7 +93,9 @@
 #include "node_query_system/search_spaces/area3d.h"
 #include "node_query_system/search_spaces/area2d.h"
 
+#include "node_query_system/search_spaces/point_grid/navigation3d.h"
 
+// Search criteria
 #include "node_query_system/search_criteria/nqs.h"
 #include "node_query_system/search_criteria/custom.h"
 #include "node_query_system/search_criteria/metadata.h"
@@ -109,8 +116,6 @@
 #include "node_query_system/search_criteria/dot_product_to_position_vector3.h"
 #include "node_query_system/search_criteria/dot_product_to_position_vector2.h"
 
-#include "node_query_system/search_spaces/point_grid/navigtaion3d.h"
-#include "node_query_system/search_spaces/point_grid/navigtaion3d_rectangular.h"
 
 // Main header for UtilityAI.
 #include "utility_ai.h"
@@ -123,8 +128,10 @@
 
 using namespace godot;
 
+// Singletons
 static UtilityAINodeQuerySystem* gpNodeQuerySystem;
 static UtilityAIPerformanceMonitorSingleton* gdAIPerformanceMonitor;
+
 
 void initialize_utility_ai_module(ModuleInitializationLevel p_level) {
     if (p_level != MODULE_INITIALIZATION_LEVEL_SCENE) {
@@ -210,8 +217,7 @@ void initialize_utility_ai_module(ModuleInitializationLevel p_level) {
     ClassDB::register_class<UtilityAIArea3DSearchSpace>();
     ClassDB::register_class<UtilityAIArea2DSearchSpace>();
 
-    //ClassDB::register_class<UtilityAINavigation3DPointGridSearchSpaces>(true);
-    //ClassDB::register_class<UtilityAINavigation3DRectangularPointGridSearchSpace>();
+    ClassDB::register_class<UtilityAINavigation3DPointGridSearchSpace>();
 
     ClassDB::register_class<UtilityAINQSSearchCriteria>(true);
     ClassDB::register_class<UtilityAICustomSearchCriterion>();

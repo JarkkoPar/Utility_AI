@@ -14,6 +14,8 @@ class UtilityAINQSSearchSpaces : public UtilityAI { //NodeQuerySystem {
     GDCLASS(UtilityAINQSSearchSpaces, UtilityAI) //NodeQuerySystem)
 
 private:
+    bool                _is_run_in_debug_mode;
+
     int                 _top_n_to_find;
     unsigned int        _current_criterion_index;
     unsigned int        _current_node_index;
@@ -76,6 +78,9 @@ public:
     
     
     // Getters and setters.
+
+    void set_is_run_in_debug_mode(bool is_run_in_debug_mode);
+    bool get_is_run_in_debug_mode() const;
 
     void set_nqs_query_index(int nqs_query_index);
     int  get_nqs_query_index() const;
