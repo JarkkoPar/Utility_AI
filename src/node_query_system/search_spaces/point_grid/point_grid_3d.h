@@ -1,18 +1,18 @@
-#ifndef UtilityAINavigation3DPointGridSearchSpaces_H_INCLUDED
-#define UtilityAINavigation3DPointGridSearchSpaces_H_INCLUDED 
+#ifndef UtilityAIPointGrid3DSearchSpaces_H_INCLUDED
+#define UtilityAIPointGrid3DSearchSpaces_H_INCLUDED 
 
 #include "../nqs.h"
 #include <godot_cpp/classes/node3d.hpp>
 
 namespace godot {
 
-class UtilityAINavigation3DPointGridSearchSpace : public UtilityAINQSSearchSpaces {
-    GDCLASS(UtilityAINavigation3DPointGridSearchSpace, UtilityAINQSSearchSpaces)
+class UtilityAIPointGrid3DSearchSpace : public UtilityAINQSSearchSpaces {
+    GDCLASS(UtilityAIPointGrid3DSearchSpace, UtilityAINQSSearchSpaces)
 
     
 public:
-    UtilityAINavigation3DPointGridSearchSpace();
-    ~UtilityAINavigation3DPointGridSearchSpace();
+    UtilityAIPointGrid3DSearchSpace();
+    ~UtilityAIPointGrid3DSearchSpace();
 
     // Godot virtuals.
     void _ready();    
@@ -59,6 +59,9 @@ public:
     void set_use_owner_global_position_and_orientation( bool use_owner_global_position_and_orientation );
     bool get_use_owner_global_position_and_orientation() const;
 
+    void set_use_navigation_mesh_positions( bool use_navigation_mesh_positions );
+    bool get_use_navigation_mesh_positions() const;
+
     void set_point_grid( TypedArray<Node3D> point_grid );
     TypedArray<Node3D> get_point_grid() const;
 
@@ -70,12 +73,12 @@ public:
     void create_rectangular_point_grid();
     void create_point_grid_nodes( Node3D* template_node );
 
-    enum UtilityAINavigation3DPointGridSearchSpaceType {
+    enum UtilityAIPointGrid3DSearchSpaceType {
         RECTANGLE = 0,
         CIRCLE = 1,
     };
 
-    enum UtilityAINavigation3DPointGridSearchSpaceLatticeType {
+    enum UtilityAIPointGrid3DSearchSpaceLatticeType {
         SQUARE = 0,
         TRIANGULAR = 1,
         CENTERED_RECTANGULAR = 2,
@@ -91,10 +94,14 @@ private:
     
     bool                _use_owner_global_position_and_orientation;
 
+    bool                _use_navigation_mesh_positions;
+
 protected:
     static void _bind_methods();
 
     virtual void _initialize_search_space() override;
+    virtual bool preprocess_search_space(uint64_t time_limit_timestamp_usec) override;
+    
 
     //float               _grid_size;
     Vector3             _grid_size;

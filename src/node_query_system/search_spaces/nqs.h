@@ -21,6 +21,7 @@ private:
     unsigned int        _current_node_index;
     unsigned int        _current_result_index;
     bool                _is_search_space_fetched;
+    bool                _is_preprocessing_completed;
     bool                _is_criteria_handled;
     bool                _is_results_copied;
     bool                _is_query_still_running;
@@ -35,6 +36,7 @@ private:
     uint64_t            _current_call_runtime_usec;
     uint64_t            _average_call_runtime_usec;
     uint64_t            _search_space_fetch_time_usec;
+    uint64_t            _preprocessing_time_usec;
     uint64_t            _completed_signal_time_usec;
     unsigned int        _current_query_node_visits;
     unsigned int        _current_query_call_count;
@@ -70,8 +72,11 @@ protected:
     bool apply_criterion_with_time_budget( UtilityAINQSSearchCriteria* criterion,
                             uint64_t start_time_usec, 
                             uint64_t time_budget_usec );
-
+    virtual bool preprocess_search_space(uint64_t time_limit_timestamp_usec){_is_preprocessing_completed = true; return true;};
     void place_to_query_results_based_on_score( Node* node, double score );
+
+    unsigned int        _current_preprocessing_node_index;
+
 public:
     UtilityAINQSSearchSpaces();
     ~UtilityAINQSSearchSpaces();

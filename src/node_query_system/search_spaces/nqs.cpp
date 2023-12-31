@@ -271,7 +271,11 @@ void UtilityAINQSSearchSpaces::reset_query_variables() {
     _current_result_index = 0;
     _work_in_progress_num_added_nodes = 0;
 
+    _preprocessing_time_usec = 0;
+    _current_preprocessing_node_index = 0;
+
     _is_search_space_fetched = false; 
+    _is_preprocessing_completed = false;
     _is_criteria_handled = false;
     _is_results_copied = false;
 
@@ -292,6 +296,7 @@ void UtilityAINQSSearchSpaces::start_query() {
 
 bool UtilityAINQSSearchSpaces::execute_query(uint64_t time_budget_usec) {
     uint64_t method_start_time_usec = godot::Time::get_singleton()->get_ticks_usec();
+    uint64_t method_time_limit_timestamp_usec = method_start_time_usec + time_budget_usec;
     uint64_t time_budget_remaining_usec = time_budget_usec;
 
     if( !get_is_active() ) return true;
@@ -326,18 +331,47 @@ bool UtilityAINQSSearchSpaces::execute_query(uint64_t time_budget_usec) {
         
         _is_search_space_fetched = true;
 
-        _search_space_fetch_time_usec = (godot::Time::get_singleton()->get_ticks_usec() - method_start_time_usec);
+        uint64_t search_space_fetch_end_timestamp_usec = godot::Time::get_singleton()->get_ticks_usec();
+        _search_space_fetch_time_usec = (search_space_fetch_end_timestamp_usec - method_start_time_usec);
+        if( time_budget_usec > 0 && search_space_fetch_end_timestamp_usec >= method_time_limit_timestamp_usec ) {
+            // Update the debug counters before exiting.
+            _current_call_runtime_usec = _search_space_fetch_time_usec; 
+            _average_call_runtime_usec = _average_call_runtime_usec * 0.5 + 0.5 * _current_call_runtime_usec;
+            _current_query_runtime_usec += _current_call_runtime_usec; 
+            return false; // Search space fetching used the time budget.
+        }
+        /**
         time_budget_remaining_usec -= _search_space_fetch_time_usec;
         if( time_budget_usec > 0 && time_budget_remaining_usec <= 0) {
             // Update the debug counters before exiting.
-            _current_call_runtime_usec = _search_space_fetch_time_usec; //(godot::Time::get_singleton()->get_ticks_usec() - method_start_time_usec);
+            _current_call_runtime_usec = _search_space_fetch_time_usec; 
             _average_call_runtime_usec = _average_call_runtime_usec * 0.5 + 0.5 * _current_call_runtime_usec;
             _current_query_runtime_usec += _current_call_runtime_usec; 
             
             return false; // Search space fetching used the time budget.
         }
+        /**/
     }//endif is searchspace fetched
 
+    // Do any preprocessing that's needed.
+    if( !_is_preprocessing_completed ) {
+        uint64_t preprocessing_start_timestamp_usec = godot::Time::get_singleton()->get_ticks_usec();
+        _is_preprocessing_completed = preprocess_search_space(method_time_limit_timestamp_usec);
+        uint64_t preprocessing_end_timestamp_usec = godot::Time::get_singleton()->get_ticks_usec();
+        _preprocessing_time_usec += (preprocessing_end_timestamp_usec - preprocessing_start_timestamp_usec);
+        time_budget_remaining_usec -= _preprocessing_time_usec;
+        //if( time_budget_usec > 0 && time_budget_remaining_usec <= 0) {
+        if( time_budget_usec > 0 && preprocessing_end_timestamp_usec >= method_time_limit_timestamp_usec ) {
+            // Update the debug counters before exiting.
+            _current_call_runtime_usec = method_start_time_usec - preprocessing_end_timestamp_usec;//godot::Time::get_singleton()->get_ticks_usec(); 
+            _average_call_runtime_usec = _average_call_runtime_usec * 0.5 + 0.5 * _current_call_runtime_usec;
+            _current_query_runtime_usec += _current_call_runtime_usec; 
+            
+            return false; // Preprocessing used the time budget.
+        }
+    }
+
+    // Handle the criteria.
     if( !_is_criteria_handled ) {
         while( _current_criterion_index < get_child_count() ) {
             UtilityAINQSSearchCriteria* criterion = godot::Object::cast_to<UtilityAINQSSearchCriteria>(get_child(_current_criterion_index));
@@ -353,6 +387,7 @@ bool UtilityAINQSSearchSpaces::execute_query(uint64_t time_budget_usec) {
                                                                 method_start_time_usec,
                                                                 time_budget_remaining_usec );
             if( !is_criterion_complete) {
+                // Note: the runtime is already updated in the apply_criterion_with_time_budget() method.
                 return false; // The criterion did not complete, so it timed out.
             }
             ++_current_criterion_index;
@@ -427,13 +462,6 @@ bool UtilityAINQSSearchSpaces::apply_criterion_with_time_budget( UtilityAINQSSea
                 _average_call_runtime_usec = _average_call_runtime_usec * 0.5 + 0.5 * _current_call_runtime_usec;
                 return false;
             }//endif time budget reached.
-            /*_current_call_runtime_usec = godot::Time::get_singleton()->get_ticks_usec() - start_time_usec;
-            if( _current_call_runtime_usec >= time_budget_usec ) {
-                _current_query_runtime_usec += _current_call_runtime_usec;
-                _average_call_runtime_usec = _average_call_runtime_usec * 0.5 + 0.5 * _current_call_runtime_usec;
-                return false; // Still running
-            } // endif timebudget used up
-            /**/
         }//endif timebudget is applied
 
         Node* node = godot::Object::cast_to<Node>((*_ptr_current_search_space)[_current_node_index]);
@@ -459,16 +487,7 @@ bool UtilityAINQSSearchSpaces::apply_criterion_with_time_budget( UtilityAINQSSea
 
         // Move to the next node.
         ++_current_node_index;
-        /* if( time_budget_usec > 0 ) {
-            _current_call_runtime_usec = godot::Time::get_singleton()->get_ticks_usec() - start_time_usec;
-            if( _current_call_runtime_usec >= time_budget_usec ) {
-                _current_query_runtime_usec += _current_call_runtime_usec;
-                _average_call_runtime_usec = _average_call_runtime_usec * 0.5 + 0.5 * _current_call_runtime_usec;
-                return false; // Still running
-            } // endif timebudget used up
-        }//endif timebudget is applied
-        /**/
-    }
+    }//endwhile nodes
 
     TypedArray<Node>* temparray = _ptr_current_search_space;
     PackedFloat64Array* tempscores = _ptr_current_scores;
