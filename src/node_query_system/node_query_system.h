@@ -24,6 +24,9 @@ private:
     
     int _current_high_priority_query_index;
     int _current_regular_query_index;
+
+    int      _high_priority_query_per_frame_execute_query_time_budget_usec;
+    int      _regular_query_per_frame_execute_query_time_budget_usec;
     uint64_t _post_query_time_budget_per_frame;
     uint64_t _run_queries_time_budget_per_frame;
     uint64_t _run_queries_time_budget_per_frame_high_priority_queries;
@@ -55,6 +58,12 @@ public:
 
     void set_time_allocation_pct_to_high_priority_queries( float time_allocation_pct_to_high_priority_queries );
     float get_time_allocation_pct_to_high_priority_queries() const;
+
+    void set_high_priority_query_per_frame_execute_query_time_budget_usec( int high_priority_query_per_frame_execute_query_time_budget_usec );
+    int  get_high_priority_query_per_frame_execute_query_time_budget_usec() const;
+
+    void set_regular_query_per_frame_execute_query_time_budget_usec( int regular_query_per_frame_execute_query_time_budget_usec );
+    int  get_regular_query_per_frame_execute_query_time_budget_usec() const;
 
     int  get_run_queries_time_elapsed_usec() const;
     int  get_post_queries_time_elapsed_usec() const;

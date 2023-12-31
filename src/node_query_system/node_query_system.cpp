@@ -30,6 +30,9 @@ UtilityAINodeQuerySystem::UtilityAINodeQuerySystem() {
 
     _num_active_high_priority_queries = 0;
     _num_active_regular_priority_queries = 0;
+
+    _high_priority_query_per_frame_execute_query_time_budget_usec = 20;
+    _regular_query_per_frame_execute_query_time_budget_usec = 10;
 }
 
 
@@ -38,13 +41,21 @@ UtilityAINodeQuerySystem::~UtilityAINodeQuerySystem() {
 }
 
 void UtilityAINodeQuerySystem::_bind_methods() {
-    ClassDB::bind_method(D_METHOD("set_run_queries_time_budget_per_frame", "run_queries_time_budget_per_frame"), &UtilityAINodeQuerySystem::set_run_queries_time_budget_per_frame);
+    ClassDB::bind_method(D_METHOD("set_run_queries_time_budget_per_frame", "run_queries_time_budget_per_frame_usec"), &UtilityAINodeQuerySystem::set_run_queries_time_budget_per_frame);
     ClassDB::bind_method(D_METHOD("get_run_queries_time_budget_per_frame"), &UtilityAINodeQuerySystem::get_run_queries_time_budget_per_frame);
-    ADD_PROPERTY(PropertyInfo(Variant::INT, "run_queries_time_budget_per_frame", PROPERTY_HINT_RANGE, "1,10000,or_greater"), "set_run_queries_time_budget_per_frame","get_run_queries_time_budget_per_frame");
+    ADD_PROPERTY(PropertyInfo(Variant::INT, "run_queries_time_budget_per_frame_usec", PROPERTY_HINT_RANGE, "1,10000,or_greater"), "set_run_queries_time_budget_per_frame","get_run_queries_time_budget_per_frame");
 
     //ClassDB::bind_method(D_METHOD("set_post_query_time_budget_per_frame", "post_query_time_budget_per_frame"), &UtilityAINodeQuerySystem::set_post_query_time_budget_per_frame);
     //ClassDB::bind_method(D_METHOD("get_post_query_time_budget_per_frame"), &UtilityAINodeQuerySystem::get_post_query_time_budget_per_frame);
     //ADD_PROPERTY(PropertyInfo(Variant::INT, "post_query_time_budget_per_frame", PROPERTY_HINT_RANGE, "1,10000,or_greater"), "set_post_query_time_budget_per_frame","get_post_query_time_budget_per_frame");
+
+    ClassDB::bind_method(D_METHOD("set_high_priority_query_per_frame_execute_query_time_budget_usec", "high_priority_query_per_frame_execute_query_time_budget_usec"), &UtilityAINodeQuerySystem::set_high_priority_query_per_frame_execute_query_time_budget_usec);
+    ClassDB::bind_method(D_METHOD("get_high_priority_query_per_frame_execute_query_time_budget_usec"), &UtilityAINodeQuerySystem::get_high_priority_query_per_frame_execute_query_time_budget_usec);
+    ADD_PROPERTY(PropertyInfo(Variant::INT, "high_priority_query_per_frame_execute_query_time_budget_usec", PROPERTY_HINT_RANGE, "1,100,or_greater"), "set_high_priority_query_per_frame_execute_query_time_budget_usec","get_high_priority_query_per_frame_execute_query_time_budget_usec");
+
+    ClassDB::bind_method(D_METHOD("set_regular_query_per_frame_execute_query_time_budget_usec", "regular_query_per_frame_execute_query_time_budget_usec"), &UtilityAINodeQuerySystem::set_regular_query_per_frame_execute_query_time_budget_usec);
+    ClassDB::bind_method(D_METHOD("get_regular_query_per_frame_execute_query_time_budget_usec"), &UtilityAINodeQuerySystem::get_regular_query_per_frame_execute_query_time_budget_usec);
+    ADD_PROPERTY(PropertyInfo(Variant::INT, "regular_query_per_frame_execute_query_time_budget_usec", PROPERTY_HINT_RANGE, "1,100,or_greater"), "set_regular_query_per_frame_execute_query_time_budget_usec","get_regular_query_per_frame_execute_query_time_budget_usec");
 
     ClassDB::bind_method(D_METHOD("set_time_allocation_pct_to_high_priority_queries", "time_allocation_pct_to_high_priority_queries"), &UtilityAINodeQuerySystem::set_time_allocation_pct_to_high_priority_queries);
     ClassDB::bind_method(D_METHOD("get_time_allocation_pct_to_high_priority_queries"), &UtilityAINodeQuerySystem::get_time_allocation_pct_to_high_priority_queries);
@@ -101,6 +112,23 @@ void UtilityAINodeQuerySystem::set_time_allocation_pct_to_high_priority_queries(
 float UtilityAINodeQuerySystem::get_time_allocation_pct_to_high_priority_queries() const {
     return _time_allocation_pct_to_high_priority_queries;
 }
+
+void UtilityAINodeQuerySystem::set_high_priority_query_per_frame_execute_query_time_budget_usec( int high_priority_query_per_frame_execute_query_time_budget_usec ) {
+    _high_priority_query_per_frame_execute_query_time_budget_usec = high_priority_query_per_frame_execute_query_time_budget_usec;
+}
+
+int  UtilityAINodeQuerySystem::get_high_priority_query_per_frame_execute_query_time_budget_usec() const {
+    return _high_priority_query_per_frame_execute_query_time_budget_usec;
+}
+
+void UtilityAINodeQuerySystem::set_regular_query_per_frame_execute_query_time_budget_usec( int regular_query_per_frame_execute_query_time_budget_usec ) {
+    _regular_query_per_frame_execute_query_time_budget_usec = regular_query_per_frame_execute_query_time_budget_usec;
+}
+
+int  UtilityAINodeQuerySystem::get_regular_query_per_frame_execute_query_time_budget_usec() const {
+    return _regular_query_per_frame_execute_query_time_budget_usec;
+}
+
 
 int  UtilityAINodeQuerySystem::get_run_queries_time_elapsed_usec() const {
     return _run_queries_time_elapsed_usec;
@@ -160,7 +188,7 @@ void UtilityAINodeQuerySystem::run_queries() {
 
             UtilityAINQSSearchSpaces* current_query = godot::Object::cast_to<UtilityAINQSSearchSpaces>(_high_priority_queries[_current_high_priority_query_index]);
             if( current_query != nullptr ) {
-                bool is_completed = current_query->execute_query(10);
+                bool is_completed = current_query->execute_query(_high_priority_query_per_frame_execute_query_time_budget_usec);
                 if( is_completed ) {
                     //queries_to_delete.push_back(_current_high_priority_query_index);
                     _high_priority_queries[_current_high_priority_query_index] = nullptr;
@@ -208,7 +236,7 @@ void UtilityAINodeQuerySystem::run_queries() {
 
             UtilityAINQSSearchSpaces* current_query = godot::Object::cast_to<UtilityAINQSSearchSpaces>(_regular_queries[_current_regular_query_index]);
             if( current_query != nullptr ) {
-                bool is_completed = current_query->execute_query(10);
+                bool is_completed = current_query->execute_query(_regular_query_per_frame_execute_query_time_budget_usec);
                 if( is_completed ) {
                     //queries_to_delete.push_back(_current_regular_query_index);
                     _available_regular_query_indexes.push_back(_current_regular_query_index);
