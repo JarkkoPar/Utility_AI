@@ -12,7 +12,7 @@ void UtilityAIBTRunNQSQuery::_bind_methods() {
 
     ClassDB::bind_method(D_METHOD("set_nqs_search_space", "nqs_search_space"), &UtilityAIBTRunNQSQuery::set_nqs_search_space);
     ClassDB::bind_method(D_METHOD("get_nqs_search_space"), &UtilityAIBTRunNQSQuery::get_nqs_search_space);
-    ADD_PROPERTY(PropertyInfo(Variant::OBJECT, "nqs_search_space_node_path", PROPERTY_HINT_NODE_TYPE, "UtilityAINQSSearchSpaces"), "set_nqs_search_space","get_nqs_search_space");
+    ADD_PROPERTY(PropertyInfo(Variant::OBJECT, "nqs_search_space", PROPERTY_HINT_NODE_TYPE, "UtilityAINQSSearchSpaces"), "set_nqs_search_space","get_nqs_search_space");
 
     ClassDB::bind_method(D_METHOD("set_top_n_to_find", "top_n_to_find"), &UtilityAIBTRunNQSQuery::set_top_n_to_find);
     ClassDB::bind_method(D_METHOD("get_top_n_to_find"), &UtilityAIBTRunNQSQuery::get_top_n_to_find);
