@@ -94,6 +94,7 @@
 #include "node_query_system/search_spaces/area2d.h"
 
 #include "node_query_system/search_spaces/point_grid/point_grid_3d.h"
+#include "node_query_system/search_spaces/point_grid/point_grid_2d.h"
 
 // Search criteria
 #include "node_query_system/search_criteria/nqs.h"
@@ -218,6 +219,7 @@ void initialize_utility_ai_module(ModuleInitializationLevel p_level) {
     ClassDB::register_class<UtilityAIArea2DSearchSpace>();
 
     ClassDB::register_class<UtilityAIPointGrid3DSearchSpace>();
+    ClassDB::register_class<UtilityAIPointGrid2DSearchSpace>();
 
     ClassDB::register_class<UtilityAINQSSearchCriteria>(true);
     ClassDB::register_class<UtilityAICustomSearchCriterion>();

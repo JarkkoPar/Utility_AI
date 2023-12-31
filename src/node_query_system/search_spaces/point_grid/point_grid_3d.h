@@ -31,14 +31,8 @@ public:
     void set_point_grid_base_spacing_vector3( Vector3 grid_base_spacing_vector );
     Vector3 get_point_grid_base_spacing_vector3() const;
 
-    void set_show_debug_info( bool show_debug_info );
-    bool get_show_debug_info() const;
-
     void set_navigation_map_rid( RID navigation_map_rid );
     RID  get_navigation_map_rid() const;
-
-    void set_from_vector3( Vector3 from_vector );
-    Vector3 get_from_vector3() const;
 
     void set_offset_vector3( Vector3 offset );
     Vector3 get_offset_vector3() const;
@@ -46,18 +40,11 @@ public:
     void set_point_grid_parent_node( Node3D* point_grid_parent_node );
     Node3D* get_point_grid_parent_node() const;
 
-    void set_direction_vector3( Vector3 direction_vector );
-    Vector3 get_direction_vector3() const;
-
     void set_grid_spacing( Vector3 grid_spacing );
     Vector3 get_grid_spacing() const;
 
     void set_grid_size( Vector3 grid_size );
     Vector3 get_grid_size() const;
-
-    
-    void set_use_owner_global_position_and_orientation( bool use_owner_global_position_and_orientation );
-    bool get_use_owner_global_position_and_orientation() const;
 
     void set_use_navigation_mesh_positions( bool use_navigation_mesh_positions );
     bool get_use_navigation_mesh_positions() const;
@@ -88,12 +75,7 @@ public:
 
 private:
     RID                 _navigation_map_rid;
-    Vector3             _from_vector;
-    Vector3             _direction_vector;
     Vector3             _offset_vector;
-    
-    bool                _use_owner_global_position_and_orientation;
-
     bool                _use_navigation_mesh_positions;
 
 protected:
@@ -102,8 +84,6 @@ protected:
     virtual void _initialize_search_space() override;
     virtual bool preprocess_search_space(uint64_t time_limit_timestamp_usec) override;
     
-
-    //float               _grid_size;
     Vector3             _grid_size;
     Vector3             _point_grid_base_spacing_vector;
     int                 _point_grid_lattice_type;

@@ -25,6 +25,7 @@ UtilityAINQSSearchSpaces::UtilityAINQSSearchSpaces() {
     _average_call_runtime_usec = 0;
     _current_call_runtime_usec = 0;
     _search_space_fetch_time_usec = 0;
+    _preprocessing_time_usec = 0;
     _completed_signal_time_usec = 0;
     _is_run_in_debug_mode = false;
 }
@@ -332,7 +333,7 @@ bool UtilityAINQSSearchSpaces::execute_query(uint64_t time_budget_usec) {
         _is_search_space_fetched = true;
 
         uint64_t search_space_fetch_end_timestamp_usec = godot::Time::get_singleton()->get_ticks_usec();
-        _search_space_fetch_time_usec = (search_space_fetch_end_timestamp_usec - method_start_time_usec);
+        _search_space_fetch_time_usec = search_space_fetch_end_timestamp_usec - method_start_time_usec;
         if( time_budget_usec > 0 && search_space_fetch_end_timestamp_usec >= method_time_limit_timestamp_usec ) {
             // Update the debug counters before exiting.
             _current_call_runtime_usec = _search_space_fetch_time_usec; 
@@ -340,6 +341,8 @@ bool UtilityAINQSSearchSpaces::execute_query(uint64_t time_budget_usec) {
             _current_query_runtime_usec += _current_call_runtime_usec; 
             return false; // Search space fetching used the time budget.
         }
+        time_budget_remaining_usec -= _search_space_fetch_time_usec;
+        
         /**
         time_budget_remaining_usec -= _search_space_fetch_time_usec;
         if( time_budget_usec > 0 && time_budget_remaining_usec <= 0) {
@@ -363,7 +366,7 @@ bool UtilityAINQSSearchSpaces::execute_query(uint64_t time_budget_usec) {
         //if( time_budget_usec > 0 && time_budget_remaining_usec <= 0) {
         if( time_budget_usec > 0 && preprocessing_end_timestamp_usec >= method_time_limit_timestamp_usec ) {
             // Update the debug counters before exiting.
-            _current_call_runtime_usec = method_start_time_usec - preprocessing_end_timestamp_usec;//godot::Time::get_singleton()->get_ticks_usec(); 
+            _current_call_runtime_usec = preprocessing_end_timestamp_usec - method_start_time_usec;//godot::Time::get_singleton()->get_ticks_usec(); 
             _average_call_runtime_usec = _average_call_runtime_usec * 0.5 + 0.5 * _current_call_runtime_usec;
             _current_query_runtime_usec += _current_call_runtime_usec; 
             
@@ -398,13 +401,13 @@ bool UtilityAINQSSearchSpaces::execute_query(uint64_t time_budget_usec) {
     }//endif is criteria handled
     uint64_t copy_start_time_usec = godot::Time::get_singleton()->get_ticks_usec();
     //time_budget_remaining_usec = time_budget_usec - (copy_start_time_usec - method_start_time_usec);
-    uint64_t end_time_usec = copy_start_time_usec + time_budget_usec - (copy_start_time_usec - method_start_time_usec);
+    uint64_t copy_end_time_usec = copy_start_time_usec + time_budget_usec - (copy_start_time_usec - method_start_time_usec);
 
     // Put all the remaining scores to the search results in order.
     if( !_is_results_copied ) {
         while( _current_result_index < _num_search_space_nodes ) {
             uint64_t current_time_usec = godot::Time::get_singleton()->get_ticks_usec();
-            if( current_time_usec >= end_time_usec) {
+            if( current_time_usec >= copy_end_time_usec) {
                 _current_call_runtime_usec = (current_time_usec - method_start_time_usec);
                 _average_call_runtime_usec = _average_call_runtime_usec * 0.5 + 0.5 * _current_call_runtime_usec;
                 _current_query_runtime_usec += _current_call_runtime_usec; 
