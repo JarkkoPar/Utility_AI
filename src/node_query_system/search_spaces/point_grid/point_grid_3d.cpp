@@ -14,7 +14,7 @@ UtilityAIPointGrid3DSearchSpace::UtilityAIPointGrid3DSearchSpace() {
     _grid_size = Vector3(15.0f, 0.0f, 15.0f);
     _point_grid_parent_node = nullptr; 
     _use_navigation_mesh_positions = true;
-    _navigation_map_rid = godot::RID::RID();
+    _navigation_map_rid = RID();
     _point_grid_base_spacing_vector = Vector3(2.0f, 1.0f, 1.0f);
     set_point_grid_lattice_type(UtilityAIPointGrid3DSearchSpaceLatticeType::SQUARE);
     _point_grid_type = UtilityAIPointGrid3DSearchSpaceType::RECTANGLE;
