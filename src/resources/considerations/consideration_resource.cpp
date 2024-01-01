@@ -53,13 +53,18 @@ Ref<Curve> UtilityAIConsiderationResource::get_activation_curve() const {
 // Handling methods.
 
 float UtilityAIConsiderationResource::evaluate(bool& has_vetoed, Node* parent_node) { 
-    if( _input_sensor == nullptr ) {
-        _input_sensor = godot::Object::cast_to<UtilityAISensors>(parent_node->get_node_or_null(_input_sensor_nodepath));
+    // An ugly fix to sensor data fetching, but should work until a better one is found.
+    UtilityAISensors* input_sensor = nullptr;
+    if( !_input_sensor_nodepath.is_empty() ) {
+        input_sensor = parent_node->get_node<UtilityAISensors>(_input_sensor_nodepath);
     }
+    //if( _input_sensor == nullptr ) {
+    // godot::Object::cast_to<UtilityAISensors>(parent_node->get_node_or_null(_input_sensor_nodepath));
+    //}
 
     float input_value = 0.0;
-    if( _input_sensor != nullptr ) {
-        input_value = _input_sensor->get_sensor_value();
+    if( input_sensor != nullptr ) {
+        input_value = input_sensor->get_sensor_value();
     }
 
     float score = 0.0;
