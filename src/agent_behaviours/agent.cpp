@@ -110,7 +110,11 @@ void UtilityAIAgent::evaluate_options(float delta) {
     if( _current_behaviour_node != nullptr ) {
         // Respect the thinking delay if we have a current behaviour.
         _thinking_delay_in_seconds_current_timer -= delta;
-        if( _thinking_delay_in_seconds_current_timer > 0.0 ) return;
+        if( _thinking_delay_in_seconds_current_timer > 0.0 ) {
+            _total_evaluate_options_usec = godot::Time::get_singleton()->get_ticks_usec() - method_start_time_usec;
+            UtilityAIPerformanceMonitorSingleton::get_singleton()->increment_total_time_elapsed_ai_agents_usec(_total_evaluate_options_usec);
+            return;
+        } 
         _thinking_delay_in_seconds_current_timer = _thinking_delay_in_seconds;
 
         // If the current behaviour cannot be interrupted, don't evaluate.
@@ -216,7 +220,11 @@ void UtilityAIAgent::evaluate_options(float delta) {
     new_behaviour = godot::Object::cast_to<UtilityAIBehaviour>(_top_scoring_behaviours_nodes[chosen_behaviour_index]);
     ERR_FAIL_COND_MSG( new_behaviour == nullptr, "UtilityAIAgent::evaluate_options(): Error, new_behaviour is nullptr.");
 
-    if( new_behaviour == _current_behaviour_node ) return; // No change.
+    if( new_behaviour == _current_behaviour_node ){
+        _total_evaluate_options_usec = godot::Time::get_singleton()->get_ticks_usec() - method_start_time_usec;
+        UtilityAIPerformanceMonitorSingleton::get_singleton()->increment_total_time_elapsed_ai_agents_usec(_total_evaluate_options_usec);
+        return; // No change.      
+    } 
     if( _current_action_node != nullptr ) {
         (godot::Object::cast_to<UtilityAIActions>(_current_action_node))->end_action();   
         _current_action_node = nullptr;
