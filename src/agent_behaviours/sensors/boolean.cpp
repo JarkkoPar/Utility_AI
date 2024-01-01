@@ -35,6 +35,7 @@ float UtilityAIBooleanSensor::evaluate_sensor_value() {
 // Getters and Setters.
 
 void UtilityAIBooleanSensor::set_boolean_value( bool boolean_value ) {
+    _has_sensor_value_changed = (_boolean_value != boolean_value);
     _boolean_value = boolean_value;
 }
 

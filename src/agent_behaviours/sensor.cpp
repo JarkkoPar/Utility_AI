@@ -28,6 +28,7 @@ UtilityAISensor::~UtilityAISensor() {
 // Handling functions.
 
 float UtilityAISensor::evaluate_sensor_value() {
+    _has_sensor_value_changed = false;
     return get_sensor_value();
 }
 

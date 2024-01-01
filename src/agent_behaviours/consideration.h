@@ -19,8 +19,9 @@ protected:
 
     UtilityAISensors* _input_sensor;
     Ref<Curve>        _activation_curve;
-    float            _activation_input_value;
+    float             _activation_input_value;
     bool              _has_custom_evaluation_method;
+    bool              _has_activation_input_changed;
 
     virtual void _evaluate_consideration();
 public:

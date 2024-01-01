@@ -195,6 +195,7 @@ void UtilityAIAgent::evaluate_options(float delta) {
         }
         //WARN_PRINT("UtilityAIAgent::evaluate_options(): Error, agent could not find valid behaviours!");
         _total_evaluate_options_usec = godot::Time::get_singleton()->get_ticks_usec() - method_start_time_usec;
+        UtilityAIPerformanceMonitorSingleton::get_singleton()->increment_total_time_elapsed_ai_agents_usec(_total_evaluate_options_usec);
         return; // No behaviour chosen.
     }
 

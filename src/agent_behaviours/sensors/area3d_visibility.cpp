@@ -271,6 +271,7 @@ void UtilityAIArea3DVisibilitySensor::on_area_entered(Area3D* area ) {
     if( _intersecting_areas.has(area) ) {
         return;
     }   
+    _has_sensor_value_changed = true;
     _intersecting_areas.push_back(area);
 }
 
@@ -287,6 +288,7 @@ void UtilityAIArea3DVisibilitySensor::on_area_exited(Area3D* area ) {
     if( index < 0 ) {
         return;
     }
+    _has_sensor_value_changed = true;
     _intersecting_areas.remove_at(index);
 }
 
@@ -296,6 +298,7 @@ void UtilityAIArea3DVisibilitySensor::on_area_exited(Area3D* area ) {
 // Configuration values. 
 
 void UtilityAIArea3DVisibilitySensor::set_use_owner_global_position( bool use_owner_global_position ) {
+    _has_sensor_value_changed = _has_sensor_value_changed || ( _use_owner_global_position != use_owner_global_position );
     _use_owner_global_position = use_owner_global_position;
 }
 
@@ -306,6 +309,7 @@ bool UtilityAIArea3DVisibilitySensor::get_use_owner_global_position() const {
 
 
 void UtilityAIArea3DVisibilitySensor::set_from_vector3( Vector3 from ) {
+    _has_sensor_value_changed = _has_sensor_value_changed || ( _from_vector != from );
     _from_vector = from;
 }
 
@@ -316,6 +320,7 @@ Vector3 UtilityAIArea3DVisibilitySensor::get_from_vector3() const {
 
 
 void UtilityAIArea3DVisibilitySensor::set_offset_vector3( Vector3 offset ) {
+    _has_sensor_value_changed = _has_sensor_value_changed || ( _offset_vector != offset );
     _offset_vector = offset;
 }
 
@@ -326,6 +331,7 @@ Vector3 UtilityAIArea3DVisibilitySensor::get_offset_vector3() const {
 
 
 void UtilityAIArea3DVisibilitySensor::set_visibility_volume( Area3D* visibility_volume ) {
+    _has_sensor_value_changed = _has_sensor_value_changed || ( _visibility_volume != visibility_volume );
     _visibility_volume = visibility_volume;
 }
 
@@ -336,6 +342,7 @@ Area3D* UtilityAIArea3DVisibilitySensor::get_visibility_volume() const {
 
 
 void UtilityAIArea3DVisibilitySensor::set_do_occlusion_test( bool do_occlusion_test ) {
+    _has_sensor_value_changed = _has_sensor_value_changed || ( _do_occlusion_test != do_occlusion_test );
     _do_occlusion_test = do_occlusion_test;
 }
 
@@ -346,6 +353,7 @@ bool UtilityAIArea3DVisibilitySensor::get_do_occlusion_test() const {
 
 
 void UtilityAIArea3DVisibilitySensor::set_collision_mask( uint32_t collision_mask) {
+    _has_sensor_value_changed = _has_sensor_value_changed || ( _collision_mask != collision_mask );
     _collision_mask = collision_mask;
 }
 
@@ -366,9 +374,10 @@ uint32_t UtilityAIArea3DVisibilitySensor::get_entity_mask() const {
 /**/
 
 void UtilityAIArea3DVisibilitySensor::set_max_expected_entities_found( int max_expected_entities_found ) {
-    if( _max_expected_entities_found <= 0 ) {
+    if( max_expected_entities_found <= 0 ) {
         return;
     }
+    _has_sensor_value_changed = _has_sensor_value_changed || ( _max_expected_entities_found != max_expected_entities_found );
     _max_expected_entities_found = max_expected_entities_found;
     _one_over_max_expected_entities_found = 1.0 / ((float)_max_expected_entities_found);
 }
@@ -380,6 +389,7 @@ int  UtilityAIArea3DVisibilitySensor::get_max_expected_entities_found() const {
 
 
 void UtilityAIArea3DVisibilitySensor::set_occlusion_test_exclusion_list( TypedArray<RID> occlusion_test_exclusion_list ) {
+    _has_sensor_value_changed = _has_sensor_value_changed || ( _occlusion_test_exclusion_list != occlusion_test_exclusion_list );
     _occlusion_test_exclusion_list = occlusion_test_exclusion_list;
 }
 
@@ -392,6 +402,7 @@ TypedArray<RID> UtilityAIArea3DVisibilitySensor::get_occlusion_test_exclusion_li
 // Debugging / current values.
 
 void UtilityAIArea3DVisibilitySensor::set_num_entities_found( int num_entities_found ) {
+    _has_sensor_value_changed = _has_sensor_value_changed || ( _num_entities_found != num_entities_found );
     _num_entities_found = num_entities_found;
 }
 
@@ -402,6 +413,7 @@ int  UtilityAIArea3DVisibilitySensor::get_num_entities_found() const {
 
 
 void UtilityAIArea3DVisibilitySensor::set_closest_intersecting_area_index( int closest_intersecting_area_index ) {
+    _has_sensor_value_changed = _has_sensor_value_changed || ( _closest_intersecting_area_index != closest_intersecting_area_index );
     _closest_intersecting_area_index = closest_intersecting_area_index;
 }
 
@@ -412,6 +424,7 @@ int  UtilityAIArea3DVisibilitySensor::get_closest_intersecting_area_index() cons
 
 
 void UtilityAIArea3DVisibilitySensor::set_closest_unoccluded_area_index( int closest_unoccluded_area_index ) {
+    _has_sensor_value_changed = _has_sensor_value_changed || ( _closest_unoccluded_area_index != closest_unoccluded_area_index );
     _closest_unoccluded_area_index = closest_unoccluded_area_index;
 }
 
@@ -422,6 +435,7 @@ int  UtilityAIArea3DVisibilitySensor::get_closest_unoccluded_area_index() const 
 
 
 void UtilityAIArea3DVisibilitySensor::set_intersecting_areas( TypedArray<Area3D> intersecting_areas ) {
+    _has_sensor_value_changed = _has_sensor_value_changed || (_intersecting_areas != intersecting_areas);
     _intersecting_areas = intersecting_areas;
 }
 
@@ -432,6 +446,7 @@ TypedArray<Area3D> UtilityAIArea3DVisibilitySensor::get_intersecting_areas() con
 
 
 void UtilityAIArea3DVisibilitySensor::set_unoccluded_areas( TypedArray<Area3D> unoccluded_areas ) {
+    _has_sensor_value_changed = _has_sensor_value_changed || (_unoccluded_areas != unoccluded_areas);
     _unoccluded_areas = unoccluded_areas;
 }
 
@@ -442,6 +457,7 @@ TypedArray<Area3D> UtilityAIArea3DVisibilitySensor::get_unoccluded_areas() const
 
 
 void UtilityAIArea3DVisibilitySensor::set_unoccluded_bodies( TypedArray<Node3D> unoccluded_bodies ) {
+    _has_sensor_value_changed = _has_sensor_value_changed || (_unoccluded_bodies != unoccluded_bodies);
     _unoccluded_bodies = unoccluded_bodies;
 }
 
@@ -452,6 +468,7 @@ TypedArray<Node3D> UtilityAIArea3DVisibilitySensor::get_unoccluded_bodies() cons
 
 
 void UtilityAIArea3DVisibilitySensor::set_squared_distances_to_intersecting_areas( TypedArray<float> squared_distances_to_intersecting_areas ) {
+    _has_sensor_value_changed = _has_sensor_value_changed || (_squared_distances_to_intersecting_areas != squared_distances_to_intersecting_areas);
     _squared_distances_to_intersecting_areas = squared_distances_to_intersecting_areas;
 }
 
@@ -462,6 +479,7 @@ TypedArray<float> UtilityAIArea3DVisibilitySensor::get_squared_distances_to_inte
 
 
 void UtilityAIArea3DVisibilitySensor::set_squared_distances_to_unoccluded_areas( TypedArray<float> squared_distances_to_unoccluded_areas ) {
+    _has_sensor_value_changed = _has_sensor_value_changed || (_squared_distances_to_unoccluded_areas != squared_distances_to_unoccluded_areas);
     _squared_distances_to_unoccluded_areas = squared_distances_to_unoccluded_areas;
 }
 

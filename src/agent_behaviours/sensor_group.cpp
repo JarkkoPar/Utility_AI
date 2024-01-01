@@ -80,6 +80,7 @@ float UtilityAISensorGroup::evaluate_sensor_value() {
                     } else {
                         sensor_value = child_sensor_value;
                     }
+
                     set_sensor_value(sensor_value);
                     return sensor_value;
                     

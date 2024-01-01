@@ -30,9 +30,10 @@ void UtilityAIConsideration::_bind_methods() {
 // Constructor and destructor.
 
 UtilityAIConsideration::UtilityAIConsideration() {
-    _activation_input_value = 0.0;
+    _activation_input_value = 0.0001f;
     _input_sensor = nullptr;
     _has_custom_evaluation_method = false;
+    _has_activation_input_changed = true;
     
 }
 
@@ -45,6 +46,7 @@ UtilityAIConsideration::~UtilityAIConsideration() {
 // Getters and Setters.
 
 void UtilityAIConsideration::set_input_sensor( UtilityAISensors* input_sensor ) {
+    _has_activation_input_changed = _has_activation_input_changed || (_input_sensor != input_sensor);
     _input_sensor = input_sensor;
 }
 
@@ -54,6 +56,7 @@ UtilityAISensors* UtilityAIConsideration::get_input_sensor() const {
 
 
 void UtilityAIConsideration::set_activation_curve( Ref<Curve> activation_curve ) {
+    _has_activation_input_changed = _has_activation_input_changed || (_activation_curve != activation_curve);
     _activation_curve = activation_curve;
 }
 
@@ -63,6 +66,7 @@ Ref<Curve> UtilityAIConsideration::get_activation_curve() const {
 
 
 void UtilityAIConsideration::set_activation_input_value( float activation_input_value ) {
+    _has_activation_input_changed = _has_activation_input_changed || (_activation_input_value != activation_input_value);
     _activation_input_value = activation_input_value;
 }
 
@@ -91,10 +95,24 @@ float UtilityAIConsideration::evaluate() {
     if( get_has_vetoed() ) return 0.0;
 
     if( _input_sensor != nullptr ) {
-        _activation_input_value = _input_sensor->get_sensor_value();
+        // If there's no change to the sensor input value, just return the
+        // earlier result.
+        //if( !_input_sensor->get_has_sensor_value_changed() ) {
+        //    return _score;
+        //}
+        float input_value = _input_sensor->get_sensor_value();
+        if( input_value != _activation_input_value || _score == 0.0f ) {
+            _activation_input_value = input_value;
+            _has_activation_input_changed = true;
+        }
     }
-    _score = 0.0;
+
+    if( !_has_activation_input_changed ) {
+        return _score;
+    }
+    _score = 0.0f;
     _evaluate_consideration();
+    _has_activation_input_changed = false;
     return _score;
 }
 

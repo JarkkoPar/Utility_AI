@@ -22,7 +22,8 @@ void UtilityAISensors::_bind_methods() {
 // Constructor and destructor.
 
 UtilityAISensors::UtilityAISensors() {
-    _sensor_value = 0.0;
+    _sensor_value = 0.0001f; // We start with a miniscule non-zero value.
+    _has_sensor_value_changed = true;
     //_use_absolute_value = true;
 }
 
@@ -49,12 +50,14 @@ void UtilityAISensors::initialize_sensor() {
 }
 
 float UtilityAISensors::evaluate_sensor_value() {
+    _has_sensor_value_changed = false;
     return 0.0;
 }
 
 // Getters and Setters.
 
 void UtilityAISensors::set_sensor_value( float sensor_value) {
+    _has_sensor_value_changed = (_sensor_value != sensor_value);
     _sensor_value = sensor_value;
 }
 

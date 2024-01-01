@@ -59,6 +59,7 @@ float UtilityAIIntRangeSensor::evaluate_sensor_value() {
     } else if( range_result > 1.0 ) {
         range_result = 1.0;
     }
+
     set_sensor_value(range_result);
     return get_sensor_value();
 }

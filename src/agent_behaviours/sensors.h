@@ -19,6 +19,8 @@ private:
 protected:
     static void _bind_methods();
 
+    bool  _has_sensor_value_changed;
+
 public:
     UtilityAISensors();
     ~UtilityAISensors();
@@ -35,7 +37,7 @@ public:
     virtual void uninitialize_sensor() {}
     
     // Getters and setters for attributes.
-    
+    bool get_has_sensor_value_changed() const { return _has_sensor_value_changed; };
     
     void set_sensor_value( float sensor_value );
     float get_sensor_value() const;
