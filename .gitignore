@@ -33,6 +33,7 @@
 *.so.*
 *.dylib
 *.wasm
+*.framework
 
 # Executables
 *.exe
