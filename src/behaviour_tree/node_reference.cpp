@@ -68,6 +68,9 @@ void UtilityAIBTNodeReference::_update_cache() {
 
 
 void UtilityAIBTNodeReference::reset() {
+    if( _cache.is_null() || !_cache.is_valid() ) {
+        return;
+    }
     if(!_node_reference) {
         return;
     }

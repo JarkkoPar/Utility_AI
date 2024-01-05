@@ -150,11 +150,18 @@ void UtilityAIArea2DVisibilitySensor::_notification(int p_what) {
 
 // Handling functions.
 
+void UtilityAIArea2DVisibilitySensor::_update_cache() {
+    _cache = ObjectID();
+    if( _visibility_volume != nullptr ) {
+    	_cache = _visibility_volume->get_instance_id();
+    }
+}
+
 void UtilityAIArea2DVisibilitySensor::initialize_sensor() {
     if( !get_is_active() ) return;
     if( Engine::get_singleton()->is_editor_hint() ) return;
 
-    ERR_FAIL_COND_MSG( _visibility_volume == nullptr, "UtilityAIArea2DVisibilitySensor::initialize_sensor() - Error, the node set as the Area2D is not of type Area2D.");
+    ERR_FAIL_COND_MSG( _visibility_volume == nullptr, "UtilityAIArea2DVisibilitySensor::initialize_sensor() - Error, the visibility volume is not set.");
     
     // Connect to the area entered and exited signals.
     Error error_visibility_volume_on_entered = _visibility_volume->connect("area_entered", Callable(this, "on_area_entered"));
@@ -163,6 +170,7 @@ void UtilityAIArea2DVisibilitySensor::initialize_sensor() {
 
 
 void UtilityAIArea2DVisibilitySensor::uninitialize_sensor() {
+    if( Engine::get_singleton()->is_editor_hint() ) return;
     if( _visibility_volume != nullptr ) {
         _visibility_volume->disconnect("area_entered", Callable(this, "on_area_entered"));
         _visibility_volume->disconnect("area_exited", Callable(this, "on_area_exited"));
@@ -176,6 +184,11 @@ float UtilityAIArea2DVisibilitySensor::evaluate_sensor_value() {
     if( _visibility_volume == nullptr ) {
         return get_sensor_value();
     }
+    if( _cache.is_null() || !_cache.is_valid() ) {
+        _visibility_volume = nullptr; // Cache shows that the node reference has become invalid.
+        return get_sensor_value();
+    }
+
 
     //Ref<World3D> w3d = _visibility_volume_node->get_world_3d();
     //ERR_FAIL_COND_V(w3d.is_null(), get_sensor_value());
@@ -341,6 +354,7 @@ Vector2 UtilityAIArea2DVisibilitySensor::get_offset_vector2() const {
 void UtilityAIArea2DVisibilitySensor::set_visibility_volume( Area2D* visibility_volume ) {
     _has_sensor_value_changed = _has_sensor_value_changed || (_visibility_volume != visibility_volume);
     _visibility_volume = visibility_volume;
+    _update_cache();
 }
 
 

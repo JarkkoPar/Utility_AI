@@ -145,11 +145,18 @@ void UtilityAIArea3DVisibilitySensor::_notification(int p_what) {
 
 // Handling functions.
 
+void UtilityAIArea3DVisibilitySensor::_update_cache() {
+    _cache = ObjectID();
+    if( _visibility_volume != nullptr ) {
+    	_cache = _visibility_volume->get_instance_id();
+    }
+}
+
 void UtilityAIArea3DVisibilitySensor::initialize_sensor() {
     //if( !get_is_active() ) return;
     if( Engine::get_singleton()->is_editor_hint() ) return;
 
-    ERR_FAIL_COND_MSG( _visibility_volume == nullptr, "UtilityAIArea3DVisibilitySensor::initialize_sensor() - Error, the node set as the Area3D is not of type Area3D.");
+    ERR_FAIL_COND_MSG( _visibility_volume == nullptr, "UtilityAIArea3DVisibilitySensor::initialize_sensor() - Error, the visibility volume is not set.");
     
     // Connect to the area entered and exited signals.
     Error error_visibility_volume_on_entered = _visibility_volume->connect("area_entered", Callable(this, "on_area_entered"));
@@ -158,6 +165,7 @@ void UtilityAIArea3DVisibilitySensor::initialize_sensor() {
 
 
 void UtilityAIArea3DVisibilitySensor::uninitialize_sensor() {
+    if( Engine::get_singleton()->is_editor_hint() ) return;
     if( _visibility_volume != nullptr ) {
         _visibility_volume->disconnect("area_entered", Callable(this, "on_area_entered"));
         _visibility_volume->disconnect("area_exited", Callable(this, "on_area_exited"));
@@ -168,6 +176,10 @@ void UtilityAIArea3DVisibilitySensor::uninitialize_sensor() {
 
 float UtilityAIArea3DVisibilitySensor::evaluate_sensor_value() {
     if( _visibility_volume == nullptr ) {
+        return get_sensor_value();
+    }
+    if( _cache.is_null() || !_cache.is_valid() ) {
+        _visibility_volume = nullptr; // Cache shows that the node reference has become invalid.
         return get_sensor_value();
     }
 
@@ -333,6 +345,7 @@ Vector3 UtilityAIArea3DVisibilitySensor::get_offset_vector3() const {
 void UtilityAIArea3DVisibilitySensor::set_visibility_volume( Area3D* visibility_volume ) {
     _has_sensor_value_changed = _has_sensor_value_changed || ( _visibility_volume != visibility_volume );
     _visibility_volume = visibility_volume;
+    _update_cache();
 }
 
 

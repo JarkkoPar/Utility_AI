@@ -10,7 +10,8 @@ class UtilityAIArea2DVisibilitySensor : public UtilityAISensor {
     GDCLASS(UtilityAIArea2DVisibilitySensor, UtilityAISensor )
 
 private:
-    Area2D* _visibility_volume;
+    Area2D*     _visibility_volume;
+    ObjectID    _cache;
 
     Vector2 _from_vector;
     Vector2 _offset_vector;
@@ -37,7 +38,7 @@ private:
     
 protected:
     static void _bind_methods();
-
+    void _update_cache();
 public:
     UtilityAIArea2DVisibilitySensor();
     ~UtilityAIArea2DVisibilitySensor();
