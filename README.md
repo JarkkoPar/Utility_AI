@@ -10,27 +10,12 @@ You can download the latest version of the source code from the releases. The re
 
 Godot 4.1.2 or newer.
 
-## Node listing
+## Components
 
-* *UtilityAIAgent* This is the main node that is used manage the UtilityAI. It represents an AI entity.
-* *UtilityAIBehaviour* The various things the AI agent can do are called _behaviours_. Each Behaviour consists of _considerations_ and _actions_.
-* *UtilityAIBehaviourGroup* The behaviours can be grouped with _behaviour groups_. A Behaviour Group uses _considerations_ to decide if the Behaviours that are its child nodes should be evaluated.
-* *UtilityAIConsideration* The AI agent does it's reasoning on what behaviour to use by going through the behaviour's considerations and producing a score for each behaviour. This node is used to represent a single thing the AI Agent should consider about a behaviour. A consideration uses a _sensor_ for input data.
-* *UtilityAIConsiderationGroup* Several considerations can be grouped to create more complex or high-level logic.
-* *UtilityAISensor* The sensor node is used to update input data to the AI Agent's considerations.
-* *UtilityAISensorGroup* Several sensors can be grouped for more high-level sensor input to the considerations.
-* *UtilityAIAction* A behaviour, if selected, will run any actions attached to it.
-* *UtilityAIActionGroup* Groups can help organize how a behaviour will run the actions attached to it.
-
-There are also a number of specialized sensor nodes to accomodate 2D and 3D visibility queries, distance and angle calculations, etc. 
-
-The included Node Query System (NQS) can be used to "find the best node for the job". It is a set of nodes for scoring and filtering nodes or node groups. It works with anything that has been derived from the Node-class. While this feature is still in development, the intended uses within a game are for example:
-
- * Scoring and filtering cover points
- * Scoring and prioritizing targets
- * Scoring movement targets or tiles
-
-And pretty much any other use case where you have a set of nodes and want to select the best or top N of the nodes based on some evaluation criteria.
+* *Utility based AI Agent Behaviours* 
+* *Behaviour Tree with utility support*
+* *State Tree with utility support*
+* *Node Query System*
 
 
 ## How to use the nodes
@@ -39,7 +24,7 @@ You can find the tutorials [here](https://github.com/JarkkoPar/Utility_AI_GDExte
 
 ## Documentation
 
-You can find the documentation of the latest release [here](https://github.com/JarkkoPar/Utility_AI_GDExtension/blob/main/documentation/Nodes_latest.md).
+You can find the documentation [here](https://github.com/JarkkoPar/Utility_AI_GDExtension/blob/main/documentation/Nodes_latest.md).
 
 
 ## Compiling from source
