@@ -39,5 +39,5 @@ git submodule init && git submodule update
 scons platform=<valid platform>
 ```
 
-After compilation, copy the bin folder into `demo/addons/utility_ai/` folder. If all goes well, you should be able to launch the demo project in Godot and start using the addon.
+After compilation, the binaries are created in to the `demo/addons/utility_ai/` folder. If all goes well, you should be able to launch the demo project in Godot and start using the addon.
 
