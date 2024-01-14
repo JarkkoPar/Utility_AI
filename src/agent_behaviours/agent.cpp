@@ -482,6 +482,7 @@ RandomNumberGenerator UtilityAIAgent::get_random_number_generator() const {
 
 // Godot virtuals.
 
+/**
 void UtilityAIAgent::_notification( int p_what ) {
     switch( p_what ) {
         case NOTIFICATION_PHYSICS_PROCESS: {
@@ -511,3 +512,31 @@ void UtilityAIAgent::_notification( int p_what ) {
         default: {} break;
     }//endswitch
 }
+*/
+
+void UtilityAIAgent::_process( double delta ) {
+    if( _current_behaviour_group_node ) {
+        _current_behaviour_group_node->emit_signal("idle_frame_tick", delta);
+    }
+    if( _current_behaviour_node ) {
+        _current_behaviour_node->emit_signal("idle_frame_tick", delta);
+    }
+    if( _current_action_node ) {
+        _current_action_node->emit_signal("idle_frame_tick", delta);
+    }
+}
+
+
+void UtilityAIAgent::_physics_process( double delta ) {
+    if( _current_behaviour_group_node ) {
+        _current_behaviour_group_node->emit_signal("physics_frame_tick", delta);
+    }
+    if( _current_behaviour_node ) {
+        _current_behaviour_node->emit_signal("physics_frame_tick", delta);
+    }
+    if( _current_action_node ) {
+        _current_action_node->emit_signal("physics_frame_tick", delta);
+    }
+}
+
+

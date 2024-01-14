@@ -98,7 +98,9 @@ public:
 
     // Godot virtuals
 
-    void _notification( int p_what );
+    //virtual void _notification( int p_what ) override;
+    void _process( double delta ) override;
+    void _physics_process( double delta ) override;
 };
 
 }
