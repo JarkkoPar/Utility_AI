@@ -1,4 +1,5 @@
 #include "area2d.h"
+#include <godot_cpp/variant/utility_functions.hpp>
 
 using namespace godot;
 
@@ -86,7 +87,7 @@ TypedArray<Node> UtilityAIArea2DSearchSpace::get_searchspace_nodes() const {
 
 
 void UtilityAIArea2DSearchSpace::_initialize_search_space() {
-    ERR_FAIL_COND_MSG( _area2d == nullptr, "UtilityAIArea2DSearchSpace::_initialize_search_space() - Error, the node for the Area2D has not been set.");
+    ERR_FAIL_COND_MSG( !UtilityFunctions::is_instance_valid(_area2d) || _area2d == nullptr, "UtilityAIArea2DSearchSpace::_initialize_search_space() - Error, the node for the Area2D has not been set.");
     
     // Connect to the area entered and exited signals.
     Error error_visibility_volume_on_entered = _area2d->connect("area_entered", Callable(this, "on_area_entered"));

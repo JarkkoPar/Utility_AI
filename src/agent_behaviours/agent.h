@@ -6,8 +6,9 @@
 #include <godot_cpp/classes/node.hpp>
 #include <godot_cpp/classes/random_number_generator.hpp>
 #include "performance_monitor_singleton.h"
-#include "agent_behaviours/behaviour.h"
-#include "agent_behaviours/action.h"
+#include "behaviour_group.h"
+#include "behaviour.h"
+#include "action.h"
 
 
 #define UTILITYAIAGENT_MAX_TOP_SCORING_BEHAVIOURS 16
@@ -19,8 +20,7 @@ class UtilityAIAgent : public UtilityAI {
 
 private:
     RandomNumberGenerator _rng;
-    //Node* _current_behaviour_node;
-    //Node* _current_action_node;
+    UtilityAIBehaviourGroup* _current_behaviour_group_node;
     UtilityAIBehaviour* _current_behaviour_node;
     UtilityAIAction*    _current_action_node;
 
@@ -28,7 +28,7 @@ private:
 
     int    _num_behaviours_to_select;
     int    _num_possible_behaviours;
-    //int    _top_scoring_behaviours[UTILITYAIAGENT_MAX_TOP_SCORING_BEHAVIOURS];
+    UtilityAIBehaviourGroup* _top_scoring_behaviours_group_nodes[UTILITYAIAGENT_MAX_TOP_SCORING_BEHAVIOURS];
     UtilityAIBehaviour*  _top_scoring_behaviours_nodes[UTILITYAIAGENT_MAX_TOP_SCORING_BEHAVIOURS];
     float _top_scoring_behaviours_score[UTILITYAIAGENT_MAX_TOP_SCORING_BEHAVIOURS];
     godot::String _top_scoring_behaviour_name;
@@ -42,7 +42,7 @@ private:
 
 protected:
     static void _bind_methods();
-    void place_into_top_n_behaviour_list(UtilityAIBehaviour* behaviour, float score );
+    void place_into_top_n_behaviour_list(UtilityAIBehaviourGroup* behaviour_group, UtilityAIBehaviour* behaviour, float score );
 
 public:
     UtilityAIAgent();
@@ -53,6 +53,9 @@ public:
     
     void set_thinking_delay_in_seconds( float thinking_delay_in_seconds );
     float get_thinking_delay_in_seconds() const;
+
+    void set_current_behaviour_group_node( UtilityAIBehaviourGroup* new_behaviour_group_node );
+    UtilityAIBehaviourGroup* get_current_behaviour_group_node() const;
 
     void set_current_behaviour_node( UtilityAIBehaviour* new_behaviour_node );
     UtilityAIBehaviour* get_current_behaviour_node() const;
@@ -92,6 +95,10 @@ public:
 
     void set_current_action_is_finished(bool is_finished);
     void abort_current_behaviour();
+
+    // Godot virtuals
+
+    void _notification( int p_what );
 };
 
 }

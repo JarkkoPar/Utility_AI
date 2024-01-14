@@ -42,7 +42,7 @@ public:
     void tick(Variant user_data, float delta);
 
     // Godot virtuals.
-    void _ready();
+    void _ready() override;
 };
 
 }

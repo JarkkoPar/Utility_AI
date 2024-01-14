@@ -1,4 +1,6 @@
 #include "area3d.h"
+#include <godot_cpp/variant/utility_functions.hpp>
+
 
 using namespace godot;
 
@@ -87,7 +89,7 @@ TypedArray<Node> UtilityAIArea3DSearchSpace::get_searchspace_nodes() const {
 
 
 void UtilityAIArea3DSearchSpace::_initialize_search_space() {
-    ERR_FAIL_COND_MSG( _area3d == nullptr, "UtilityAIArea3DSearchSpace::_initialize_search_space() - Error, the node for the Area3D has not been set.");
+    ERR_FAIL_COND_MSG( !UtilityFunctions::is_instance_valid(_area3d) || _area3d == nullptr, "UtilityAIArea3DSearchSpace::_initialize_search_space() - Error, the node for the Area3D has not been set.");
     
     // Connect to the area entered and exited signals.
     Error error_visibility_volume_on_entered = _area3d->connect("area_entered", Callable(this, "on_area_entered"));

@@ -1,6 +1,6 @@
 #include "node_children.h"
 #include <godot_cpp/classes/engine.hpp>
-//#include <godot_cpp/classes/node.hpp>
+#include <godot_cpp/variant/utility_functions.hpp>
 
 using namespace godot;
 
@@ -42,7 +42,7 @@ Node* UtilityAINodeChildrenSearchSpace::get_parent_node() const {
 
 
 TypedArray<Node> UtilityAINodeChildrenSearchSpace::get_searchspace_nodes() const {
-    if( _parent_node == nullptr ) {
+    if( _parent_node == nullptr || !UtilityFunctions::is_instance_valid(_parent_node) ) {
         TypedArray<Node> emptyarray;
         return emptyarray;
     }

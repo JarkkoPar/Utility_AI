@@ -2,7 +2,7 @@
 #define UtilityAIBEHAVIOURGROUP_H_INCLUDED 
 
 #include "utility_ai.h"
-#include "agent.h"
+//#include "agent.h"
 #include <godot_cpp/classes/node.hpp>
 #include "resources/considerations/consideration_resources.h"
 

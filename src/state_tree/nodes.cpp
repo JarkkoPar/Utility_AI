@@ -22,6 +22,11 @@ void UtilityAIStateTreeNodes::_bind_methods() {
     ClassDB::bind_method(D_METHOD("get_considerations"), &UtilityAIStateTreeNodes::get_considerations);
     ADD_PROPERTY(PropertyInfo(Variant::ARRAY, "considerations", PROPERTY_HINT_ARRAY_TYPE,vformat("%s/%s:%s", Variant::OBJECT, PROPERTY_HINT_RESOURCE_TYPE, "UtilityAIConsiderationResources") ), "set_considerations","get_considerations");
 
+    ClassDB::bind_method(D_METHOD("set_on_entered_condition", "is_entered"), &UtilityAIStateTreeNodes::set_is_on_entered_condition_true);
+    ClassDB::bind_method(D_METHOD("get_on_entered_condition"), &UtilityAIStateTreeNodes::get_is_on_entered_condition_true);
+    //ADD_PROPERTY(PropertyInfo(Variant::INT, "child_state_selection_rule", PROPERTY_HINT_ENUM, "OnEnterConditionMethod:0,UtilityScoring:1" ), "set_child_state_selection_rule","get_child_state_selection_rule");
+
+
     ADD_SUBGROUP("Debugging","");
 
     ClassDB::bind_method(D_METHOD("set_score", "score"), &UtilityAIStateTreeNodes::set_score);
@@ -30,6 +35,10 @@ void UtilityAIStateTreeNodes::_bind_methods() {
 
     ClassDB::bind_method(D_METHOD("transition_to", "new_state_nodepath", "user_data", "delta" ), &UtilityAIStateTreeNodes::transition_to);
 
+    ADD_SIGNAL(MethodInfo("state_check_enter_condition", PropertyInfo(Variant::OBJECT, "user_data"), PropertyInfo(Variant::FLOAT, "delta")));
+    ADD_SIGNAL(MethodInfo("state_entered", PropertyInfo(Variant::OBJECT, "user_data"), PropertyInfo(Variant::FLOAT, "delta")));
+    ADD_SIGNAL(MethodInfo("state_ticked", PropertyInfo(Variant::OBJECT, "user_data"), PropertyInfo(Variant::FLOAT, "delta")));
+    ADD_SIGNAL(MethodInfo("state_exited", PropertyInfo(Variant::OBJECT, "user_data"), PropertyInfo(Variant::FLOAT, "delta")));
 }
 
 
@@ -42,6 +51,12 @@ UtilityAIStateTreeNodes::UtilityAIStateTreeNodes() {
     _tree_root_node = nullptr;
     _child_state_selection_rule = UtilityAIStateTreeNodeChildStateSelectionRule::ON_ENTER_CONDITION_METHOD;
     _tree_root_node = nullptr;
+    _is_on_entered_condition_true = true;
+
+    _has_on_entered_condition_method = false;
+    _has_on_entered_method = false;
+    _has_on_exited_method = false;
+    _has_on_ticked_method = false;
 }
 
 
@@ -59,6 +74,16 @@ void UtilityAIStateTreeNodes::set_considerations( TypedArray<UtilityAIConsiderat
 TypedArray<UtilityAIConsiderationResources> UtilityAIStateTreeNodes::get_considerations() const {
     return _considerations;
 }
+
+void UtilityAIStateTreeNodes::set_is_on_entered_condition_true( bool is_on_entered_condition_true ) {
+    _is_on_entered_condition_true = is_on_entered_condition_true;
+}
+
+
+bool UtilityAIStateTreeNodes::get_is_on_entered_condition_true() const {
+    return _is_on_entered_condition_true;
+}
+
 
 void UtilityAIStateTreeNodes::set_evaluation_method( int evaluation_method ) {
     _evaluation_method = evaluation_method;
@@ -112,10 +137,10 @@ Dictionary UtilityAIStateTreeNodes::get_child_nodes_as_dictionary(UtilityAIState
 // Handling methods.
 
 float UtilityAIStateTreeNodes::evaluate() {
-    if( !get_is_active() ) return 0.0;
-    if( Engine::get_singleton()->is_editor_hint() ) return 0.0;
+    if( !get_is_active() ) return 0.0f;
+    if( Engine::get_singleton()->is_editor_hint() ) return 0.0f;
 
-    _score = 0.0;
+    _score = 0.0f;
     bool has_vetoed = false;
     // Evaluate the consideration resources (if any).
     int num_resources = _considerations.size();
@@ -129,15 +154,17 @@ float UtilityAIStateTreeNodes::evaluate() {
         }
         float score = consideration_resource->evaluate( has_vetoed, this );
         if( has_vetoed ) {
-            _score = 0.0;
-            return 0.0; // A consideration vetoed.
+            _score = 0.0f;
+            return 0.0f; // A consideration vetoed.
         }
         _score += score;
     }
     
     // Evaluate the children.
     int num_children = get_child_count();
-    if( num_children < 1 && num_resources < 1 ) return 0.0;
+    if( num_children < 1 ) {
+        return _score;
+    }
     float child_score = 0.0;
     for( int i = 0; i < num_children; ++i ) {
         Node* node = get_child(i);
@@ -210,29 +237,33 @@ float UtilityAIStateTreeNodes::evaluate() {
 
 
 bool UtilityAIStateTreeNodes::on_enter_condition( Variant user_data, float delta ) {
-    if( has_method("on_enter_condition")){
+    if( _has_on_entered_condition_method ){
         return call("on_enter_condition", user_data, delta );
-    }
-    return true;
+    } 
+    emit_signal("state_check_enter_condition", user_data, delta);
+    return _is_on_entered_condition_true;
 }
 
 void UtilityAIStateTreeNodes::on_enter_state( Variant user_data, float delta ) {
-    if( has_method("on_enter_state")){
+    if( _has_on_entered_method ){
         call("on_enter_state", user_data, delta );
-    }
+    } 
+    emit_signal("state_entered", user_data, delta);
 }
 
 void UtilityAIStateTreeNodes::on_exit_state( Variant user_data, float delta ) {
-    if( has_method("on_exit_state")){
+    if( _has_on_exited_method ){
         call("on_exit_state", user_data, delta );
     }
+    emit_signal("state_exited", user_data, delta);
 }
 
 
 void UtilityAIStateTreeNodes::on_tick( Variant user_data, float delta ) {
-    if( has_method("on_tick")){
+    if( _has_on_ticked_method ){
         call("on_tick", user_data, delta );
     }
+    emit_signal("state_ticked", user_data, delta);
 }
 
 void UtilityAIStateTreeNodes::transition_to( NodePath path_to_node, Variant user_data, float delta ) {
@@ -266,7 +297,7 @@ UtilityAIStateTreeNodes* UtilityAIStateTreeNodes::evaluate_state_activation( Var
         }//endfor child nodes
     } else {
         // Childs are evaluated by using Utility-based scoring.
-        UtilityAIStateTreeNodes* highest_scoring_state_to_activate;
+        UtilityAIStateTreeNodes* highest_scoring_state_to_activate = nullptr;
         float highest_score = -9999999.9999;
         for( int i = 0; i < get_child_count(); ++i ) {
             if( UtilityAIStateTreeNodes* stnode = godot::Object::cast_to<UtilityAIStateTreeNodes>(get_child(i)) ) {
@@ -300,4 +331,12 @@ UtilityAIStateTreeNodes* UtilityAIStateTreeNodes::evaluate_state_activation( Var
 }
 
 
+// Godot virtuals.
+
+void UtilityAIStateTreeNodes::_enter_tree() {
+    _has_on_entered_condition_method = has_method("on_enter_condition");
+    _has_on_entered_method = has_method("on_enter_state");
+    _has_on_exited_method = has_method("on_exit_state");
+    _has_on_ticked_method = has_method("on_tick");
+}
 

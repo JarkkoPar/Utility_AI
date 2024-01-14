@@ -1,7 +1,7 @@
 #include "agent.h"
 #include "sensors.h"
 #include "behaviour.h"
-#include "behaviour_group.h"
+//#include "behaviour_group.h"
 
 #include <godot_cpp/core/class_db.hpp>
 #include <godot_cpp/classes/engine.hpp>
@@ -13,6 +13,9 @@ using namespace godot;
 // Method binds.
 
 void UtilityAIAgent::_bind_methods() {
+    ClassDB::bind_method(D_METHOD("set_current_behaviour_group_node"), &UtilityAIAgent::set_current_behaviour_group_node);
+    ClassDB::bind_method(D_METHOD("get_current_behaviour_group_node"), &UtilityAIAgent::get_current_behaviour_group_node);
+
     ClassDB::bind_method(D_METHOD("set_current_behaviour_node"), &UtilityAIAgent::set_current_behaviour_node);
     ClassDB::bind_method(D_METHOD("get_current_behaviour_node"), &UtilityAIAgent::get_current_behaviour_node);
 
@@ -57,15 +60,22 @@ void UtilityAIAgent::_bind_methods() {
 
     // Add all signals.
 
+    ADD_SIGNAL(MethodInfo("behaviour_group_changed", PropertyInfo(Variant::OBJECT, "behaviour_group_node")));
+    ADD_SIGNAL(MethodInfo("behaviour_group_exited", PropertyInfo(Variant::OBJECT, "behaviour_group_node")));
+
     ADD_SIGNAL(MethodInfo("behaviour_changed", PropertyInfo(Variant::OBJECT, "behaviour_node")));
-    //ADD_SIGNAL(MethodInfo("behaviour_completed", PropertyInfo(Variant::OBJECT, "behaviour_node")));
+    ADD_SIGNAL(MethodInfo("behaviour_exited", PropertyInfo(Variant::OBJECT, "behaviour_node")));
+
     ADD_SIGNAL(MethodInfo("action_changed", PropertyInfo(Variant::OBJECT, "action_node")));
+    ADD_SIGNAL(MethodInfo("action_exited", PropertyInfo(Variant::OBJECT, "action_node")));
+    
 }
 
 
 // Constructor and destructor.
 
 UtilityAIAgent::UtilityAIAgent() {
+    _current_behaviour_group_node = nullptr;
     _current_behaviour_node = nullptr;
     _num_behaviours_to_select = 1;
     _num_possible_behaviours = 0;
@@ -73,6 +83,7 @@ UtilityAIAgent::UtilityAIAgent() {
         //_top_scoring_behaviours[i] = -1;
         _top_scoring_behaviours_score[i] = 0.0f;
         _top_scoring_behaviours_nodes[i] = nullptr;
+        _top_scoring_behaviours_group_nodes[i] = nullptr;
     }
     _top_scoring_behaviour_name = "";
     
@@ -110,7 +121,7 @@ void UtilityAIAgent::evaluate_options(float delta) {
     if( _current_behaviour_node != nullptr ) {
         // Respect the thinking delay if we have a current behaviour.
         _thinking_delay_in_seconds_current_timer -= delta;
-        if( _thinking_delay_in_seconds_current_timer > 0.0 ) {
+        if( _thinking_delay_in_seconds_current_timer > 0.0f ) {
             _total_evaluate_options_usec = godot::Time::get_singleton()->get_ticks_usec() - method_start_time_usec;
             UtilityAIPerformanceMonitorSingleton::get_singleton()->increment_total_time_elapsed_ai_agents_usec(_total_evaluate_options_usec);
             return;
@@ -136,8 +147,9 @@ void UtilityAIAgent::evaluate_options(float delta) {
     UtilityAIBehaviour* new_behaviour = nullptr;
 
     for( int b = 0; b < _num_behaviours_to_select; ++b ) {
+        _top_scoring_behaviours_group_nodes[b]= nullptr;
         _top_scoring_behaviours_nodes[b] = nullptr;
-        _top_scoring_behaviours_score[b] = -1.0;
+        _top_scoring_behaviours_score[b] = -1.0f;
     }
     
     // Evaluate the children.
@@ -167,8 +179,8 @@ void UtilityAIAgent::evaluate_options(float delta) {
                             if( bgiBehaviourNode == _current_behaviour_node ) {
                                 score += _current_behaviour_bias;
                             }
-                            if( score > 0.0 ) {
-                                place_into_top_n_behaviour_list( bgiBehaviourNode, score );
+                            if( score > 0.0f ) {
+                                place_into_top_n_behaviour_list( behaviourGroupNode, bgiBehaviourNode, score );
                             }
                     }//endif is a behaviour node
                 }//endfor behaviour group children
@@ -186,8 +198,8 @@ void UtilityAIAgent::evaluate_options(float delta) {
             score += _current_behaviour_bias;
         }
 
-        if( score > 0.0 ) {
-            place_into_top_n_behaviour_list( behaviourNode, score );
+        if( score > 0.0f ) {
+            place_into_top_n_behaviour_list( nullptr, behaviourNode, score );
         }
     }//endfor children
 
@@ -195,6 +207,7 @@ void UtilityAIAgent::evaluate_options(float delta) {
     if( _num_possible_behaviours < 1 ) {
         if( _current_behaviour_node != nullptr ){
             (godot::Object::cast_to<UtilityAIBehaviour>(_current_behaviour_node))->end_behaviour();
+            // Todo: add behaviour exited signal.
             _current_behaviour_node = nullptr;
         }
         //WARN_PRINT("UtilityAIAgent::evaluate_options(): Error, agent could not find valid behaviours!");
@@ -218,6 +231,7 @@ void UtilityAIAgent::evaluate_options(float delta) {
     
 
     new_behaviour = godot::Object::cast_to<UtilityAIBehaviour>(_top_scoring_behaviours_nodes[chosen_behaviour_index]);
+    UtilityAIBehaviourGroup* new_behaviour_group = godot::Object::cast_to<UtilityAIBehaviourGroup>(_top_scoring_behaviours_group_nodes[chosen_behaviour_index]);
     ERR_FAIL_COND_MSG( new_behaviour == nullptr, "UtilityAIAgent::evaluate_options(): Error, new_behaviour is nullptr.");
 
     if( new_behaviour == _current_behaviour_node ){
@@ -227,20 +241,32 @@ void UtilityAIAgent::evaluate_options(float delta) {
     } 
     if( _current_action_node != nullptr ) {
         (godot::Object::cast_to<UtilityAIActions>(_current_action_node))->end_action();   
+        emit_signal("action_exited", _current_action_node);
         _current_action_node = nullptr;
     }
     if( _current_behaviour_node != nullptr ) {
         (godot::Object::cast_to<UtilityAIBehaviour>(_current_behaviour_node))->end_behaviour();   
+        emit_signal("behaviour_exited", _current_behaviour_node);
         _current_behaviour_node = nullptr;
     }
 
+    if( _current_behaviour_group_node != new_behaviour_group && _current_behaviour_group_node != nullptr ) {
+        _current_behaviour_group_node->emit_signal("on_exit_behaviour_group");
+        emit_signal("behaviour_group_exited", _current_behaviour_group_node);
+    }
+
     // Start and signal the chosen behaviour node.
+    _current_behaviour_group_node = new_behaviour_group;
+    if( new_behaviour_group != nullptr ) {
+        new_behaviour_group->emit_signal("on_enter_behaviour_group");
+    }
     _current_behaviour_name = new_behaviour->get_name();
     _current_behaviour_node = new_behaviour;//::Object::cast_to<Node>(new_behaviour);
     new_behaviour->start_behaviour();
     _current_action_node = nullptr; 
+    emit_signal("behaviour_group_changed", _current_behaviour_group_node);
     emit_signal("behaviour_changed", _current_behaviour_node);
-    emit_signal("action_changed", _current_action_node);
+    //emit_signal("action_changed", _current_action_node);
 
     _thinking_delay_in_seconds_current_timer = _thinking_delay_in_seconds;
     
@@ -249,10 +275,11 @@ void UtilityAIAgent::evaluate_options(float delta) {
 }
 
 
-void UtilityAIAgent::place_into_top_n_behaviour_list(UtilityAIBehaviour* behaviour, float score ) {
+void UtilityAIAgent::place_into_top_n_behaviour_list( UtilityAIBehaviourGroup* behaviour_group, UtilityAIBehaviour* behaviour, float score ) {
     
     // First on the list.
     if( _num_possible_behaviours == 0 ) {
+        _top_scoring_behaviours_group_nodes[0] = behaviour_group;
         _top_scoring_behaviours_nodes[0] = behaviour;
         _top_scoring_behaviours_score[0] = score;
         _num_possible_behaviours = 1;
@@ -272,6 +299,7 @@ void UtilityAIAgent::place_into_top_n_behaviour_list(UtilityAIBehaviour* behavio
     
     // Last on the list.
     if( place_in_behaviour_list == _num_behaviours_to_select-1 ) {
+        _top_scoring_behaviours_group_nodes[_num_behaviours_to_select-1] = behaviour_group;
         _top_scoring_behaviours_nodes[_num_behaviours_to_select-1] = behaviour;
         _top_scoring_behaviours_score[_num_behaviours_to_select-1] = score;
         return;
@@ -279,10 +307,12 @@ void UtilityAIAgent::place_into_top_n_behaviour_list(UtilityAIBehaviour* behavio
 
     // In the beginning or in the middle of a list.
     for( int b = _num_behaviours_to_select-1; b > place_in_behaviour_list; --b ) {
+        _top_scoring_behaviours_group_nodes[b] = _top_scoring_behaviours_group_nodes[b-1];
         _top_scoring_behaviours_nodes[b] = _top_scoring_behaviours_nodes[b-1];
         _top_scoring_behaviours_score[b] = _top_scoring_behaviours_score[b-1];
     }
-    
+
+    _top_scoring_behaviours_group_nodes[place_in_behaviour_list] = behaviour_group;
     _top_scoring_behaviours_nodes[place_in_behaviour_list] = behaviour;
     _top_scoring_behaviours_score[place_in_behaviour_list] = score;
     if(_num_possible_behaviours < _num_behaviours_to_select ) {
@@ -312,6 +342,7 @@ void UtilityAIAgent::update_current_behaviour() {
     UtilityAIAction* new_action_node = _current_behaviour_node->update_behaviour();
     //godot::Object::cast_to<Node>((godot::Object::cast_to<UtilityAIBehaviour>(_current_behaviour_node))->update_behaviour());
     if( _current_action_node != new_action_node ) {
+
         _current_action_node = new_action_node;
         emit_signal("action_changed", _current_action_node );
     }
@@ -357,6 +388,14 @@ void UtilityAIAgent::set_current_behaviour_name( godot::String current_behaviour
 
 godot::String UtilityAIAgent::get_current_behaviour_name() const {
     return _current_behaviour_name;
+}
+
+void UtilityAIAgent::set_current_behaviour_group_node( UtilityAIBehaviourGroup* new_behaviour_group ) {
+    _current_behaviour_group_node = new_behaviour_group;
+}
+
+UtilityAIBehaviourGroup* UtilityAIAgent::get_current_behaviour_group_node() const {
+    return _current_behaviour_group_node;
 }
 
 void UtilityAIAgent::set_current_behaviour_node( UtilityAIBehaviour* new_behaviour ) {
@@ -439,3 +478,36 @@ RandomNumberGenerator UtilityAIAgent::get_random_number_generator() const {
     return _rng;
 }
 */
+
+
+// Godot virtuals.
+
+void UtilityAIAgent::_notification( int p_what ) {
+    switch( p_what ) {
+        case NOTIFICATION_PHYSICS_PROCESS: {
+            double dt = get_physics_process_delta_time();
+            if( _current_behaviour_group_node ) {
+                _current_behaviour_group_node->emit_signal("on_physics_frame_tick", dt);
+            }
+            if( _current_behaviour_node ) {
+                _current_behaviour_node->emit_signal("on_physics_frame_tick", dt);
+            }
+            if( _current_action_node ) {
+                _current_action_node->emit_signal("on_physics_frame_tick", dt);
+            }
+        } break;
+        case NOTIFICATION_PROCESS: {
+            double dt = get_process_delta_time();
+            if( _current_behaviour_group_node ) {
+                _current_behaviour_group_node->emit_signal("on_idle_frame_tick", dt);
+            }
+            if( _current_behaviour_node ) {
+                _current_behaviour_node->emit_signal("on_idle_frame_tick", dt);
+            }
+            if( _current_action_node ) {
+                _current_action_node->emit_signal("on_idle_frame_tick", dt);
+            }
+        } break;
+        default: {} break;
+    }//endswitch
+}

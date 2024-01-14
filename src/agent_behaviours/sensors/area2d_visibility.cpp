@@ -6,6 +6,7 @@
 #include <godot_cpp/classes/physics_server2d.hpp>
 #include <godot_cpp/classes/physics_direct_space_state2d.hpp>
 #include <godot_cpp/classes/physics_ray_query_parameters2d.hpp>
+#include <godot_cpp/variant/utility_functions.hpp>
 
 
 using namespace godot;
@@ -184,10 +185,15 @@ float UtilityAIArea2DVisibilitySensor::evaluate_sensor_value() {
     if( _visibility_volume == nullptr ) {
         return get_sensor_value();
     }
-    if( _cache.is_null() || !_cache.is_valid() ) {
-        _visibility_volume = nullptr; // Cache shows that the node reference has become invalid.
+    if( !UtilityFunctions::is_instance_valid(_visibility_volume) ) {
+        _visibility_volume = nullptr;
         return get_sensor_value();
     }
+    
+    //if( _cache.is_null() || !_cache.is_valid() ) {
+    //    _visibility_volume = nullptr; // Cache shows that the node reference has become invalid.
+    //    return get_sensor_value();
+    //}
 
 
     //Ref<World3D> w3d = _visibility_volume_node->get_world_3d();

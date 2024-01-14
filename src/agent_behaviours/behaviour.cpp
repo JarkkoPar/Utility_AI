@@ -46,6 +46,12 @@ void UtilityAIBehaviour::_bind_methods() {
     ClassDB::bind_method(D_METHOD("get_current_action_index"), &UtilityAIBehaviour::get_current_action_index);
     ADD_PROPERTY(PropertyInfo(Variant::INT, "current_action_index", PROPERTY_HINT_RANGE,"0,256"), "set_current_action_index","get_current_action_index");
     
+
+    // Signals.
+    ADD_SIGNAL(MethodInfo("behaviour_entered"));
+    ADD_SIGNAL(MethodInfo("physics_frame_tick", PropertyInfo(Variant::FLOAT, "delta")));
+    ADD_SIGNAL(MethodInfo("idle_frame_tick", PropertyInfo(Variant::FLOAT, "delta")));
+    ADD_SIGNAL(MethodInfo("behaviour_exited"));
 }
 
 
@@ -218,15 +224,14 @@ void UtilityAIBehaviour::start_behaviour() {
     _current_action_index = 0;
     //_current_action_node = nullptr;
     //_current_action_node = update_behaviour();
+    emit_signal("behaviour_entered");
     update_behaviour();
 }
 
 
 void UtilityAIBehaviour::end_behaviour() {
-    //WARN_PRINT("Behaviour ended. " + get_name());
+    emit_signal("behaviour_exited");
     _current_action_index = 0;
-    //_current_action_node = nullptr;
-    
 }
 
 

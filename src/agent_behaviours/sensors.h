@@ -27,9 +27,9 @@ public:
     
     // Godot virtuals.
 
-    void _ready();
-
-    void _exit_tree();
+    void _ready() override;
+    //void _enter_tree() override;
+    void _exit_tree() override;
 
     // Handling methods.
 

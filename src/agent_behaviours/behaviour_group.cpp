@@ -28,6 +28,12 @@ void UtilityAIBehaviourGroup::_bind_methods() {
     ClassDB::bind_method(D_METHOD("set_score", "score"), &UtilityAIBehaviourGroup::set_score);
     ClassDB::bind_method(D_METHOD("get_score"), &UtilityAIBehaviourGroup::get_score);
     ADD_PROPERTY(PropertyInfo(Variant::FLOAT, "score", PROPERTY_HINT_RANGE,"0.0,1.0"), "set_score","get_score");
+
+    // Signals.
+    ADD_SIGNAL(MethodInfo("behaviour_group_entered"));
+    ADD_SIGNAL(MethodInfo("physics_frame_tick", PropertyInfo(Variant::FLOAT, "delta")));
+    ADD_SIGNAL(MethodInfo("idle_frame_tick", PropertyInfo(Variant::FLOAT, "delta")));
+    ADD_SIGNAL(MethodInfo("behaviour_group_exited"));
 }
 
 

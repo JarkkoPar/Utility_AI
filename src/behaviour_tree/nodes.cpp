@@ -38,6 +38,10 @@ void UtilityAIBehaviourTreeNodes::_bind_methods() {
 
     ClassDB::bind_method(D_METHOD("_tick", "user_data", "delta" ), &UtilityAIBehaviourTreeNodes::tick);
 
+
+    // Signals.
+
+    
 }
 
 
@@ -171,10 +175,10 @@ void UtilityAIBehaviourTreeNodes::reset_for_looping() {
 /**/
 
 float UtilityAIBehaviourTreeNodes::evaluate() {
-    if( !get_is_active() ) return 0.0;
-    if( Engine::get_singleton()->is_editor_hint() ) return 0.0;
+    if( !get_is_active() ) return 0.0f;
+    if( Engine::get_singleton()->is_editor_hint() ) return 0.0f;
 
-    _score = 0.0;
+    _score = 0.0f;
     bool has_vetoed = false;
     // Evaluate the consideration resources (if any).
     int num_resources = _considerations.size();
@@ -189,14 +193,16 @@ float UtilityAIBehaviourTreeNodes::evaluate() {
         float score = consideration_resource->evaluate( has_vetoed, this );
         if( has_vetoed ) {
             _score = 0.0;
-            return 0.0; // A consideration vetoed.
+            return 0.0f; // A consideration vetoed.
         }
         _score += score;
     }
     
     // Evaluate the children.
     int num_children = get_child_count();
-    if( num_children < 1 && num_resources < 1 ) return 0.0;
+    if( num_children < 1 ) {
+        return _score;
+    }
     float child_score = 0.0;
     for( int i = 0; i < num_children; ++i ) {
         Node* node = get_child(i);
@@ -207,7 +213,7 @@ float UtilityAIBehaviourTreeNodes::evaluate() {
         child_score = considerationNode->evaluate();
         if( considerationNode->get_has_vetoed()) {
             _score = 0.0;
-            return 0.0; // Veto zeroes out the score for the entire group.
+            return 0.0f; // Veto zeroes out the score for the entire group.
         }
 
         switch( _evaluation_method ) {
@@ -229,21 +235,21 @@ float UtilityAIBehaviourTreeNodes::evaluate() {
                 else _score *= child_score;
                 // If after multiplication we are at 0.0, then none of the
                 // other considerations will ever change the result, so bail.
-                if( _score == 0.0 ) {
+                if( _score == 0.0f ) {
                     if( _invert_score ) {
                         _score = 1.0;
                         return 1.0;
                     }
-                    _score = 0.0;
-                    return 0.0;
+                    _score = 0.0f;
+                    return 0.0f;
                 }
             }
             break;
             case UtilityAIBehaviourTreeNodesEvaluationMethod::FirstNonZero: 
             {
-                if( child_score > 0.0 ) {
+                if( child_score > 0.0f ) {
                     if( _invert_score ) {
-                        _score = 1.0 - child_score;
+                        _score = 1.0f - child_score;
                     } else {
                         _score = child_score;
                     }
@@ -261,7 +267,7 @@ float UtilityAIBehaviourTreeNodes::evaluate() {
     }
 
     if( _invert_score ) {
-        _score = 1.0 - _score;
+        _score = 1.0f - _score;
     }
 
     return _score;

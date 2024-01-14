@@ -14,6 +14,8 @@ class UtilityAIBTLeaf : public UtilityAIBTTaskNodes {
 private:
     //Callable _tick_method;
     //int _tick_result;
+    bool    _has_on_tick_method;
+    bool    _has_tick_method;
     
 protected:
     static void _bind_methods();
@@ -34,7 +36,7 @@ public:
 
     // Godot virtuals.
 
-    //void _enter_tree();
+    void _enter_tree();
 
 };
 

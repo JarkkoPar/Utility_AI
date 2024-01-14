@@ -2,6 +2,7 @@
 
 #include <godot_cpp/core/class_db.hpp>
 #include <godot_cpp/classes/engine.hpp>
+#include <godot_cpp/variant/utility_functions.hpp>
 
 
 using namespace godot;
@@ -80,7 +81,8 @@ void UtilityAIBTNodeReference::reset() {
 
 int UtilityAIBTNodeReference::tick(Variant user_data, float delta) { 
     set_internal_status(BT_INTERNAL_STATUS_TICKED);
-    if( _cache.is_null() || !_cache.is_valid() ) {
+    if( !UtilityFunctions::is_instance_valid(_node_reference) ) {
+    //_cache.is_null() || !_cache.is_valid() ) {
         _node_reference = nullptr; // Cache shows that the node reference has become invalid.
         set_internal_status(BT_INTERNAL_STATUS_COMPLETED);
         set_tick_result(BT_FAILURE);

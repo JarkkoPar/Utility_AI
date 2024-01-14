@@ -121,6 +121,12 @@
 // Main header for UtilityAI.
 #include "utility_ai.h"
 
+
+// EDITOR PLUGIN CLASSES.
+#include "editor/editor_plugin.h"
+#include "debugger/debugger_plugin.h"
+
+
 // Standard headers.
 #include <gdextension_interface.h>
 #include <godot_cpp/core/defs.hpp>
@@ -134,12 +140,8 @@ static UtilityAINodeQuerySystem* gpNodeQuerySystem;
 static UtilityAIPerformanceMonitorSingleton* gdAIPerformanceMonitor;
 
 
-void initialize_utility_ai_module(ModuleInitializationLevel p_level) {
-    if (p_level != MODULE_INITIALIZATION_LEVEL_SCENE) {
-        return;
-    }
 
-    // Add the classes here.
+void register_scene_classes() {
     ClassDB::register_class<UtilityAI>(true);
     ClassDB::register_class<UtilityAIConsiderations>(true);
     ClassDB::register_class<UtilityAIConsiderationGroup>();
@@ -248,6 +250,38 @@ void initialize_utility_ai_module(ModuleInitializationLevel p_level) {
 
     gdAIPerformanceMonitor = memnew(UtilityAIPerformanceMonitorSingleton);
     Engine::get_singleton()->register_singleton("AIPerformanceMonitor", gdAIPerformanceMonitor);
+}
+
+
+void register_editor_classes() {
+    //GDREGISTER_CLASS(UtilityAIEditorPlugin);
+    ClassDB::register_class<UtilityAIEditorPlugin>();
+    EditorPlugins::add_by_type<UtilityAIEditorPlugin>();
+
+    ClassDB::register_class<UtilityAIDebuggerPlugin>();
+    EditorPlugins::add_by_type<UtilityAIDebuggerPlugin>();
+}
+
+
+void initialize_utility_ai_module(ModuleInitializationLevel p_level) {
+    //if (p_level != MODULE_INITIALIZATION_LEVEL_SCENE) {
+    //    return;
+    //}
+
+    // Add the classes here.
+    switch( p_level ) {
+        case MODULE_INITIALIZATION_LEVEL_SCENE: {
+            register_scene_classes();
+        }
+        break;
+        case MODULE_INITIALIZATION_LEVEL_EDITOR: {
+            //register_editor_classes();
+        }
+        break;
+        
+        default: {} break;
+    }//endswitch p_level
+    
 }
 
 void uninitialize_utility_ai_module(ModuleInitializationLevel p_level) {

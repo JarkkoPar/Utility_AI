@@ -12,10 +12,15 @@ class UtilityAIStateTreeNodes : public UtilityAI {
     GDCLASS(UtilityAIStateTreeNodes, UtilityAI)
 
 private:
-    float _score;
-    int    _evaluation_method;
-    bool   _invert_score;
-    int    _child_state_selection_rule;
+    bool    _is_on_entered_condition_true;
+    float   _score;
+    int     _evaluation_method;
+    bool    _invert_score;
+    int     _child_state_selection_rule;
+    bool    _has_on_entered_method;
+    bool    _has_on_exited_method;
+    bool    _has_on_ticked_method;
+    bool    _has_on_entered_condition_method;
     UtilityAIStateTreeNodes* _tree_root_node;
     TypedArray<UtilityAIConsiderationResources>    _considerations;
 protected:
@@ -30,6 +35,9 @@ public:
     void set_considerations( TypedArray<UtilityAIConsiderationResources> considerations );
     TypedArray<UtilityAIConsiderationResources> get_considerations() const;
     
+    void set_is_on_entered_condition_true( bool is_on_entered_condition_true );
+    bool get_is_on_entered_condition_true() const;
+
     void set_evaluation_method( int evaluation_method );
     int  get_evaluation_method() const;
 
@@ -72,7 +80,8 @@ public:
     
 
     // Godot virtuals.
-    // none.
+    
+    void _enter_tree();
     
 };
 

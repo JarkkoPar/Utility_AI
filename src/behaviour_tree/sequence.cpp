@@ -62,6 +62,7 @@ void UtilityAIBTSequence::reset_bt_node() {
 int UtilityAIBTSequence::tick(Variant user_data, float delta) {
     if( get_internal_status() == BT_INTERNAL_STATUS_UNTICKED ) {
         _current_child_index = 0;
+        //emit_signal("btree_node_entered", user_data, delta, this);
     }
     set_internal_status(BT_INTERNAL_STATUS_TICKED);
     while( _current_child_index < get_child_count() ) {
@@ -83,6 +84,7 @@ int UtilityAIBTSequence::tick(Variant user_data, float delta) {
     }//endwhile children to tick
     
     set_internal_status(BT_INTERNAL_STATUS_COMPLETED);
+    //emit_signal("btree_node_exited", user_data, delta, this);
     return BT_SUCCESS;
 }
 
