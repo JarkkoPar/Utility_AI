@@ -1,6 +1,9 @@
 #ifndef UTILITY_AI_EDITOR_PLUGIN_H_INCLUDED
 #define UTILITY_AI_EDITOR_PLUGIN_H_INCLUDED
 
+#ifdef DEBUG_ENABLED
+
+
 #include <godot_cpp/classes/editor_plugin.hpp>
 #include <godot_cpp/classes/editor_interface.hpp>
 #include <godot_cpp/classes/editor_selection.hpp>
@@ -56,5 +59,7 @@ public:
 };
 
 }
+
+#endif //debug enabled
 
 #endif

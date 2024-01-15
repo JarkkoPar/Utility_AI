@@ -1,3 +1,5 @@
+#ifdef DEBUG_ENABLED
+
 #include "debugger_plugin.h"
 #include <godot_cpp/classes/label.hpp>
 #include "../utility_ai.h"
@@ -69,3 +71,5 @@ bool UtilityAIDebuggerPlugin::_capture(const String &message, const Array &data,
 void UtilityAIDebuggerPlugin::_notification(int p_what) {
 
 }
+
+#endif //debug enabled

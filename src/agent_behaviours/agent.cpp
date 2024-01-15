@@ -7,6 +7,10 @@
 #include <godot_cpp/classes/engine.hpp>
 #include <godot_cpp/classes/time.hpp>
 
+#ifdef DEBUG_ENABLED
+#include "../debugger/live_debugger.h"
+#endif
+
 
 using namespace godot;
 
@@ -513,6 +517,14 @@ void UtilityAIAgent::_notification( int p_what ) {
     }//endswitch
 }
 */
+
+void UtilityAIAgent::_ready() {
+    if( Engine::get_singleton()->is_editor_hint() ) return;
+#ifdef DEBUG_ENABLED
+    UtilityAILiveDebugger::get_singleton()->register_ai_agent(this->get_instance_id());
+    WARN_PRINT("AA Registered!");
+#endif
+}
 
 void UtilityAIAgent::_process( double delta ) {
     if( _current_behaviour_group_node ) {

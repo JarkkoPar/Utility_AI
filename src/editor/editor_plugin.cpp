@@ -1,4 +1,8 @@
+#ifdef DEBUG_ENABLED
+
+
 #include "editor_plugin.h"
+
 //#include "../behaviour_tree/nodes.h"
 #include "../behaviour_tree/root.h"
 
@@ -118,4 +122,6 @@ void  UtilityAIEditorPlugin::btree_add_child_nodes( Tree* tree, TreeItem* parent
         }
     }//endfor child nodes.
 }
+
+#endif //debug enabled
 

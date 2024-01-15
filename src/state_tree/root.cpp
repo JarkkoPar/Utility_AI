@@ -6,6 +6,9 @@
 #include <godot_cpp/classes/engine.hpp>
 #include <godot_cpp/classes/time.hpp>
 #include "../performance_monitor_singleton.h"
+#ifdef DEBUG_ENABLED
+#include "../debugger/live_debugger.h"
+#endif
 
 
 using namespace godot;
@@ -166,6 +169,11 @@ void UtilityAISTRoot::tick(Variant user_data, float delta) {
 void UtilityAISTRoot::_ready() {
     if( Engine::get_singleton()->is_editor_hint() ) return;
     set_root_node(this);
+
+#ifdef DEBUG_ENABLED
+    UtilityAILiveDebugger::get_singleton()->register_state_tree(this->get_instance_id());
+    WARN_PRINT("ST Registered!");
+#endif
 }
 /**/
 
