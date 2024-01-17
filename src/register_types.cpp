@@ -253,9 +253,9 @@ void register_scene_classes() {
     ClassDB::register_class<UtilityAIPerformanceMonitorSingleton>();
 
 #ifdef DEBUG_ENABLED
-    ClassDB::register_class<UtilityAILiveDebugger>();
-    gpAILiveDebugger = memnew(UtilityAILiveDebugger);
-    Engine::get_singleton()->register_singleton("AILiveDebugger", gpAILiveDebugger);
+    //ClassDB::register_class<UtilityAILiveDebugger>();
+    //gpAILiveDebugger = memnew(UtilityAILiveDebugger);
+    //Engine::get_singleton()->register_singleton("AILiveDebugger", gpAILiveDebugger);
 #endif 
 
     // Add singletons.
@@ -311,8 +311,8 @@ void uninitialize_utility_ai_module(ModuleInitializationLevel p_level) {
     memdelete(gpAIPerformanceMonitor);
 
 #ifdef DEBUG_ENABLED
-    Engine::get_singleton()->unregister_singleton("AILiveDebugger");
-    memdelete(gpAILiveDebugger);
+    //Engine::get_singleton()->unregister_singleton("AILiveDebugger");
+    //memdelete(gpAILiveDebugger);
 #endif
 }
 

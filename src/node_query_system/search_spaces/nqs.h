@@ -29,7 +29,7 @@ private:
     PackedFloat64Array  _current_query_result_scores;
     TypedArray<Node>    _query_results;
     PackedFloat64Array  _query_result_scores;
-    //double              _query_time_budget_per_frame_sec;
+    //float              _query_time_budget_per_frame_sec;
     //uint64_t            _query_time_budget_per_frame_usec;
     uint64_t            _total_query_runtime_usec;
     uint64_t            _current_query_runtime_usec;
@@ -42,7 +42,7 @@ private:
     unsigned int        _current_query_call_count;
     unsigned int        _total_query_node_visits;
     unsigned int        _total_query_call_count;
-    //double              _total_query_runtime_sec;
+    //float              _total_query_runtime_sec;
     TypedArray<Node>    _search_space;
     PackedFloat64Array  _scores;
     unsigned int        _num_search_space_nodes;
@@ -64,16 +64,16 @@ protected:
     virtual void _initialize_search_space(){}
     virtual void _uninitialize_search_space(){}
 
-    void apply_criterion(   UtilityAINQSSearchCriteria* criterion, 
+    /*void apply_criterion(   UtilityAINQSSearchCriteria* criterion, 
                             TypedArray<Node> search_space, 
                             PackedFloat64Array scores, 
                             TypedArray<Node>& result_space, 
-                            PackedFloat64Array& result_scores );
+                            PackedFloat64Array& result_scores );*/
     bool apply_criterion_with_time_budget( UtilityAINQSSearchCriteria* criterion,
                             uint64_t start_time_usec, 
                             uint64_t time_budget_usec );
     virtual bool preprocess_search_space(uint64_t time_limit_timestamp_usec){_is_preprocessing_completed = true; return true;};
-    void place_to_query_results_based_on_score( Node* node, double score );
+    void place_to_query_results_based_on_score( Node* node, float score );
 
     unsigned int        _current_preprocessing_node_index;
 
@@ -137,7 +137,7 @@ public:
     virtual void start_query();
     virtual bool execute_query(uint64_t time_budget_usec = 0 );
 
-    //void apply_criterion( UtilityAISearchCriteria* criteria, TypedArray<Node> search_space, TypedArray<double> current_scores, TypedArray<Node>& result_space, TypedArray<double>& result_scores );
+    //void apply_criterion( UtilityAISearchCriteria* criteria, TypedArray<Node> search_space, TypedArray<float> current_scores, TypedArray<Node>& result_space, TypedArray<float>& result_scores );
     
     // Godot virtuals.
     void _ready();

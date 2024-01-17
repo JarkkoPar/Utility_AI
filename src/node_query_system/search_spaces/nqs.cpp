@@ -343,17 +343,6 @@ bool UtilityAINQSSearchSpaces::execute_query(uint64_t time_budget_usec) {
         }
         time_budget_remaining_usec -= _search_space_fetch_time_usec;
         
-        /**
-        time_budget_remaining_usec -= _search_space_fetch_time_usec;
-        if( time_budget_usec > 0 && time_budget_remaining_usec <= 0) {
-            // Update the debug counters before exiting.
-            _current_call_runtime_usec = _search_space_fetch_time_usec; 
-            _average_call_runtime_usec = _average_call_runtime_usec * 0.5 + 0.5 * _current_call_runtime_usec;
-            _current_query_runtime_usec += _current_call_runtime_usec; 
-            
-            return false; // Search space fetching used the time budget.
-        }
-        /**/
     }//endif is searchspace fetched
 
     // Do any preprocessing that's needed.
@@ -454,9 +443,9 @@ bool UtilityAINQSSearchSpaces::apply_criterion_with_time_budget( UtilityAINQSSea
                                                                  uint64_t start_time_usec,
                                                                  uint64_t time_budget_usec ) {
     bool filter_out = false;
-    double score = 0.0;
+    float score = 0.0f;
     uint64_t end_time_usec = start_time_usec + time_budget_usec;
-    uint64_t current_time_usec = 0;
+    //uint64_t current_time_usec = 0;
     while( _current_node_index < _num_search_space_nodes ) {
         uint64_t current_time_usec = godot::Time::get_singleton()->get_ticks_usec();
         if( time_budget_usec > 0 ) {
@@ -472,7 +461,7 @@ bool UtilityAINQSSearchSpaces::apply_criterion_with_time_budget( UtilityAINQSSea
             ++_current_node_index;
             continue;
         } 
-        double previous_score = 1.0;
+        float previous_score = 1.0f;
         if( _current_node_index < (*_ptr_current_scores).size() ) {
             previous_score = (*_ptr_current_scores)[_current_node_index];
         }
@@ -480,7 +469,7 @@ bool UtilityAINQSSearchSpaces::apply_criterion_with_time_budget( UtilityAINQSSea
         criterion->apply_criterion(node, filter_out, score );
         if( !filter_out ) {
             (*_ptr_current_work_in_progress_search_space)[_work_in_progress_num_added_nodes] = node;
-            (*_ptr_current_work_in_progress_scores)[_work_in_progress_num_added_nodes] = score;
+            (*_ptr_current_work_in_progress_scores)[_work_in_progress_num_added_nodes] = previous_score * score;
             ++_work_in_progress_num_added_nodes;
         } 
         if( _is_run_in_debug_mode ) {
@@ -510,18 +499,18 @@ bool UtilityAINQSSearchSpaces::apply_criterion_with_time_budget( UtilityAINQSSea
 }
 
 
-
+/*
 void UtilityAINQSSearchSpaces::apply_criterion( UtilityAINQSSearchCriteria* criterion, TypedArray<Node> search_space, PackedFloat64Array scores, TypedArray<Node>& result_space, PackedFloat64Array& result_scores ) {
     TypedArray<Node> result_space_after_application;
     PackedFloat64Array result_scores_after_application;
 
     bool filter_out = false;
-    double score = 0.0;
+    float score = 0.0;
     _current_node_index = 0;
     for( int i = 0; i < search_space.size(); ++i ) {
         Node* node = godot::Object::cast_to<Node>(search_space[i]);
         if( node == nullptr ) continue;
-        double previous_score = 1.0;
+        float previous_score = 1.0;
         if( i < scores.size() ) {
             previous_score = scores[i];
         }
@@ -536,9 +525,9 @@ void UtilityAINQSSearchSpaces::apply_criterion( UtilityAINQSSearchCriteria* crit
     result_space = result_space_after_application;
     result_scores = result_scores_after_application;
 }
+*/
 
-
-void UtilityAINQSSearchSpaces::place_to_query_results_based_on_score( Node* node, double score ) {
+void UtilityAINQSSearchSpaces::place_to_query_results_based_on_score( Node* node, float score ) {
     int num_entries = _current_query_result_scores.size();
     if( num_entries == 0 ) {
         _current_query_results.push_back(node);
@@ -549,7 +538,7 @@ void UtilityAINQSSearchSpaces::place_to_query_results_based_on_score( Node* node
     }
     
     int i = 0;//_current_query_result_scores.bsearch(score); 
-    while( i < num_entries && _current_query_result_scores[i] > score ) {
+    while( i < num_entries && _current_query_result_scores[i] >= score ) {
         ++i;
     }
 
@@ -557,29 +546,16 @@ void UtilityAINQSSearchSpaces::place_to_query_results_based_on_score( Node* node
         _current_query_results.insert(i, node);
         _current_query_result_scores.insert(i, score);
         if( num_entries + 1 > _top_n_to_find ) {
-            _current_query_result_scores = _current_query_result_scores.slice(0, _top_n_to_find-1);//.remove_at(_top_n_to_find);
-            _current_query_results = _current_query_results.slice(0, _top_n_to_find-1); //.remove_at(_top_n_to_find);
+            //_current_query_result_scores = 
+            _current_query_result_scores.remove_at(_top_n_to_find);//.slice(0, _top_n_to_find-1);//.remove_at(_top_n_to_find);
+            //_current_query_results = 
+            _current_query_results.remove_at(_top_n_to_find);//(0, _top_n_to_find-1); //.remove_at(_top_n_to_find);
         }
+        return;
     }
     if( i < _top_n_to_find ) {
         _current_query_results.push_back(node);
         _current_query_result_scores.push_back(score);
     }
 }
-
-/**
- * Symptoms of premature optimization...
-void UtilityAINQSSearchSpaces::apply_criterion( UtilityAISearchCriteria* criteria, 
-                                                TypedArray<Node> search_space, 
-                                                TypedArray<double> current_scores, 
-                                                TypedArray<Node>& result_space, 
-                                                TypedArray<double>& result_scores ) {
-    TypedArray<Node> new_space;
-    TypedArray<double> new_scoring;
-    for( int i = 0; i < search_space.size(); ++i ) {
-
-    }
-
-}
-/**/
 

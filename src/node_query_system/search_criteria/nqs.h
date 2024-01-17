@@ -21,7 +21,7 @@ protected:
 
     virtual void _initialize_criterion(){};
 
-    double  _score;
+    float  _score;
     bool    _is_filtered;
 
 public:
@@ -43,8 +43,8 @@ public:
     void set_is_filtered( bool is_filtered );
     bool get_is_filtered() const;
 
-    void set_score( double score );
-    double get_score() const;
+    void set_score( float score );
+    float get_score() const;
 
     void set_activation_curve( Ref<Curve> activation_curve );
     Ref<Curve> get_activation_curve() const;
@@ -52,8 +52,8 @@ public:
 
     // Handling methods.
 
-    virtual void apply_criterion( Node* node, bool& filter_out, double& score );
-    virtual double sample_activation_curve( double input_value ) const;
+    virtual void apply_criterion( Node* node, bool& filter_out, float& score );
+    virtual float sample_activation_curve( float input_value ) const;
 };
 
 }

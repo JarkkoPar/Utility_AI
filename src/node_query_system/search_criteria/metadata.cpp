@@ -23,8 +23,8 @@ StringName UtilityAIMetadataSearchCriterion::get_metadata_name() const {
     return _metadata_name;
 }
 
-void UtilityAIMetadataSearchCriterion::apply_criterion( Node* node, bool& filter_out, double& score ) {
-    _score = 1.0;
+void UtilityAIMetadataSearchCriterion::apply_criterion( Node* node, bool& filter_out, float& score ) {
+    _score = 1.0f;
     godot::Variant metavar = node->get_meta(_metadata_name, "UAI*NAN");
     _is_filtered = (metavar != godot::Variant("UAI*NAN"));
     filter_out = _is_filtered;

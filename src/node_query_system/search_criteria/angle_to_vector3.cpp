@@ -5,8 +5,8 @@ using namespace godot;
 
 
 UtilityAIAngleToVector3SearchCriterion::UtilityAIAngleToVector3SearchCriterion() {
-    _min_angle_degrees =   0.0;
-    _max_angle_degrees =  90.0;
+    _min_angle_degrees =   0.0f;
+    _max_angle_degrees =  90.0f;
     _min_angle_radians = godot::Math::deg_to_rad(_min_angle_degrees);
     _max_angle_radians = godot::Math::deg_to_rad(_max_angle_degrees);
     _angle_to_direction_vector = Vector3(0.0, 0.0, -1.0);
@@ -38,17 +38,17 @@ void UtilityAIAngleToVector3SearchCriterion::_bind_methods() {
 
 void UtilityAIAngleToVector3SearchCriterion::_initialize_criterion() {
     if( _max_angle_degrees <= _min_angle_degrees ) {
-        _max_angle_degrees = _min_angle_degrees + 1.0;
-        if( _max_angle_degrees > 180.0 ) {
-            _max_angle_degrees = 180.0;
-            _min_angle_degrees = 179.0;
+        _max_angle_degrees = _min_angle_degrees + 1.0f;
+        if( _max_angle_degrees > 180.0f ) {
+            _max_angle_degrees = 180.0f;
+            _min_angle_degrees = 179.0f;
         }    
     }
     _max_angle_radians = godot::Math::deg_to_rad(_max_angle_degrees);
     _min_angle_radians = godot::Math::deg_to_rad(_min_angle_degrees);
     
     _span_radians = _max_angle_radians - _min_angle_radians;
-    _one_over_span_radians = 1.0 / _span_radians;
+    _one_over_span_radians = 1.0f / _span_radians;
 }
 
 
@@ -64,49 +64,49 @@ Vector3 UtilityAIAngleToVector3SearchCriterion::get_angle_to_direction_vector() 
 }
 
 
-void UtilityAIAngleToVector3SearchCriterion::set_min_angle_degrees( double min_angle_degrees ) {
+void UtilityAIAngleToVector3SearchCriterion::set_min_angle_degrees( float min_angle_degrees ) {
     //if( _min_angle_degrees >= _max_angle_degrees ) return;
-    if( _min_angle_degrees < -180.0 ) return;
+    if( _min_angle_degrees < -180.0f ) return;
     
     _min_angle_degrees = min_angle_degrees;
     _min_angle_radians = godot::Math::deg_to_rad(_min_angle_degrees);
     _span_radians = _max_angle_radians - _min_angle_radians;
-    _one_over_span_radians = 1.0 / _span_radians;
+    _one_over_span_radians = 1.0f / _span_radians;
 }
 
 
-double UtilityAIAngleToVector3SearchCriterion::get_min_angle_degrees() const {
+float UtilityAIAngleToVector3SearchCriterion::get_min_angle_degrees() const {
     return _min_angle_degrees;
 }
 
 
-void UtilityAIAngleToVector3SearchCriterion::set_max_angle_degrees( double max_angle_degrees ) {
+void UtilityAIAngleToVector3SearchCriterion::set_max_angle_degrees( float max_angle_degrees ) {
     //if( max_angle_degrees <= _min_angle_degrees ) return;
-    if( max_angle_degrees > 180.0 ) return;
+    if( max_angle_degrees > 180.0f ) return;
     _max_angle_degrees = max_angle_degrees;
     _max_angle_radians = godot::Math::deg_to_rad(_max_angle_degrees);
     _span_radians = _max_angle_radians - _min_angle_radians;
-    _one_over_span_radians = 1.0 / _span_radians;
+    _one_over_span_radians = 1.0f / _span_radians;
 }
 
 
-double UtilityAIAngleToVector3SearchCriterion::get_max_angle_degrees() const {
+float UtilityAIAngleToVector3SearchCriterion::get_max_angle_degrees() const {
     return _max_angle_degrees;
 }
 
 
 // Handing methods.
 
-void UtilityAIAngleToVector3SearchCriterion::apply_criterion( Node* node, bool& filter_out, double& score ) {
+void UtilityAIAngleToVector3SearchCriterion::apply_criterion( Node* node, bool& filter_out, float& score ) {
     Node3D* node3d = godot::Object::cast_to<Node3D>(node);
     if( node3d == nullptr ) return;
 
     _is_filtered = false;
-    _score = 0.0;
+    _score = 1.0f;
 
     Vector3 node3d_direction_vector = -node3d->get_global_transform().basis.get_column(2);
 
-    double angle = _angle_to_direction_vector.angle_to(node3d_direction_vector);
+    float angle = _angle_to_direction_vector.angle_to(node3d_direction_vector);
     
     if( get_use_for_filtering() ) {
         _is_filtered = (angle < _min_angle_radians || angle > _max_angle_radians );
@@ -114,11 +114,11 @@ void UtilityAIAngleToVector3SearchCriterion::apply_criterion( Node* node, bool& 
 
     if( get_use_for_scoring() ) {
         if( angle >= _max_angle_radians ) {
-            _score = 1.0;
+            _score = 1.0f;
         } else if( angle <= _min_angle_radians) {
-            _score = 0.0;
+            _score = 0.0f;
         } else {
-            double angle_from_lower_limit = angle - _min_angle_radians;
+            float angle_from_lower_limit = angle - _min_angle_radians;
             _score = angle_from_lower_limit * _one_over_span_radians; 
         }
         if( get_activation_curve().is_valid()) {

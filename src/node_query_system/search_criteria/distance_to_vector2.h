@@ -10,13 +10,13 @@ class UtilityAIDistanceToVector2SearchCriterion : public UtilityAINQSSearchCrite
     GDCLASS(UtilityAIDistanceToVector2SearchCriterion, UtilityAINQSSearchCriteria)
 
 private:
-    double _min_distance;
-    double _max_distance;
+    float _min_distance;
+    float _max_distance;
 
-    double _min_distance_squared;
-    double _max_distance_squared;
-    double _span_length;
-    double _one_over_span_length;
+    float _min_distance_squared;
+    float _max_distance_squared;
+    float _span_length;
+    float _one_over_span_length;
 
     Vector2 _distance_to_vector;
 
@@ -34,15 +34,15 @@ public:
     Vector2 get_distance_to_vector() const;
 
 
-    void set_min_distance( double min_distance );
-    double get_min_distance() const;
+    void set_min_distance( float min_distance );
+    float get_min_distance() const;
 
-    void set_max_distance( double max_distance );
-    double get_max_distance() const;
+    void set_max_distance( float max_distance );
+    float get_max_distance() const;
 
     // Handling methods.
 
-    virtual void apply_criterion( Node* node, bool& filter_out, double& score ) override;
+    virtual void apply_criterion( Node* node, bool& filter_out, float& score ) override;
 
 };
 

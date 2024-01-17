@@ -172,7 +172,7 @@ void UtilityAISTRoot::_ready() {
 
 #ifdef DEBUG_ENABLED
     UtilityAILiveDebugger::get_singleton()->register_state_tree(this->get_instance_id());
-    WARN_PRINT("ST Registered!");
+    //WARN_PRINT("ST Registered!");
 #endif
 }
 /**/

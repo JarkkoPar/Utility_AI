@@ -35,18 +35,21 @@ void UtilityAINQSSearchCriteria::_bind_methods() {
     ClassDB::bind_method(D_METHOD("set_use_for_filtering", "use_for_filtering"), &UtilityAINQSSearchCriteria::set_use_for_filtering);
     ClassDB::bind_method(D_METHOD("get_use_for_filtering"), &UtilityAINQSSearchCriteria::get_use_for_filtering);
     ADD_PROPERTY(PropertyInfo(Variant::BOOL, "use_for_filtering", PROPERTY_HINT_NONE), "set_use_for_filtering","get_use_for_filtering");
-    
+
+    ClassDB::bind_method(D_METHOD("set_activation_curve", "activation_curve"), &UtilityAINQSSearchCriteria::set_activation_curve);
+    ClassDB::bind_method(D_METHOD("get_activation_curve"), &UtilityAINQSSearchCriteria::get_activation_curve);
+    ADD_PROPERTY(PropertyInfo(Variant::OBJECT, "activation_curve", PROPERTY_HINT_RESOURCE_TYPE, "Curve"), "set_activation_curve", "get_activation_curve");
+
+    ADD_SUBGROUP("Debugging","");
+
     ClassDB::bind_method(D_METHOD("set_score", "score"), &UtilityAINQSSearchCriteria::set_score);
     ClassDB::bind_method(D_METHOD("get_score"), &UtilityAINQSSearchCriteria::get_score);
     ADD_PROPERTY(PropertyInfo(Variant::FLOAT, "score", PROPERTY_HINT_NONE), "set_score","get_score");
-    
+
     ClassDB::bind_method(D_METHOD("set_is_filtered", "is_filtered"), &UtilityAINQSSearchCriteria::set_is_filtered);
     ClassDB::bind_method(D_METHOD("get_is_filtered"), &UtilityAINQSSearchCriteria::get_is_filtered);
     ADD_PROPERTY(PropertyInfo(Variant::BOOL, "is_filtered", PROPERTY_HINT_NONE), "set_is_filtered","get_is_filtered");
     
-    ClassDB::bind_method(D_METHOD("set_activation_curve", "activation_curve"), &UtilityAINQSSearchCriteria::set_activation_curve);
-    ClassDB::bind_method(D_METHOD("get_activation_curve"), &UtilityAINQSSearchCriteria::get_activation_curve);
-    ADD_PROPERTY(PropertyInfo(Variant::OBJECT, "activation_curve", PROPERTY_HINT_RESOURCE_TYPE, "Curve"), "set_activation_curve", "get_activation_curve");
 
 }
 
@@ -92,29 +95,29 @@ bool UtilityAINQSSearchCriteria::get_use_for_filtering() const {
 }
 
 
-void UtilityAINQSSearchCriteria::set_score( double score ) {
+void UtilityAINQSSearchCriteria::set_score( float score ) {
     _score = score;
 }
 
 
-double UtilityAINQSSearchCriteria::get_score() const {
+float UtilityAINQSSearchCriteria::get_score() const {
     return _score;
 }
 
 
 // Handing methods.
 
-void UtilityAINQSSearchCriteria::apply_criterion( Node* node, bool& filter_out, double& score ) {
+void UtilityAINQSSearchCriteria::apply_criterion( Node* node, bool& filter_out, float& score ) {
     if( node == nullptr ) return;
 
 
 }
 
 
-double UtilityAINQSSearchCriteria::sample_activation_curve( double input_value ) const {
+float UtilityAINQSSearchCriteria::sample_activation_curve( float input_value ) const {
     if(_activation_curve.is_valid()) {
 		return _activation_curve->sample( input_value );
     }
-    return 0.0;
+    return 0.0f;
 }
 

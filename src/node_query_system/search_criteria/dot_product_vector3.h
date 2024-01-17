@@ -12,7 +12,7 @@ class UtilityAIDotProductVector3SearchCriterion : public UtilityAINQSSearchCrite
 private:
 
     Vector3 _dot_product_direction_vector;
-    double  _filtering_value;
+    float  _filtering_value;
     int     _filtering_rule;
 
 protected:
@@ -36,15 +36,15 @@ public:
     Vector3 get_dot_product_direction_vector() const;
 
     
-    void set_filtering_value( double filtering_value );
-    double get_filtering_value() const;
+    void set_filtering_value( float filtering_value );
+    float get_filtering_value() const;
     
     void set_filtering_rule( int filtering_rule );
     int get_filtering_rule() const;
     
     // Handling methods.
 
-    virtual void apply_criterion( Node* node, bool& filter_out, double& score ) override;
+    virtual void apply_criterion( Node* node, bool& filter_out, float& score ) override;
 
 };
 

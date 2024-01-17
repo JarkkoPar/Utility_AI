@@ -23,7 +23,7 @@ public:
 
     // Handling methods.
 
-    virtual void apply_criterion( Node* node, bool& filter_out, double& score ) override;
+    virtual void apply_criterion( Node* node, bool& filter_out, float& score ) override;
 
 };
 

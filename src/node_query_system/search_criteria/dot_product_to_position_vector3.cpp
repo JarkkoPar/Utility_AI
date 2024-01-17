@@ -5,7 +5,7 @@ using namespace godot;
 
 
 UtilityAIDotProductToPositionVector3SearchCriterion::UtilityAIDotProductToPositionVector3SearchCriterion() {
-    _filtering_value = 0.0;
+    _filtering_value = 0.0f;
     _filtering_rule = UtilityAIDotProductToPositionVector3SearchCriteriaFilteringRule::LessOrEqual;
     
     _dot_product_position_vector = Vector3(0.0, 0.0, -1.0);
@@ -52,12 +52,12 @@ Vector3 UtilityAIDotProductToPositionVector3SearchCriterion::get_dot_product_pos
 }
 
 
-void UtilityAIDotProductToPositionVector3SearchCriterion::set_filtering_value( double filtering_value ) {
+void UtilityAIDotProductToPositionVector3SearchCriterion::set_filtering_value( float filtering_value ) {
     _filtering_value = filtering_value;
 }
 
 
-double UtilityAIDotProductToPositionVector3SearchCriterion::get_filtering_value() const {
+float UtilityAIDotProductToPositionVector3SearchCriterion::get_filtering_value() const {
     return _filtering_value;
 }
 
@@ -73,18 +73,18 @@ int UtilityAIDotProductToPositionVector3SearchCriterion::get_filtering_rule() co
 
 // Handing methods.
 
-void UtilityAIDotProductToPositionVector3SearchCriterion::apply_criterion( Node* node, bool& filter_out, double& score ) {
+void UtilityAIDotProductToPositionVector3SearchCriterion::apply_criterion( Node* node, bool& filter_out, float& score ) {
     Node3D* node3d = godot::Object::cast_to<Node3D>(node);
     if( node3d == nullptr ) return;
 
     _is_filtered = false;
-    _score = 0.0;
+    _score = 1.0f;
 
     Vector3 node3d_direction_vector = -node3d->get_global_transform().basis.get_column(2);
     Vector3 node3d_position_vector = node3d->get_global_position();
     Vector3 node3d_from_to_position_vector = (_dot_product_position_vector - node3d_position_vector).normalized();
 
-    double DotProductToPosition = node3d_direction_vector.dot(node3d_from_to_position_vector);
+    float DotProductToPosition = node3d_direction_vector.dot(node3d_from_to_position_vector);
     
     if( get_use_for_filtering() ) {
         switch(_filtering_rule) {
@@ -117,7 +117,7 @@ void UtilityAIDotProductToPositionVector3SearchCriterion::apply_criterion( Node*
     }//endif do filtering
 
     if( get_use_for_scoring() ) {
-        _score = DotProductToPosition * 0.5 + 0.5;
+        _score = DotProductToPosition * 0.5f + 0.5f;
         if( get_activation_curve().is_valid()) {
             _score = sample_activation_curve(_score);
         }

@@ -5,10 +5,10 @@ using namespace godot;
 
 
 UtilityAIDotProductToPositionVector2SearchCriterion::UtilityAIDotProductToPositionVector2SearchCriterion() {
-    _filtering_value = 0.0;
+    _filtering_value = 0.0f;
     _filtering_rule = UtilityAIDotProductToPositionVector2SearchCriteriaFilteringRule::LessOrEqual;
     
-    _dot_product_position_vector = Vector2(1.0, 0.0);
+    _dot_product_position_vector = Vector2(1.0f, 0.0f);
 }
 
 
@@ -52,12 +52,12 @@ Vector2 UtilityAIDotProductToPositionVector2SearchCriterion::get_dot_product_pos
 }
 
 
-void UtilityAIDotProductToPositionVector2SearchCriterion::set_filtering_value( double filtering_value ) {
+void UtilityAIDotProductToPositionVector2SearchCriterion::set_filtering_value( float filtering_value ) {
     _filtering_value = filtering_value;
 }
 
 
-double UtilityAIDotProductToPositionVector2SearchCriterion::get_filtering_value() const {
+float UtilityAIDotProductToPositionVector2SearchCriterion::get_filtering_value() const {
     return _filtering_value;
 }
 
@@ -73,19 +73,19 @@ int UtilityAIDotProductToPositionVector2SearchCriterion::get_filtering_rule() co
 
 // Handing methods.
 
-void UtilityAIDotProductToPositionVector2SearchCriterion::apply_criterion( Node* node, bool& filter_out, double& score ) {
+void UtilityAIDotProductToPositionVector2SearchCriterion::apply_criterion( Node* node, bool& filter_out, float& score ) {
     Node2D* node2d = godot::Object::cast_to<Node2D>(node);
     if( node2d == nullptr ) return;
 
     _is_filtered = false;
-    _score = 0.0;
+    _score = 1.0f;
 
     Vector2 node2d_position_vector = node2d->get_global_position();
     Vector2 node2d_direction_vector = Vector2(1.0,0.0).rotated(node2d->get_global_rotation());
 
     Vector2 node2d_from_to_vector = (_dot_product_position_vector - node2d_position_vector).normalized();
 
-    double DotProductToPosition = node2d_direction_vector.dot(node2d_from_to_vector);
+    float DotProductToPosition = node2d_direction_vector.dot(node2d_from_to_vector);
     
     if( get_use_for_filtering() ) {
         switch(_filtering_rule) {
@@ -118,7 +118,7 @@ void UtilityAIDotProductToPositionVector2SearchCriterion::apply_criterion( Node*
     }//endif do filtering
 
     if( get_use_for_scoring() ) {
-        _score = DotProductToPosition * 0.5 + 0.5;
+        _score = DotProductToPosition * 0.5f + 0.5f;
         if( get_activation_curve().is_valid()) {
             _score = sample_activation_curve(_score);
         }

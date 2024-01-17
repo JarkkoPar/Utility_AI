@@ -52,12 +52,12 @@ Vector2 UtilityAIDotProductVector2SearchCriterion::get_dot_product_direction_vec
 }
 
 
-void UtilityAIDotProductVector2SearchCriterion::set_filtering_value( double filtering_value ) {
+void UtilityAIDotProductVector2SearchCriterion::set_filtering_value( float filtering_value ) {
     _filtering_value = filtering_value;
 }
 
 
-double UtilityAIDotProductVector2SearchCriterion::get_filtering_value() const {
+float UtilityAIDotProductVector2SearchCriterion::get_filtering_value() const {
     return _filtering_value;
 }
 
@@ -73,16 +73,16 @@ int UtilityAIDotProductVector2SearchCriterion::get_filtering_rule() const {
 
 // Handing methods.
 
-void UtilityAIDotProductVector2SearchCriterion::apply_criterion( Node* node, bool& filter_out, double& score ) {
+void UtilityAIDotProductVector2SearchCriterion::apply_criterion( Node* node, bool& filter_out, float& score ) {
     Node2D* node2d = godot::Object::cast_to<Node2D>(node);
     if( node2d == nullptr ) return;
 
     _is_filtered = false;
-    _score = 0.0;
+    _score = 1.0f;
 
-    Vector2 node2d_direction_vector = Vector2(1.0,0.0).rotated(node2d->get_global_rotation());
+    Vector2 node2d_direction_vector = Vector2(1.0f,0.0f).rotated(node2d->get_global_rotation());
 
-    double dotproduct = _dot_product_direction_vector.dot(node2d_direction_vector);
+    float dotproduct = _dot_product_direction_vector.dot(node2d_direction_vector);
     
     if( get_use_for_filtering() ) {
         switch(_filtering_rule) {
@@ -115,7 +115,7 @@ void UtilityAIDotProductVector2SearchCriterion::apply_criterion( Node* node, boo
     }//endif do filtering
 
     if( get_use_for_scoring() ) {
-        _score = dotproduct * 0.5 + 0.5;
+        _score = dotproduct * 0.5f + 0.5f;
         if( get_activation_curve().is_valid()) {
             _score = sample_activation_curve(_score);
         }

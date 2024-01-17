@@ -10,14 +10,14 @@ class UtilityAIAngleToVector2SearchCriterion : public UtilityAINQSSearchCriteria
     GDCLASS(UtilityAIAngleToVector2SearchCriterion, UtilityAINQSSearchCriteria)
 
 private:
-    double _min_angle_degrees;
-    double _max_angle_degrees;
+    float _min_angle_degrees;
+    float _max_angle_degrees;
 
-    double _min_angle_radians;
-    double _max_angle_radians;
+    float _min_angle_radians;
+    float _max_angle_radians;
 
-    double _span_radians;
-    double _one_over_span_radians;
+    float _span_radians;
+    float _one_over_span_radians;
 
     Vector2 _angle_to_direction_vector;
 
@@ -35,15 +35,15 @@ public:
     Vector2 get_angle_to_direction_vector() const;
 
 
-    void set_min_angle_degrees( double min_angle_degrees );
-    double get_min_angle_degrees() const;
+    void set_min_angle_degrees( float min_angle_degrees );
+    float get_min_angle_degrees() const;
 
-    void set_max_angle_degrees( double max_angle_degrees );
-    double get_max_angle_degrees() const;
+    void set_max_angle_degrees( float max_angle_degrees );
+    float get_max_angle_degrees() const;
 
     // Handling methods.
 
-    virtual void apply_criterion( Node* node, bool& filter_out, double& score ) override;
+    virtual void apply_criterion( Node* node, bool& filter_out, float& score ) override;
 
 };
 

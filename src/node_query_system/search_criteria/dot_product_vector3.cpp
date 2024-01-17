@@ -5,7 +5,7 @@ using namespace godot;
 
 
 UtilityAIDotProductVector3SearchCriterion::UtilityAIDotProductVector3SearchCriterion() {
-    _filtering_value = 0.0;
+    _filtering_value = 0.0f;
     _filtering_rule = UtilityAIDotProductVector3SearchCriteriaFilteringRule::LessOrEqual;
     
     _dot_product_direction_vector = Vector3(0.0, 0.0, -1.0);
@@ -52,12 +52,12 @@ Vector3 UtilityAIDotProductVector3SearchCriterion::get_dot_product_direction_vec
 }
 
 
-void UtilityAIDotProductVector3SearchCriterion::set_filtering_value( double filtering_value ) {
+void UtilityAIDotProductVector3SearchCriterion::set_filtering_value( float filtering_value ) {
     _filtering_value = filtering_value;
 }
 
 
-double UtilityAIDotProductVector3SearchCriterion::get_filtering_value() const {
+float UtilityAIDotProductVector3SearchCriterion::get_filtering_value() const {
     return _filtering_value;
 }
 
@@ -73,16 +73,16 @@ int UtilityAIDotProductVector3SearchCriterion::get_filtering_rule() const {
 
 // Handing methods.
 
-void UtilityAIDotProductVector3SearchCriterion::apply_criterion( Node* node, bool& filter_out, double& score ) {
+void UtilityAIDotProductVector3SearchCriterion::apply_criterion( Node* node, bool& filter_out, float& score ) {
     Node3D* node3d = godot::Object::cast_to<Node3D>(node);
     if( node3d == nullptr ) return;
 
     _is_filtered = false;
-    _score = 0.0;
+    _score = 1.0f;
 
     Vector3 node3d_direction_vector = -node3d->get_global_transform().basis.get_column(2);
 
-    double dotproduct = _dot_product_direction_vector.dot(node3d_direction_vector);
+    float dotproduct = _dot_product_direction_vector.dot(node3d_direction_vector);
     
     if( get_use_for_filtering() ) {
         switch(_filtering_rule) {
@@ -115,7 +115,7 @@ void UtilityAIDotProductVector3SearchCriterion::apply_criterion( Node* node, boo
     }//endif do filtering
 
     if( get_use_for_scoring() ) {
-        _score = dotproduct * 0.5 + 0.5;
+        _score = dotproduct * 0.5f + 0.5f;
         if( get_activation_curve().is_valid()) {
             _score = sample_activation_curve(_score);
         }

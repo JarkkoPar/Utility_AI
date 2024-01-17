@@ -5,12 +5,12 @@ using namespace godot;
 
 
 UtilityAIDistanceToNode3DSearchCriterion::UtilityAIDistanceToNode3DSearchCriterion() {
-    _min_distance = 0.0;
-    _max_distance = 100.0;
-    _min_distance_squared = 0.0;
+    _min_distance = 0.0f;
+    _max_distance = 100.0f;
+    _min_distance_squared = 0.0f;
     _max_distance_squared = _max_distance * _max_distance;
     _span_length = _max_distance_squared - _min_distance_squared;
-    _one_over_span_length = 1.0 / _span_length;
+    _one_over_span_length = 1.0f / _span_length;
     _distance_to = nullptr;
 }
 
@@ -54,50 +54,50 @@ Node3D* UtilityAIDistanceToNode3DSearchCriterion::get_distance_to() const {
 }
 
 
-void UtilityAIDistanceToNode3DSearchCriterion::set_min_distance( double min_distance ) {
-    if( _min_distance < 0.0 ) return;
+void UtilityAIDistanceToNode3DSearchCriterion::set_min_distance( float min_distance ) {
+    if( _min_distance < 0.0f ) return;
     if( _min_distance >= _max_distance ) return;
 
     _min_distance = min_distance;
     _min_distance_squared = _min_distance * _min_distance;
 
     _span_length = _max_distance_squared - _min_distance_squared;
-    _one_over_span_length = 1.0 / _span_length;
+    _one_over_span_length = 1.0f / _span_length;
 }
 
 
-double UtilityAIDistanceToNode3DSearchCriterion::get_min_distance() const {
+float UtilityAIDistanceToNode3DSearchCriterion::get_min_distance() const {
     return _min_distance;
 }
 
 
-void UtilityAIDistanceToNode3DSearchCriterion::set_max_distance( double max_distance ) {
+void UtilityAIDistanceToNode3DSearchCriterion::set_max_distance( float max_distance ) {
     if( max_distance <= _min_distance ) return;
     _max_distance = max_distance;
     _max_distance_squared = _max_distance * _max_distance;
     
     _span_length = _max_distance_squared - _min_distance_squared;
-    _one_over_span_length = 1.0 / _span_length;
+    _one_over_span_length = 1.0f / _span_length;
 }
 
 
-double UtilityAIDistanceToNode3DSearchCriterion::get_max_distance() const {
+float UtilityAIDistanceToNode3DSearchCriterion::get_max_distance() const {
     return _max_distance;
 }
 
 
 // Handing methods.
 
-void UtilityAIDistanceToNode3DSearchCriterion::apply_criterion( Node* node, bool& filter_out, double& score ) {
+void UtilityAIDistanceToNode3DSearchCriterion::apply_criterion( Node* node, bool& filter_out, float& score ) {
     if( _distance_to == nullptr ) return;
     Node3D* node3d = godot::Object::cast_to<Node3D>(node);
     if( node3d == nullptr ) return;
     
     _is_filtered = false;
-    _score = 0.0;
+    _score = 1.0f;
 
     Vector3 from_to = node3d->get_global_position() - _distance_to->get_global_position();
-    double distance_squared = from_to.length_squared();
+    float distance_squared = from_to.length_squared();
     
     if( get_use_for_filtering() ) {
         _is_filtered = (distance_squared < _min_distance_squared || distance_squared > _max_distance_squared);
@@ -105,11 +105,11 @@ void UtilityAIDistanceToNode3DSearchCriterion::apply_criterion( Node* node, bool
 
     if( get_use_for_scoring() ) {
         if( distance_squared >= _max_distance_squared ) {
-            _score = 1.0;
+            _score = 1.0f;
         } else if( distance_squared <= _min_distance_squared) {
-            _score = 0.0;
+            _score = 0.0f;
         } else {
-            double distance_from_lower_limit = distance_squared - _min_distance_squared;
+            float distance_from_lower_limit = distance_squared - _min_distance_squared;
             _score = distance_from_lower_limit * _one_over_span_length; 
         }
         if( get_activation_curve().is_valid()) {
