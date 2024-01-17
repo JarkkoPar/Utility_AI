@@ -112,7 +112,7 @@ int UtilityAIBTRoot::tick(Variant user_data, float delta) {
 void UtilityAIBTRoot::_ready() {
     if( Engine::get_singleton()->is_editor_hint() ) return;
 #ifdef DEBUG_ENABLED
-    UtilityAILiveDebugger::get_singleton()->register_behaviour_tree(this->get_instance_id());
+    //UtilityAILiveDebugger::get_singleton()->register_behaviour_tree(this->get_instance_id());
     //WARN_PRINT("BT Registered!");
 #endif
     reset();

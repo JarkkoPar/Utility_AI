@@ -469,12 +469,12 @@ bool UtilityAINQSSearchSpaces::apply_criterion_with_time_budget( UtilityAINQSSea
         criterion->apply_criterion(node, filter_out, score );
         if( !filter_out ) {
             (*_ptr_current_work_in_progress_search_space)[_work_in_progress_num_added_nodes] = node;
-            (*_ptr_current_work_in_progress_scores)[_work_in_progress_num_added_nodes] = previous_score * score;
+            (*_ptr_current_work_in_progress_scores)[_work_in_progress_num_added_nodes] = (previous_score * score);
             ++_work_in_progress_num_added_nodes;
         } 
         if( _is_run_in_debug_mode ) {
             node->set("is_filtered", filter_out );
-            node->set("score", score );
+            node->set("score", (previous_score * score) );
         }
 
         // Move to the next node.

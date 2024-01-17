@@ -521,7 +521,7 @@ void UtilityAIAgent::_notification( int p_what ) {
 void UtilityAIAgent::_ready() {
     if( Engine::get_singleton()->is_editor_hint() ) return;
 #ifdef DEBUG_ENABLED
-    UtilityAILiveDebugger::get_singleton()->register_ai_agent(this->get_instance_id());
+    //UtilityAILiveDebugger::get_singleton()->register_ai_agent(this->get_instance_id());
     //WARN_PRINT("AA Registered!");
 #endif
 }

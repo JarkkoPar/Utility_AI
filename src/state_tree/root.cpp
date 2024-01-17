@@ -171,7 +171,7 @@ void UtilityAISTRoot::_ready() {
     set_root_node(this);
 
 #ifdef DEBUG_ENABLED
-    UtilityAILiveDebugger::get_singleton()->register_state_tree(this->get_instance_id());
+    //UtilityAILiveDebugger::get_singleton()->register_state_tree(this->get_instance_id());
     //WARN_PRINT("ST Registered!");
 #endif
 }
