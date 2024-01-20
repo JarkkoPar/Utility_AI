@@ -13,8 +13,10 @@ class UtilityAISTRoot : public UtilityAIStateTreeNodes {
     GDCLASS(UtilityAISTRoot, UtilityAIStateTreeNodes)
 
 private:
+    #ifdef DEBUG_ENABLED
     uint64_t                 _total_tick_usec;    
     uint64_t                 _total_transition_usec;
+    #endif
     //UtilityAIStateTreeNodes* _active_state;
     TypedArray<UtilityAIStateTreeNodes> _active_states;
     //godot::Dictionary        _state_tree_nodes;
@@ -27,10 +29,10 @@ public:
     
     
     // Getters and setters for attributes.
-    
+    #ifdef DEBUG_ENABLED
     uint64_t get_total_tick_usec() const;
     void set_total_tick_usec(uint64_t total_tick_usec );
-
+    #endif 
     //UtilityAIStateTreeNodes* get_active_state() const;
     //_active_states
 

@@ -12,7 +12,9 @@ class UtilityAIBTRoot : public UtilityAIBehaviourTreeNodes {
     GDCLASS(UtilityAIBTRoot, UtilityAIBehaviourTreeNodes)
 
 private:
+    #ifdef DEBUG_ENABLED
     uint64_t            _total_tick_usec;    
+    #endif
 protected:
     static void _bind_methods();
 
@@ -23,8 +25,10 @@ public:
     
     // Getters and setters for attributes.
     
+    #ifdef DEBUG_ENABLED
     uint64_t get_total_tick_usec() const;
     void set_total_tick_usec(uint64_t total_tick_usec );
+    #endif
 
     // Handling functions.
 

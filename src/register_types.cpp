@@ -125,8 +125,8 @@
 // EDITOR PLUGIN CLASSES.
 #ifdef DEBUG_ENABLED
 
-#include "editor/editor_plugin.h"
-#include "debugger/debugger_plugin.h"
+//#include "editor/editor_plugin.h"
+//#include "debugger/debugger_plugin.h"
 
 #include "debugger/live_debugger.h"
 
@@ -142,9 +142,9 @@ using namespace godot;
 
 // Singletons
 static UtilityAINodeQuerySystem* gpNodeQuerySystem;
-static UtilityAIPerformanceMonitorSingleton* gpAIPerformanceMonitor;
 #ifdef DEBUG_ENABLED
-    UtilityAILiveDebugger* gpAILiveDebugger;
+    static UtilityAILiveDebugger* gpAILiveDebugger;
+    static UtilityAIPerformanceMonitorSingleton* gpAIPerformanceMonitor;
     
 #endif 
 
@@ -250,31 +250,35 @@ void register_scene_classes() {
     ClassDB::register_class<UtilityAIDotProductToPositionVector3SearchCriterion>();
     ClassDB::register_class<UtilityAIDotProductToPositionVector2SearchCriterion>();
 
-    ClassDB::register_class<UtilityAIPerformanceMonitorSingleton>();
-
-#ifdef DEBUG_ENABLED
-    //ClassDB::register_class<UtilityAILiveDebugger>();
-    //gpAILiveDebugger = memnew(UtilityAILiveDebugger);
-    //Engine::get_singleton()->register_singleton("AILiveDebugger", gpAILiveDebugger);
-#endif 
 
     // Add singletons.
     gpNodeQuerySystem = memnew(UtilityAINodeQuerySystem);
     Engine::get_singleton()->register_singleton("NodeQuerySystem", gpNodeQuerySystem);
 
+    ClassDB::register_class<UtilityAIPerformanceMonitorSingleton>();
     gpAIPerformanceMonitor = memnew(UtilityAIPerformanceMonitorSingleton);
     Engine::get_singleton()->register_singleton("AIPerformanceMonitor", gpAIPerformanceMonitor);
+
+
+#ifdef DEBUG_ENABLED
+
+    ClassDB::register_class<UtilityAILiveDebugger>();
+    gpAILiveDebugger = memnew(UtilityAILiveDebugger);
+    Engine::get_singleton()->register_singleton("AILiveDebugger", gpAILiveDebugger);
+#endif 
+
+    
 }
 
 
 void register_editor_classes() {
 #ifdef DEBUG_ENABLED
     //GDREGISTER_CLASS(UtilityAIEditorPlugin);
-    ClassDB::register_class<UtilityAIEditorPlugin>();
-    EditorPlugins::add_by_type<UtilityAIEditorPlugin>();
+    //ClassDB::register_class<UtilityAIEditorPlugin>();
+    //EditorPlugins::add_by_type<UtilityAIEditorPlugin>();
 
-    ClassDB::register_class<UtilityAIDebuggerPlugin>();
-    EditorPlugins::add_by_type<UtilityAIDebuggerPlugin>();
+    //ClassDB::register_class<UtilityAIDebuggerPlugin>();
+    //EditorPlugins::add_by_type<UtilityAIDebuggerPlugin>();
 #endif
 }
 
@@ -307,12 +311,13 @@ void uninitialize_utility_ai_module(ModuleInitializationLevel p_level) {
 
     Engine::get_singleton()->unregister_singleton("NodeQuerySystem");
     memdelete(gpNodeQuerySystem);
+
     Engine::get_singleton()->unregister_singleton("AIPerformanceMonitor");
     memdelete(gpAIPerformanceMonitor);
 
 #ifdef DEBUG_ENABLED
-    //Engine::get_singleton()->unregister_singleton("AILiveDebugger");
-    //memdelete(gpAILiveDebugger);
+    Engine::get_singleton()->unregister_singleton("AILiveDebugger");
+    memdelete(gpAILiveDebugger);
 #endif
 }
 

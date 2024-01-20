@@ -1,7 +1,7 @@
 #include "nqs.h"
 #include <godot_cpp/classes/engine.hpp>
 #include <godot_cpp/classes/time.hpp>
-
+#include "../node_query_system.h"
 
 using namespace godot;
 
@@ -113,6 +113,11 @@ void UtilityAINQSSearchSpaces::_ready() {
 void UtilityAINQSSearchSpaces::_exit_tree() {
     if( Engine::get_singleton()->is_editor_hint() ) return;
     _uninitialize_search_space();
+    // If we don't remove this search space from the singleton, it'll cause a memory leak.
+    UtilityAINodeQuerySystem* nqs = godot::Object::cast_to<UtilityAINodeQuerySystem>(Engine::get_singleton()->get_singleton("NodeQuerySystem"));
+    if( nqs == nullptr ) return;
+    nqs->stop_query(this);
+
 }
 
 
@@ -442,8 +447,6 @@ bool UtilityAINQSSearchSpaces::execute_query(uint64_t time_budget_usec) {
 bool UtilityAINQSSearchSpaces::apply_criterion_with_time_budget( UtilityAINQSSearchCriteria* criterion, 
                                                                  uint64_t start_time_usec,
                                                                  uint64_t time_budget_usec ) {
-    bool filter_out = false;
-    float score = 0.0f;
     uint64_t end_time_usec = start_time_usec + time_budget_usec;
     //uint64_t current_time_usec = 0;
     while( _current_node_index < _num_search_space_nodes ) {
@@ -461,6 +464,8 @@ bool UtilityAINQSSearchSpaces::apply_criterion_with_time_budget( UtilityAINQSSea
             ++_current_node_index;
             continue;
         } 
+        bool filter_out = false;
+        float score = 1.0f;
         float previous_score = 1.0f;
         if( _current_node_index < (*_ptr_current_scores).size() ) {
             previous_score = (*_ptr_current_scores)[_current_node_index];

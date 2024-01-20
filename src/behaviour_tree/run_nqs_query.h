@@ -16,6 +16,7 @@ class UtilityAIBTRunNQSQuery : public UtilityAIBTTaskNodes {
     GDCLASS(UtilityAIBTRunNQSQuery, UtilityAIBTTaskNodes)
 
 private:
+    //ObjectID                  _nqs_search_space_cache;
     UtilityAINQSSearchSpaces* _nqs_search_space;
     UtilityAINodeQuerySystem* _nqs;
 

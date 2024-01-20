@@ -2,7 +2,7 @@
 
 #include <godot_cpp/core/class_db.hpp>
 #include <godot_cpp/classes/engine.hpp>
-
+#include <godot_cpp/variant/utility_functions.hpp>
 
 using namespace godot;
 
@@ -47,6 +47,8 @@ UtilityAIBTRunNQSQuery::~UtilityAIBTRunNQSQuery() {
 
 void UtilityAIBTRunNQSQuery::set_nqs_search_space( UtilityAINQSSearchSpaces* nqs_search_space ) {
     _nqs_search_space = nqs_search_space;
+    //_nqs_search_space_cache = ObjectID();
+    
 }
 
 
@@ -90,7 +92,8 @@ void UtilityAIBTRunNQSQuery::reset_bt_node() {
 }
 
 int UtilityAIBTRunNQSQuery::tick(Variant user_data, float delta) { 
-    if( _nqs_search_space == nullptr ) {
+    if( _nqs_search_space == nullptr || !UtilityFunctions::is_instance_valid(_nqs_search_space) ) {
+        _nqs_search_space = nullptr;
         set_internal_status(BT_INTERNAL_STATUS_COMPLETED);
         set_tick_result(BT_FAILURE);
         return BT_FAILURE;

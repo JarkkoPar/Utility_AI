@@ -55,16 +55,16 @@ bool UtilityAIConsiderationGroup::get_invert_score() const {
 // Handling functions.
 
 float UtilityAIConsiderationGroup::evaluate() { 
-    if( !get_is_active() ) return 0.0;
-    if( Engine::get_singleton()->is_editor_hint() ) return 0.0;
+    //if( !get_is_active() ) return 0.0;
+    //if( Engine::get_singleton()->is_editor_hint() ) return 0.0;
 
     _score = 0.0;
     _has_vetoed = false;
     
     // Evaluate the children.
     int num_children = get_child_count();
-    if( num_children < 1 ) return 0.0;
-    float child_score = 0.0;
+    if( num_children < 1 ) return 0.0f;
+    float child_score = 0.0f;
     for( int i = 0; i < num_children; ++i ) {
         Node* node = get_child(i);
         if( node == nullptr ) continue;
@@ -72,7 +72,7 @@ float UtilityAIConsiderationGroup::evaluate() {
         if( considerationNode == nullptr ) continue;
         if( !considerationNode->get_is_active() ) continue;
         child_score = considerationNode->evaluate(); //agent, delta);
-        if( considerationNode->get_has_vetoed()) {
+        if( considerationNode->get_has_vetoed() ) {
             _score = 0.0;
             _has_vetoed = true;
             return _score; // Veto zeroes out the score for the entire group.

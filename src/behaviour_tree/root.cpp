@@ -16,13 +16,13 @@ using namespace godot;
 // Method binds.
 
 void UtilityAIBTRoot::_bind_methods() {
-
+    #ifdef DEBUG_ENABLED
     ADD_SUBGROUP("Debugging","");
 
     ClassDB::bind_method(D_METHOD("set_total_tick_usec", "total_tick_usec"), &UtilityAIBTRoot::set_total_tick_usec);
     ClassDB::bind_method(D_METHOD("get_total_tick_usec"), &UtilityAIBTRoot::get_total_tick_usec);
     ADD_PROPERTY(PropertyInfo(Variant::INT, "total_tick_usec", PROPERTY_HINT_NONE), "set_total_tick_usec","get_total_tick_usec");
-
+    #endif
     ClassDB::bind_method(D_METHOD("tick", "user_data", "delta"), &UtilityAIBTRoot::tick);
 }
 
@@ -30,7 +30,9 @@ void UtilityAIBTRoot::_bind_methods() {
 // Constructor and destructor.
 
 UtilityAIBTRoot::UtilityAIBTRoot() {
+    #ifdef DEBUG_ENABLED
     _total_tick_usec = 0;
+    #endif
 }
 
 
@@ -40,7 +42,7 @@ UtilityAIBTRoot::~UtilityAIBTRoot() {
 
 // Getters and Setters.
 
-
+#ifdef DEBUG_ENABLED
 void UtilityAIBTRoot::set_total_tick_usec( uint64_t total_tick_usec ) {
     _total_tick_usec = total_tick_usec;
 }
@@ -48,7 +50,7 @@ void UtilityAIBTRoot::set_total_tick_usec( uint64_t total_tick_usec ) {
 uint64_t  UtilityAIBTRoot::get_total_tick_usec() const {
     return _total_tick_usec;
 }
-
+#endif
 
 
 
@@ -56,22 +58,30 @@ uint64_t  UtilityAIBTRoot::get_total_tick_usec() const {
 
 
 int UtilityAIBTRoot::tick(Variant user_data, float delta) { 
+    #ifdef DEBUG_ENABLED
     uint64_t method_start_time_usec = godot::Time::get_singleton()->get_ticks_usec();
+    #endif
     if( !get_is_active() ){
+        #ifdef DEBUG_ENABLED
         _total_tick_usec = godot::Time::get_singleton()->get_ticks_usec() - method_start_time_usec;
         UtilityAIPerformanceMonitorSingleton::get_singleton()->increment_total_time_elapsed_behaviour_trees_usec(_total_tick_usec);
+        #endif
         return BT_FAILURE;
     } 
     if( Engine::get_singleton()->is_editor_hint() ) {
+        #ifdef DEBUG_ENABLED
         _total_tick_usec = godot::Time::get_singleton()->get_ticks_usec() - method_start_time_usec;
         UtilityAIPerformanceMonitorSingleton::get_singleton()->increment_total_time_elapsed_behaviour_trees_usec(_total_tick_usec);
+        #endif
         return BT_FAILURE;
     } 
 
     if(get_reset_rule() == UtilityAIBehaviourTreeNodesResetRule::NEVER) {
         if( get_internal_status() == BT_INTERNAL_STATUS_COMPLETED ){
+            #ifdef DEBUG_ENABLED
             _total_tick_usec = godot::Time::get_singleton()->get_ticks_usec() - method_start_time_usec;
             UtilityAIPerformanceMonitorSingleton::get_singleton()->increment_total_time_elapsed_behaviour_trees_usec(_total_tick_usec);
+            #endif
             return get_tick_result();
         }  
     } 
@@ -96,14 +106,18 @@ int UtilityAIBTRoot::tick(Variant user_data, float delta) {
             if( btnode->get_internal_status() == BT_INTERNAL_STATUS_COMPLETED ) {
                 set_internal_status(BT_INTERNAL_STATUS_COMPLETED);
             }
+            #ifdef DEBUG_ENABLED
             _total_tick_usec = godot::Time::get_singleton()->get_ticks_usec() - method_start_time_usec;
             UtilityAIPerformanceMonitorSingleton::get_singleton()->increment_total_time_elapsed_behaviour_trees_usec(_total_tick_usec);
+            #endif
             return result;
         }
     }
     set_internal_status(BT_INTERNAL_STATUS_COMPLETED);
+    #ifdef DEBUG_ENABLED
     _total_tick_usec = godot::Time::get_singleton()->get_ticks_usec() - method_start_time_usec;
     UtilityAIPerformanceMonitorSingleton::get_singleton()->increment_total_time_elapsed_behaviour_trees_usec(_total_tick_usec);
+    #endif
     return BT_FAILURE; // We shouldn't get here. If we do, there were no child nodes.
 }
 
@@ -112,8 +126,7 @@ int UtilityAIBTRoot::tick(Variant user_data, float delta) {
 void UtilityAIBTRoot::_ready() {
     if( Engine::get_singleton()->is_editor_hint() ) return;
 #ifdef DEBUG_ENABLED
-    //UtilityAILiveDebugger::get_singleton()->register_behaviour_tree(this->get_instance_id());
-    //WARN_PRINT("BT Registered!");
+    UtilityAILiveDebugger::get_singleton()->register_behaviour_tree(this->get_instance_id());
 #endif
     reset();
 }

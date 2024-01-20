@@ -108,7 +108,7 @@ float UtilityAINQSSearchCriteria::get_score() const {
 // Handing methods.
 
 void UtilityAINQSSearchCriteria::apply_criterion( Node* node, bool& filter_out, float& score ) {
-    if( node == nullptr ) return;
+    //if( node == nullptr ) return;
 
 
 }
@@ -118,6 +118,6 @@ float UtilityAINQSSearchCriteria::sample_activation_curve( float input_value ) c
     if(_activation_curve.is_valid()) {
 		return _activation_curve->sample( input_value );
     }
-    return 0.0f;
+    return input_value;//0.0f;
 }
 

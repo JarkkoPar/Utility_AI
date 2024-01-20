@@ -16,12 +16,13 @@ using namespace godot;
 // Method binds.
 
 void UtilityAISTRoot::_bind_methods() {
-
+    #ifdef DEBUG_ENABLED
     ADD_SUBGROUP("Debugging","");
 
     ClassDB::bind_method(D_METHOD("set_total_tick_usec", "total_tick_usec"), &UtilityAISTRoot::set_total_tick_usec);
     ClassDB::bind_method(D_METHOD("get_total_tick_usec"), &UtilityAISTRoot::get_total_tick_usec);
     ADD_PROPERTY(PropertyInfo(Variant::INT, "total_tick_usec", PROPERTY_HINT_NONE), "set_total_tick_usec","get_total_tick_usec");
+    #endif
 
     ClassDB::bind_method(D_METHOD("tick", "user_data", "delta"), &UtilityAISTRoot::tick);
 }
@@ -30,9 +31,10 @@ void UtilityAISTRoot::_bind_methods() {
 // Constructor and destructor.
 
 UtilityAISTRoot::UtilityAISTRoot() {
+    #ifdef DEBUG_ENABLED
     _total_tick_usec = 0;
     _total_transition_usec = 0;
-    //_state_tree_nodes = Dictionary();
+    #endif
 }
 
 
@@ -42,7 +44,7 @@ UtilityAISTRoot::~UtilityAISTRoot() {
 
 // Getters and Setters.
 
-
+#ifdef DEBUG_ENABLED
 void UtilityAISTRoot::set_total_tick_usec( uint64_t total_tick_usec ) {
     _total_tick_usec = total_tick_usec;
 }
@@ -50,6 +52,7 @@ void UtilityAISTRoot::set_total_tick_usec( uint64_t total_tick_usec ) {
 uint64_t  UtilityAISTRoot::get_total_tick_usec() const {
     return _total_tick_usec;
 }
+#endif
 
 // Handling methods.
 
@@ -63,22 +66,29 @@ void UtilityAISTRoot::transition_to( NodePath path_to_node, Variant user_data, f
 
 
 bool UtilityAISTRoot::try_transition( UtilityAIStateTreeNodes* transition_target_node, Variant user_data, float delta) {
+    #ifdef DEBUG_ENABLED
     uint64_t method_start_time_usec = godot::Time::get_singleton()->get_ticks_usec();
-    
+    #endif
     // Check that this is a valid transition for this tree.
     if( transition_target_node == nullptr ){
+        #ifdef DEBUG_ENABLED
         _total_transition_usec = godot::Time::get_singleton()->get_ticks_usec() - method_start_time_usec;
         UtilityAIPerformanceMonitorSingleton::get_singleton()->increment_total_time_elapsed_state_trees_usec(_total_transition_usec);
+        #endif
         return false;
     } 
     if( !get_is_active() ){
+        #ifdef DEBUG_ENABLED
         _total_transition_usec = godot::Time::get_singleton()->get_ticks_usec() - method_start_time_usec;
         UtilityAIPerformanceMonitorSingleton::get_singleton()->increment_total_time_elapsed_state_trees_usec(_total_transition_usec);
+        #endif
         return false;
     } 
     if( Engine::get_singleton()->is_editor_hint() ) {
+        #ifdef DEBUG_ENABLED
         _total_transition_usec = godot::Time::get_singleton()->get_ticks_usec() - method_start_time_usec;
         UtilityAIPerformanceMonitorSingleton::get_singleton()->increment_total_time_elapsed_state_trees_usec(_total_transition_usec);
+        #endif
         return false;
     } 
     bool new_state_found = false;
@@ -113,22 +123,22 @@ bool UtilityAISTRoot::try_transition( UtilityAIStateTreeNodes* transition_target
         }
         new_state_found = true;
     }//endif new state found
-    
+    #ifdef DEBUG_ENABLED
     _total_transition_usec = godot::Time::get_singleton()->get_ticks_usec() - method_start_time_usec;
     UtilityAIPerformanceMonitorSingleton::get_singleton()->increment_total_time_elapsed_state_trees_usec(_total_transition_usec);
+    #endif
     return new_state_found;
 
 }
 
 void UtilityAISTRoot::tick(Variant user_data, float delta) { 
-    //WARN_PRINT("root->tick()");
+    #ifdef DEBUG_ENABLED
     uint64_t method_start_time_usec = godot::Time::get_singleton()->get_ticks_usec();
-    
+    #endif
+
     // No states, so try transition to the root.
     if( _active_states.size() == 0 ) {
-        //WARN_PRINT("tick: trying transition to get active states...");
         try_transition(this, user_data, delta);
-        //WARN_PRINT("tick: try transition completed!");
     }
 
     // Update the sensors.
@@ -148,19 +158,16 @@ void UtilityAISTRoot::tick(Variant user_data, float delta) {
     // If there are active states, tick their custom method from the 
     // root to the active leaf.
     if( _active_states.size() > 0 ) {
-        //WARN_PRINT("tick: Ticking active states...");
         for( int i = _active_states.size()-1; i > -1; --i ) {
             if( UtilityAIStateTreeNodes* stnode = godot::Object::cast_to<UtilityAIStateTreeNodes>(_active_states[i]) ) {
-                //WARN_PRINT("Calling on tick... ");
-                //WARN_PRINT(stnode->get_name());
                 stnode->on_tick(user_data, delta);
             }
         }
-        //WARN_PRINT("tick: ticking completed!");
     }
-    
+    #ifdef DEBUG_ENABLED
     _total_tick_usec = godot::Time::get_singleton()->get_ticks_usec() - method_start_time_usec;
     UtilityAIPerformanceMonitorSingleton::get_singleton()->increment_total_time_elapsed_state_trees_usec(_total_tick_usec);
+    #endif
 }
 
 // Godot virtuals.
@@ -171,7 +178,7 @@ void UtilityAISTRoot::_ready() {
     set_root_node(this);
 
 #ifdef DEBUG_ENABLED
-    //UtilityAILiveDebugger::get_singleton()->register_state_tree(this->get_instance_id());
+    UtilityAILiveDebugger::get_singleton()->register_state_tree(this->get_instance_id());
     //WARN_PRINT("ST Registered!");
 #endif
 }

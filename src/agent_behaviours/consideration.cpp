@@ -90,9 +90,9 @@ void UtilityAIConsideration::_notification(int p_what) {
 // Handling methods.
 
 float UtilityAIConsideration::evaluate() { 
-    if( !get_is_active() ) return 0.0;
-    if( Engine::get_singleton()->is_editor_hint() ) return 0.0;
-    if( get_has_vetoed() ) return 0.0;
+    //if( !get_is_active() ) return 0.0;
+    //if( Engine::get_singleton()->is_editor_hint() ) return 0.0;
+    if( get_has_vetoed() ) return 0.0f;
 
     if( _input_sensor != nullptr ) {
         // If there's no change to the sensor input value, just return the
@@ -110,7 +110,7 @@ float UtilityAIConsideration::evaluate() {
     if( !_has_activation_input_changed ) {
         return _score;
     }
-    _score = 0.0f;
+    //_score = 0.0f;
     _evaluate_consideration();
     _has_activation_input_changed = false;
     return _score;
@@ -120,7 +120,7 @@ float UtilityAIConsideration::sample_activation_curve( float input_value ) const
     if(_activation_curve.is_valid()) {
 		return _activation_curve->sample( input_value );
     }
-    return 0.0;
+    return 0.0f;
 }
 
 

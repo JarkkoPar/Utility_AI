@@ -176,13 +176,13 @@ float UtilityAIBehaviour::evaluate(){ //UtilityAIAgent* agent) {
     //if( Engine::get_singleton()->is_editor_hint() ) return 0.0;
 
     // If the behaviour is on cooldown, it cannot be chosen.
-    if( _current_cooldown_seconds > 0.0 ) return 0.0;
-    if( _current_cooldown_turns > 0) {
+    if( _current_cooldown_seconds > 0.0f ) return 0.0f;
+    if( _current_cooldown_turns > 0 ) {
         --_current_cooldown_turns;
-        return 0.0;
+        return 0.0f;
     }
 
-    _score = 0.0;
+    _score = 0.0f;
     bool has_vetoed = false;
     // Evaluate the consideration resources (if any).
     int num_resources = _considerations.size();
@@ -196,7 +196,7 @@ float UtilityAIBehaviour::evaluate(){ //UtilityAIAgent* agent) {
         }
         float score = consideration_resource->evaluate( has_vetoed, this );
         if( has_vetoed ) {
-            return 0.0; // A consideration vetoed.
+            return 0.0f; // A consideration vetoed.
         }
         _score += score;
     }
@@ -209,8 +209,8 @@ float UtilityAIBehaviour::evaluate(){ //UtilityAIAgent* agent) {
         if( !considerationNode->get_is_active() ) continue;
         _score += considerationNode->evaluate();
         if( considerationNode->get_has_vetoed()){
-            _score = 0.0;
-            return 0.0; // The consideration vetoed this behaviour.
+            _score = 0.0f;
+            return 0.0f; // The consideration vetoed this behaviour.
         }
     }//endfor children
 
