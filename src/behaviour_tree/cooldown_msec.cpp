@@ -75,6 +75,10 @@ int  UtilityAIBTCooldownMsec::get_cooldown_return_value() const {
 
 int UtilityAIBTCooldownMsec::tick(Variant user_data, float delta) {
     set_internal_status(BT_INTERNAL_STATUS_TICKED);
+    //if( _is_first_tick ) {
+    //    _is_first_tick = false;
+    //    emit_signal("btnode_entered", user_data, delta);
+    //}
     uint64_t wait_time = godot::Time::get_singleton()->get_ticks_msec() - _cooldown_start_timestamp;
     if( wait_time < _cooldown_msec ) {
         return _cooldown_return_value;
@@ -89,11 +93,13 @@ int UtilityAIBTCooldownMsec::tick(Variant user_data, float delta) {
             int result = btnode->tick(user_data, delta);
             set_internal_status(BT_INTERNAL_STATUS_COMPLETED);
             set_tick_result(result);
+            //emit_signal("btnode_exited", user_data, delta);
             return result;
         }
     }
     set_internal_status(BT_INTERNAL_STATUS_COMPLETED);
     set_tick_result(BT_FAILURE);
+    //emit_signal("btnode_exited", user_data, delta);
     return BT_FAILURE;
 }
 

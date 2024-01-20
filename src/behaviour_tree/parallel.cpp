@@ -53,6 +53,10 @@ bool UtilityAIBTParallel::get_is_reactive() const {
 
 int UtilityAIBTParallel::tick(Variant user_data, float delta) {
     set_internal_status(BT_INTERNAL_STATUS_TICKED);
+    //if( _is_first_tick ) {
+    //    _is_first_tick = false;
+    //    emit_signal("btnode_entered", user_data, delta);
+    //}
     int parallelresult = BT_SUCCESS;
     for( int i = 0; i < get_child_count(); ++i ) {
         UtilityAIBehaviourTreeNodes* btnode = godot::Object::cast_to<UtilityAIBehaviourTreeNodes>(get_child(i));
@@ -68,8 +72,10 @@ int UtilityAIBTParallel::tick(Variant user_data, float delta) {
             }
         }//endif node was of correct type
     }
+    //emit_signal("btnode_ticked", user_data, delta);
     if( parallelresult != 0 ) {
         set_internal_status(BT_INTERNAL_STATUS_COMPLETED);
+        //emit_signal("btnode_exited", user_data, delta);
     }
     set_tick_result(parallelresult);
     return parallelresult;

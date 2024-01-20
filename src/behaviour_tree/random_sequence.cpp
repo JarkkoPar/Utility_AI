@@ -72,6 +72,11 @@ int UtilityAIBTRandomSequence::tick(Variant user_data, float delta) {
     }
 
     set_internal_status(BT_INTERNAL_STATUS_TICKED);
+    //if( _is_first_tick ) {
+    //    _is_first_tick = false;
+    //    emit_signal("btnode_entered", user_data, delta);
+    //}
+    //emit_signal("btnode_ticked", user_data, delta);
     while( _current_child_index < _child_node_order.size() ) {
         UtilityAIBehaviourTreeNodes* btnode = godot::Object::cast_to<UtilityAIBehaviourTreeNodes>(get_child(_child_node_order[_current_child_index]));
         if( btnode != nullptr ) {
@@ -82,6 +87,7 @@ int UtilityAIBTRandomSequence::tick(Variant user_data, float delta) {
             set_tick_result(result);
             if( result == BT_FAILURE ) {
                 set_internal_status(BT_INTERNAL_STATUS_COMPLETED);
+                //emit_signal("btnode_exited", user_data, delta);
                 return BT_FAILURE;
             } else if ( result == BT_RUNNING ) {
                 return BT_RUNNING;
@@ -92,6 +98,7 @@ int UtilityAIBTRandomSequence::tick(Variant user_data, float delta) {
     //_current_child_index = -1;
     set_internal_status(BT_INTERNAL_STATUS_COMPLETED);
     set_tick_result(BT_SUCCESS);
+    //emit_signal("btnode_exited", user_data, delta);
     return BT_SUCCESS;
 }
 

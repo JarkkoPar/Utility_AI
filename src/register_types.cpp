@@ -142,9 +142,10 @@ using namespace godot;
 
 // Singletons
 static UtilityAINodeQuerySystem* gpNodeQuerySystem;
+static UtilityAIPerformanceMonitorSingleton* gpAIPerformanceMonitor;
 #ifdef DEBUG_ENABLED
     static UtilityAILiveDebugger* gpAILiveDebugger;
-    static UtilityAIPerformanceMonitorSingleton* gpAIPerformanceMonitor;
+
     
 #endif 
 

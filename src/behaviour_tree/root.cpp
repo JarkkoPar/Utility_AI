@@ -85,9 +85,12 @@ int UtilityAIBTRoot::tick(Variant user_data, float delta) {
             return get_tick_result();
         }  
     } 
-    
     set_internal_status(BT_INTERNAL_STATUS_TICKED);
-    
+    //if( _is_first_tick ) {
+    //    _is_first_tick = false;
+    //    emit_signal("btnode_entered", user_data, delta);
+    //}
+
     for( int i = 0; i < get_child_count(); ++i ) {
         Node* node = get_child(i);
         if( UtilityAISensors* sensor = godot::Object::cast_to<UtilityAISensors>(node) ) {
@@ -105,6 +108,7 @@ int UtilityAIBTRoot::tick(Variant user_data, float delta) {
             set_tick_result(result);
             if( btnode->get_internal_status() == BT_INTERNAL_STATUS_COMPLETED ) {
                 set_internal_status(BT_INTERNAL_STATUS_COMPLETED);
+                //emit_signal("btnode_exited", user_data, delta);
             }
             #ifdef DEBUG_ENABLED
             _total_tick_usec = godot::Time::get_singleton()->get_ticks_usec() - method_start_time_usec;
@@ -114,6 +118,7 @@ int UtilityAIBTRoot::tick(Variant user_data, float delta) {
         }
     }
     set_internal_status(BT_INTERNAL_STATUS_COMPLETED);
+    //emit_signal("btnode_exited", user_data, delta);
     #ifdef DEBUG_ENABLED
     _total_tick_usec = godot::Time::get_singleton()->get_ticks_usec() - method_start_time_usec;
     UtilityAIPerformanceMonitorSingleton::get_singleton()->increment_total_time_elapsed_behaviour_trees_usec(_total_tick_usec);

@@ -54,10 +54,16 @@ int UtilityAIBTPassBy::tick(Variant user_data, float delta) {
     // behaviour tree node child and returns the result of the child.
     // Otherwise it returns what ever is set as the tick result property.
     set_internal_status(BT_INTERNAL_STATUS_TICKED);
+    //if( _is_first_tick ) {
+    //    _is_first_tick = false;
+    //    emit_signal("btnode_entered", user_data, delta);
+    //}
     if( has_method("tick")) {
         call("tick", user_data, delta);
     }
+    //emit_signal("btnode_ticked", user_data, delta);
     set_internal_status(BT_INTERNAL_STATUS_COMPLETED);
+    //emit_signal("btnode_exited", user_data, delta);
     return BT_SKIP;
 }
 

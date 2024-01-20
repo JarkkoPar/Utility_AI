@@ -105,6 +105,7 @@ void UtilityAIPerformanceMonitorSingleton::increment_total_time_elapsed_state_tr
 
 
 void UtilityAIPerformanceMonitorSingleton::initialize_performance_counters() {
+    #ifndef DEBUG_ENABLED
     if( _is_performance_counter_initialized ) return;
     Performance* perf = godot::Performance::get_singleton();
     if( perf == nullptr ) return;
@@ -114,6 +115,7 @@ void UtilityAIPerformanceMonitorSingleton::initialize_performance_counters() {
     perf->add_custom_monitor("UtilityAI/State Tree tick time usec", Callable(this, "get_total_time_elapsed_state_trees_usec"));
     _is_performance_counter_initialized = true;
     set_is_active(true);
+    #endif
 }
 
 

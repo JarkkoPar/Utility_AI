@@ -53,6 +53,10 @@ int UtilityAIBTPassThrough::tick(Variant user_data, float delta) {
     // behaviour tree node child and returns the result of the child.
     // Otherwise it returns what ever is set as the tick result property.
     set_internal_status(BT_INTERNAL_STATUS_TICKED);
+    //if( _is_first_tick ) {
+    //    _is_first_tick = false;
+    //    emit_signal("btnode_entered", user_data, delta);
+    //}
     if( has_method("tick")) {
         godot::Variant return_value = call("tick", user_data, delta);
         if( return_value.get_type() == godot::Variant::Type::INT) {
@@ -64,6 +68,7 @@ int UtilityAIBTPassThrough::tick(Variant user_data, float delta) {
             }
         }
     }
+    //emit_signal("btnode_ticked", user_data, delta);
 
     for( int i = 0; i < get_child_count(); ++i ) {
         Node* node = get_child(i);
@@ -74,12 +79,14 @@ int UtilityAIBTPassThrough::tick(Variant user_data, float delta) {
             int result = btnode->tick(user_data, delta);
             if( result != BT_RUNNING ) {
                 set_internal_status(BT_INTERNAL_STATUS_COMPLETED);
+                //emit_signal("btnode_exited", user_data, delta);
             }
             return result;
         }
 
     }
     set_internal_status(BT_INTERNAL_STATUS_COMPLETED);
+    //emit_signal("btnode_exited", user_data, delta);
     return _tick_result;
 }
 

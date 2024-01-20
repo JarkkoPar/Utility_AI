@@ -101,13 +101,17 @@ int UtilityAIBTRepeatUntil::tick(Variant user_data, float delta) {
     }
 
     set_internal_status(BT_INTERNAL_STATUS_TICKED);
+    //if( _is_first_tick ) {
+    //    _is_first_tick = false;
+    //    emit_signal("btnode_entered", user_data, delta);
+    //}
     
     if( _is_expected_tick_result_reached ) {
         set_internal_status(BT_INTERNAL_STATUS_COMPLETED);
         set_tick_result(BT_FAILURE);
         return BT_FAILURE;
     }
-
+    //emit_signal("btnode_ticked", user_data, delta);
     for( int i = 0; i < get_child_count(); ++i ) {
         if( UtilityAIBehaviourTreeNodes* btnode = godot::Object::cast_to<UtilityAIBehaviourTreeNodes>(get_child(i)) ) {
             if( !btnode->get_is_active() ) {
@@ -121,6 +125,7 @@ int UtilityAIBTRepeatUntil::tick(Variant user_data, float delta) {
                 _is_expected_tick_result_reached = true;
                 set_internal_status(BT_INTERNAL_STATUS_COMPLETED);
                 set_tick_result(BT_SUCCESS);
+                //emit_signal("btnode_exited", user_data, delta);
                 return BT_SUCCESS;
             } 
             if( _current_max_repeat_times > 0 || _current_max_repeat_times < 0 ) {
@@ -129,6 +134,7 @@ int UtilityAIBTRepeatUntil::tick(Variant user_data, float delta) {
             } else if (_current_max_repeat_times == 0 ) {
                 set_internal_status(BT_INTERNAL_STATUS_COMPLETED);
                 set_tick_result(BT_SUCCESS);
+                //emit_signal("btnode_exited", user_data, delta);
                 return BT_SUCCESS;
             }
         }

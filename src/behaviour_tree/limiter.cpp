@@ -78,10 +78,14 @@ int UtilityAIBTLimiter::tick(Variant user_data, float delta) {
         reset_bt_node();
     }
     set_internal_status(BT_INTERNAL_STATUS_TICKED);
-
+    //if( _is_first_tick ) {
+    //    _is_first_tick = false;
+    //    emit_signal("btnode_entered", user_data, delta);
+    //}
     if( _current_repeat_times == 0 ){
         set_internal_status(BT_INTERNAL_STATUS_COMPLETED);
         set_tick_result(BT_FAILURE);
+        //emit_signal("btnode_exited", user_data, delta);
         return BT_FAILURE;
     } 
 
@@ -94,13 +98,16 @@ int UtilityAIBTLimiter::tick(Variant user_data, float delta) {
             int result = btnode->tick(user_data, delta);
             set_tick_result(result);
             if( result != BT_RUNNING ) {
+                //emit_signal("btnode_exited", user_data, delta);
                 return result;
             }
         }
     }
+    //emit_signal("btnode_ticked", user_data, delta);
     // If we get here, there are no child nodes set.
     set_internal_status(BT_INTERNAL_STATUS_COMPLETED);   
     set_tick_result(BT_FAILURE);
+    //emit_signal("btnode_exited", user_data, delta);
     return BT_FAILURE;
 }
 

@@ -21,11 +21,14 @@ private:
     int    _internal_status;
     int    _reset_rule;
     bool   _has_reset_rule_changed;
+    
 
     TypedArray<UtilityAIConsiderationResources> _considerations;
 
 protected:
     static void _bind_methods();
+
+    bool   _is_first_tick;
 public:
     UtilityAIBehaviourTreeNodes();
     ~UtilityAIBehaviourTreeNodes();

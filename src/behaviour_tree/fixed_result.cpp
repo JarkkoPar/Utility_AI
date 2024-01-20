@@ -45,6 +45,11 @@ int  UtilityAIBTFixedResult::get_fixed_result() const {
 
 int UtilityAIBTFixedResult::tick(Variant user_data, float delta) {
     set_internal_status(BT_INTERNAL_STATUS_TICKED);
+    //if( _is_first_tick ) {
+    //    _is_first_tick = false;
+    //    emit_signal("btnode_entered", user_data, delta);
+    //}
+
     set_tick_result(_fixed_result);
     for( int i = 0; i < get_child_count(); ++i ) {
         Node* node = get_child(i);
@@ -53,11 +58,13 @@ int UtilityAIBTFixedResult::tick(Variant user_data, float delta) {
                 continue;
             } 
             btnode->tick(user_data, delta);
+            //emit_signal("btnode_ticked", user_data, delta);
             break;
         }
 
     }
     set_internal_status(BT_INTERNAL_STATUS_COMPLETED);
+    //emit_signal("btnode_exited", user_data, delta);
     return _fixed_result;
 }
 

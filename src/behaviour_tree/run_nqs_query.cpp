@@ -99,6 +99,11 @@ int UtilityAIBTRunNQSQuery::tick(Variant user_data, float delta) {
         return BT_FAILURE;
     }
     set_internal_status(BT_INTERNAL_STATUS_TICKED);
+    //if( _is_first_tick ) {
+    //    _is_first_tick = false;
+    //    emit_signal("btnode_entered", user_data, delta);
+    //}
+
     switch (_query_state)
     {
         case QS_IDLE: {
@@ -107,17 +112,20 @@ int UtilityAIBTRunNQSQuery::tick(Variant user_data, float delta) {
             _nqs->post_query(_nqs_search_space, _is_high_priority );
             _query_state = QS_RUNNING;
             set_tick_result(BT_RUNNING);
+            //emit_signal("btnode_ticked", user_data, delta);
             return BT_RUNNING;
         }
         break;
         case QS_COMPLETED: {
             set_internal_status(BT_INTERNAL_STATUS_COMPLETED);
             set_tick_result(BT_SUCCESS);
+            //emit_signal("btnode_exited", user_data, delta);
             return BT_SUCCESS;
         }
         break;    
         default: {
             set_tick_result(BT_RUNNING);
+            //emit_signal("btnode_ticked", user_data, delta);
             return BT_RUNNING;            
         }
         break;
@@ -125,6 +133,7 @@ int UtilityAIBTRunNQSQuery::tick(Variant user_data, float delta) {
     // We shouldn't get here.
     set_internal_status(BT_INTERNAL_STATUS_COMPLETED);
     set_tick_result(BT_FAILURE);
+    //emit_signal("btnode_exited", user_data, delta);
     return BT_FAILURE;
 }
 

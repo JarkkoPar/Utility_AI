@@ -77,11 +77,16 @@ int  UtilityAIBTCooldownTicks::get_cooldown_return_value() const {
 
 int UtilityAIBTCooldownTicks::tick(Variant user_data, float delta) { 
     set_internal_status(BT_INTERNAL_STATUS_TICKED);
+    //if( _is_first_tick ) {
+    //    _is_first_tick = false;
+    //    emit_signal("btnode_entered", user_data, delta);
+    //}
     if( _current_cooldown_ticks > 1 ) {
         --_current_cooldown_ticks;
         return _cooldown_return_value;
     }
     _current_cooldown_ticks = _cooldown_ticks;
+    //emit_signal("btnode_ticked", user_data, delta);
     for( int i = 0; i < get_child_count(); ++i ) {
         Node* node = get_child(i);
         if( UtilityAIBehaviourTreeNodes* btnode = godot::Object::cast_to<UtilityAIBehaviourTreeNodes>(node) ) {
@@ -91,12 +96,14 @@ int UtilityAIBTCooldownTicks::tick(Variant user_data, float delta) {
             int result = btnode->tick(user_data, delta);
             set_internal_status(BT_INTERNAL_STATUS_COMPLETED);
             set_tick_result(result);
+            //emit_signal("btnode_exited", user_data, delta);
             return result;
         }
 
     }
     set_internal_status(BT_INTERNAL_STATUS_COMPLETED);
     set_tick_result(BT_FAILURE);
+    //emit_signal("btnode_exited", user_data, delta);
     return BT_FAILURE;
 }
 
