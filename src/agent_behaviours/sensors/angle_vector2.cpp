@@ -50,13 +50,13 @@ void UtilityAIAngleVector2Sensor::_bind_methods() {
 // Constructor and destructor.
 
 UtilityAIAngleVector2Sensor::UtilityAIAngleVector2Sensor() {
-    _angle_radian = 0.0;
-    _angle_degrees = 0.0;
+    _angle_radian = 0.0f;
+    _angle_degrees = 0.0f;
     _min_angle_radian = -Math_PI;
     _min_angle_degrees = godot::Math::rad_to_deg(_min_angle_radian);
     _max_angle_radian = Math_PI;
     _max_angle_degrees = godot::Math::rad_to_deg(_max_angle_radian);
-    _one_over_2_pi = 1.0 / (2.0 * Math_PI);
+    _one_over_2_pi = 1.0f / (2.0f * Math_PI);
 }
 
 

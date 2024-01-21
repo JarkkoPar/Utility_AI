@@ -42,10 +42,10 @@ void UtilityAIAngleVector3Sensor::_bind_methods() {
 // Constructor and destructor.
 
 UtilityAIAngleVector3Sensor::UtilityAIAngleVector3Sensor() {
-    _angle_radian = 0.0;
-    _angle_degrees = 0.0;
-    _max_angle_radian = 2.0 * Math_PI;
-    _max_angle_degrees = 360.0;
+    _angle_radian = 0.0f;
+    _angle_degrees = 0.0f;
+    _max_angle_radian = 2.0f * Math_PI;
+    _max_angle_degrees = 360.0f;
 }
 
 
@@ -88,12 +88,12 @@ Vector3 UtilityAIAngleVector3Sensor::get_from_vector3() const {
 }
 
 void UtilityAIAngleVector3Sensor::set_max_angle_radian( float max_angle_radian ) {
-    if( max_angle_radian == 0.0 ) {
+    if( max_angle_radian == 0.0f ) {
         return;
     }
     _max_angle_radian = max_angle_radian;
     _max_angle_degrees = godot::Math::rad_to_deg(_max_angle_radian);
-    _one_over_max_angle_radian = 1.0 / _max_angle_radian;
+    _one_over_max_angle_radian = 1.0f / _max_angle_radian;
 }
 
 float UtilityAIAngleVector3Sensor::get_max_angle_radian() const {
@@ -101,12 +101,12 @@ float UtilityAIAngleVector3Sensor::get_max_angle_radian() const {
 }
 
 void UtilityAIAngleVector3Sensor::set_max_angle_degrees( float max_angle_degrees ) {
-    if( max_angle_degrees == 0.0 ) {
+    if( max_angle_degrees == 0.0f ) {
         return;
     }
     _max_angle_degrees = max_angle_degrees;
     _max_angle_radian = godot::Math::deg_to_rad(_max_angle_degrees);
-    _one_over_max_angle_radian = 1.0 / _max_angle_radian;
+    _one_over_max_angle_radian = 1.0f / _max_angle_radian;
 }
 
 float UtilityAIAngleVector3Sensor::get_max_angle_degrees() const {

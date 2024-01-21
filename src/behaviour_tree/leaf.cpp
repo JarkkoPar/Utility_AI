@@ -62,27 +62,27 @@ int UtilityAIBTLeaf::tick(Variant user_data, float delta) {
             ret_val = (int)return_value;
             set_tick_result(ret_val);
         }
-        
     } else if( _has_tick_method ) {
         godot::Variant return_value = call("tick", user_data, delta);
         if( return_value.get_type() == godot::Variant::Type::INT) {
             ret_val = (int)return_value;
             set_tick_result(ret_val);
         }
-        
     }
     //emit_signal("btnode_ticked", user_data, delta);
     if( ret_val == BT_FAILURE || ret_val == BT_SUCCESS ) {
         set_internal_status(BT_INTERNAL_STATUS_COMPLETED);
         //emit_signal("btnode_exited", user_data, delta);
     }
+    
     return ret_val;
 }
 
 
 // Godot virtuals.
 
-void UtilityAIBTLeaf::_enter_tree() {
+void UtilityAIBTLeaf::_notification( int p_what ) {
+    if( p_what != NOTIFICATION_POST_ENTER_TREE ) return;
     _has_on_tick_method = has_method("on_tick");
     _has_tick_method = has_method("tick");
 }

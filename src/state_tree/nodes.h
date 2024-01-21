@@ -23,6 +23,8 @@ private:
     bool    _has_on_entered_condition_method;
     UtilityAIStateTreeNodes* _tree_root_node;
     TypedArray<UtilityAIConsiderationResources>    _considerations;
+    std::vector<UtilityAIStateTreeNodes*>   _child_states;
+    unsigned int _num_child_states;
 protected:
     static void _bind_methods();
 public:
@@ -81,8 +83,8 @@ public:
 
     // Godot virtuals.
     
-    void _enter_tree();
-    
+    //void _enter_tree();
+    void _notification(int p_what);
 };
 
 }

@@ -19,10 +19,12 @@ private:
     #endif
     //UtilityAIStateTreeNodes* _active_state;
     TypedArray<UtilityAIStateTreeNodes> _active_states;
+    std::vector<UtilityAIStateTreeNodes*> _active_states_vector;
     //godot::Dictionary        _state_tree_nodes;
 protected:
     static void _bind_methods();
-
+    std::vector<UtilityAISensors*>  _child_sensors;
+    unsigned int _num_child_sensors;
 public:
     UtilityAISTRoot();
     ~UtilityAISTRoot();

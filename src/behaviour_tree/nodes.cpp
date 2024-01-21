@@ -58,7 +58,9 @@ UtilityAIBehaviourTreeNodes::UtilityAIBehaviourTreeNodes() {
     _internal_status = BT_INTERNAL_STATUS_UNTICKED;
     _reset_rule = UtilityAIBehaviourTreeNodesResetRule::WHEN_TICKED_AFTER_BEING_COMPLETED;
     _has_reset_rule_changed = false;
-    _is_first_tick = true;
+    //_is_first_tick = true;
+    _num_child_btnodes = 0;
+    _num_child_considerations = 0;
 }
 
 
@@ -105,7 +107,7 @@ void UtilityAIBehaviourTreeNodes::set_internal_status( int internal_status ) {
         case UtilityAIBehaviourTreeNodesResetRule::WHEN_COMPLETED: {
             if( internal_status == BT_INTERNAL_STATUS_COMPLETED ) {
                 reset_bt_node();
-                _is_first_tick = true;
+                //_is_first_tick = true;
             }
         }
         break;
@@ -113,14 +115,14 @@ void UtilityAIBehaviourTreeNodes::set_internal_status( int internal_status ) {
             if( _internal_status == BT_INTERNAL_STATUS_COMPLETED &&
                  internal_status == BT_INTERNAL_STATUS_TICKED ) {
                 reset_bt_node();
-                _is_first_tick = true;
+                //_is_first_tick = true;
             }
         }
         break;
         case UtilityAIBehaviourTreeNodesResetRule::WHEN_TICKED: {
             if( internal_status == BT_INTERNAL_STATUS_TICKED && (_internal_status != BT_INTERNAL_STATUS_UNTICKED || _has_reset_rule_changed ) ) {
                 reset_bt_node();
-                _is_first_tick = true;
+                //_is_first_tick = true;
             }
         }
         break;
@@ -163,11 +165,16 @@ TypedArray<UtilityAIConsiderationResources> UtilityAIBehaviourTreeNodes::get_con
 
 void UtilityAIBehaviourTreeNodes::reset() {
     _internal_status = BT_INTERNAL_STATUS_UNTICKED;
+    for( int i = 0; i < _num_child_btnodes; ++i ) {
+        _child_btnodes[i]->reset();
+    }
+    /**
     for( int i = 0; i < get_child_count(); ++i ) {
         if( UtilityAIBehaviourTreeNodes* btnode = godot::Object::cast_to<UtilityAIBehaviourTreeNodes>(get_child(i)) ) {
             btnode->reset();
         }
     }
+    /**/
 }
 
 /**
@@ -182,8 +189,8 @@ void UtilityAIBehaviourTreeNodes::reset_for_looping() {
 /**/
 
 float UtilityAIBehaviourTreeNodes::evaluate() {
-    if( !get_is_active() ) return 0.0f;
-    if( Engine::get_singleton()->is_editor_hint() ) return 0.0f;
+    //if( !get_is_active() ) return 0.0f;
+    //if( Engine::get_singleton()->is_editor_hint() ) return 0.0f;
 
     _score = 0.0f;
     bool has_vetoed = false;
@@ -199,27 +206,31 @@ float UtilityAIBehaviourTreeNodes::evaluate() {
         }
         float score = consideration_resource->evaluate( has_vetoed, this );
         if( has_vetoed ) {
-            _score = 0.0;
+            _score = 0.0f;
             return 0.0f; // A consideration vetoed.
         }
         _score += score;
     }
     
-    // Evaluate the children.
-    int num_children = get_child_count();
-    if( num_children < 1 ) {
+    // Evaluate the child considerations.
+    if( _num_child_considerations < 1 ) {
         return _score;
     }
-    float child_score = 0.0;
-    for( int i = 0; i < num_children; ++i ) {
-        Node* node = get_child(i);
-        if( node == nullptr ) continue;
-        UtilityAIConsiderations* considerationNode = godot::Object::cast_to<UtilityAIConsiderations>(node);
-        if( considerationNode == nullptr ) continue;
+    //int num_children = get_child_count();
+    //if( num_children < 1 ) {
+    //    return _score;
+    //}
+    float child_score = 0.0f;
+    for( unsigned int i = 0; i < _num_child_considerations; ++i ) {
+        //Node* node = get_child(i);
+        //if( node == nullptr ) continue;
+        //UtilityAIConsiderations* considerationNode = godot::Object::cast_to<UtilityAIConsiderations>(node);
+        //if( considerationNode == nullptr ) continue;
+        UtilityAIConsiderations* considerationNode = _child_considerations[i];
         if( !considerationNode->get_is_active() ) continue;
         child_score = considerationNode->evaluate();
         if( considerationNode->get_has_vetoed()) {
-            _score = 0.0;
+            _score = 0.0f;
             return 0.0f; // Veto zeroes out the score for the entire group.
         }
 
@@ -244,8 +255,8 @@ float UtilityAIBehaviourTreeNodes::evaluate() {
                 // other considerations will ever change the result, so bail.
                 if( _score == 0.0f ) {
                     if( _invert_score ) {
-                        _score = 1.0;
-                        return 1.0;
+                        _score = 1.0f;
+                        return 1.0f;
                     }
                     _score = 0.0f;
                     return 0.0f;
@@ -270,7 +281,7 @@ float UtilityAIBehaviourTreeNodes::evaluate() {
     }//endfor children
 
     if( _evaluation_method == UtilityAIBehaviourTreeNodesEvaluationMethod::Mean ) {
-        _score = _score / ((float)num_children);
+        _score = _score / ((float)_num_child_considerations);
     }
 
     if( _invert_score ) {
@@ -285,4 +296,32 @@ int UtilityAIBehaviourTreeNodes::tick(Variant user_data, float delta ) {
     return 0;
 }
 
+
+// Godot virtuals.
+
+void UtilityAIBehaviourTreeNodes::_notification(int p_what) {
+    if( p_what != NOTIFICATION_CHILD_ORDER_CHANGED) {
+        return;
+    }
+
+    // Update the child pointers if the child nodes are changed
+    // somehow. This caching of the pointers is done to avoid
+    // the expensive godot::Object::cast_to calls later.
+    update_child_vectors();
+}
+
+
+void UtilityAIBehaviourTreeNodes::update_child_vectors() {
+    _child_btnodes.clear();
+    _child_considerations.clear();
+    for( int i = 0; i < get_child_count(); ++i ) {
+        if( UtilityAIBehaviourTreeNodes* btnode = godot::Object::cast_to<UtilityAIBehaviourTreeNodes>(get_child(i)) ){
+            _child_btnodes.push_back(btnode);
+        } else if ( UtilityAIConsiderations* consideration = godot::Object::cast_to<UtilityAIConsiderations>(get_child(i)) ) {
+            _child_considerations.push_back(consideration);
+        }
+    }
+    _num_child_btnodes = (unsigned int)_child_btnodes.size();
+    _num_child_considerations = (unsigned int)_child_considerations.size();
+}
 

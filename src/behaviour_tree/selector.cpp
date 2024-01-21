@@ -81,21 +81,23 @@ int UtilityAIBTSelector::tick(Variant user_data, float delta) {
     //    emit_signal("btnode_entered", user_data, delta);
     //}
     //emit_signal("btnode_ticked", user_data, delta);
-    while( _current_child_index < get_child_count() ) {
-        UtilityAIBehaviourTreeNodes* btnode = godot::Object::cast_to<UtilityAIBehaviourTreeNodes>(get_child(_current_child_index));
-        if( btnode != nullptr ) {
-            if( btnode->get_is_active() ) {
-                int result = btnode->tick(user_data, delta);
-                set_tick_result(result);
-                if( result == BT_SUCCESS ) { //&& _current_child_index == get_child_count() - 1 ) {
-                    set_internal_status(BT_INTERNAL_STATUS_COMPLETED);
-                    //emit_signal("btnode_exited", user_data, delta);
-                    return BT_SUCCESS;
-                } else if ( result == BT_RUNNING ) {
-                    return BT_RUNNING;
-                }
-            }//endif is active
-        }//endif node was of correct type
+    //while( _current_child_index < get_child_count() ) {
+    //    UtilityAIBehaviourTreeNodes* btnode = godot::Object::cast_to<UtilityAIBehaviourTreeNodes>(get_child(_current_child_index));
+        //if( btnode != nullptr ) {
+    while( _current_child_index < (int)_num_child_btnodes ) {
+        UtilityAIBehaviourTreeNodes* btnode = _child_btnodes[_current_child_index];
+        if( btnode->get_is_active() ) {
+            int result = btnode->tick(user_data, delta);
+            set_tick_result(result);
+            if( result == BT_SUCCESS ) { //&& _current_child_index == get_child_count() - 1 ) {
+                set_internal_status(BT_INTERNAL_STATUS_COMPLETED);
+                //emit_signal("btnode_exited", user_data, delta);
+                return BT_SUCCESS;
+            } else if ( result == BT_RUNNING ) {
+                return BT_RUNNING;
+            }
+        }//endif is active
+    //}//endif node was of correct type
         ++_current_child_index;
     }//endwhile children to tick
     //_current_child_index = -1;

@@ -9,21 +9,7 @@ using namespace godot;
 // Method binds.
 
 void UtilityAIBTSequence::_bind_methods() {
-    
-    //ClassDB::bind_method(D_METHOD("set_is_reactive", "is_reactive"), &UtilityAIBTSequence::set_is_reactive);
-    //ClassDB::bind_method(D_METHOD("get_is_reactive"), &UtilityAIBTSequence::get_is_reactive);
-    //ADD_PROPERTY(PropertyInfo(Variant::BOOL, "is_reactive", PROPERTY_HINT_NONE), "set_is_reactive","get_is_reactive");
-    
-    /*
-    ClassDB::bind_method(D_METHOD("set_score", "score"), &UtilityAIBTSequence::set_score);
-    ClassDB::bind_method(D_METHOD("get_score"), &UtilityAIBTSequence::get_score);
-    ADD_PROPERTY(PropertyInfo(Variant::FLOAT, "score", PROPERTY_HINT_NONE ), "set_score","get_score");
-    /**/
-
-    //ClassDB::bind_method(D_METHOD("set_reset_rule", "reset_rule"), &UtilityAIBTSequence::set_reset_rule);
-    //ClassDB::bind_method(D_METHOD("get_reset_rule"), &UtilityAIBTSequence::get_reset_rule);
-    //ADD_PROPERTY(PropertyInfo(Variant::INT, "reset_rule", PROPERTY_HINT_ENUM, "WhenTicked:0,WhenCompleted:1,WhenTickedAfterBeingCompleted:2,Never:3" ), "set_reset_rule","get_reset_rule");
- 
+  
 }
 
 
@@ -31,28 +17,13 @@ void UtilityAIBTSequence::_bind_methods() {
 
 UtilityAIBTSequence::UtilityAIBTSequence() {
     _current_child_index = 0;
-    //_is_reactive = true;
 }
 
 
 UtilityAIBTSequence::~UtilityAIBTSequence() {
 }
 
-// Handling functions.
-
-
-
-// Getters and Setters.
-
-/**
-void UtilityAIBTSequence::set_is_reactive( bool is_reactive ) {
-    _is_reactive = is_reactive;
-}
-
-bool UtilityAIBTSequence::get_is_reactive() const {
-    return _is_reactive;
-}
-/**/
+// Handling methods.
 
 void UtilityAIBTSequence::reset_bt_node() {
     _current_child_index = 0;
@@ -70,25 +41,26 @@ int UtilityAIBTSequence::tick(Variant user_data, float delta) {
     //    emit_signal("btnode_entered", user_data, delta);
     //}
     //emit_signal("btnode_ticked", user_data, delta);
-    while( _current_child_index < get_child_count() ) {
-        UtilityAIBehaviourTreeNodes* btnode = godot::Object::cast_to<UtilityAIBehaviourTreeNodes>(get_child(_current_child_index));
-        if( btnode != nullptr ) {
-            if( btnode->get_is_active() ) {
-                
-                int result = btnode->tick(user_data, delta);
-                set_tick_result(result);
-                if( result == BT_FAILURE ) {
-                    set_internal_status(BT_INTERNAL_STATUS_COMPLETED);
-                    //emit_signal("btnode_exited", user_data, delta);
-                    return BT_FAILURE;
-                } else if ( result == BT_RUNNING ) {
-                    return BT_RUNNING;
-                }
-            }//endif is active
-        }//endif node was of correct type
+    //int num_children = get_child_count();
+    //while( _current_child_index < num_children ) {
+    //    UtilityAIBehaviourTreeNodes* btnode = godot::Object::cast_to<UtilityAIBehaviourTreeNodes>(get_child(_current_child_index));
+    //    if( btnode != nullptr ) {
+    while( _current_child_index < (int)_num_child_btnodes ) {
+        UtilityAIBehaviourTreeNodes* btnode = _child_btnodes[_current_child_index];
+        if( btnode->get_is_active() ) {
+            int result = btnode->tick(user_data, delta);
+            set_tick_result(result);
+            if( result == BT_FAILURE ) {
+                set_internal_status(BT_INTERNAL_STATUS_COMPLETED);
+                //emit_signal("btnode_exited", user_data, delta);
+                return BT_FAILURE;
+            } else if ( result == BT_RUNNING ) {
+                return BT_RUNNING;
+            }
+        }//endif is active
+        //}//endif node was of correct type
         ++_current_child_index;
     }//endwhile children to tick
-    
     set_internal_status(BT_INTERNAL_STATUS_COMPLETED);
     //emit_signal("btnode_exited", user_data, delta);
     return BT_SUCCESS;

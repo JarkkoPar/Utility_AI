@@ -12,7 +12,6 @@ class UtilityAIBTSequence : public UtilityAIBTCompositeNodes {
     GDCLASS(UtilityAIBTSequence, UtilityAIBTCompositeNodes )
 
 private:
-    //bool _is_reactive;
     int _current_child_index;
     
 protected:
@@ -23,10 +22,6 @@ public:
     ~UtilityAIBTSequence();
     
     
-    // Getters and setters for attributes.
-    //void set_is_reactive( bool is_reactive );
-    //bool get_is_reactive() const;
-
     // Handling functions.
 
     virtual void reset_bt_node() override;

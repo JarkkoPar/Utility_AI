@@ -58,9 +58,11 @@ int UtilityAIBTParallel::tick(Variant user_data, float delta) {
     //    emit_signal("btnode_entered", user_data, delta);
     //}
     int parallelresult = BT_SUCCESS;
-    for( int i = 0; i < get_child_count(); ++i ) {
-        UtilityAIBehaviourTreeNodes* btnode = godot::Object::cast_to<UtilityAIBehaviourTreeNodes>(get_child(i));
-        if( btnode != nullptr ) {
+    //for( int i = 0; i < get_child_count(); ++i ) {
+    //    UtilityAIBehaviourTreeNodes* btnode = godot::Object::cast_to<UtilityAIBehaviourTreeNodes>(get_child(i));
+    for( unsigned int i = 0; i < _num_child_btnodes; ++i ) {
+        UtilityAIBehaviourTreeNodes* btnode = _child_btnodes[i];
+        //if( btnode != nullptr ) {
             if( !btnode->get_is_active() ) {
                 continue;
             } 
@@ -70,8 +72,8 @@ int UtilityAIBTParallel::tick(Variant user_data, float delta) {
             } else if ( result == BT_RUNNING ) {
                 parallelresult = BT_RUNNING;
             }
-        }//endif node was of correct type
-    }
+        //}//endif node was of correct type
+    }//endfor btnodes
     //emit_signal("btnode_ticked", user_data, delta);
     if( parallelresult != 0 ) {
         set_internal_status(BT_INTERNAL_STATUS_COMPLETED);

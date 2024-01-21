@@ -36,7 +36,7 @@ public:
 
     // Godot virtuals.
 
-    void _enter_tree();
+    void _notification(int p_what) override;
 
 };
 

@@ -55,7 +55,9 @@ private:
     PackedFloat64Array* _ptr_current_scores;
     PackedFloat64Array* _ptr_current_work_in_progress_scores;
 
-    TypedArray<UtilityAINQSSearchCriteria> _filtering_criteria;
+    //TypedArray<UtilityAINQSSearchCriteria> _filtering_criteria;
+    std::vector<UtilityAINQSSearchCriteria*> _filtering_criteria;
+    unsigned int                             _num_filtering_criteria;
 
     int                 _nqs_query_index; // Index of the query in the singleton.
     bool                _nqs_query_is_high_priority; 

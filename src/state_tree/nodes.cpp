@@ -57,6 +57,8 @@ UtilityAIStateTreeNodes::UtilityAIStateTreeNodes() {
     _has_on_entered_method = false;
     _has_on_exited_method = false;
     _has_on_ticked_method = false;
+
+    _num_child_states = 0;
 }
 
 
@@ -137,8 +139,8 @@ Dictionary UtilityAIStateTreeNodes::get_child_nodes_as_dictionary(UtilityAIState
 // Handling methods.
 
 float UtilityAIStateTreeNodes::evaluate() {
-    if( !get_is_active() ) return 0.0f;
-    if( Engine::get_singleton()->is_editor_hint() ) return 0.0f;
+    //if( !get_is_active() ) return 0.0f;
+    //if( Engine::get_singleton()->is_editor_hint() ) return 0.0f;
 
     _score = 0.0f;
     bool has_vetoed = false;
@@ -279,43 +281,48 @@ UtilityAIStateTreeNodes* UtilityAIStateTreeNodes::evaluate_state_activation( Var
 
     if( get_child_state_selection_rule() == UtilityAIStateTreeNodeChildStateSelectionRule::ON_ENTER_CONDITION_METHOD ) {
         // Childs are evaluated by using the user-defined on_enter_condition method.
-        for( int i = 0; i < get_child_count(); ++i ) {
-            if( UtilityAIStateTreeNodes* stnode = godot::Object::cast_to<UtilityAIStateTreeNodes>(get_child(i)) ) {
-                if( !stnode->get_is_active() ) {
-                    continue;
-                } 
+        //for( int i = 0; i < get_child_count(); ++i ) {
+        //    if( UtilityAIStateTreeNodes* stnode = godot::Object::cast_to<UtilityAIStateTreeNodes>(get_child(i)) ) {
+        for( unsigned int i = 0; i < _num_child_states; ++i ) {
+            UtilityAIStateTreeNodes* stnode = _child_states[i];
+            if( !stnode->get_is_active() ) {
+                continue;
+            } 
 
-                ++num_state_tree_childs;
-                if( !stnode->on_enter_condition(user_data, delta) ) {
-                    continue;
-                }
-            
-                if( UtilityAIStateTreeNodes* result = stnode->evaluate_state_activation(user_data, delta) ) {
-                    return result;
-                }//endif result is not nullptr
-            }//endif valid node type
+            ++num_state_tree_childs;
+            if( !stnode->on_enter_condition(user_data, delta) ) {
+                continue;
+            }
+        
+            if( UtilityAIStateTreeNodes* result = stnode->evaluate_state_activation(user_data, delta) ) {
+                return result;
+            }//endif result is not nullptr
+            //}//endif valid node type
         }//endfor child nodes
     } else {
         // Childs are evaluated by using Utility-based scoring.
         UtilityAIStateTreeNodes* highest_scoring_state_to_activate = nullptr;
         float highest_score = -9999999.9999;
-        for( int i = 0; i < get_child_count(); ++i ) {
-            if( UtilityAIStateTreeNodes* stnode = godot::Object::cast_to<UtilityAIStateTreeNodes>(get_child(i)) ) {
-                if( !stnode->get_is_active() ) {
-                    continue;
-                }
+        //for( int i = 0; i < get_child_count(); ++i ) {
+            //if( UtilityAIStateTreeNodes* stnode = godot::Object::cast_to<UtilityAIStateTreeNodes>(get_child(i)) ) {
+        for( unsigned int i = 0; i < _num_child_states; ++i ) {
+            UtilityAIStateTreeNodes* stnode = _child_states[i];
+        
+            if( !stnode->get_is_active() ) {
+                continue;
+            }
 
-                ++num_state_tree_childs;
-                float score = stnode->evaluate();
-                if( score > highest_score ) {
-                    if( UtilityAIStateTreeNodes* result = stnode->evaluate_state_activation(user_data, delta) ) {
-                        highest_score = score;
-                        highest_scoring_state_to_activate = result;
-                    }//endif result is not nullptr
-                }//endif score is higher than current highest
+            ++num_state_tree_childs;
+            float score = stnode->evaluate();
+            if( score > highest_score ) {
+                if( UtilityAIStateTreeNodes* result = stnode->evaluate_state_activation(user_data, delta) ) {
+                    highest_score = score;
+                    highest_scoring_state_to_activate = result;
+                }//endif result is not nullptr
+            }//endif score is higher than current highest
+        
             
-                
-            }//endif valid node type
+        //}//endif valid node type
         }//endfor child nodes
         // Return the highest scoring state that can activate.
         if( highest_scoring_state_to_activate != nullptr ) {
@@ -332,11 +339,31 @@ UtilityAIStateTreeNodes* UtilityAIStateTreeNodes::evaluate_state_activation( Var
 
 
 // Godot virtuals.
-
+/**
 void UtilityAIStateTreeNodes::_enter_tree() {
     _has_on_entered_condition_method = has_method("on_enter_condition");
     _has_on_entered_method = has_method("on_enter_state");
     _has_on_exited_method = has_method("on_exit_state");
     _has_on_ticked_method = has_method("on_tick");
+}
+/**/
+
+void UtilityAIStateTreeNodes::_notification(int p_what ) {
+    if( p_what == NOTIFICATION_POST_ENTER_TREE ) {
+        _has_on_entered_condition_method = has_method("on_enter_condition");
+        _has_on_entered_method = has_method("on_enter_state");
+        _has_on_exited_method = has_method("on_exit_state");
+        _has_on_ticked_method = has_method("on_tick");
+    } else if( p_what == NOTIFICATION_CHILD_ORDER_CHANGED ) {
+        _child_states.clear();
+        int num_children = get_child_count();
+        for( int i = 0; i < num_children; ++i ) {
+            if( UtilityAIStateTreeNodes* stnode = godot::Object::cast_to<UtilityAIStateTreeNodes>(get_child(i)) ) {
+                _child_states.push_back(stnode);
+            }
+        }//endfor child nodes
+        _num_child_states = (unsigned int)_child_states.size();
+    }
+    
 }
 

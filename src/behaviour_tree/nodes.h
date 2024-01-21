@@ -5,6 +5,7 @@
 #include "definitions.h"
 #include <godot_cpp/classes/node.hpp>
 #include "../resources/considerations/consideration_resources.h"
+#include "../agent_behaviours/considerations.h"
 
 
 
@@ -22,13 +23,16 @@ private:
     int    _reset_rule;
     bool   _has_reset_rule_changed;
     
-
     TypedArray<UtilityAIConsiderationResources> _considerations;
 
 protected:
     static void _bind_methods();
 
-    bool   _is_first_tick;
+    //bool   _is_first_tick;
+    std::vector<UtilityAIBehaviourTreeNodes*>   _child_btnodes;
+    unsigned int _num_child_btnodes;
+    std::vector<UtilityAIConsiderations*>       _child_considerations;
+    unsigned int _num_child_considerations;
 public:
     UtilityAIBehaviourTreeNodes();
     ~UtilityAIBehaviourTreeNodes();
@@ -81,12 +85,13 @@ public:
     virtual void reset();
     //virtual void reset_for_looping();
     virtual void reset_bt_node() {};
+    virtual void update_child_vectors();
 
     inline virtual bool has_completed() { return (_internal_status == BT_INTERNAL_STATUS_COMPLETED); };
 
     // Godot virtuals.
     // none.
-    
+    virtual void _notification(int p_what);
 };
 
 }

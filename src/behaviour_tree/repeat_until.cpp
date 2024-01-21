@@ -112,32 +112,34 @@ int UtilityAIBTRepeatUntil::tick(Variant user_data, float delta) {
         return BT_FAILURE;
     }
     //emit_signal("btnode_ticked", user_data, delta);
-    for( int i = 0; i < get_child_count(); ++i ) {
-        if( UtilityAIBehaviourTreeNodes* btnode = godot::Object::cast_to<UtilityAIBehaviourTreeNodes>(get_child(i)) ) {
-            if( !btnode->get_is_active() ) {
-                continue;
-            } 
-            if( _current_max_repeat_times > 0 ) {
-                --_current_max_repeat_times;
-            }
-            int result = btnode->tick(user_data, delta);
-            if( result == _expected_tick_result ) {
-                _is_expected_tick_result_reached = true;
-                set_internal_status(BT_INTERNAL_STATUS_COMPLETED);
-                set_tick_result(BT_SUCCESS);
-                //emit_signal("btnode_exited", user_data, delta);
-                return BT_SUCCESS;
-            } 
-            if( _current_max_repeat_times > 0 || _current_max_repeat_times < 0 ) {
-                set_tick_result(BT_RUNNING);
-                return BT_RUNNING;
-            } else if (_current_max_repeat_times == 0 ) {
-                set_internal_status(BT_INTERNAL_STATUS_COMPLETED);
-                set_tick_result(BT_SUCCESS);
-                //emit_signal("btnode_exited", user_data, delta);
-                return BT_SUCCESS;
-            }
+    //for( int i = 0; i < get_child_count(); ++i ) {
+    //    if( UtilityAIBehaviourTreeNodes* btnode = godot::Object::cast_to<UtilityAIBehaviourTreeNodes>(get_child(i)) ) {
+    for( unsigned int i = 0; i < _num_child_btnodes; ++i ) {
+        UtilityAIBehaviourTreeNodes* btnode = _child_btnodes[i];
+        if( !btnode->get_is_active() ) {
+            continue;
+        } 
+        if( _current_max_repeat_times > 0 ) {
+            --_current_max_repeat_times;
         }
+        int result = btnode->tick(user_data, delta);
+        if( result == _expected_tick_result ) {
+            _is_expected_tick_result_reached = true;
+            set_internal_status(BT_INTERNAL_STATUS_COMPLETED);
+            set_tick_result(BT_SUCCESS);
+            //emit_signal("btnode_exited", user_data, delta);
+            return BT_SUCCESS;
+        } 
+        if( _current_max_repeat_times > 0 || _current_max_repeat_times < 0 ) {
+            set_tick_result(BT_RUNNING);
+            return BT_RUNNING;
+        } else if (_current_max_repeat_times == 0 ) {
+            set_internal_status(BT_INTERNAL_STATUS_COMPLETED);
+            set_tick_result(BT_SUCCESS);
+            //emit_signal("btnode_exited", user_data, delta);
+            return BT_SUCCESS;
+        }
+        //}
     }
     set_internal_status(BT_INTERNAL_STATUS_COMPLETED);
     set_tick_result(BT_FAILURE);

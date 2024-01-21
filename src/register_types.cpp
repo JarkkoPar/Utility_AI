@@ -128,7 +128,7 @@
 //#include "editor/editor_plugin.h"
 //#include "debugger/debugger_plugin.h"
 
-#include "debugger/live_debugger.h"
+//#include "debugger/live_debugger.h"
 
 #endif 
 
@@ -144,7 +144,7 @@ using namespace godot;
 static UtilityAINodeQuerySystem* gpNodeQuerySystem;
 static UtilityAIPerformanceMonitorSingleton* gpAIPerformanceMonitor;
 #ifdef DEBUG_ENABLED
-    static UtilityAILiveDebugger* gpAILiveDebugger;
+    //static UtilityAILiveDebugger* gpAILiveDebugger;
 
     
 #endif 
@@ -263,9 +263,9 @@ void register_scene_classes() {
 
 #ifdef DEBUG_ENABLED
 
-    ClassDB::register_class<UtilityAILiveDebugger>();
-    gpAILiveDebugger = memnew(UtilityAILiveDebugger);
-    Engine::get_singleton()->register_singleton("AILiveDebugger", gpAILiveDebugger);
+    //ClassDB::register_class<UtilityAILiveDebugger>();
+    //gpAILiveDebugger = memnew(UtilityAILiveDebugger);
+    //Engine::get_singleton()->register_singleton("AILiveDebugger", gpAILiveDebugger);
 #endif 
 
     
@@ -317,8 +317,8 @@ void uninitialize_utility_ai_module(ModuleInitializationLevel p_level) {
     memdelete(gpAIPerformanceMonitor);
 
 #ifdef DEBUG_ENABLED
-    Engine::get_singleton()->unregister_singleton("AILiveDebugger");
-    memdelete(gpAILiveDebugger);
+    //Engine::get_singleton()->unregister_singleton("AILiveDebugger");
+    //memdelete(gpAILiveDebugger);
 #endif
 }
 

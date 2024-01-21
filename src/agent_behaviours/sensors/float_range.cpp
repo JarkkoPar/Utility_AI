@@ -25,11 +25,11 @@ void UtilityAIFloatRangeSensor::_bind_methods() {
 // Constructor and destructor.
 
 UtilityAIFloatRangeSensor::UtilityAIFloatRangeSensor() {
-    _range_max_value = 100.0;
-    _range_min_value = 0.0;
-    _range_value = 0.0;
-    _range_length = 100.0;
-    _one_over_range_length = 1.0 / _range_length;
+    _range_max_value = 100.0f;
+    _range_min_value = 0.0f;
+    _range_value = 0.0f;
+    _range_length = 100.0f;
+    _one_over_range_length = 1.0f / _range_length;
 }
 
 
@@ -54,10 +54,10 @@ float UtilityAIFloatRangeSensor::evaluate_sensor_value() {
     /**/
     // Relative value, so calculate the position within the interval.
     float range_result = ((_range_value - _range_min_value)) * _one_over_range_length;
-    if( range_result < 0.0 ) {
-        range_result = 0.0;
-    } else if( range_result > 1.0 ) {
-        range_result = 1.0;
+    if( range_result < 0.0f ) {
+        range_result = 0.0f;
+    } else if( range_result > 1.0f ) {
+        range_result = 1.0f;
     }
     set_sensor_value(range_result);
     return get_sensor_value();
@@ -71,10 +71,10 @@ void UtilityAIFloatRangeSensor::set_range_min_value( float range_min_value ) {
     }
     _range_min_value = range_min_value;
     _range_length = _range_max_value - _range_min_value;
-    if( _range_length != 0.0 ) {
-        _one_over_range_length = 1.0 / _range_length;
+    if( _range_length != 0.0f ) {
+        _one_over_range_length = 1.0f / _range_length;
     } else {
-        _one_over_range_length = 0.0;
+        _one_over_range_length = 0.0f;
     }
 }
 
@@ -88,10 +88,10 @@ void UtilityAIFloatRangeSensor::set_range_max_value( float range_max_value ) {
     }
     _range_max_value = range_max_value;
     _range_length = _range_max_value - _range_min_value;
-    if( _range_length != 0.0 ) {
-        _one_over_range_length = 1.0 / _range_length;
+    if( _range_length != 0.0f ) {
+        _one_over_range_length = 1.0f / _range_length;
     } else {
-        _one_over_range_length = 0.0;
+        _one_over_range_length = 0.0f;
     }
 }
 

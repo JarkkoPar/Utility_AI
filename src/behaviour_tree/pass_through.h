@@ -13,7 +13,8 @@ class UtilityAIBTPassThrough : public UtilityAIBTDecoratorNodes {
 
 private:
     int _tick_result;
-    
+    bool _has_on_tick_method;
+    bool _has_tick_method;
 protected:
     static void _bind_methods();
 
@@ -32,7 +33,7 @@ public:
     virtual int tick(Variant user_data, float delta) override;
 
     // Godot virtuals.
-
+    void _notification( int p_what ) override;
 };
 
 }

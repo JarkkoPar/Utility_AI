@@ -94,19 +94,16 @@ void UtilityAINQSSearchSpaces::_ready() {
     //if( !get_is_active() ) return;
     if( Engine::get_singleton()->is_editor_hint() ) return;
     initialize_search_space(); // Maybe not really needed? We'll see.
-    /**
-    // Find all the boolean filtering criterias, as they will be run first.
+
+    // Get all the criterias to a vector to avoid slow type casting
+    // during runtime.
     _filtering_criteria.clear();
     for( int i = 0; i < get_child_count(); ++i ) {
-        UtilityAISearchCriteria* criterion = godot::Object::cast_to<UtilityAISearchCriteria>(get_child(i));
-        if( criterion == nullptr ) {
-            continue;
-        }
-        if( criterion->get_is_filtered() && !criterion->get_is_scored() ) {
+        if( UtilityAINQSSearchCriteria* criterion = godot::Object::cast_to<UtilityAINQSSearchCriteria>(get_child(i))) {
             _filtering_criteria.push_back(criterion);
         }
-    }//endfor criteria
-    */
+    }
+    _num_filtering_criteria = (unsigned int)_filtering_criteria.size();
 }
 
 
@@ -370,12 +367,13 @@ bool UtilityAINQSSearchSpaces::execute_query(uint64_t time_budget_usec) {
 
     // Handle the criteria.
     if( !_is_criteria_handled ) {
-        while( _current_criterion_index < get_child_count() ) {
-            UtilityAINQSSearchCriteria* criterion = godot::Object::cast_to<UtilityAINQSSearchCriteria>(get_child(_current_criterion_index));
-            if( criterion == nullptr ){
-                ++_current_criterion_index;
-                continue;
-            } 
+        while( _current_criterion_index < (int)_num_filtering_criteria ) { // get_child_count() ) {
+            //UtilityAINQSSearchCriteria* criterion = godot::Object::cast_to<UtilityAINQSSearchCriteria>(get_child(_current_criterion_index));
+            //if( criterion == nullptr ){
+            //    ++_current_criterion_index;
+            //    continue;
+            //} 
+            UtilityAINQSSearchCriteria* criterion = _filtering_criteria[_current_criterion_index];
             if( !criterion->get_is_active() ){
                 ++_current_criterion_index;
                 continue;

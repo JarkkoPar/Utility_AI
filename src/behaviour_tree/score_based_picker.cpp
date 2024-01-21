@@ -58,11 +58,13 @@ void UtilityAIBTScoreBasedPicker::reset_bt_node() {
     // score to run.
     _current_child_index = -1;
     float current_highest_score = -99999999.9999;
-    for( int i = 0; i < get_child_count(); ++i ) {
-        UtilityAIBehaviourTreeNodes* btnode = godot::Object::cast_to<UtilityAIBehaviourTreeNodes>(get_child(i));
-        if( btnode == nullptr ) {
-            continue;
-        }
+    //for( int i = 0; i < get_child_count(); ++i ) {
+    //    UtilityAIBehaviourTreeNodes* btnode = godot::Object::cast_to<UtilityAIBehaviourTreeNodes>(get_child(i));
+    for( unsigned int i = 0; i < _num_child_btnodes; ++i ) {
+        UtilityAIBehaviourTreeNodes* btnode = _child_btnodes[i];
+        //if( btnode == nullptr ) {
+        //    continue;
+        //}
         if( !btnode->get_is_active() ) {
             continue;
         } 
@@ -82,10 +84,10 @@ int UtilityAIBTScoreBasedPicker::tick(Variant user_data, float delta) {
     }
 
     set_internal_status(BT_INTERNAL_STATUS_TICKED);
-    if( _is_first_tick ) {
-        _is_first_tick = false;
-        emit_signal("btnode_entered", user_data, delta);
-    }
+    //if( _is_first_tick ) {
+    //    _is_first_tick = false;
+    //    emit_signal("btnode_entered", user_data, delta);
+    //}
     
     if( _current_child_index < 0 ) {
         set_internal_status(BT_INTERNAL_STATUS_COMPLETED);
@@ -95,7 +97,8 @@ int UtilityAIBTScoreBasedPicker::tick(Variant user_data, float delta) {
     }
 
     
-    UtilityAIBehaviourTreeNodes* btnode = godot::Object::cast_to<UtilityAIBehaviourTreeNodes>(get_child(_current_child_index));
+    //UtilityAIBehaviourTreeNodes* btnode = godot::Object::cast_to<UtilityAIBehaviourTreeNodes>(get_child(_current_child_index));
+    UtilityAIBehaviourTreeNodes* btnode = _child_btnodes[_current_child_index];
     if( btnode != nullptr ) {
         int return_value = btnode->tick(user_data, delta);
         set_tick_result(return_value);

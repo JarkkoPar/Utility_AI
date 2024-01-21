@@ -106,15 +106,17 @@ int UtilityAIBTRepeater::tick(Variant user_data, float delta) {
     } 
 
     //emit_signal("btnode_ticked",user_data, delta);
-    for( int i = 0; i < get_child_count(); ++i ) {
-        if( UtilityAIBehaviourTreeNodes* btnode = godot::Object::cast_to<UtilityAIBehaviourTreeNodes>(get_child(i)) ) {
-            if( !btnode->get_is_active() ) {
-                continue;
-            } 
-            --_current_repeat_times;
-            btnode->tick(user_data, delta);
-            break;
-        }
+    //for( int i = 0; i < get_child_count(); ++i ) {
+    //    if( UtilityAIBehaviourTreeNodes* btnode = godot::Object::cast_to<UtilityAIBehaviourTreeNodes>(get_child(i)) ) {
+    for( unsigned int i = 0; i < _num_child_btnodes; ++i ) {
+        UtilityAIBehaviourTreeNodes* btnode = _child_btnodes[i];
+        if( !btnode->get_is_active() ) {
+            continue;
+        } 
+        --_current_repeat_times;
+        btnode->tick(user_data, delta);
+        break;
+    //    }
     }
     if( _current_repeat_times > 0 || _current_repeat_times < 0 ) {
         set_tick_result(BT_RUNNING);

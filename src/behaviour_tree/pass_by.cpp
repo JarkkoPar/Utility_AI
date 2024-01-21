@@ -23,6 +23,8 @@ void UtilityAIBTPassBy::_bind_methods() {
 
 UtilityAIBTPassBy::UtilityAIBTPassBy() {
     //_tick_result = 1;
+    _has_on_tick_method = false;
+    _has_tick_method = false;
 }
 
 
@@ -58,12 +60,29 @@ int UtilityAIBTPassBy::tick(Variant user_data, float delta) {
     //    _is_first_tick = false;
     //    emit_signal("btnode_entered", user_data, delta);
     //}
-    if( has_method("tick")) {
+    if( _has_on_tick_method ) {
+        call("on_tick", user_data, delta);
+        
+        
+    } else if( _has_tick_method ) {
         call("tick", user_data, delta);
+        
     }
     //emit_signal("btnode_ticked", user_data, delta);
     set_internal_status(BT_INTERNAL_STATUS_COMPLETED);
     //emit_signal("btnode_exited", user_data, delta);
     return BT_SKIP;
+}
+
+// Godot virtuals.
+
+void UtilityAIBTPassBy::_notification(int p_what) {
+    if( p_what == NOTIFICATION_POST_ENTER_TREE ){
+        _has_on_tick_method = has_method("on_tick");
+        _has_tick_method = has_method("tick");
+
+    } else if ( p_what == NOTIFICATION_CHILD_ORDER_CHANGED ) {
+        update_child_vectors();
+    }
 }
 

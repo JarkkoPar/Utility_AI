@@ -105,7 +105,7 @@ void UtilityAIPerformanceMonitorSingleton::increment_total_time_elapsed_state_tr
 
 
 void UtilityAIPerformanceMonitorSingleton::initialize_performance_counters() {
-    #ifndef DEBUG_ENABLED
+    #ifdef DEBUG_ENABLED
     if( _is_performance_counter_initialized ) return;
     Performance* perf = godot::Performance::get_singleton();
     if( perf == nullptr ) return;

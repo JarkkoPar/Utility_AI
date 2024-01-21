@@ -54,10 +54,11 @@ void UtilityAIDistanceVector3Sensor::_bind_methods() {
 // Constructor and destructor.
 
 UtilityAIDistanceVector3Sensor::UtilityAIDistanceVector3Sensor() {
-    _distance = 0.0;
-    _max_distance = 100.0;
+    _distance = 0.0f;
+    _distance_squared = 0.0f;
+    _max_distance = 100.0f;
     _max_distance_squared = _max_distance * _max_distance;
-    _one_over_max_distance_squared = 1.0 / _max_distance_squared;
+    _one_over_max_distance_squared = 1.0f / _max_distance_squared;
 
     _is_distance_calculated = false;
     _is_direction_vector_calculated = false;

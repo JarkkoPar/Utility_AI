@@ -23,6 +23,8 @@ void UtilityAIBTPassThrough::_bind_methods() {
 
 UtilityAIBTPassThrough::UtilityAIBTPassThrough() {
     _tick_result = 1;
+    _has_on_tick_method = false;
+    _has_tick_method = false;
 }
 
 
@@ -57,8 +59,18 @@ int UtilityAIBTPassThrough::tick(Variant user_data, float delta) {
     //    _is_first_tick = false;
     //    emit_signal("btnode_entered", user_data, delta);
     //}
-    if( has_method("tick")) {
+    if( _has_tick_method ) {
         godot::Variant return_value = call("tick", user_data, delta);
+        if( return_value.get_type() == godot::Variant::Type::INT) {
+            _tick_result = (int)return_value;
+            if( _tick_result > 1 ) {
+                _tick_result = 1;
+            } else if (_tick_result < -1 ) {
+                _tick_result = -1;
+            }
+        }
+    } else if( _has_on_tick_method ) {
+        godot::Variant return_value = call("on_tick", user_data, delta);
         if( return_value.get_type() == godot::Variant::Type::INT) {
             _tick_result = (int)return_value;
             if( _tick_result > 1 ) {
@@ -70,23 +82,35 @@ int UtilityAIBTPassThrough::tick(Variant user_data, float delta) {
     }
     //emit_signal("btnode_ticked", user_data, delta);
 
-    for( int i = 0; i < get_child_count(); ++i ) {
-        Node* node = get_child(i);
-        if( UtilityAIBehaviourTreeNodes* btnode = godot::Object::cast_to<UtilityAIBehaviourTreeNodes>(node) ) {
-            if( !btnode->get_is_active() ) {
-                continue;
-            } 
-            int result = btnode->tick(user_data, delta);
-            if( result != BT_RUNNING ) {
-                set_internal_status(BT_INTERNAL_STATUS_COMPLETED);
-                //emit_signal("btnode_exited", user_data, delta);
-            }
-            return result;
+    //for( int i = 0; i < get_child_count(); ++i ) {
+    //    Node* node = get_child(i);
+    //    if( UtilityAIBehaviourTreeNodes* btnode = godot::Object::cast_to<UtilityAIBehaviourTreeNodes>(node) ) {
+    for( unsigned int i = 0; i < _num_child_btnodes; ++i ) {
+        UtilityAIBehaviourTreeNodes* btnode = _child_btnodes[i];
+        if( !btnode->get_is_active() ) {
+            continue;
+        } 
+        int result = btnode->tick(user_data, delta);
+        if( result != BT_RUNNING ) {
+            set_internal_status(BT_INTERNAL_STATUS_COMPLETED);
+            //emit_signal("btnode_exited", user_data, delta);
         }
+        return result;
+    }//endfor child ndoes
 
-    }
+    //}
     set_internal_status(BT_INTERNAL_STATUS_COMPLETED);
     //emit_signal("btnode_exited", user_data, delta);
     return _tick_result;
 }
 
+
+void UtilityAIBTPassThrough::_notification( int p_what ) {
+    if( p_what == NOTIFICATION_POST_ENTER_TREE ){
+        _has_on_tick_method = has_method("on_tick");
+        _has_tick_method = has_method("tick");
+
+    } else if ( p_what == NOTIFICATION_CHILD_ORDER_CHANGED ) {
+        update_child_vectors();
+    }
+}

@@ -3,7 +3,7 @@
 
 #include "nodes.h"
 #include <godot_cpp/classes/node.hpp>
-
+#include "../agent_behaviours/sensors.h"
 
 
 namespace godot {
@@ -18,6 +18,8 @@ private:
 protected:
     static void _bind_methods();
 
+    std::vector<UtilityAISensors*>  _child_sensors;
+    unsigned int _num_child_sensors;
 public:
     UtilityAIBTRoot();
     ~UtilityAIBTRoot();
