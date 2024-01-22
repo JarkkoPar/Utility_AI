@@ -85,7 +85,7 @@ int UtilityAIBTRandomSequence::tick(Variant user_data, float delta) {
             //if( !btnode->get_is_active() ) {
             //    continue;
             //}
-        UtilityAIBehaviourTreeNodes* btnode = _child_btnodes[_current_child_index]; 
+        UtilityAIBehaviourTreeNodes* btnode = _child_btnodes[_child_node_order[_current_child_index]]; 
         int result = btnode->tick(user_data, delta);
         set_tick_result(result);
         if( result == BT_FAILURE ) {
