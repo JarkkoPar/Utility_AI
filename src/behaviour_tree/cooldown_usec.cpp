@@ -35,6 +35,7 @@ UtilityAIBTCooldownUsec::UtilityAIBTCooldownUsec() {
     _cooldown_usec = 0;
     _cooldown_start_timestamp = 0;
     _cooldown_return_value = BT_FAILURE;
+    _is_in_cooldown = false;
 }
 
 
@@ -81,11 +82,14 @@ int UtilityAIBTCooldownUsec::tick(Variant user_data, float delta) {
     //    _is_first_tick = false;
     //    emit_signal("btnode_entered", user_data, delta);
     //}
-
-    uint64_t wait_time = godot::Time::get_singleton()->get_ticks_usec() - _cooldown_start_timestamp;
-    if( wait_time < _cooldown_usec ) {
-        return _cooldown_return_value;
+    if( _is_in_cooldown ) {
+        uint64_t wait_time = godot::Time::get_singleton()->get_ticks_usec() - _cooldown_start_timestamp;
+        if( wait_time < _cooldown_usec ) {
+            return _cooldown_return_value;
+        }
+        _is_in_cooldown = false;
     }
+    _is_in_cooldown = true;
     _cooldown_start_timestamp = godot::Time::get_singleton()->get_ticks_usec();
     //emit_signal("btnode_ticked", user_data, delta);
     for( int i = 0; i < get_child_count(); ++i ) {

@@ -17,7 +17,7 @@ private:
     uint64_t _cooldown_start_timestamp;
 
     int _cooldown_return_value;
-    
+    bool _is_in_cooldown;
 protected:
     static void _bind_methods();
 
