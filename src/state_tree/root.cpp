@@ -108,8 +108,8 @@ bool UtilityAISTRoot::try_transition( UtilityAIStateTreeNodes* transition_target
 
         // Now that we have the new states in the list, do on_exit to those that
         // are leaving the list.
-        for( int i = 0; i < _active_states_vector.size(); ++i ) {
-            UtilityAIStateTreeNodes* cur_active_state = _active_states_vector[i]; //godot::Object::cast_to<UtilityAIStateTreeNodes>(_active_states[i]);
+        for( int i = 0; i < _active_states.size(); ++i ) {
+            UtilityAIStateTreeNodes* cur_active_state = godot::Object::cast_to<UtilityAIStateTreeNodes>(_active_states[i]);
             if( !new_active_states.has(cur_active_state) ) {
                 cur_active_state->on_exit_state(user_data, delta);
             }
