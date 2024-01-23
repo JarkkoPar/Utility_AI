@@ -53,9 +53,9 @@ public:
 
     // Godot virtuals.
 
-    void _ready();
-    void _physics_process(float delta );
-    //void _exit_tree();
+    void _ready() override;
+    void _physics_process(double delta ) override;
+    
 };
 
 }

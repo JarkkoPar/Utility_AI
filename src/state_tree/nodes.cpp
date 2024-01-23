@@ -113,7 +113,7 @@ int  UtilityAIStateTreeNodes::get_child_state_selection_rule() const {
 }
 
 
-inline void UtilityAIStateTreeNodes::set_root_node( UtilityAIStateTreeNodes* tree_root_node ) { 
+void UtilityAIStateTreeNodes::set_root_node( UtilityAIStateTreeNodes* tree_root_node ) { 
     _tree_root_node = tree_root_node; 
     for( int i = 0; i < get_child_count(); ++i ) {
         if( UtilityAIStateTreeNodes* stnode = godot::Object::cast_to<UtilityAIStateTreeNodes>(get_child(i)) ) {

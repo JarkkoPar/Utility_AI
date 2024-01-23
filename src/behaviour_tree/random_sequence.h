@@ -15,6 +15,7 @@ private:
     //bool _is_reactive;
     int _current_child_index;
     TypedArray<int> _child_node_order;
+    
 protected:
     static void _bind_methods();
 

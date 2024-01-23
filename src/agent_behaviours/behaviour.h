@@ -62,9 +62,9 @@ public:
     //UtilityAIAction* get_current_action_node() const { return _current_action_node;};
 
     // Godot virtuals.
-    void _ready();
+    void _ready() override;
     
-    void _process(float delta);
+    void _process(double delta) override;
     void _notification(int p_what);
 
     // Handling functions.

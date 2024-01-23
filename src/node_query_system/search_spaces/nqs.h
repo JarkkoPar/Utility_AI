@@ -142,8 +142,8 @@ public:
     //void apply_criterion( UtilityAISearchCriteria* criteria, TypedArray<Node> search_space, TypedArray<float> current_scores, TypedArray<Node>& result_space, TypedArray<float>& result_scores );
     
     // Godot virtuals.
-    void _ready();
-    void _exit_tree();
+    void _ready() override;
+    void _exit_tree() override;
 };
 
 }

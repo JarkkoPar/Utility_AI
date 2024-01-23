@@ -158,7 +158,7 @@ void UtilityAIBehaviour::_ready() {
     
 }
 
-void UtilityAIBehaviour::_process(float delta ) {
+void UtilityAIBehaviour::_process(double delta ) {
     if( !get_is_active() ) return;
     if( Engine::get_singleton()->is_editor_hint() ) return;
     if( _current_cooldown_seconds > 0.0 ) {

@@ -29,7 +29,7 @@ public:
     ~UtilityAINQSSearchCriteria();
     
     // Godot virtuals.
-    void _ready();    
+    void _ready() override;    
 
     
     // Getters and setters for attributes.

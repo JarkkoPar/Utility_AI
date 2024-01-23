@@ -35,7 +35,7 @@ public:
    
     // Handling functions.
     
-    virtual float sample_activation_curve( float input_value ) const;
+    virtual float sample_activation_curve( float input_value ) const override;
 };
 
 }

@@ -39,7 +39,7 @@ public:
     StringName get_property_name() const;
             
     // Godot virtuals.
-    void _ready();
+    void _ready() override;
     //void _notification( int p_what );
    
     // Handling functions.

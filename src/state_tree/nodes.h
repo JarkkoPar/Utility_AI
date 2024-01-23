@@ -59,7 +59,7 @@ public:
     void set_child_state_selection_rule( int child_state_selection_rule );
     int  get_child_state_selection_rule() const;
 
-    virtual inline void set_root_node( UtilityAIStateTreeNodes* tree_root_node );
+    virtual void set_root_node( UtilityAIStateTreeNodes* tree_root_node );
     //Dictionary get_child_nodes_as_dictionary(UtilityAIStateTreeNodes* tree_root_node );
 
     //inline virtual bool get_is_leaf() const { return false; };

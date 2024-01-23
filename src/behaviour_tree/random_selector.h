@@ -13,7 +13,6 @@ class UtilityAIBTRandomSelector : public UtilityAIBTCompositeNodes {
 
 private:
     TypedArray<int> _child_node_order;    
-    //bool _is_reactive;
     int _current_child_index;
 protected:
     static void _bind_methods();
@@ -24,9 +23,6 @@ public:
     
     
     // Getters and setters for attributes.
-        
-    //void  set_is_reactive( bool is_reactive );
-    //bool  get_is_reactive() const;
 
     // Handling functions.
 

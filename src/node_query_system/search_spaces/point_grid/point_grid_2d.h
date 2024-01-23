@@ -15,7 +15,7 @@ public:
     ~UtilityAIPointGrid2DSearchSpace();
 
     // Godot virtuals.
-    void _ready();    
+    void _ready() override;    
     
     // Getters and setters for attributes.
 

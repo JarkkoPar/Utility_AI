@@ -145,7 +145,7 @@ void UtilityAIBTRunNQSQuery::_ready() {
 }
 
 
-void UtilityAIBTRunNQSQuery::_physics_process(float delta ) {
+void UtilityAIBTRunNQSQuery::_physics_process(double delta ) {
     if( _nqs_search_space == nullptr ) return;
     if( _nqs == nullptr ) return;
     if( _query_state == QS_RUNNING ) {
@@ -155,11 +155,4 @@ void UtilityAIBTRunNQSQuery::_physics_process(float delta ) {
         }
     }
 }
-
-
-/**
-void UtilityAIBTRunNQSQuery::_exit_tree() {
-
-}
-/**/
 
