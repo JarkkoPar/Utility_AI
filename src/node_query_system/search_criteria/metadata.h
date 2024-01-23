@@ -10,8 +10,9 @@ class UtilityAIMetadataSearchCriterion : public UtilityAINQSSearchCriteria {
 
 private:
     StringName _metadata_name;
+    Variant    _metadata_value;
 protected:
-    //static void _bind_methods();
+    static void _bind_methods();
 
 public:
     UtilityAIMetadataSearchCriterion();
@@ -20,8 +21,11 @@ public:
     
     // Getters and setters for attributes.
 
-    void set_metadata_name( StringName _metadata_name );
+    void set_metadata_name( StringName metadata_name );
     StringName get_metadata_name() const;
+
+    void set_metadata_value( Variant metadata_value );
+    Variant get_metadata_value() const;
 
     // Handling methods.
 
