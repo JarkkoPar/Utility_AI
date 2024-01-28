@@ -3,6 +3,7 @@
 #include <godot_cpp/core/class_db.hpp>
 #include <godot_cpp/classes/engine.hpp>
 #include <godot_cpp/classes/random_number_generator.hpp>
+#include <godot_cpp/classes/time.hpp>
 
 
 using namespace godot;
@@ -57,8 +58,11 @@ bool UtilityAIConsiderationGroup::get_invert_score() const {
 float UtilityAIConsiderationGroup::evaluate() { 
     //if( !get_is_active() ) return 0.0;
     //if( Engine::get_singleton()->is_editor_hint() ) return 0.0;
+    #ifdef DEBUG_ENABLED
+    _last_evaluated_timestamp = godot::Time::get_singleton()->get_ticks_usec();
+    #endif
 
-    _score = 0.0;
+    _score = 0.0f;
     _has_vetoed = false;
     
     // Evaluate the children.

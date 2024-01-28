@@ -1,5 +1,5 @@
-#ifndef UTILITYAI_LIVE_DEBUGGER_H_INCLUDED
-#define UTILITYAI_LIVE_DEBUGGER_H_INCLUDED
+#ifndef UTILITYAI_DEBUGGER_OVERLAY_H_INCLUDED
+#define UTILITYAI_DEBUGGER_OVERLAY_H_INCLUDED
 
 #ifdef DEBUG_ENABLED
 
@@ -7,36 +7,39 @@
 #include <godot_cpp/classes/node.hpp>
 #include <godot_cpp/classes/control.hpp>
 #include <godot_cpp/classes/option_button.hpp>
+#include <godot_cpp/classes/rich_text_label.hpp>
 #include <godot_cpp/classes/tree.hpp>
 
 
 namespace godot {
 
-class UtilityAILiveDebugger : public Node {
-    GDCLASS(UtilityAILiveDebugger, Node)
+class UtilityAIDebuggerOverlay : public Node {
+    GDCLASS(UtilityAIDebuggerOverlay, Node)
 
 private:
     std::vector<ObjectID>   _behaviour_trees;
     std::vector<ObjectID>   _state_trees;
     std::vector<ObjectID>   _agents;
     
-    static UtilityAILiveDebugger* _singleton;
+    static UtilityAIDebuggerOverlay* _singleton;
 
-    Control*                _live_debugger_scene;
+    Control*                _debugger_overlay_scene;
     OptionButton*           _type_selection;
     OptionButton*           _root_selection;
+    RichTextLabel*          _debug_messages;
 
     int                     _current_type_selection;
     int                     _current_root_selection;
+    Node*                   _current_root_selection_node;
 protected:
     static void _bind_methods();
 
 
 public:
-    UtilityAILiveDebugger();
-    ~UtilityAILiveDebugger();
+    UtilityAIDebuggerOverlay();
+    ~UtilityAIDebuggerOverlay();
 
-    static UtilityAILiveDebugger* get_singleton();
+    static UtilityAIDebuggerOverlay* get_singleton();
     
     // Godot virtuals.
 

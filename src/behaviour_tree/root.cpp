@@ -8,7 +8,7 @@
 #include "../performance_monitor_singleton.h"
 
 #ifdef DEBUG_ENABLED
-#include "../debugger/live_debugger.h"
+#include "../debugger/debugger_overlay.h"
 #endif
 
 using namespace godot;
@@ -162,7 +162,7 @@ void UtilityAIBTRoot::_ready() {
     
 #ifdef DEBUG_ENABLED
     if( Engine::get_singleton()->is_editor_hint() ) return;
-    //UtilityAILiveDebugger::get_singleton()->register_behaviour_tree(this->get_instance_id());
+    UtilityAIDebuggerOverlay::get_singleton()->register_behaviour_tree(this->get_instance_id());
 #endif
     _child_sensors.clear();
     for( int i = 0; i < get_child_count(); ++i ) {

@@ -33,12 +33,21 @@ protected:
     unsigned int _num_child_btnodes;
     std::vector<UtilityAIConsiderations*>       _child_considerations;
     unsigned int _num_child_considerations;
+    #ifdef DEBUG_ENABLED
+    uint64_t     _last_evaluated_timestamp;
+    uint64_t     _last_visited_timestamp;
+    #endif
 public:
     UtilityAIBehaviourTreeNodes();
     ~UtilityAIBehaviourTreeNodes();
     
     
     // Getters and setters for attributes.
+
+    #ifdef DEBUG_ENABLED
+    inline uint64_t get_last_visited_timestamp() const {return _last_visited_timestamp;};
+    inline uint64_t get_last_evaluated_timestamp() const {return _last_evaluated_timestamp;};
+    #endif
 
     void set_considerations( TypedArray<UtilityAIConsiderationResources> considerations );
     TypedArray<UtilityAIConsiderationResources> get_considerations() const;

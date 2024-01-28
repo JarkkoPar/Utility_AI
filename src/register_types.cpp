@@ -9,6 +9,7 @@
 // AI AGENT 
 
 // Core nodes
+#include "agent_behaviours/behaviours.h"
 #include "agent_behaviours/behaviour.h"
 #include "agent_behaviours/behaviour_group.h"
 #include "agent_behaviours/considerations.h"
@@ -128,7 +129,7 @@
 //#include "editor/editor_plugin.h"
 //#include "debugger/debugger_plugin.h"
 
-//#include "debugger/live_debugger.h"
+#include "debugger/debugger_overlay.h"
 
 #endif 
 
@@ -144,7 +145,7 @@ using namespace godot;
 static UtilityAINodeQuerySystem* gpNodeQuerySystem;
 static UtilityAIPerformanceMonitorSingleton* gpAIPerformanceMonitor;
 #ifdef DEBUG_ENABLED
-    //static UtilityAILiveDebugger* gpAILiveDebugger;
+    static UtilityAIDebuggerOverlay* gpAIDebuggerOverlay;
 
     
 #endif 
@@ -161,6 +162,7 @@ void register_scene_classes() {
     ClassDB::register_class<UtilityAIActions>(true);
     ClassDB::register_class<UtilityAIActionGroup>();
     ClassDB::register_class<UtilityAIAction>();
+    ClassDB::register_class<UtilityAIBehaviours>(true);
     ClassDB::register_class<UtilityAIBehaviour>();
     ClassDB::register_class<UtilityAIBehaviourGroup>();
     ClassDB::register_class<UtilityAIAgent>();
@@ -263,9 +265,9 @@ void register_scene_classes() {
 
 #ifdef DEBUG_ENABLED
 
-    //ClassDB::register_class<UtilityAILiveDebugger>();
-    //gpAILiveDebugger = memnew(UtilityAILiveDebugger);
-    //Engine::get_singleton()->register_singleton("AILiveDebugger", gpAILiveDebugger);
+    ClassDB::register_class<UtilityAIDebuggerOverlay>();
+    gpAIDebuggerOverlay = memnew(UtilityAIDebuggerOverlay);
+    Engine::get_singleton()->register_singleton("AIDebuggerOverlay", gpAIDebuggerOverlay);
 #endif 
 
     
@@ -317,8 +319,8 @@ void uninitialize_utility_ai_module(ModuleInitializationLevel p_level) {
     memdelete(gpAIPerformanceMonitor);
 
 #ifdef DEBUG_ENABLED
-    //Engine::get_singleton()->unregister_singleton("AILiveDebugger");
-    //memdelete(gpAILiveDebugger);
+    Engine::get_singleton()->unregister_singleton("AIDebuggerOverlay");
+    memdelete(gpAIDebuggerOverlay);
 #endif
 }
 

@@ -28,7 +28,7 @@ void UtilityAIConsiderations::_bind_methods() {
 
 UtilityAIConsiderations::UtilityAIConsiderations() {
     _has_vetoed = false;
-    _score = 0.0;
+    _score = 0.0f;
 }
 
 
@@ -59,7 +59,7 @@ float UtilityAIConsiderations::get_score() const {
 }
 
 float UtilityAIConsiderations::evaluate() { 
-    return 0.0;
+    return 0.0f;
 }
 
 

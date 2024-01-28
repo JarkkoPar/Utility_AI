@@ -2,6 +2,7 @@
 #include "../agent_behaviours/considerations.h"
 #include <godot_cpp/core/class_db.hpp>
 #include <godot_cpp/classes/engine.hpp>
+#include <godot_cpp/classes/time.hpp>
 
 
 using namespace godot;
@@ -59,6 +60,12 @@ UtilityAIStateTreeNodes::UtilityAIStateTreeNodes() {
     _has_on_ticked_method = false;
 
     _num_child_states = 0;
+    _num_child_considerations = 0;
+
+    #ifdef DEBUG_ENABLED
+    _last_evaluated_timestamp = 0;
+    _last_visited_timestamp = 0;
+    #endif
 }
 
 
@@ -141,6 +148,9 @@ Dictionary UtilityAIStateTreeNodes::get_child_nodes_as_dictionary(UtilityAIState
 float UtilityAIStateTreeNodes::evaluate() {
     //if( !get_is_active() ) return 0.0f;
     //if( Engine::get_singleton()->is_editor_hint() ) return 0.0f;
+    #ifdef DEBUG_ENABLED
+    _last_evaluated_timestamp = godot::Time::get_singleton()->get_ticks_usec();
+    #endif
 
     _score = 0.0f;
     bool has_vetoed = false;
@@ -168,16 +178,19 @@ float UtilityAIStateTreeNodes::evaluate() {
         return _score;
     }
     float child_score = 0.0;
-    for( int i = 0; i < num_children; ++i ) {
-        Node* node = get_child(i);
-        if( node == nullptr ) continue;
-        UtilityAIConsiderations* considerationNode = godot::Object::cast_to<UtilityAIConsiderations>(node);
-        if( considerationNode == nullptr ) continue;
+
+    //for( int i = 0; i < num_children; ++i ) {
+    //    Node* node = get_child(i);
+    //    if( node == nullptr ) continue;
+    //    UtilityAIConsiderations* considerationNode = godot::Object::cast_to<UtilityAIConsiderations>(node);
+    //    if( considerationNode == nullptr ) continue;
+    for( unsigned int i = 0; i < _num_child_considerations; ++i ) {
+        UtilityAIConsiderations* considerationNode = _child_considerations[i];
         if( !considerationNode->get_is_active() ) continue;
         child_score = considerationNode->evaluate();
         if( considerationNode->get_has_vetoed()) {
-            _score = 0.0;
-            return 0.0; // Veto zeroes out the score for the entire group.
+            _score = 0.0f;
+            return 0.0f; // Veto zeroes out the score for the entire group.
         }
 
         switch( _evaluation_method ) {
@@ -199,21 +212,21 @@ float UtilityAIStateTreeNodes::evaluate() {
                 else _score *= child_score;
                 // If after multiplication we are at 0.0, then none of the
                 // other considerations will ever change the result, so bail.
-                if( _score == 0.0 ) {
+                if( _score == 0.0f ) {
                     if( _invert_score ) {
-                        _score = 1.0;
-                        return 1.0;
+                        _score = 1.0f;
+                        return 1.0f;
                     }
-                    _score = 0.0;
-                    return 0.0;
+                    _score = 0.0f;
+                    return 0.0f;
                 }
             }
             break;
             case UtilityAIStateTreeNodesEvaluationMethod::FirstNonZero: 
             {
-                if( child_score > 0.0 ) {
+                if( child_score > 0.0f ) {
                     if( _invert_score ) {
-                        _score = 1.0 - child_score;
+                        _score = 1.0f - child_score;
                     } else {
                         _score = child_score;
                     }
@@ -231,7 +244,7 @@ float UtilityAIStateTreeNodes::evaluate() {
     }
 
     if( _invert_score ) {
-        _score = 1.0 - _score;
+        _score = 1.0f - _score;
     }
 
     return _score;
@@ -266,6 +279,9 @@ void UtilityAIStateTreeNodes::on_tick( Variant user_data, float delta ) {
         call("on_tick", user_data, delta );
     }
     emit_signal("state_ticked", user_data, delta);
+    #ifdef DEBUG_ENABLED
+    _last_visited_timestamp = godot::Time::get_singleton()->get_ticks_usec();
+    #endif
 }
 
 void UtilityAIStateTreeNodes::transition_to( NodePath path_to_node, Variant user_data, float delta ) {
@@ -356,13 +372,18 @@ void UtilityAIStateTreeNodes::_notification(int p_what ) {
         _has_on_ticked_method = has_method("on_tick");
     } else if( p_what == NOTIFICATION_CHILD_ORDER_CHANGED ) {
         _child_states.clear();
+        _child_considerations.clear();
         int num_children = get_child_count();
         for( int i = 0; i < num_children; ++i ) {
             if( UtilityAIStateTreeNodes* stnode = godot::Object::cast_to<UtilityAIStateTreeNodes>(get_child(i)) ) {
                 _child_states.push_back(stnode);
             }
+            if( UtilityAIConsiderations* cons = godot::Object::cast_to<UtilityAIConsiderations>(get_child(i))) {
+                _child_considerations.push_back(cons);
+            }
         }//endfor child nodes
         _num_child_states = (unsigned int)_child_states.size();
+        _num_child_considerations = (unsigned int)_child_considerations.size();
     }
     
 }

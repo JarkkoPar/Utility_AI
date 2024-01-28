@@ -4,7 +4,7 @@
 #include "utility_ai.h"
 #include <godot_cpp/classes/node.hpp>
 #include "../resources/considerations/consideration_resources.h"
-
+#include "../agent_behaviours/considerations.h"
 
 namespace godot {
 
@@ -25,14 +25,27 @@ private:
     TypedArray<UtilityAIConsiderationResources>    _considerations;
     std::vector<UtilityAIStateTreeNodes*>   _child_states;
     unsigned int _num_child_states;
+
+    std::vector<UtilityAIConsiderations*> _child_considerations;
+    unsigned int _num_child_considerations;
 protected:
     static void _bind_methods();
+
+    #ifdef DEBUG_ENABLED
+    uint64_t     _last_evaluated_timestamp;
+    uint64_t     _last_visited_timestamp;
+    #endif
 public:
     UtilityAIStateTreeNodes();
     ~UtilityAIStateTreeNodes();
     
     
     // Getters and setters for attributes.
+
+    #ifdef DEBUG_ENABLED
+    inline uint64_t get_last_visited_timestamp() const {return _last_visited_timestamp;};
+    inline uint64_t get_last_evaluated_timestamp() const {return _last_evaluated_timestamp;};
+    #endif
 
     void set_considerations( TypedArray<UtilityAIConsiderationResources> considerations );
     TypedArray<UtilityAIConsiderationResources> get_considerations() const;

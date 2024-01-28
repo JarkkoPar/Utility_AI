@@ -2,7 +2,7 @@
 #include "../agent_behaviours/considerations.h"
 #include <godot_cpp/core/class_db.hpp>
 #include <godot_cpp/classes/engine.hpp>
-
+#include <godot_cpp/classes/time.hpp>
 
 using namespace godot;
 
@@ -61,6 +61,10 @@ UtilityAIBehaviourTreeNodes::UtilityAIBehaviourTreeNodes() {
     //_is_first_tick = true;
     _num_child_btnodes = 0;
     _num_child_considerations = 0;
+#ifdef DEBUG_ENABLED
+    _last_visited_timestamp = 0;
+    _last_evaluated_timestamp = 0;
+#endif
 }
 
 
@@ -103,6 +107,9 @@ int  UtilityAIBehaviourTreeNodes::get_tick_result() const {
 }
 
 void UtilityAIBehaviourTreeNodes::set_internal_status( int internal_status ) {
+    #ifdef DEBUG_ENABLED
+    _last_visited_timestamp = godot::Time::get_singleton()->get_ticks_usec();
+    #endif
     switch( _reset_rule ) {
         case UtilityAIBehaviourTreeNodesResetRule::WHEN_COMPLETED: {
             if( internal_status == BT_INTERNAL_STATUS_COMPLETED ) {
@@ -191,6 +198,9 @@ void UtilityAIBehaviourTreeNodes::reset_for_looping() {
 float UtilityAIBehaviourTreeNodes::evaluate() {
     //if( !get_is_active() ) return 0.0f;
     //if( Engine::get_singleton()->is_editor_hint() ) return 0.0f;
+    #ifdef DEBUG_ENABLED
+    _last_evaluated_timestamp = godot::Time::get_singleton()->get_ticks_usec();
+    #endif
 
     _score = 0.0f;
     bool has_vetoed = false;

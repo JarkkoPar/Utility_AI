@@ -20,7 +20,10 @@ protected:
     static void _bind_methods();
 
     bool  _has_sensor_value_changed;
-
+    #ifdef DEBUG_ENABLED
+    uint64_t     _last_evaluated_timestamp;
+    uint64_t     _last_visited_timestamp;
+    #endif
 public:
     UtilityAISensors();
     ~UtilityAISensors();
@@ -37,6 +40,12 @@ public:
     virtual void uninitialize_sensor() {}
     
     // Getters and setters for attributes.
+
+    #ifdef DEBUG_ENABLED
+    inline uint64_t get_last_visited_timestamp() const {return _last_visited_timestamp;};
+    inline uint64_t get_last_evaluated_timestamp() const {return _last_evaluated_timestamp;};
+    #endif
+
     bool get_has_sensor_value_changed() const { return _has_sensor_value_changed; };
     
     void set_sensor_value( float sensor_value );

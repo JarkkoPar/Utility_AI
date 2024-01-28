@@ -6,6 +6,7 @@
 #include <godot_cpp/classes/node.hpp>
 #include <godot_cpp/classes/random_number_generator.hpp>
 #include "performance_monitor_singleton.h"
+
 #include "behaviour_group.h"
 #include "behaviour.h"
 #include "action.h"
@@ -41,16 +42,31 @@ private:
     uint64_t _total_evaluate_options_usec;
     uint64_t _total_update_behaviour_usec;
     #endif
+
+    std::vector<UtilityAISensors*> _child_sensors;
+    std::vector<UtilityAIBehaviours*> _child_behaviours;
+    //std::vector<UtilityAIBehaviourGroup*> _child_behaviour_groups;
+    unsigned int _num_child_sensors;
+    unsigned int _num_child_behaviours;
 protected:
     static void _bind_methods();
     void place_into_top_n_behaviour_list(UtilityAIBehaviourGroup* behaviour_group, UtilityAIBehaviour* behaviour, float score );
 
+    #ifdef DEBUG_ENABLED
+    uint64_t     _last_evaluated_timestamp;
+    uint64_t     _last_visited_timestamp;
+    #endif
 public:
     UtilityAIAgent();
     ~UtilityAIAgent();
     
     
     // Getters and setters for attributes.
+
+    #ifdef DEBUG_ENABLED
+    inline uint64_t get_last_visited_timestamp() const {return _last_visited_timestamp;};
+    inline uint64_t get_last_evaluated_timestamp() const {return _last_evaluated_timestamp;};
+    #endif
     
     void set_thinking_delay_in_seconds( float thinking_delay_in_seconds );
     float get_thinking_delay_in_seconds() const;

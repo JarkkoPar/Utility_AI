@@ -3,6 +3,7 @@
 #include <godot_cpp/core/class_db.hpp>
 #include <godot_cpp/classes/engine.hpp>
 #include <godot_cpp/classes/random_number_generator.hpp>
+#include <godot_cpp/classes/time.hpp>
 
 
 using namespace godot;
@@ -35,15 +36,20 @@ UtilityAISensorGroup::~UtilityAISensorGroup() {
 // Handling functions.
 
 float UtilityAISensorGroup::evaluate_sensor_value() {
-    if( !get_is_active() ) return 0.0;
-    if( Engine::get_singleton()->is_editor_hint() ) return 0.0;
+    #ifdef DEBUG_ENABLED
+    _last_evaluated_timestamp = godot::Time::get_singleton()->get_ticks_usec();
+    #endif
+    
+    if( !get_is_active() ) return 0.0f;
+    if( Engine::get_singleton()->is_editor_hint() ) return 0.0f;
 
-    float sensor_value = 0.0;
+
+    float sensor_value = 0.0f;
 
     // Evaluate the children.
     int num_children = get_child_count();
-    if( num_children < 1 ) return 0.0;
-    float child_sensor_value = 0.0;
+    if( num_children < 1 ) return 0.0f;
+    float child_sensor_value = 0.0f;
     for( int i = 0; i < num_children; ++i ) {
         Node* node = get_child(i);
         if( node == nullptr ) continue;

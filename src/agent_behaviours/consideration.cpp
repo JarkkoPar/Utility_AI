@@ -3,7 +3,7 @@
 #include <godot_cpp/core/class_db.hpp>
 #include <godot_cpp/classes/engine.hpp>
 #include <godot_cpp/classes/random_number_generator.hpp>
-
+#include <godot_cpp/classes/time.hpp>
 
 using namespace godot;
 
@@ -90,6 +90,9 @@ void UtilityAIConsideration::_notification(int p_what) {
 // Handling methods.
 
 float UtilityAIConsideration::evaluate() { 
+    #ifdef DEBUG_ENABLED
+    _last_evaluated_timestamp = godot::Time::get_singleton()->get_ticks_usec();
+    #endif
     //if( !get_is_active() ) return 0.0;
     //if( Engine::get_singleton()->is_editor_hint() ) return 0.0;
     if( get_has_vetoed() ) return 0.0f;

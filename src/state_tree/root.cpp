@@ -7,7 +7,7 @@
 #include <godot_cpp/classes/time.hpp>
 #include "../performance_monitor_singleton.h"
 #ifdef DEBUG_ENABLED
-#include "../debugger/live_debugger.h"
+#include "../debugger/debugger_overlay.h"
 #endif
 
 
@@ -191,8 +191,7 @@ void UtilityAISTRoot::_ready() {
     }
     _num_child_sensors = (unsigned int)_child_sensors.size();
 #ifdef DEBUG_ENABLED
-    //UtilityAILiveDebugger::get_singleton()->register_state_tree(this->get_instance_id());
-    //WARN_PRINT("ST Registered!");
+    UtilityAIDebuggerOverlay::get_singleton()->register_state_tree(this->get_instance_id());
 #endif
 }
 /**/

@@ -3,6 +3,7 @@
 #include <godot_cpp/core/class_db.hpp>
 #include <godot_cpp/classes/engine.hpp>
 #include <godot_cpp/classes/random_number_generator.hpp>
+#include <godot_cpp/classes/time.hpp>
 
 #include "consideration.h"
 #include "consideration_group.h"
@@ -38,9 +39,9 @@ void UtilityAIBehaviour::_bind_methods() {
 
     ADD_SUBGROUP("Debugging","");
 
-    ClassDB::bind_method(D_METHOD("set_score", "score"), &UtilityAIBehaviour::set_score);
-    ClassDB::bind_method(D_METHOD("get_score"), &UtilityAIBehaviour::get_score);
-    ADD_PROPERTY(PropertyInfo(Variant::FLOAT, "score", PROPERTY_HINT_RANGE,"-100.0,100.0"), "set_score","get_score");
+    //ClassDB::bind_method(D_METHOD("set_score", "score"), &UtilityAIBehaviour::set_score);
+    //ClassDB::bind_method(D_METHOD("get_score"), &UtilityAIBehaviour::get_score);
+    //ADD_PROPERTY(PropertyInfo(Variant::FLOAT, "score", PROPERTY_HINT_RANGE,"-100.0,100.0"), "set_score","get_score");
 
     ClassDB::bind_method(D_METHOD("set_current_action_index", "current_action_index"), &UtilityAIBehaviour::set_current_action_index);
     ClassDB::bind_method(D_METHOD("get_current_action_index"), &UtilityAIBehaviour::get_current_action_index);
@@ -67,6 +68,7 @@ UtilityAIBehaviour::UtilityAIBehaviour() {
     _current_action_index = 0;
     _can_be_interrupted = true;
     _behaviour_id = 0;
+    _num_child_considerations = 0;
 }
 
 
@@ -96,6 +98,7 @@ bool  UtilityAIBehaviour::get_can_be_interrupted() const {
     return _can_be_interrupted;
 }
 
+/*
 void UtilityAIBehaviour::set_score( float score ) {
     _score = score;
 }
@@ -103,7 +106,7 @@ void UtilityAIBehaviour::set_score( float score ) {
 float UtilityAIBehaviour::get_score() const {
     return _score;
 }
-
+*/
 void UtilityAIBehaviour::set_cooldown_seconds( float cooldown_seconds ) {
     _cooldown_seconds = cooldown_seconds;
 }
@@ -128,6 +131,7 @@ int  UtilityAIBehaviour::get_current_action_index() const {
     return _current_action_index;
 }
 
+/**
 void UtilityAIBehaviour::set_considerations( TypedArray<UtilityAIConsiderationResources> considerations ) {
     _considerations = considerations;
 }
@@ -135,11 +139,23 @@ void UtilityAIBehaviour::set_considerations( TypedArray<UtilityAIConsiderationRe
 TypedArray<UtilityAIConsiderationResources> UtilityAIBehaviour::get_considerations() const {
     return _considerations;
 }
-
+/**/
 
 // Godot virtuals.
-
+/**
 void UtilityAIBehaviour::_notification(int p_what) {
+
+    if( p_what == NOTIFICATION_CHILD_ORDER_CHANGED ) {
+        _child_considerations.clear();
+        int num_children = get_child_count();
+        for( int i = 0; i < num_children; ++i ) {
+            if( UtilityAIConsiderations* cons = godot::Object::cast_to<UtilityAIConsiderations>(get_child(i))) {
+                _child_considerations.push_back(cons);
+            }
+        }//endfor child nodes
+        _num_child_considerations = (unsigned int)_child_considerations.size();
+    }
+    /**
 	switch (p_what) {
         case NOTIFICATION_ENTER_TREE: {
             // Entered the tree. 
@@ -148,7 +164,9 @@ void UtilityAIBehaviour::_notification(int p_what) {
 			
 		} break;
 	}
+    
 }
+/**/
 
 void UtilityAIBehaviour::_ready() {
     if( !get_is_active() ) return;
@@ -161,9 +179,9 @@ void UtilityAIBehaviour::_ready() {
 void UtilityAIBehaviour::_process(double delta ) {
     if( !get_is_active() ) return;
     if( Engine::get_singleton()->is_editor_hint() ) return;
-    if( _current_cooldown_seconds > 0.0 ) {
+    if( _current_cooldown_seconds > 0.0f ) {
         _current_cooldown_seconds -= delta;
-        if(_current_cooldown_seconds < 0.0 ) _current_cooldown_seconds = 0.0;
+        if(_current_cooldown_seconds < 0.0f ) _current_cooldown_seconds = 0.0f;
     }
 }
 
@@ -171,9 +189,10 @@ void UtilityAIBehaviour::_process(double delta ) {
 
 // Handling functions.
 
-float UtilityAIBehaviour::evaluate(){ //UtilityAIAgent* agent) { 
-    //if( !get_is_active() ) return 0.0;
-    //if( Engine::get_singleton()->is_editor_hint() ) return 0.0;
+float UtilityAIBehaviour::evaluate(){ 
+    #ifdef DEBUG_ENABLED
+    _last_evaluated_timestamp = godot::Time::get_singleton()->get_ticks_usec();
+    #endif
 
     // If the behaviour is on cooldown, it cannot be chosen.
     if( _current_cooldown_seconds > 0.0f ) return 0.0f;
@@ -202,10 +221,12 @@ float UtilityAIBehaviour::evaluate(){ //UtilityAIAgent* agent) {
     }
 
     // Evaluate the child nodes.
-    int num_children = get_child_count();
-    for( int i = 0; i < num_children; ++i ) {
-        UtilityAIConsiderations* considerationNode = godot::Object::cast_to<UtilityAIConsiderations>(get_child(i));
-        if( considerationNode == nullptr ) continue;
+    //int num_children = get_child_count();
+    //for( int i = 0; i < num_children; ++i ) {
+        //UtilityAIConsiderations* considerationNode = godot::Object::cast_to<UtilityAIConsiderations>(get_child(i));
+    for( unsigned int i = 0; i < _num_child_considerations; ++i ) {
+        UtilityAIConsiderations* considerationNode = _child_considerations[i];
+        //if( considerationNode == nullptr ) continue;
         if( !considerationNode->get_is_active() ) continue;
         _score += considerationNode->evaluate();
         if( considerationNode->get_has_vetoed()){
