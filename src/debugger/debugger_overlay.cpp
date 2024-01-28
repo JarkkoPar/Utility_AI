@@ -29,7 +29,11 @@ UtilityAIDebuggerOverlay::UtilityAIDebuggerOverlay() {
     _singleton = this;
     _debugger_overlay_scene = nullptr;
     _current_type_selection = -1;
+    _current_root_selection = -1;
     _current_root_selection_node = nullptr;
+    _type_selection = nullptr;
+    _root_selection = nullptr;
+    _debug_messages = nullptr;
 }
 
 UtilityAIDebuggerOverlay::~UtilityAIDebuggerOverlay() {
@@ -43,6 +47,7 @@ void UtilityAIDebuggerOverlay::_bind_methods() {
     // UI Handling methods.
     ClassDB::bind_method(D_METHOD("on_type_item_selected", "item"), &UtilityAIDebuggerOverlay::on_type_item_selected);
     ClassDB::bind_method(D_METHOD("on_root_item_selected", "item"), &UtilityAIDebuggerOverlay::on_root_item_selected);
+    ClassDB::bind_method(D_METHOD("on_exit_tree"), &UtilityAIDebuggerOverlay::on_exit_tree);
     ClassDB::bind_method(D_METHOD("update_ui"), &UtilityAIDebuggerOverlay::update_ui);
 }
 
@@ -54,27 +59,41 @@ void UtilityAIDebuggerOverlay::_bind_methods() {
 
 // Handling methods.
 
-void UtilityAIDebuggerOverlay::register_behaviour_tree(uint64_t instance_id) {
+int UtilityAIDebuggerOverlay::register_behaviour_tree(uint64_t instance_id) {
     ObjectID new_objectID = ObjectID();
     new_objectID = instance_id;
+    int index = _behaviour_trees.size();
     _behaviour_trees.push_back(new_objectID);
-    //WARN_PRINT("Added BTRee");
+    return index;
 }
 
-void UtilityAIDebuggerOverlay::register_state_tree(uint64_t instance_id) {
+int UtilityAIDebuggerOverlay::register_state_tree(uint64_t instance_id) {
     ObjectID new_objectID = ObjectID();
     new_objectID = instance_id;
+    int index = _state_trees.size();
     _state_trees.push_back(new_objectID);
-    //WARN_PRINT("Added State Tree");
+    return index;
 }
 
-void UtilityAIDebuggerOverlay::register_ai_agent(uint64_t instance_id) {
+int UtilityAIDebuggerOverlay::register_ai_agent(uint64_t instance_id) {
     ObjectID new_objectID = ObjectID();
     new_objectID = instance_id;
+    int index = _agents.size();
     _agents.push_back(new_objectID);
-    //WARN_PRINT("Added AIAgent");
+    return index;
 }
 
+void UtilityAIDebuggerOverlay::deregister_behaviour_tree(uint64_t index) {
+   
+}
+
+void UtilityAIDebuggerOverlay::deregister_state_tree(uint64_t index) {
+    
+}
+
+void UtilityAIDebuggerOverlay::deregister_ai_agent(uint64_t index) {
+    
+}
 
 
 void UtilityAIDebuggerOverlay::add_as_child_of( Node* debugger_parent_node ) {
@@ -87,8 +106,10 @@ void UtilityAIDebuggerOverlay::add_as_child_of( Node* debugger_parent_node ) {
         _debugger_overlay_scene = godot::Object::cast_to<Control>(scene_template->instantiate());
         
     }//endif live debugger scene is not loaded.
-    
+    _debug_messages = _debugger_overlay_scene->get_node<RichTextLabel>("HBoxContainer/TextVBoxContainer/DebugTextArea");
+
     debugger_parent_node->add_child(_debugger_overlay_scene);
+    _debugger_overlay_scene->connect("tree_exited", Callable(this, "on_exit_tree"));
     
     // Connect the signals.
     _type_selection = _debugger_overlay_scene->get_node<OptionButton>("HBoxContainer/VBoxContainer/SelectType");
@@ -104,11 +125,11 @@ void UtilityAIDebuggerOverlay::add_as_child_of( Node* debugger_parent_node ) {
         return;
     }
     _root_selection->connect("item_selected", Callable(this, "on_root_item_selected"));
-
+    _current_type_selection = -1;
     on_type_item_selected(0);
     //WARN_PRINT("ALL DONE!");
 
-    _debug_messages = _debugger_overlay_scene->get_node<RichTextLabel>("HBoxContainer/TextVBoxContainer/DebugTextArea");
+    
 }
 
 
@@ -131,7 +152,22 @@ void UtilityAIDebuggerOverlay::on_type_item_selected(int item) {
     //WARN_PRINT("--3");
     //WARN_PRINT(String("Got: ") + String(item));
     switch( item ) {
-        case 1: { // Behaviour trees.
+        case 1: { // Agent behaviours.
+            for( int i = 0; i < _agents.size(); ++i ) {
+                ObjectID helper = ObjectID();
+                helper = _agents[i];
+                if( !helper.is_valid() ) {
+                    continue;
+                }
+                UtilityAIAgent* agent = godot::Object::cast_to<UtilityAIAgent>(ObjectDB::get_instance(_agents[i]));
+                if( agent == nullptr ) {
+                    continue;
+                }
+                _root_selection->add_item(String(agent->get_owner()->get_name()) + ": " + String(agent->get_name()) );
+            }//endfor
+            //WARN_PRINT("--6");
+        } break;
+        case 2: { // Behaviour trees.
             for( int i = 0; i < _behaviour_trees.size(); ++i ) {
                 ObjectID helper = ObjectID();
                 helper = _behaviour_trees[i];
@@ -146,7 +182,7 @@ void UtilityAIDebuggerOverlay::on_type_item_selected(int item) {
             }//endfor
             //WARN_PRINT("--4");
         } break;
-        case 2: { // State trees.
+        case 3: { // State trees.
             for( int i = 0; i < _state_trees.size(); ++i ) {
                 ObjectID helper = ObjectID();
                 helper = _state_trees[i];
@@ -161,20 +197,7 @@ void UtilityAIDebuggerOverlay::on_type_item_selected(int item) {
             }//endfor
             //WARN_PRINT("--5");
         } break;
-        default: { // Agent behaviours.
-            for( int i = 0; i < _agents.size(); ++i ) {
-                ObjectID helper = ObjectID();
-                helper = _agents[i];
-                if( !helper.is_valid() ) {
-                    continue;
-                }
-                UtilityAIAgent* agent = godot::Object::cast_to<UtilityAIAgent>(ObjectDB::get_instance(_agents[i]));
-                if( agent == nullptr ) {
-                    continue;
-                }
-                _root_selection->add_item(String(agent->get_owner()->get_name()) + ": " + String(agent->get_name()) );
-            }//endfor
-            //WARN_PRINT("--6");
+        default: { // No selection.
         } break;
     }
 
@@ -196,7 +219,13 @@ void UtilityAIDebuggerOverlay::on_root_item_selected(int item) {
     root_item->set_custom_font_size(2, 10);
     _current_root_selection_node = nullptr;
     switch(_current_type_selection) {
-        case 1: { // Behaviour trees.
+        case 1: { // Agent behaviours.
+            UtilityAIAgent* agent = godot::Object::cast_to<UtilityAIAgent>(ObjectDB::get_instance(_agents[_current_root_selection]));
+            _current_root_selection_node = agent;
+            root_item->set_text(0, agent->get_name());
+            tree_add_child_nodes( tree, root_item, agent );
+        } break;
+        case 2: { // Behaviour trees.
             // todo: * show the Behaviour Tree debugging view
             //       * update the debugging view with the selected behaviour tree data.
             UtilityAIBTRoot* btroot = godot::Object::cast_to<UtilityAIBTRoot>(ObjectDB::get_instance(_behaviour_trees[_current_root_selection]));
@@ -204,22 +233,37 @@ void UtilityAIDebuggerOverlay::on_root_item_selected(int item) {
             root_item->set_text(0, btroot->get_name());
             tree_add_child_nodes( tree, root_item, btroot );
         } break;
-        case 2: { // State trees.
+        case 3: { // State trees.
             UtilityAISTRoot* stroot = godot::Object::cast_to<UtilityAISTRoot>(ObjectDB::get_instance(_state_trees[_current_root_selection]));
             _current_root_selection_node = stroot;
             root_item->set_text(0, stroot->get_name());
             tree_add_child_nodes( tree, root_item, stroot );
         } break;
-        default: { // Agent behaviours.
-            UtilityAIAgent* agent = godot::Object::cast_to<UtilityAIAgent>(ObjectDB::get_instance(_agents[_current_root_selection]));
-            _current_root_selection_node = agent;
-            root_item->set_text(0, agent->get_name());
-            tree_add_child_nodes( tree, root_item, agent );
+        default: { // No selection.
         } break;
     }//end switch
     /**/
 }
 
+
+void UtilityAIDebuggerOverlay::on_exit_tree() {
+    // The overlay node is exiting the tree, so clear all the pointers.
+    _debugger_overlay_scene->disconnect("tree_exited", Callable(this, "on_exit_tree"));
+    _debugger_overlay_scene = nullptr;
+    _type_selection = nullptr;
+    _root_selection = nullptr;
+    _debug_messages = nullptr;
+    _current_type_selection = -1;
+    _current_root_selection = -1;
+    _current_root_selection_node = nullptr;
+    
+    _agents.clear();
+    _behaviour_trees.clear();
+    _state_trees.clear();
+    
+}
+
+// Handling methods.
 
 void UtilityAIDebuggerOverlay::update_ui() {
     on_root_item_selected(_current_root_selection+1);
@@ -259,44 +303,7 @@ void UtilityAIDebuggerOverlay::update_ui() {
     }//end switch
 /**/
     _debug_messages->set_text(msg);
-    return;
-
-    // RETURN ABOVE!!!
-
-    if( _current_root_selection < 0 || _root_selection == nullptr || _type_selection == nullptr ) return;
-    Tree* tree = _debugger_overlay_scene->get_node<Tree>("SelectedTree");
-    if( tree == nullptr ) return;
-
     
-    //_debug_messages->
-
-    TreeItem* tree_root = tree->get_root();
-    //WARN_PRINT("Updating...");
-    // These just step through the trees hand-in-hand and update the 
-    // contents.
-    switch(_current_type_selection) {
-        case 1: { // Behaviour trees.
-            // todo: * show the Behaviour Tree debugging view
-            //       * update the debugging view with the selected behaviour tree data.
-            UtilityAIBTRoot* btroot = godot::Object::cast_to<UtilityAIBTRoot>(ObjectDB::get_instance(_behaviour_trees[_current_root_selection]));
-            //WARN_PRINT("btroot.");
-            tree_update_child_nodes( tree, tree_root, btroot );
-           
-            
-        } break;
-        case 2: { // State trees.
-            UtilityAISTRoot* stroot = godot::Object::cast_to<UtilityAISTRoot>(ObjectDB::get_instance(_state_trees[_current_root_selection]));
-            //WARN_PRINT("stroot.");
-            tree_update_child_nodes( tree, tree_root, stroot );
-           
-        } break;
-        default: { // Agent behaviours.
-            UtilityAIAgent* agent = godot::Object::cast_to<UtilityAIAgent>(ObjectDB::get_instance(_agents[_current_root_selection]));
-            //WARN_PRINT("agent.");
-            tree_update_child_nodes( tree, tree_root, agent );
-           
-        } break;
-    }//end switch
 
 }
 
@@ -387,7 +394,7 @@ void  UtilityAIDebuggerOverlay::tree_add_child_nodes( Tree* tree, TreeItem* pare
     }//endfor child nodes.
 }
 
-
+/**
 void  UtilityAIDebuggerOverlay::tree_update_child_nodes( Tree* tree, TreeItem* parent_node, Node* parent_ai_node ) {
     if( parent_ai_node == nullptr || parent_node == nullptr ) {
         return;
@@ -423,7 +430,7 @@ void  UtilityAIDebuggerOverlay::tree_update_child_nodes( Tree* tree, TreeItem* p
         
     }//endfor child nodes.
 }
-
+/**/
 
 #endif
 

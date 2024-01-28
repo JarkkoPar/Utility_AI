@@ -46,18 +46,24 @@ public:
     //void _notification( int p_what ) override;
     //void _physics_process(double delta ) override;
     void  tree_add_child_nodes( Tree* tree, TreeItem* parent_node, Node* parent_ai_node );
-    void  tree_update_child_nodes( Tree* tree, TreeItem* parent_node, Node* parent_ai_node );
+    //void  tree_update_child_nodes( Tree* tree, TreeItem* parent_node, Node* parent_ai_node );
 
     // Handling methods.
-    void register_behaviour_tree(uint64_t instance_id);
-    void register_state_tree(uint64_t instance_id);
-    void register_ai_agent(uint64_t instance_id);
+    int register_behaviour_tree(uint64_t instance_id);
+    int register_state_tree(uint64_t instance_id);
+    int register_ai_agent(uint64_t instance_id);
+
+    void deregister_behaviour_tree(uint64_t instance_id);
+    void deregister_state_tree(uint64_t instance_id);
+    void deregister_ai_agent(uint64_t instance_id);
+    
 
     void add_as_child_of( Node* debugger_parent_node );
 
     // UI handling methods.
     void on_type_item_selected(int item);
     void on_root_item_selected(int item);
+    void on_exit_tree();
 
     void update_ui();
 };
