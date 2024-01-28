@@ -333,23 +333,23 @@ void  UtilityAIDebuggerOverlay::tree_add_child_nodes( Tree* tree, TreeItem* pare
         uint64_t tick_timestamp = 0;
         uint64_t eval_timestamp = 0;
         if( UtilityAIAgent* agent = godot::Object::cast_to<UtilityAIAgent>(next_ai_node)) {
-            tick_timestamp = agent->get_last_visited_timestamp();
-            eval_timestamp = agent->get_last_evaluated_timestamp();
+            tick_timestamp = agent->get_last_evaluated_timestamp();// Visited gets only updated if signals are used, so use eval instead
+            eval_timestamp = agent->get_last_evaluated_timestamp();// for the Agent Behaviour tick timestamp.
             score = 0.0f;
         }else if( UtilityAIConsideration* cons = godot::Object::cast_to<UtilityAIConsideration>(next_ai_node)) {
-            tick_timestamp = cons->get_last_visited_timestamp();
+            tick_timestamp = cons->get_last_evaluated_timestamp();
             eval_timestamp = cons->get_last_evaluated_timestamp();
             score = cons->get_score();
         }else if( UtilityAIConsiderationGroup* consg = godot::Object::cast_to<UtilityAIConsiderationGroup>(next_ai_node)) {
-            tick_timestamp = consg->get_last_visited_timestamp();
+            tick_timestamp = consg->get_last_evaluated_timestamp();
             eval_timestamp = consg->get_last_evaluated_timestamp();
             score = consg->get_score();
         }else if( UtilityAIBehaviour* beh = godot::Object::cast_to<UtilityAIBehaviour>(next_ai_node)) {
-            tick_timestamp = beh->get_last_visited_timestamp();
+            tick_timestamp = beh->get_last_evaluated_timestamp();
             eval_timestamp = beh->get_last_evaluated_timestamp();
             score = beh->get_score();
         }else if( UtilityAIBehaviourGroup* behg = godot::Object::cast_to<UtilityAIBehaviourGroup>(next_ai_node)) {
-            tick_timestamp = behg->get_last_visited_timestamp();
+            tick_timestamp = behg->get_last_evaluated_timestamp();
             eval_timestamp = behg->get_last_evaluated_timestamp();
             score = behg->get_score();
         }else if( UtilityAIBehaviourTreeNodes* btnode = godot::Object::cast_to<UtilityAIBehaviourTreeNodes>(next_ai_node) ) {
@@ -379,7 +379,7 @@ void  UtilityAIDebuggerOverlay::tree_add_child_nodes( Tree* tree, TreeItem* pare
         float eval_color = 1.0f - (float)eval_time_diff * 0.000001f * 0.7f;
         
         child_tree_item->set_custom_color(0, Color(tick_color, tick_color, tick_color));
-        child_tree_item->set_custom_color(1, Color(eval_color * 0.8f, eval_color * 0.8f, eval_color));
+        child_tree_item->set_custom_color(2, Color(eval_color * 0.8f, eval_color * 0.8f, eval_color));
 
         //child_tree_item->set_text(2, "n/a");
         tree_add_child_nodes(tree, child_tree_item, next_ai_node );
