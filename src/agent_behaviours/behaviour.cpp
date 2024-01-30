@@ -213,26 +213,94 @@ float UtilityAIBehaviour::evaluate(){
         if( !consideration_resource->get_is_active() ) {
             continue;
         }
-        float score = consideration_resource->evaluate( has_vetoed, this );
+        float child_score = consideration_resource->evaluate( has_vetoed, this );
         if( has_vetoed ) {
             return 0.0f; // A consideration vetoed.
         }
-        _score += score;
+        switch( _evaluation_method ) {
+            case UtilityAIConsiderationGroup::UtilityAIConsiderationGroupEvaluationMethod::Min: 
+            {
+                if( i == 0 ) _score = child_score;
+                if( child_score < _score ) _score = child_score;
+            }
+            break;
+            case UtilityAIConsiderationGroup::UtilityAIConsiderationGroupEvaluationMethod::Max: 
+            {
+                if( i == 0 ) _score = child_score;
+                if( child_score > _score ) _score = child_score;
+            }
+            break;
+            case UtilityAIConsiderationGroup::UtilityAIConsiderationGroupEvaluationMethod::Multiply: 
+            {
+                if( i == 0 ) _score = child_score;
+                else _score *= child_score;
+                // If after multiplication we are at 0.0, then none of the
+                // other considerations will ever change the result, so bail.
+                if( _score == 0.0 ) {
+                    return 0.0;
+                }
+            }
+            break;
+            case UtilityAIConsiderationGroup::UtilityAIConsiderationGroupEvaluationMethod::FirstNonZero: 
+            {
+                if( child_score > 0.0 ) {
+                    _score = child_score;
+                    return _score;
+                }
+            }
+            break;
+            default: _score += child_score;
+        }//end switch evaluation method
     }
 
     // Evaluate the child nodes.
     //int num_children = get_child_count();
     //for( int i = 0; i < num_children; ++i ) {
         //UtilityAIConsiderations* considerationNode = godot::Object::cast_to<UtilityAIConsiderations>(get_child(i));
+    float child_score = 0.0f;
     for( unsigned int i = 0; i < _num_child_considerations; ++i ) {
         UtilityAIConsiderations* considerationNode = _child_considerations[i];
         //if( considerationNode == nullptr ) continue;
         if( !considerationNode->get_is_active() ) continue;
-        _score += considerationNode->evaluate();
+        child_score = considerationNode->evaluate();
         if( considerationNode->get_has_vetoed()){
             _score = 0.0f;
             return 0.0f; // The consideration vetoed this behaviour.
         }
+        switch( _evaluation_method ) {
+            case UtilityAIConsiderationGroup::UtilityAIConsiderationGroupEvaluationMethod::Min: 
+            {
+                if( i == 0 ) _score = child_score;
+                if( child_score < _score ) _score = child_score;
+            }
+            break;
+            case UtilityAIConsiderationGroup::UtilityAIConsiderationGroupEvaluationMethod::Max: 
+            {
+                if( i == 0 ) _score = child_score;
+                if( child_score > _score ) _score = child_score;
+            }
+            break;
+            case UtilityAIConsiderationGroup::UtilityAIConsiderationGroupEvaluationMethod::Multiply: 
+            {
+                if( i == 0 ) _score = child_score;
+                else _score *= child_score;
+                // If after multiplication we are at 0.0, then none of the
+                // other considerations will ever change the result, so bail.
+                if( _score == 0.0 ) {
+                    return 0.0;
+                }
+            }
+            break;
+            case UtilityAIConsiderationGroup::UtilityAIConsiderationGroupEvaluationMethod::FirstNonZero: 
+            {
+                if( child_score > 0.0 ) {
+                    _score = child_score;
+                    return _score;
+                }
+            }
+            break;
+            default: _score += child_score;
+        }//end switch evaluation method
     }//endfor children
 
     return _score;

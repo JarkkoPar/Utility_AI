@@ -108,13 +108,46 @@ float UtilityAIBehaviourGroup::evaluate(){
         if( !consideration_resource->get_is_active() ) {
             continue;
         }
-        float score = consideration_resource->evaluate( has_vetoed, this );
+        float child_score = consideration_resource->evaluate( has_vetoed, this );
         ++num_consideration_nodes_handled;
         if( has_vetoed ) {
             _score = 0.0f; // A consideration vetoed.
             return _score;
         }
-        _score += score;
+        switch( _evaluation_method ) {
+            case UtilityAIConsiderationGroup::UtilityAIConsiderationGroupEvaluationMethod::Min: 
+            {
+                if( i == 0 ) _score = child_score;
+                if( child_score < _score ) _score = child_score;
+            }
+            break;
+            case UtilityAIConsiderationGroup::UtilityAIConsiderationGroupEvaluationMethod::Max: 
+            {
+                if( i == 0 ) _score = child_score;
+                if( child_score > _score ) _score = child_score;
+            }
+            break;
+            case UtilityAIConsiderationGroup::UtilityAIConsiderationGroupEvaluationMethod::Multiply: 
+            {
+                if( i == 0 ) _score = child_score;
+                else _score *= child_score;
+                // If after multiplication we are at 0.0, then none of the
+                // other considerations will ever change the result, so bail.
+                if( _score == 0.0 ) {
+                    return 0.0;
+                }
+            }
+            break;
+            case UtilityAIConsiderationGroup::UtilityAIConsiderationGroupEvaluationMethod::FirstNonZero: 
+            {
+                if( child_score > 0.0 ) {
+                    _score = child_score;
+                    return _score;
+                }
+            }
+            break;
+            default: _score += child_score;
+        }//end switch evaluation method
     }
 
     // Evaluate the children.
@@ -126,12 +159,46 @@ float UtilityAIBehaviourGroup::evaluate(){
     for( unsigned int i = 0; i < _num_child_considerations; ++i ) {
         UtilityAIConsiderations* considerationsNode = _child_considerations[i];
         if( !considerationsNode->get_is_active() ) continue;
-        _score += considerationsNode->evaluate();
+        float child_score = considerationsNode->evaluate();
         ++num_consideration_nodes_handled;
         if( considerationsNode->get_has_vetoed()){
             _score = 0.0f;
             return _score;//return false; // The consideration vetoed this behaviour group.
         }
+        switch( _evaluation_method ) {
+            case UtilityAIConsiderationGroup::UtilityAIConsiderationGroupEvaluationMethod::Min: 
+            {
+                if( i == 0 ) _score = child_score;
+                if( child_score < _score ) _score = child_score;
+            }
+            break;
+            case UtilityAIConsiderationGroup::UtilityAIConsiderationGroupEvaluationMethod::Max: 
+            {
+                if( i == 0 ) _score = child_score;
+                if( child_score > _score ) _score = child_score;
+            }
+            break;
+            case UtilityAIConsiderationGroup::UtilityAIConsiderationGroupEvaluationMethod::Multiply: 
+            {
+                if( i == 0 ) _score = child_score;
+                else _score *= child_score;
+                // If after multiplication we are at 0.0, then none of the
+                // other considerations will ever change the result, so bail.
+                if( _score == 0.0 ) {
+                    return 0.0;
+                }
+            }
+            break;
+            case UtilityAIConsiderationGroup::UtilityAIConsiderationGroupEvaluationMethod::FirstNonZero: 
+            {
+                if( child_score > 0.0 ) {
+                    _score = child_score;
+                    return _score;
+                }
+            }
+            break;
+            default: _score += child_score;
+        }//end switch evaluation method
     }//endfor children
 
     //if( num_consideration_nodes_handled == 0 ) return true;

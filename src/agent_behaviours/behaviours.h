@@ -23,6 +23,9 @@ protected:
     uint64_t     _last_evaluated_timestamp;
     uint64_t     _last_visited_timestamp;
     #endif
+
+    int _evaluation_method;
+
     float  _score;
     TypedArray<UtilityAIConsiderationResources> _considerations;
 
@@ -33,9 +36,12 @@ protected:
     unsigned int _num_child_behaviours;
 public:
     UtilityAIBehaviours(){ _score = 0.0f; _last_evaluated_timestamp = 0; _last_visited_timestamp = 0;};
-    
+        
     
     // Getters and setters for attributes.
+
+    void set_evaluation_method( int evaluation_method );
+    int  get_evaluation_method() const;
 
     #ifdef DEBUG_ENABLED
     inline uint64_t get_last_visited_timestamp() const {return _last_visited_timestamp;};
