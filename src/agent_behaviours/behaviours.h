@@ -36,6 +36,7 @@ protected:
     unsigned int _num_child_behaviours;
 public:
     UtilityAIBehaviours(){ _score = 0.0f;
+    _evaluation_method = 0;
     #ifdef DEBUG_ENABLED
      _last_evaluated_timestamp = 0; _last_visited_timestamp = 0;
     #endif 
