@@ -77,7 +77,7 @@ float UtilityAIConsiderationGroup::evaluate() {
         if( !considerationNode->get_is_active() ) continue;
         child_score = considerationNode->evaluate(); //agent, delta);
         if( considerationNode->get_has_vetoed() ) {
-            _score = 0.0;
+            _score = 0.0f;
             _has_vetoed = true;
             return _score; // Veto zeroes out the score for the entire group.
         }
@@ -101,19 +101,19 @@ float UtilityAIConsiderationGroup::evaluate() {
                 else _score *= child_score;
                 // If after multiplication we are at 0.0, then none of the
                 // other considerations will ever change the result, so bail.
-                if( _score == 0.0 ) {
+                if( _score == 0.0f ) {
                     if( _invert_score ) {
-                        return 1.0;
+                        return 1.0f;
                     }
-                    return 0.0;
+                    return 0.0f;
                 }
             }
             break;
             case UtilityAIConsiderationGroupEvaluationMethod::FirstNonZero: 
             {
-                if( child_score > 0.0 ) {
+                if( child_score > 0.0f ) {
                     if( _invert_score ) {
-                        _score = 1.0 - child_score;
+                        _score = 1.0f - child_score;
                     } else {
                         _score = child_score;
                     }
@@ -131,7 +131,7 @@ float UtilityAIConsiderationGroup::evaluate() {
     }
 
     if( _invert_score ) {
-        _score = 1.0 - _score;
+        _score = 1.0f - _score;
     }
 
     return _score;

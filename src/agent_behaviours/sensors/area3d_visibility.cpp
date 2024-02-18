@@ -23,7 +23,7 @@ void UtilityAIArea3DVisibilitySensor::_bind_methods() {
     
     ClassDB::bind_method(D_METHOD("set_offset_vector", "offset_vector"), &UtilityAIArea3DVisibilitySensor::set_offset_vector3);
     ClassDB::bind_method(D_METHOD("get_offset_vector"), &UtilityAIArea3DVisibilitySensor::get_offset_vector3);
-    ADD_PROPERTY(PropertyInfo(Variant::VECTOR2, "offset_vector", PROPERTY_HINT_NONE), "set_offset_vector","get_offset_vector");
+    ADD_PROPERTY(PropertyInfo(Variant::VECTOR3, "offset_vector", PROPERTY_HINT_NONE), "set_offset_vector","get_offset_vector");
 
 
     ClassDB::bind_method(D_METHOD("set_visibility_volume", "visibility_volume"), &UtilityAIArea3DVisibilitySensor::set_visibility_volume);
@@ -396,7 +396,7 @@ void UtilityAIArea3DVisibilitySensor::set_max_expected_entities_found( int max_e
     }
     _has_sensor_value_changed = _has_sensor_value_changed || ( _max_expected_entities_found != max_expected_entities_found );
     _max_expected_entities_found = max_expected_entities_found;
-    _one_over_max_expected_entities_found = 1.0 / ((float)_max_expected_entities_found);
+    _one_over_max_expected_entities_found = 1.0f / ((float)_max_expected_entities_found);
 }
 
 

@@ -51,7 +51,7 @@ void UtilityAISensors::initialize_sensor() {
 
 float UtilityAISensors::evaluate_sensor_value() {
     _has_sensor_value_changed = false;
-    return 0.0;
+    return 0.0f;
 }
 
 // Getters and Setters.

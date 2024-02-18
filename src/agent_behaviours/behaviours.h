@@ -35,7 +35,11 @@ protected:
     std::vector<UtilityAIBehaviours*> _child_behaviours;
     unsigned int _num_child_behaviours;
 public:
-    UtilityAIBehaviours(){ _score = 0.0f; _last_evaluated_timestamp = 0; _last_visited_timestamp = 0;};
+    UtilityAIBehaviours(){ _score = 0.0f;
+    #ifdef DEBUG_ENABLED
+     _last_evaluated_timestamp = 0; _last_visited_timestamp = 0;
+    #endif 
+    };
         
     
     // Getters and setters for attributes.

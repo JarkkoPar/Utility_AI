@@ -79,10 +79,10 @@ float UtilityAISensorGroup::evaluate_sensor_value() {
             break;
             case UtilityAISensorGroupEvaluationMethod::FirstNonZero: 
             {
-                if( child_sensor_value > 0.0 ) {
+                if( child_sensor_value > 0.0f ) {
                     //sensor_value = child_sensor_value;
                     if( _invert_sensor_value ) {
-                        sensor_value = 1.0 - child_sensor_value;
+                        sensor_value = 1.0f - child_sensor_value;
                     } else {
                         sensor_value = child_sensor_value;
                     }
@@ -103,7 +103,7 @@ float UtilityAISensorGroup::evaluate_sensor_value() {
     }
 
     if( _invert_sensor_value ) {
-        sensor_value = 1.0 - sensor_value;
+        sensor_value = 1.0f - sensor_value;
     }
 
     set_sensor_value(sensor_value);
