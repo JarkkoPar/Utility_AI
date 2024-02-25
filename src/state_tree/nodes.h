@@ -91,8 +91,14 @@ public:
     virtual void   on_tick( Variant user_data, float delta );
     virtual void   transition_to( NodePath path_to_node, Variant user_data, float delta );
 
+    virtual bool   on_enter_condition_no_params();
+    virtual void   on_enter_state_no_params();
+    virtual void   on_exit_state_no_params();
+    virtual void   on_tick_no_params();
+    virtual void   transition_to_no_params( NodePath path_to_node );
+
     virtual UtilityAIStateTreeNodes* evaluate_state_activation( Variant user_data, float delta );
-    
+    virtual UtilityAIStateTreeNodes* evaluate_state_activation_no_params();
 
     // Godot virtuals.
     

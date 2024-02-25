@@ -17,10 +17,11 @@ private:
     uint64_t                 _total_tick_usec;    
     uint64_t                 _total_transition_usec;
     #endif
-    //UtilityAIStateTreeNodes* _active_state;
     TypedArray<UtilityAIStateTreeNodes> _active_states;
     std::vector<UtilityAIStateTreeNodes*> _active_states_vector;
-    //godot::Dictionary        _state_tree_nodes;
+
+    Variant                  _ai_context;
+    
 protected:
     static void _bind_methods();
     std::vector<UtilityAISensors*>  _child_sensors;
@@ -35,6 +36,12 @@ public:
     uint64_t get_total_tick_usec() const;
     void set_total_tick_usec(uint64_t total_tick_usec );
     #endif 
+
+    void set_ai_context( Variant ai_context );
+    Variant get_ai_context() const;
+
+    TypedArray<Node> get_active_states() const;
+
     //UtilityAIStateTreeNodes* get_active_state() const;
     //_active_states
 
@@ -43,7 +50,12 @@ public:
     virtual void transition_to( NodePath path_to_node, Variant user_data, float delta ) override;
     bool try_transition( UtilityAIStateTreeNodes* transition_target_node, Variant user_data, float delta );
 
+    virtual void transition_to_no_params( NodePath path_to_node ) override;
+    bool try_transition_no_params( UtilityAIStateTreeNodes* transition_target_node );
+
+
     void tick(Variant user_data, float delta);
+    void tick_no_params();
 
     // Godot virtuals.
     void _ready() override;

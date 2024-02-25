@@ -35,11 +35,17 @@ void UtilityAIStateTreeNodes::_bind_methods() {
     ADD_PROPERTY(PropertyInfo(Variant::FLOAT, "score", PROPERTY_HINT_NONE ), "set_score","get_score");
 
     ClassDB::bind_method(D_METHOD("transition_to", "new_state_nodepath", "user_data", "delta" ), &UtilityAIStateTreeNodes::transition_to);
+    ClassDB::bind_method(D_METHOD("transition_to_np", "new_state_nodepath" ), &UtilityAIStateTreeNodes::transition_to_no_params);
 
     ADD_SIGNAL(MethodInfo("state_check_enter_condition", PropertyInfo(Variant::OBJECT, "user_data"), PropertyInfo(Variant::FLOAT, "delta")));
     ADD_SIGNAL(MethodInfo("state_entered", PropertyInfo(Variant::OBJECT, "user_data"), PropertyInfo(Variant::FLOAT, "delta")));
     ADD_SIGNAL(MethodInfo("state_ticked", PropertyInfo(Variant::OBJECT, "user_data"), PropertyInfo(Variant::FLOAT, "delta")));
     ADD_SIGNAL(MethodInfo("state_exited", PropertyInfo(Variant::OBJECT, "user_data"), PropertyInfo(Variant::FLOAT, "delta")));
+
+    ADD_SIGNAL(MethodInfo("state_check_enter_condition_np"));
+    ADD_SIGNAL(MethodInfo("state_entered_np"));
+    ADD_SIGNAL(MethodInfo("state_ticked_np"));
+    ADD_SIGNAL(MethodInfo("state_exited_np"));
 }
 
 
@@ -292,6 +298,47 @@ void UtilityAIStateTreeNodes::transition_to( NodePath path_to_node, Variant user
 }
 
 
+bool UtilityAIStateTreeNodes::on_enter_condition_no_params() {
+    if( _has_on_entered_condition_method ){
+        return call("on_enter_condition" );
+    } 
+    emit_signal("state_check_enter_condition_np");
+    return _is_on_entered_condition_true;
+}
+
+void UtilityAIStateTreeNodes::on_enter_state_no_params() {
+    if( _has_on_entered_method ){
+        call("on_enter_state" );
+    } 
+    emit_signal("state_entered_np");
+}
+
+void UtilityAIStateTreeNodes::on_exit_state_no_params() {
+    if( _has_on_exited_method ){
+        call("on_exit_state" );
+    }
+    emit_signal("state_exited_np");
+}
+
+
+void UtilityAIStateTreeNodes::on_tick_no_params() {
+    if( _has_on_ticked_method ){
+        call("on_tick" );
+    }
+    emit_signal("state_ticked_np");
+    #ifdef DEBUG_ENABLED
+    _last_visited_timestamp = godot::Time::get_singleton()->get_ticks_usec();
+    #endif
+}
+
+void UtilityAIStateTreeNodes::transition_to_no_params( NodePath path_to_node ) {
+    if( _tree_root_node == nullptr ) {
+        return;
+    }
+    _tree_root_node->transition_to_no_params(path_to_node);
+}
+
+
 UtilityAIStateTreeNodes* UtilityAIStateTreeNodes::evaluate_state_activation( Variant user_data, float delta ) {
     unsigned int num_state_tree_childs = 0;
 
@@ -352,6 +399,67 @@ UtilityAIStateTreeNodes* UtilityAIStateTreeNodes::evaluate_state_activation( Var
     }
     return this; // This has no state tree children, so it is a leaf node.
 }
+
+
+UtilityAIStateTreeNodes* UtilityAIStateTreeNodes::evaluate_state_activation_no_params() {
+    unsigned int num_state_tree_childs = 0;
+
+    if( get_child_state_selection_rule() == UtilityAIStateTreeNodeChildStateSelectionRule::ON_ENTER_CONDITION_METHOD ) {
+        // Childs are evaluated by using the user-defined on_enter_condition method.
+        for( unsigned int i = 0; i < _num_child_states; ++i ) {
+            UtilityAIStateTreeNodes* stnode = _child_states[i];
+            if( !stnode->get_is_active() ) {
+                continue;
+            } 
+
+            ++num_state_tree_childs;
+            if( !stnode->on_enter_condition_no_params() ) {
+                continue;
+            }
+        
+            if( UtilityAIStateTreeNodes* result = stnode->evaluate_state_activation_no_params() ) {
+                return result;
+            }//endif result is not nullptr
+            //}//endif valid node type
+        }//endfor child nodes
+    } else {
+        // Childs are evaluated by using Utility-based scoring.
+        UtilityAIStateTreeNodes* highest_scoring_state_to_activate = nullptr;
+        float highest_score = -9999999.9999f;
+        //for( int i = 0; i < get_child_count(); ++i ) {
+            //if( UtilityAIStateTreeNodes* stnode = godot::Object::cast_to<UtilityAIStateTreeNodes>(get_child(i)) ) {
+        for( unsigned int i = 0; i < _num_child_states; ++i ) {
+            UtilityAIStateTreeNodes* stnode = _child_states[i];
+        
+            if( !stnode->get_is_active() ) {
+                continue;
+            }
+
+            ++num_state_tree_childs;
+            float score = stnode->evaluate();
+            if( score > highest_score ) {
+                if( UtilityAIStateTreeNodes* result = stnode->evaluate_state_activation_no_params() ) {
+                    highest_score = score;
+                    highest_scoring_state_to_activate = result;
+                }//endif result is not nullptr
+            }//endif score is higher than current highest
+        
+            
+        //}//endif valid node type
+        }//endfor child nodes
+        // Return the highest scoring state that can activate.
+        if( highest_scoring_state_to_activate != nullptr ) {
+            return highest_scoring_state_to_activate;
+        }
+    }//endif state selection method
+
+    
+    if( num_state_tree_childs > 0 ) {
+        return nullptr;
+    }
+    return this; // This has no state tree children, so it is a leaf node.
+}
+
 
 
 // Godot virtuals.
