@@ -2,6 +2,9 @@
 
 using namespace godot;
 
+void UtilityAICustomSearchCriterion::_bind_methods() {
+
+}
 
 
 UtilityAICustomSearchCriterion::UtilityAICustomSearchCriterion() {
