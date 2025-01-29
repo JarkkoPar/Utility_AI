@@ -21,15 +21,20 @@ using namespace godot;
     //ClassDB::bind_method(D_METHOD("tick", "user_data", "delta"), &UtilityAISTSelector::tick);
 //}
 
+void UtilityAISTNode::_bind_methods() {
+
+}
+
 
 // Constructor and destructor.
 
 UtilityAISTNode::UtilityAISTNode() {
-    
+
 }
 
 
 UtilityAISTNode::~UtilityAISTNode() {
+
 }
 
 
@@ -43,7 +48,7 @@ UtilityAISTNode::~UtilityAISTNode() {
 // Handling functions.
 
 /**
-UtilityAISTNodes* UtilityAISTSelector::_tick(Variant user_data, double delta) { 
+UtilityAISTNodes* UtilityAISTSelector::_tick(Variant user_data, double delta) {
 
     // The selector will only consider the state tree nodes.
     UtilityAISTNodes* result_state = nullptr;

@@ -1,5 +1,5 @@
 #ifndef UtilityAICustomSearchCriterion_H_INCLUDED
-#define UtilityAICustomSearchCriterion_H_INCLUDED 
+#define UtilityAICustomSearchCriterion_H_INCLUDED
 
 #include "nqs.h"
 
@@ -9,15 +9,15 @@ class UtilityAICustomSearchCriterion : public UtilityAINQSSearchCriteria {
     GDCLASS(UtilityAICustomSearchCriterion, UtilityAINQSSearchCriteria)
 
 private:
-    
+
 protected:
-    //static void _bind_methods();
+    static void _bind_methods();
 
 public:
     UtilityAICustomSearchCriterion();
     ~UtilityAICustomSearchCriterion();
-    
-    
+
+
     // Getters and setters for attributes.
 
 
@@ -30,4 +30,4 @@ public:
 }
 
 
-#endif 
+#endif
