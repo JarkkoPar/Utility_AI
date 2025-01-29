@@ -23,10 +23,6 @@ void UtilityAISTRoot::_bind_methods() {
     ClassDB::bind_method(D_METHOD("get_total_tick_usec"), &UtilityAISTRoot::get_total_tick_usec);
     ADD_PROPERTY(PropertyInfo(Variant::INT, "total_tick_usec", PROPERTY_HINT_NONE), "set_total_tick_usec","get_total_tick_usec");
     #endif
-
-    ClassDB::bind_method(D_METHOD("set_ai_context", "ai_context"), &UtilityAISTRoot::set_ai_context);
-    ClassDB::bind_method(D_METHOD("get_ai_context"), &UtilityAISTRoot::get_ai_context);
-    //ADD_PROPERTY(PropertyInfo(Variant::, "total_tick_usec", PROPERTY_HINT_NONE), "set_total_tick_usec","get_total_tick_usec");
     
     ClassDB::bind_method(D_METHOD("tick_np"), &UtilityAISTRoot::tick_no_params);
     ClassDB::bind_method(D_METHOD("tick", "user_data", "delta"), &UtilityAISTRoot::tick);
@@ -61,12 +57,6 @@ uint64_t  UtilityAISTRoot::get_total_tick_usec() const {
 }
 #endif
 
-void UtilityAISTRoot::set_ai_context( Variant ai_context ) {
-    _ai_context = ai_context;
-}
-Variant UtilityAISTRoot::get_ai_context() const {
-    return _ai_context;
-} 
 
 TypedArray<Node> UtilityAISTRoot::get_active_states() const {
     return _active_states;

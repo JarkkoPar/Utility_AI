@@ -37,9 +37,6 @@ public:
     void set_total_tick_usec(uint64_t total_tick_usec );
     #endif 
 
-    void set_ai_context( Variant ai_context );
-    Variant get_ai_context() const;
-
     TypedArray<Node> get_active_states() const;
 
     //UtilityAIStateTreeNodes* get_active_state() const;

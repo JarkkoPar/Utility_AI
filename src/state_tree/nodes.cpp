@@ -99,7 +99,6 @@ bool UtilityAIStateTreeNodes::get_is_on_entered_condition_true() const {
     return _is_on_entered_condition_true;
 }
 
-
 void UtilityAIStateTreeNodes::set_evaluation_method( int evaluation_method ) {
     _evaluation_method = evaluation_method;
 }
@@ -134,6 +133,8 @@ void UtilityAIStateTreeNodes::set_root_node( UtilityAIStateTreeNodes* tree_root_
         }
     }//endfor children 
 }
+
+
 /**
 Dictionary UtilityAIStateTreeNodes::get_child_nodes_as_dictionary(UtilityAIStateTreeNodes* tree_root_node ) {
     _tree_root_node = tree_root_node;

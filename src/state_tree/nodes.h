@@ -28,7 +28,11 @@ private:
 
     std::vector<UtilityAIConsiderations*> _child_considerations;
     unsigned int _num_child_considerations;
+
+
 protected:
+    
+
     static void _bind_methods();
 
     #ifdef DEBUG_ENABLED
