@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="UtilityAINodeGroupSearchSpace" inherits="UtilityAINQSSearchSpaces" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/godotengine/godot/master/doc/class.xsd">
+	<brief_description>
+	</brief_description>
+	<description>
+	</description>
+	<tutorials>
+	</tutorials>
+	<members>
+		<member name="group_name" type="StringName" setter="set_group_name" getter="get_group_name" default="&amp;&quot;&quot;">
+		</member>
+	</members>
+</class>

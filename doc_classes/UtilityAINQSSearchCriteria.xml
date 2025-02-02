@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="UtilityAINQSSearchCriteria" inherits="UtilityAI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/godotengine/godot/master/doc/class.xsd">
+	<brief_description>
+	</brief_description>
+	<description>
+	</description>
+	<tutorials>
+	</tutorials>
+	<members>
+		<member name="activation_curve" type="Curve" setter="set_activation_curve" getter="get_activation_curve">
+		</member>
+		<member name="is_filtered" type="bool" setter="set_is_filtered" getter="get_is_filtered" default="true">
+		</member>
+		<member name="score" type="float" setter="set_score" getter="get_score" default="0.0">
+		</member>
+		<member name="use_for_filtering" type="bool" setter="set_use_for_filtering" getter="get_use_for_filtering" default="false">
+		</member>
+		<member name="use_for_scoring" type="bool" setter="set_use_for_scoring" getter="get_use_for_scoring" default="true">
+		</member>
+	</members>
+</class>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="UtilityAIBTRoot" inherits="UtilityAIBehaviourTreeNodes" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/godotengine/godot/master/doc/class.xsd">
+	<brief_description>
+	</brief_description>
+	<description>
+	</description>
+	<tutorials>
+	</tutorials>
+	<methods>
+		<method name="tick">
+			<return type="int" />
+			<param index="0" name="user_data" type="Variant" />
+			<param index="1" name="delta" type="float" />
+			<description>
+			</description>
+		</method>
+	</methods>
+	<members>
+		<member name="total_tick_usec" type="int" setter="set_total_tick_usec" getter="get_total_tick_usec" default="0">
+		</member>
+	</members>
+</class>

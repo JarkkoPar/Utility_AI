@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="UtilityAIBehaviourGroup" inherits="UtilityAIBehaviours" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/godotengine/godot/master/doc/class.xsd">
+	<brief_description>
+	</brief_description>
+	<description>
+	</description>
+	<tutorials>
+	</tutorials>
+	<members>
+		<member name="activation_score" type="float" setter="set_activation_score" getter="get_activation_score" default="0.0">
+		</member>
+		<member name="considerations" type="UtilityAIConsiderationResources[]" setter="set_considerations" getter="get_considerations" default="[]">
+		</member>
+	</members>
+	<signals>
+		<signal name="behaviour_group_entered">
+			<description>
+			</description>
+		</signal>
+		<signal name="behaviour_group_exited">
+			<description>
+			</description>
+		</signal>
+		<signal name="idle_frame_tick">
+			<param index="0" name="delta" type="float" />
+			<description>
+			</description>
+		</signal>
+		<signal name="physics_frame_tick">
+			<param index="0" name="delta" type="float" />
+			<description>
+			</description>
+		</signal>
+	</signals>
+</class>

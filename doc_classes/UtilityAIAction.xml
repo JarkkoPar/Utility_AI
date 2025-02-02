@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="UtilityAIAction" inherits="UtilityAIActions" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/godotengine/godot/master/doc/class.xsd">
+	<brief_description>
+	</brief_description>
+	<description>
+	</description>
+	<tutorials>
+	</tutorials>
+	<members>
+		<member name="action_id" type="int" setter="set_action_id" getter="get_action_id" default="0">
+		</member>
+	</members>
+	<signals>
+		<signal name="action_entered">
+			<description>
+			</description>
+		</signal>
+		<signal name="action_exited">
+			<description>
+			</description>
+		</signal>
+		<signal name="idle_frame_tick">
+			<param index="0" name="delta" type="float" />
+			<description>
+			</description>
+		</signal>
+		<signal name="physics_frame_tick">
+			<param index="0" name="delta" type="float" />
+			<description>
+			</description>
+		</signal>
+	</signals>
+</class>

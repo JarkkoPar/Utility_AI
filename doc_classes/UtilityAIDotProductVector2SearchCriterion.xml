@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="UtilityAIDotProductVector2SearchCriterion" inherits="UtilityAINQSSearchCriteria" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/godotengine/godot/master/doc/class.xsd">
+	<brief_description>
+	</brief_description>
+	<description>
+	</description>
+	<tutorials>
+	</tutorials>
+	<members>
+		<member name="dot_product_vector" type="Vector2" setter="set_dot_product_direction_vector" getter="get_dot_product_direction_vector" default="Vector2(1, 0)">
+		</member>
+		<member name="filtering_rule" type="int" setter="set_filtering_rule" getter="get_filtering_rule" default="1">
+		</member>
+		<member name="filtering_value" type="float" setter="set_filtering_value" getter="get_filtering_value" default="0.0">
+		</member>
+	</members>
+</class>

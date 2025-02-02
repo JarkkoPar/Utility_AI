@@ -6,7 +6,7 @@
 // Performance monitor singleton.
 #include "performance_monitor_singleton.h"
 
-// AI AGENT 
+// AI AGENT
 
 // Core nodes
 #include "agent_behaviours/behaviours.h"
@@ -131,7 +131,7 @@
 
 #include "debugger/debugger_overlay.h"
 
-#endif 
+#endif
 
 // Standard headers.
 #include <gdextension_interface.h>
@@ -147,130 +147,130 @@ static UtilityAIPerformanceMonitorSingleton* gpAIPerformanceMonitor;
 #ifdef DEBUG_ENABLED
     static UtilityAIDebuggerOverlay* gpAIDebuggerOverlay;
 
-    
-#endif 
+
+#endif
 
 
 void register_scene_classes() {
-    ClassDB::register_class<UtilityAI>(true);
-    ClassDB::register_class<UtilityAIConsiderations>(true);
-    ClassDB::register_class<UtilityAIConsiderationGroup>();
-    ClassDB::register_class<UtilityAIConsideration>();
-    ClassDB::register_class<UtilityAISensors>(true);
-    ClassDB::register_class<UtilityAISensorGroup>();
-    ClassDB::register_class<UtilityAISensor>();
-    ClassDB::register_class<UtilityAIActions>(true);
-    ClassDB::register_class<UtilityAIActionGroup>();
-    ClassDB::register_class<UtilityAIAction>();
-    ClassDB::register_class<UtilityAIBehaviours>(true);
-    ClassDB::register_class<UtilityAIBehaviour>();
-    ClassDB::register_class<UtilityAIBehaviourGroup>();
-    ClassDB::register_class<UtilityAIAgent>();
-    
-    // Special sensors.
-    ClassDB::register_class<UtilityAIBooleanSensor>();
-    ClassDB::register_class<UtilityAIFloatRangeSensor>();
-    ClassDB::register_class<UtilityAIIntRangeSensor>();
-    ClassDB::register_class<UtilityAIAngleVector2Sensor>();
-    ClassDB::register_class<UtilityAIAngleVector3Sensor>();
-    ClassDB::register_class<UtilityAIDistanceVector2Sensor>();
-    ClassDB::register_class<UtilityAIDistanceVector3Sensor>();
-    ClassDB::register_class<UtilityAIArea2DVisibilitySensor>();
-    ClassDB::register_class<UtilityAIArea3DVisibilitySensor>();    
+    GDREGISTER_VIRTUAL_CLASS(UtilityAI);
+    GDREGISTER_VIRTUAL_CLASS(UtilityAIConsiderations);
+    GDREGISTER_CLASS(UtilityAIConsiderationGroup);
+    GDREGISTER_CLASS(UtilityAIConsideration);
+    GDREGISTER_VIRTUAL_CLASS(UtilityAISensors);
+    GDREGISTER_CLASS(UtilityAISensorGroup);
+    GDREGISTER_CLASS(UtilityAISensor);
+    GDREGISTER_VIRTUAL_CLASS(UtilityAIActions);
+    GDREGISTER_CLASS(UtilityAIActionGroup);
+    GDREGISTER_CLASS(UtilityAIAction);
+    GDREGISTER_VIRTUAL_CLASS(UtilityAIBehaviours);
+    GDREGISTER_CLASS(UtilityAIBehaviour);
+    GDREGISTER_CLASS(UtilityAIBehaviourGroup);
+    GDREGISTER_CLASS(UtilityAIAgent);
+
+    // // Special sensors.
+    GDREGISTER_CLASS(UtilityAIBooleanSensor);
+    GDREGISTER_CLASS(UtilityAIFloatRangeSensor);
+    GDREGISTER_CLASS(UtilityAIIntRangeSensor);
+    GDREGISTER_CLASS(UtilityAIAngleVector2Sensor);
+    GDREGISTER_CLASS(UtilityAIAngleVector3Sensor);
+    GDREGISTER_CLASS(UtilityAIDistanceVector2Sensor);
+    GDREGISTER_CLASS(UtilityAIDistanceVector3Sensor);
+    GDREGISTER_CLASS(UtilityAIArea2DVisibilitySensor);
+    GDREGISTER_CLASS(UtilityAIArea3DVisibilitySensor);
 
     // Special considerations.
-    ClassDB::register_class<UtilityAIBooleanConsideration>();
-    ClassDB::register_class<UtilityAICustomPropertyConsideration>();
+    GDREGISTER_CLASS(UtilityAIBooleanConsideration);
+    GDREGISTER_CLASS(UtilityAICustomPropertyConsideration);
 
     // Resource-based considerations.
-    ClassDB::register_class<UtilityAIConsiderationResources>(true);
-    ClassDB::register_class<UtilityAIConsiderationResource>();
-    ClassDB::register_class<UtilityAIConsiderationGroupResource>();
+    GDREGISTER_VIRTUAL_CLASS(UtilityAIConsiderationResources);
+    GDREGISTER_CLASS(UtilityAIConsiderationResource);
+    GDREGISTER_CLASS(UtilityAIConsiderationGroupResource);
 
     // Behaviour tree.
-    ClassDB::register_class<UtilityAIBehaviourTreeNodes>(true);
-    ClassDB::register_class<UtilityAIBTRoot>();
+    GDREGISTER_VIRTUAL_CLASS(UtilityAIBehaviourTreeNodes);
+    GDREGISTER_CLASS(UtilityAIBTRoot);
 
-    ClassDB::register_class<UtilityAIBTCompositeNodes>(true);
-    ClassDB::register_class<UtilityAIBTSequence>();
-    ClassDB::register_class<UtilityAIBTSelector>();
-    ClassDB::register_class<UtilityAIBTParallel>();
-    ClassDB::register_class<UtilityAIBTRandomSequence>();
-    ClassDB::register_class<UtilityAIBTRandomSelector>();
-    ClassDB::register_class<UtilityAIBTScoreBasedPicker>();
+    GDREGISTER_VIRTUAL_CLASS(UtilityAIBTCompositeNodes);
+    GDREGISTER_CLASS(UtilityAIBTSequence);
+    GDREGISTER_CLASS(UtilityAIBTSelector);
+    GDREGISTER_CLASS(UtilityAIBTParallel);
+    GDREGISTER_CLASS(UtilityAIBTRandomSequence);
+    GDREGISTER_CLASS(UtilityAIBTRandomSelector);
+    GDREGISTER_CLASS(UtilityAIBTScoreBasedPicker);
 
-    ClassDB::register_class<UtilityAIBTDecoratorNodes>(true);
-    ClassDB::register_class<UtilityAIBTRepeater>();
-    ClassDB::register_class<UtilityAIBTRepeatUntil>();
-    ClassDB::register_class<UtilityAIBTLimiter>();
-    ClassDB::register_class<UtilityAIBTFixedResult>();
-    ClassDB::register_class<UtilityAIBTInverter>();
-    ClassDB::register_class<UtilityAIBTPassThrough>();
-    ClassDB::register_class<UtilityAIBTCooldownTicks>();
-    ClassDB::register_class<UtilityAIBTCooldownMsec>();
-    ClassDB::register_class<UtilityAIBTCooldownUsec>(); 
+    GDREGISTER_VIRTUAL_CLASS(UtilityAIBTDecoratorNodes);
+    GDREGISTER_CLASS(UtilityAIBTRepeater);
+    GDREGISTER_CLASS(UtilityAIBTRepeatUntil);
+    GDREGISTER_CLASS(UtilityAIBTLimiter);
+    GDREGISTER_CLASS(UtilityAIBTFixedResult);
+    GDREGISTER_CLASS(UtilityAIBTInverter);
+    GDREGISTER_CLASS(UtilityAIBTPassThrough);
+    GDREGISTER_CLASS(UtilityAIBTCooldownTicks);
+    GDREGISTER_CLASS(UtilityAIBTCooldownMsec);
+    GDREGISTER_CLASS(UtilityAIBTCooldownUsec);
 
-    ClassDB::register_class<UtilityAIBTTaskNodes>(true);
-    ClassDB::register_class<UtilityAIBTLeaf>();
-    ClassDB::register_class<UtilityAIBTRunNQSQuery>();
-    ClassDB::register_class<UtilityAIBTPassBy>();
-    ClassDB::register_class<UtilityAIBTNodeReference>();
+    GDREGISTER_VIRTUAL_CLASS(UtilityAIBTTaskNodes);
+    GDREGISTER_CLASS(UtilityAIBTLeaf);
+    GDREGISTER_CLASS(UtilityAIBTRunNQSQuery);
+    GDREGISTER_CLASS(UtilityAIBTPassBy);
+    GDREGISTER_CLASS(UtilityAIBTNodeReference);
 
     // State tree.
-    ClassDB::register_class<UtilityAIStateTreeNodes>(true);
-    ClassDB::register_class<UtilityAISTRoot>();
-    ClassDB::register_class<UtilityAISTNode>();
+    GDREGISTER_VIRTUAL_CLASS(UtilityAIStateTreeNodes);
+    GDREGISTER_CLASS(UtilityAISTRoot);
+    GDREGISTER_CLASS(UtilityAISTNode);
 
     // Node Query System.
-    ClassDB::register_class<UtilityAINodeQuerySystem>();
+    GDREGISTER_CLASS(UtilityAINodeQuerySystem);
 
-    ClassDB::register_class<UtilityAINQSSearchSpaces>(true);
-    ClassDB::register_class<UtilityAINodeGroupSearchSpace>();
-    ClassDB::register_class<UtilityAINodeChildrenSearchSpace>();
+    GDREGISTER_VIRTUAL_CLASS(UtilityAINQSSearchSpaces);
+    GDREGISTER_CLASS(UtilityAINodeGroupSearchSpace);
+    GDREGISTER_CLASS(UtilityAINodeChildrenSearchSpace);
 
-    ClassDB::register_class<UtilityAIArea3DSearchSpace>();
-    ClassDB::register_class<UtilityAIArea2DSearchSpace>();
+    GDREGISTER_CLASS(UtilityAIArea3DSearchSpace);
+    GDREGISTER_CLASS(UtilityAIArea2DSearchSpace);
 
-    ClassDB::register_class<UtilityAIPointGrid3DSearchSpace>();
-    ClassDB::register_class<UtilityAIPointGrid2DSearchSpace>();
+    GDREGISTER_CLASS(UtilityAIPointGrid3DSearchSpace);
+    GDREGISTER_CLASS(UtilityAIPointGrid2DSearchSpace);
 
-    ClassDB::register_class<UtilityAINQSSearchCriteria>(true);
-    ClassDB::register_class<UtilityAICustomSearchCriterion>();
-    ClassDB::register_class<UtilityAIMetadataSearchCriterion>();
-    ClassDB::register_class<UtilityAIDistanceToVector3SearchCriterion>();
-    ClassDB::register_class<UtilityAIDistanceToVector2SearchCriterion>();
+    GDREGISTER_VIRTUAL_CLASS(UtilityAINQSSearchCriteria);
+    GDREGISTER_CLASS(UtilityAICustomSearchCriterion);
+    GDREGISTER_CLASS(UtilityAIMetadataSearchCriterion);
+    GDREGISTER_CLASS(UtilityAIDistanceToVector3SearchCriterion);
+    GDREGISTER_CLASS(UtilityAIDistanceToVector2SearchCriterion);
 
-    ClassDB::register_class<UtilityAIDistanceToNode3DSearchCriterion>();
-    ClassDB::register_class<UtilityAIDistanceToNode2DSearchCriterion>();
+    GDREGISTER_CLASS(UtilityAIDistanceToNode3DSearchCriterion);
+    GDREGISTER_CLASS(UtilityAIDistanceToNode2DSearchCriterion);
 
-    ClassDB::register_class<UtilityAIAngleToVector3XZSearchCriterion>();
-    ClassDB::register_class<UtilityAIAngleToVector3SearchCriterion>();
-    ClassDB::register_class<UtilityAIAngleToVector2SearchCriterion>();
+    GDREGISTER_CLASS(UtilityAIAngleToVector3XZSearchCriterion);
+    GDREGISTER_CLASS(UtilityAIAngleToVector3SearchCriterion);
+    GDREGISTER_CLASS(UtilityAIAngleToVector2SearchCriterion);
 
-    ClassDB::register_class<UtilityAIDotProductVector3SearchCriterion>();
-    ClassDB::register_class<UtilityAIDotProductVector2SearchCriterion>();
+    GDREGISTER_CLASS(UtilityAIDotProductVector3SearchCriterion);
+    GDREGISTER_CLASS(UtilityAIDotProductVector2SearchCriterion);
 
-    ClassDB::register_class<UtilityAIDotProductToPositionVector3SearchCriterion>();
-    ClassDB::register_class<UtilityAIDotProductToPositionVector2SearchCriterion>();
+    GDREGISTER_CLASS(UtilityAIDotProductToPositionVector3SearchCriterion);
+    GDREGISTER_CLASS(UtilityAIDotProductToPositionVector2SearchCriterion);
 
 
     // Add singletons.
     gpNodeQuerySystem = memnew(UtilityAINodeQuerySystem);
     Engine::get_singleton()->register_singleton("NodeQuerySystem", gpNodeQuerySystem);
 
-    ClassDB::register_class<UtilityAIPerformanceMonitorSingleton>();
+    GDREGISTER_CLASS(UtilityAIPerformanceMonitorSingleton);
     gpAIPerformanceMonitor = memnew(UtilityAIPerformanceMonitorSingleton);
     Engine::get_singleton()->register_singleton("AIPerformanceMonitor", gpAIPerformanceMonitor);
 
 
 #ifdef DEBUG_ENABLED
 
-    ClassDB::register_class<UtilityAIDebuggerOverlay>();
+    GDREGISTER_CLASS(UtilityAIDebuggerOverlay);
     gpAIDebuggerOverlay = memnew(UtilityAIDebuggerOverlay);
     Engine::get_singleton()->register_singleton("AIDebuggerOverlay", gpAIDebuggerOverlay);
-#endif 
+#endif
 
-    
+
 }
 
 
@@ -301,10 +301,10 @@ void initialize_utility_ai_module(ModuleInitializationLevel p_level) {
             //register_editor_classes();
         }
         break;
-        
+
         default: {} break;
     }//endswitch p_level
-    
+
 }
 
 void uninitialize_utility_ai_module(ModuleInitializationLevel p_level) {

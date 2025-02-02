@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="UtilityAIBTRunNQSQuery" inherits="UtilityAIBTTaskNodes" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/godotengine/godot/master/doc/class.xsd">
+	<brief_description>
+	</brief_description>
+	<description>
+	</description>
+	<tutorials>
+	</tutorials>
+	<members>
+		<member name="is_high_priority" type="bool" setter="set_is_high_priority" getter="get_is_high_priority" default="true">
+		</member>
+		<member name="nqs_search_space" type="UtilityAINQSSearchSpaces" setter="set_nqs_search_space" getter="get_nqs_search_space">
+		</member>
+		<member name="top_n_to_find" type="int" setter="set_top_n_to_find" getter="get_top_n_to_find" default="1">
+		</member>
+	</members>
+</class>

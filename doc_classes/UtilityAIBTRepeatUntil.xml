@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="UtilityAIBTRepeatUntil" inherits="UtilityAIBTDecoratorNodes" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/godotengine/godot/master/doc/class.xsd">
+	<brief_description>
+	</brief_description>
+	<description>
+	</description>
+	<tutorials>
+	</tutorials>
+	<members>
+		<member name="expected_tick_result" type="int" setter="set_expected_tick_result" getter="get_expected_tick_result" default="1">
+		</member>
+		<member name="max_repeat_times" type="int" setter="set_max_repeat_times" getter="get_max_repeat_times" default="-1">
+		</member>
+		<member name="reset_rule" type="int" setter="set_reset_rule" getter="get_reset_rule" overrides="UtilityAIBehaviourTreeNodes" default="3" />
+	</members>
+</class>

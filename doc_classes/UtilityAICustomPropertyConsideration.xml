@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="UtilityAICustomPropertyConsideration" inherits="UtilityAIConsiderations" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/godotengine/godot/master/doc/class.xsd">
+	<brief_description>
+	</brief_description>
+	<description>
+	</description>
+	<tutorials>
+	</tutorials>
+	<methods>
+		<method name="sample_activation_curve" qualifiers="const">
+			<return type="float" />
+			<param index="0" name="input_value" type="float" />
+			<description>
+			</description>
+		</method>
+	</methods>
+	<members>
+		<member name="node_with_property" type="Node" setter="set_node_with_property" getter="get_node_with_property">
+		</member>
+		<member name="property_max_value" type="float" setter="set_property_max_value" getter="get_property_max_value" default="1.0">
+		</member>
+		<member name="property_name" type="StringName" setter="set_property_name" getter="get_property_name" default="&amp;&quot;&quot;">
+		</member>
+	</members>
+</class>

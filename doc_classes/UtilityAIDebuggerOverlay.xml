@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="UtilityAIDebuggerOverlay" inherits="Node" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/godotengine/godot/master/doc/class.xsd">
+	<brief_description>
+	</brief_description>
+	<description>
+	</description>
+	<tutorials>
+	</tutorials>
+	<methods>
+		<method name="add_as_child_of">
+			<return type="void" />
+			<param index="0" name="debugger_parent_node" type="Node" />
+			<description>
+			</description>
+		</method>
+		<method name="on_exit_tree">
+			<return type="void" />
+			<description>
+			</description>
+		</method>
+		<method name="on_root_item_selected">
+			<return type="void" />
+			<param index="0" name="item" type="int" />
+			<description>
+			</description>
+		</method>
+		<method name="on_type_item_selected">
+			<return type="void" />
+			<param index="0" name="item" type="int" />
+			<description>
+			</description>
+		</method>
+		<method name="update_ui">
+			<return type="void" />
+			<description>
+			</description>
+		</method>
+	</methods>
+</class>

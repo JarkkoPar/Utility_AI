@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="UtilityAIArea2DSearchSpace" inherits="UtilityAINQSSearchSpaces" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/godotengine/godot/master/doc/class.xsd">
+	<brief_description>
+	</brief_description>
+	<description>
+	</description>
+	<tutorials>
+	</tutorials>
+	<methods>
+		<method name="on_area_entered">
+			<return type="void" />
+			<param index="0" name="area" type="Area2D" />
+			<description>
+			</description>
+		</method>
+		<method name="on_area_exited">
+			<return type="void" />
+			<param index="0" name="area" type="Area2D" />
+			<description>
+			</description>
+		</method>
+	</methods>
+	<members>
+		<member name="area2d" type="Area2D" setter="set_area2d" getter="get_area2d">
+		</member>
+		<member name="intersecting_areas" type="Area2D[]" setter="set_intersecting_areas" getter="get_intersecting_areas" default="[]">
+		</member>
+	</members>
+</class>

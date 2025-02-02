@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="UtilityAIActionGroup" inherits="UtilityAIActions" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/godotengine/godot/master/doc/class.xsd">
+	<brief_description>
+	</brief_description>
+	<description>
+	</description>
+	<tutorials>
+	</tutorials>
+	<members>
+		<member name="action_execution_rule" type="int" setter="set_action_execution_rule" getter="get_action_execution_rule" default="0">
+		</member>
+		<member name="current_action_index" type="int" setter="set_current_action_index" getter="get_current_action_index" default="0">
+		</member>
+		<member name="error_handling_rule" type="int" setter="set_error_handling_rule" getter="get_error_handling_rule" default="0">
+		</member>
+		<member name="if_else_boolean_value" type="bool" setter="set_if_else_boolean_value" getter="get_if_else_boolean_value" default="true">
+		</member>
+	</members>
+	<signals>
+		<signal name="action_failed">
+			<param index="0" name="action_node" type="Object" />
+			<param index="1" name="action_group_node" type="Object" />
+			<description>
+			</description>
+		</signal>
+	</signals>
+</class>
