@@ -288,7 +288,7 @@ float UtilityAIArea3DVisibilitySensor::evaluate_sensor_value() {
             params->set_collide_with_areas(true);
             //params->set_block_signals(true);
             Dictionary results = dss->intersect_ray( params );
-            if( results.is_empty() ) {
+            if( results.is_empty() || results.get("collider", nullptr) == _intersecting_areas[i]  ) {
                 _unoccluded_areas.push_back(area);
                 _squared_distances_to_unoccluded_areas.push_back(distance_squared);
                 if( _closest_unoccluded_area_index == -1 ) {
@@ -313,7 +313,7 @@ float UtilityAIArea3DVisibilitySensor::evaluate_sensor_value() {
         }
         Vector3 body_position = body->get_global_position();
 
-        // Calculate the distance to the area.
+        // Calculate the distance to the body.
         Vector3 from_to = body_position - offset_from_vector;
         float distance_squared = from_to.length_squared();
         _squared_distances_to_intersecting_bodies.push_back(distance_squared);
@@ -339,14 +339,14 @@ float UtilityAIArea3DVisibilitySensor::evaluate_sensor_value() {
             params->set_collide_with_areas(false);
             //params->set_block_signals(true);
             Dictionary results = dss->intersect_ray( params );
-            if( results.is_empty() ) {
+            if( results.is_empty() || results.get("collider", nullptr) == _intersecting_bodies[i] ) {
                 _unoccluded_bodies.push_back(body);
                 _squared_distances_to_unoccluded_bodies.push_back(distance_squared);
                 if( _closest_unoccluded_body_index == -1 ) {
-                    _closest_unoccluded_body_index = found_unoccluded_areas;
+                    _closest_unoccluded_body_index = found_unoccluded_bodies;
                     closest_unoccluded_body_distance = distance_squared;
                 } else if( closest_unoccluded_body_distance > distance_squared ) {
-                    _closest_unoccluded_body_index = found_unoccluded_areas;
+                    _closest_unoccluded_body_index = found_unoccluded_bodies;
                     closest_unoccluded_body_distance = distance_squared;
                 }
                 ++found_unoccluded_bodies;
