@@ -300,7 +300,7 @@ float UtilityAIArea2DVisibilitySensor::evaluate_sensor_value() {
             params->set_collide_with_areas(true);
             //params->set_block_signals(true);
             Dictionary results = dss->intersect_ray( params );
-            if( results.is_empty() ) {
+            if( results.is_empty() || results.get("collider", nullptr) == _intersecting_areas[i] ) {
                 _unoccluded_areas.push_back(area);
                 _squared_distances_to_unoccluded_areas.push_back(distance_squared);
                 if( _closest_unoccluded_area_index == -1 ) {
@@ -350,7 +350,7 @@ float UtilityAIArea2DVisibilitySensor::evaluate_sensor_value() {
             // params->set_collide_with_areas(true);
             //params->set_block_signals(true);
             Dictionary results = dss->intersect_ray( params );
-            if( results.is_empty() ) {
+            if( results.is_empty() || results.get("collider", nullptr) == _intersecting_bodies[i] ) {
                 _unoccluded_areas.push_back(body);
                 _squared_distances_to_unoccluded_bodies.push_back(distance_squared);
                 if( _closest_unoccluded_body_index == -1 ) {
