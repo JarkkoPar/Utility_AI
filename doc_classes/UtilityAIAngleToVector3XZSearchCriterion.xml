@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="UtilityAIAngleToVector3XZSearchCriterion" inherits="UtilityAINQSSearchCriteria" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/godotengine/godot/master/doc/class.xsd">
+	<brief_description>
+	</brief_description>
+	<description>
+	</description>
+	<tutorials>
+	</tutorials>
+	<members>
+		<member name="angle_to_direction_vector" type="Vector3" setter="set_angle_to_direction_vector" getter="get_angle_to_direction_vector" default="Vector3(0, 0, -1)">
+		</member>
+		<member name="max_angle_degrees" type="float" setter="set_max_angle_degrees" getter="get_max_angle_degrees" default="90.0">
+		</member>
+		<member name="min_angle_degrees" type="float" setter="set_min_angle_degrees" getter="get_min_angle_degrees" default="-90.0">
+		</member>
+	</members>
+</class>

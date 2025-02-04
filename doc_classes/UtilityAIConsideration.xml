@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="UtilityAIConsideration" inherits="UtilityAIConsiderations" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/godotengine/godot/master/doc/class.xsd">
+	<brief_description>
+	</brief_description>
+	<description>
+	</description>
+	<tutorials>
+	</tutorials>
+	<methods>
+		<method name="sample_activation_curve" qualifiers="const">
+			<return type="float" />
+			<param index="0" name="input_value" type="float" />
+			<description>
+			</description>
+		</method>
+	</methods>
+	<members>
+		<member name="activation_curve" type="Curve" setter="set_activation_curve" getter="get_activation_curve">
+		</member>
+		<member name="activation_input_value" type="float" setter="set_activation_input_value" getter="get_activation_input_value" default="0.0001">
+		</member>
+		<member name="input_sensor" type="UtilityAISensors" setter="set_input_sensor" getter="get_input_sensor">
+		</member>
+	</members>
+</class>

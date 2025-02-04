@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="UtilityAINQSSearchSpaces" inherits="UtilityAI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/godotengine/godot/master/doc/class.xsd">
+	<brief_description>
+	</brief_description>
+	<description>
+	</description>
+	<tutorials>
+	</tutorials>
+	<methods>
+		<method name="execute_query">
+			<return type="bool" />
+			<param index="0" name="time_budget_usec" type="int" />
+			<description>
+			</description>
+		</method>
+		<method name="initialize_search_space">
+			<return type="void" />
+			<description>
+			</description>
+		</method>
+	</methods>
+	<members>
+		<member name="average_call_runtime_usec" type="int" setter="set_average_call_runtime_usec" getter="get_average_call_runtime_usec" default="0">
+		</member>
+		<member name="completed_signal_time_usec" type="int" setter="set_completed_signal_time_usec" getter="get_completed_signal_time_usec" default="0">
+		</member>
+		<member name="is_query_still_running" type="bool" setter="set_is_query_still_running" getter="get_is_query_still_running" default="false">
+		</member>
+		<member name="is_run_in_debug_mode" type="bool" setter="set_is_run_in_debug_mode" getter="get_is_run_in_debug_mode" default="false">
+		</member>
+		<member name="query_result_scores" type="PackedFloat64Array" setter="set_query_result_scores" getter="get_query_result_scores" default="PackedFloat64Array()">
+		</member>
+		<member name="query_results" type="Node[]" setter="set_query_results" getter="get_query_results" default="[]">
+		</member>
+		<member name="search_space_fetch_time_usec" type="int" setter="set_search_space_fetch_time_usec" getter="get_search_space_fetch_time_usec" default="0">
+		</member>
+		<member name="top_n_to_find" type="int" setter="set_top_n_to_find" getter="get_top_n_to_find" default="1">
+		</member>
+		<member name="total_query_call_count" type="int" setter="set_total_query_call_count" getter="get_total_query_call_count" default="0">
+		</member>
+		<member name="total_query_node_visits" type="int" setter="set_total_query_node_visits" getter="get_total_query_node_visits" default="0">
+		</member>
+		<member name="total_query_runtime_usec" type="int" setter="set_total_query_runtime_usec" getter="get_total_query_runtime_usec" default="0">
+		</member>
+	</members>
+	<signals>
+		<signal name="query_completed">
+			<param index="0" name="search_space" type="Object" />
+			<description>
+			</description>
+		</signal>
+	</signals>
+</class>

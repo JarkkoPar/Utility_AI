@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="UtilityAIDistanceToVector3SearchCriterion" inherits="UtilityAINQSSearchCriteria" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/godotengine/godot/master/doc/class.xsd">
+	<brief_description>
+	</brief_description>
+	<description>
+	</description>
+	<tutorials>
+	</tutorials>
+	<members>
+		<member name="distance_to_vector" type="Vector3" setter="set_distance_to_vector" getter="get_distance_to_vector" default="Vector3(0, 0, 0)">
+		</member>
+		<member name="max_distance" type="float" setter="set_max_distance" getter="get_max_distance" default="100.0">
+		</member>
+		<member name="min_distance" type="float" setter="set_min_distance" getter="get_min_distance" default="0.0">
+		</member>
+	</members>
+</class>

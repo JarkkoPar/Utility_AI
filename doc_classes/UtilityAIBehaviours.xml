@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="UtilityAIBehaviours" inherits="UtilityAI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/godotengine/godot/master/doc/class.xsd">
+	<brief_description>
+	</brief_description>
+	<description>
+	</description>
+	<tutorials>
+	</tutorials>
+	<methods>
+		<method name="get_considerations" qualifiers="const">
+			<return type="UtilityAIConsiderationResources[]" />
+			<description>
+			</description>
+		</method>
+		<method name="set_considerations">
+			<return type="void" />
+			<param index="0" name="considerations" type="UtilityAIConsiderationResources[]" />
+			<description>
+			</description>
+		</method>
+	</methods>
+	<members>
+		<member name="evaluation_method" type="int" setter="set_evaluation_method" getter="get_evaluation_method" default="0">
+		</member>
+		<member name="score" type="float" setter="set_score" getter="get_score" default="0.0">
+		</member>
+	</members>
+</class>

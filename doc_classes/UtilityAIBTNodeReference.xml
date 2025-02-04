@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="UtilityAIBTNodeReference" inherits="UtilityAIBTTaskNodes" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/godotengine/godot/master/doc/class.xsd">
+	<brief_description>
+	</brief_description>
+	<description>
+	</description>
+	<tutorials>
+	</tutorials>
+	<members>
+		<member name="node_reference" type="UtilityAIBehaviourTreeNodes" setter="set_node_reference" getter="get_node_reference">
+		</member>
+	</members>
+</class>

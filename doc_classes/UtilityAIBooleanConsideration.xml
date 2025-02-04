@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="UtilityAIBooleanConsideration" inherits="UtilityAIConsideration" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/godotengine/godot/master/doc/class.xsd">
+	<brief_description>
+	</brief_description>
+	<description>
+	</description>
+	<tutorials>
+	</tutorials>
+	<methods>
+		<method name="sample_activation_curve" qualifiers="const">
+			<return type="float" />
+			<param index="0" name="input_value" type="float" />
+			<description>
+			</description>
+		</method>
+	</methods>
+	<members>
+		<member name="false_score_value" type="float" setter="set_false_score_value" getter="get_false_score_value" default="0.0">
+		</member>
+		<member name="true_score_value" type="float" setter="set_true_score_value" getter="get_true_score_value" default="1.0">
+		</member>
+	</members>
+</class>

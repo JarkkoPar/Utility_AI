@@ -21,25 +21,27 @@ void UtilityAIActionGroup::_bind_methods() {
     ClassDB::bind_method(D_METHOD("set_current_action_index", "current_action_index"), &UtilityAIActionGroup::set_current_action_index);
     ClassDB::bind_method(D_METHOD("get_current_action_index"), &UtilityAIActionGroup::get_current_action_index);
     ADD_PROPERTY(PropertyInfo(Variant::INT, "current_action_index", PROPERTY_HINT_RANGE,"0,256,or_greater"), "set_current_action_index","get_current_action_index");
-    
+
     ClassDB::bind_method(D_METHOD("set_if_else_boolean_value", "if_else_boolean_value"), &UtilityAIActionGroup::set_if_else_boolean_value);
     ClassDB::bind_method(D_METHOD("get_if_else_boolean_value"), &UtilityAIActionGroup::get_if_else_boolean_value);
     ADD_PROPERTY(PropertyInfo(Variant::BOOL, "if_else_boolean_value", PROPERTY_HINT_NONE), "set_if_else_boolean_value","get_if_else_boolean_value");
-    
+
     ADD_SIGNAL(MethodInfo("action_failed", PropertyInfo(Variant::OBJECT, "action_node"), PropertyInfo(Variant::OBJECT, "action_group_node")));
-    
+
 }
 
 
 // Constructor and destructor.
 
 UtilityAIActionGroup::UtilityAIActionGroup() {
+    _rnd.instantiate();
+
     _action_execution_rule = UtilityAIActionGroupExecutionRule::Sequence;
     _error_handling_rule = UtilityAIActionGroupErrorHandlingRule::EndExecution;
     _current_action_index = 0;
     _if_else_boolean_value = true;
 
-    _rnd.set_seed(time(0));
+    _rnd->set_seed(time(0));
 }
 
 
@@ -52,10 +54,10 @@ bool UtilityAIActionGroup::start_action() {
     if( get_child_count() <= 0 ) {
         _current_action_index = -1;
         return false;
-    } 
+    }
     switch( _action_execution_rule ) {
         case UtilityAIActionGroupExecutionRule::PickOneAtRandom: {
-            _current_action_index = _rnd.randi_range(0, get_child_count() - 1 );
+            _current_action_index = _rnd->randi_range(0, get_child_count() - 1 );
         }
         break;
         case UtilityAIActionGroupExecutionRule::IfElse: {
@@ -99,7 +101,7 @@ bool UtilityAIActionGroup::end_action() {
 
 Node* UtilityAIActionGroup::step_actions() {
     if( _current_action_index >= get_child_count () ) return nullptr;
-    
+
     // All execution rules must check the current action first if it exists.
     if( _current_action_index > -1 ) {
         // The action has been picked earlier, so check if it has finished.
@@ -108,8 +110,8 @@ Node* UtilityAIActionGroup::step_actions() {
             if( !action_node->get_is_finished() ) return action_node;
             // The action has finished, has it failed?
             if( action_node->get_has_failed() ) {
-                // Failed, so fail the group and end/continue based on error handling rule. 
-                action_node->end_action(); 
+                // Failed, so fail the group and end/continue based on error handling rule.
+                action_node->end_action();
                 set_has_failed(true);
                 emit_signal("action_failed", action_node, this);
                 if( _error_handling_rule == UtilityAIActionGroupErrorHandlingRule::EndExecution) {
@@ -139,7 +141,7 @@ Node* UtilityAIActionGroup::step_actions() {
 
     switch( _action_execution_rule ) {
         case UtilityAIActionGroupExecutionRule::PickOneAtRandom:
-        //case UtilityAIActionGroupExecutionRule::IfPreviousActionFailedElse: 
+        //case UtilityAIActionGroupExecutionRule::IfPreviousActionFailedElse:
         case UtilityAIActionGroupExecutionRule::IfElse: {}
         break;
         case UtilityAIActionGroupExecutionRule::CustomRule: {
@@ -147,7 +149,7 @@ Node* UtilityAIActionGroup::step_actions() {
             // action index or one that doesn't work.
             if( has_method("eval")) {
                 call("eval");
-                if( _current_action_index > -1 ) 
+                if( _current_action_index > -1 )
                 {
                     if( UtilityAIAction* action_node = godot::Object::cast_to<UtilityAIAction>(get_child(_current_action_index)) ) {
                         if( action_node->get_is_active() ) {
@@ -165,14 +167,14 @@ Node* UtilityAIActionGroup::step_actions() {
                         }
                     }// endif is action or action_group
                 }//endif is valid action index
-            } 
+            }
         }
         break;
         default: {
             // Default to a Sequence, where all child nodes are stepped one by one.
-            // Try and move to the next step.            
+            // Try and move to the next step.
             ++_current_action_index;
-            while( _current_action_index < get_child_count() ) {    
+            while( _current_action_index < get_child_count() ) {
                 if( UtilityAIAction* action_node = godot::Object::cast_to<UtilityAIAction>(get_child(_current_action_index)) ) {
                     if( action_node->get_is_active() ) {
                         action_node->start_action();

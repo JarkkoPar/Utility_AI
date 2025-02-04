@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="UtilityAIAgent" inherits="UtilityAI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/godotengine/godot/master/doc/class.xsd">
+	<brief_description>
+	</brief_description>
+	<description>
+	</description>
+	<tutorials>
+	</tutorials>
+	<methods>
+		<method name="abort_current_behaviour">
+			<return type="void" />
+			<description>
+			</description>
+		</method>
+		<method name="evaluate_options">
+			<return type="void" />
+			<param index="0" name="delta" type="float" />
+			<description>
+			</description>
+		</method>
+		<method name="get_current_action_node" qualifiers="const">
+			<return type="UtilityAIAction" />
+			<description>
+			</description>
+		</method>
+		<method name="get_current_behaviour_group_node" qualifiers="const">
+			<return type="UtilityAIBehaviourGroup" />
+			<description>
+			</description>
+		</method>
+		<method name="get_current_behaviour_node" qualifiers="const">
+			<return type="UtilityAIBehaviour" />
+			<description>
+			</description>
+		</method>
+		<method name="set_current_action_node">
+			<return type="void" />
+			<param index="0" name="_unnamed_arg0" type="UtilityAIAction" />
+			<description>
+			</description>
+		</method>
+		<method name="set_current_behaviour_group_node">
+			<return type="void" />
+			<param index="0" name="_unnamed_arg0" type="UtilityAIBehaviourGroup" />
+			<description>
+			</description>
+		</method>
+		<method name="set_current_behaviour_node">
+			<return type="void" />
+			<param index="0" name="_unnamed_arg0" type="UtilityAIBehaviour" />
+			<description>
+			</description>
+		</method>
+		<method name="update_current_behaviour">
+			<return type="void" />
+			<description>
+			</description>
+		</method>
+	</methods>
+	<members>
+		<member name="current_behaviour_bias" type="float" setter="set_current_behaviour_bias" getter="get_current_behaviour_bias" default="0.1">
+		</member>
+		<member name="current_behaviour_name" type="String" setter="set_current_behaviour_name" getter="get_current_behaviour_name" default="&quot;&quot;">
+		</member>
+		<member name="num_behaviours_to_select" type="int" setter="set_num_behaviours_to_select" getter="get_num_behaviours_to_select" default="1">
+		</member>
+		<member name="thinking_delay_in_seconds" type="float" setter="set_thinking_delay_in_seconds" getter="get_thinking_delay_in_seconds" default="1.0">
+		</member>
+		<member name="top_scoring_behaviour_name" type="String" setter="set_top_scoring_behaviour_name" getter="get_top_scoring_behaviour_name" default="&quot;&quot;">
+		</member>
+		<member name="total_evaluate_options_usec" type="int" setter="set_total_evaluate_options_usec" getter="get_total_evaluate_options_usec" default="0">
+		</member>
+		<member name="total_update_behaviour_usec" type="int" setter="set_total_update_behaviour_usec" getter="get_total_update_behaviour_usec" default="0">
+		</member>
+	</members>
+	<signals>
+		<signal name="action_changed">
+			<param index="0" name="action_node" type="Object" />
+			<description>
+			</description>
+		</signal>
+		<signal name="action_exited">
+			<param index="0" name="action_node" type="Object" />
+			<description>
+			</description>
+		</signal>
+		<signal name="behaviour_changed">
+			<param index="0" name="behaviour_node" type="Object" />
+			<description>
+			</description>
+		</signal>
+		<signal name="behaviour_exited">
+			<param index="0" name="behaviour_node" type="Object" />
+			<description>
+			</description>
+		</signal>
+		<signal name="behaviour_group_changed">
+			<param index="0" name="behaviour_group_node" type="Object" />
+			<description>
+			</description>
+		</signal>
+		<signal name="behaviour_group_exited">
+			<param index="0" name="behaviour_group_node" type="Object" />
+			<description>
+			</description>
+		</signal>
+	</signals>
+</class>

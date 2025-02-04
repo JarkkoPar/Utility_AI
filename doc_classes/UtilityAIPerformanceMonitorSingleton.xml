@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="UtilityAIPerformanceMonitorSingleton" inherits="UtilityAI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/godotengine/godot/master/doc/class.xsd">
+	<brief_description>
+	</brief_description>
+	<description>
+	</description>
+	<tutorials>
+	</tutorials>
+	<methods>
+		<method name="get_total_time_elapsed_ai_agents_update_behaviour_usec" qualifiers="const">
+			<return type="int" />
+			<description>
+			</description>
+		</method>
+		<method name="get_total_time_elapsed_ai_agents_usec" qualifiers="const">
+			<return type="int" />
+			<description>
+			</description>
+		</method>
+		<method name="get_total_time_elapsed_behaviour_trees_usec" qualifiers="const">
+			<return type="int" />
+			<description>
+			</description>
+		</method>
+		<method name="get_total_time_elapsed_state_trees_usec" qualifiers="const">
+			<return type="int" />
+			<description>
+			</description>
+		</method>
+		<method name="increment_total_time_elapsed_ai_agents_update_behaviour_usec">
+			<return type="void" />
+			<param index="0" name="time_usec" type="int" />
+			<description>
+			</description>
+		</method>
+		<method name="increment_total_time_elapsed_ai_agents_usec">
+			<return type="void" />
+			<param index="0" name="time_usec" type="int" />
+			<description>
+			</description>
+		</method>
+		<method name="increment_total_time_elapsed_behaviour_trees_usec">
+			<return type="void" />
+			<param index="0" name="time_usec" type="int" />
+			<description>
+			</description>
+		</method>
+		<method name="increment_total_time_elapsed_state_trees_usec">
+			<return type="void" />
+			<param index="0" name="time_usec" type="int" />
+			<description>
+			</description>
+		</method>
+		<method name="initialize_performance_counters">
+			<return type="void" />
+			<description>
+			</description>
+		</method>
+		<method name="update_performance_counters">
+			<return type="void" />
+			<description>
+			</description>
+		</method>
+	</methods>
+	<members>
+		<member name="is_active" type="bool" setter="set_is_active" getter="get_is_active" overrides="UtilityAI" default="false" />
+	</members>
+</class>

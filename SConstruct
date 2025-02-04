@@ -15,7 +15,24 @@ env = SConscript("godot-cpp/SConstruct")
 # tweak this if you want to use different folders, or more folders, to store your source code in.
 # Edit: Added the specialsensors subfolder.
 env.Append(CPPPATH=["src/","src/sensors","src/considerations", "src/node_query_system", "src/node_query_system/search_spaces", "src/node_query_system/search_criteria", "src/node_query_system/search_spaces/point_grid", "src/behaviour_tree"])
-sources = Glob("src/*.cpp") + Glob("src/*/*.cpp") + Glob("src/*/*/*.cpp") + Glob("src/*/*/*/*.cpp")
+sources = Glob("src/*.cpp")
+sources += Glob("src/agent_behaviours/*.cpp")
+sources += Glob("src/behaviour_tree/*.cpp")
+sources += Glob("src/debugger/*.cpp")
+sources += Glob("src/editor/*.cpp")
+sources += Glob("src/node_query_system/*.cpp")
+sources += Glob("src/resources/*.cpp")
+sources += Glob("src/state_tree/*.cpp")
+sources += Glob("src/*/*/*.cpp")
+sources += Glob("src/*/*/*/*.cpp")
+
+
+if env["target"] in ["editor", "template_debug"]:
+    try:
+        doc_data = env.GodotCPPDocData("src/gen/doc_data.gen.cpp", source=Glob("doc_classes/*.xml"))
+        sources.append(doc_data)
+    except AttributeError:
+        print("Not including class reference as we're targeting a pre-4.3 baseline.")
 
 if env["platform"] == "macos":
     library = env.SharedLibrary(
@@ -30,4 +47,5 @@ else:
         source=sources,
     )
 
+#env.NoCache(library)
 Default(library)

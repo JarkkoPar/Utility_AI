@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="UtilityAIAngleVector2Sensor" inherits="UtilityAISensor" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/godotengine/godot/master/doc/class.xsd">
+	<brief_description>
+	</brief_description>
+	<description>
+	</description>
+	<tutorials>
+	</tutorials>
+	<members>
+		<member name="angle_degrees" type="float" setter="set_angle_degrees" getter="get_angle_degrees" default="0.0">
+		</member>
+		<member name="angle_radian" type="float" setter="set_angle_radian" getter="get_angle_radian" default="0.0">
+		</member>
+		<member name="from_vector" type="Vector2" setter="set_from_vector" getter="get_from_vector" default="Vector2(0, 0)">
+		</member>
+		<member name="max_angle_degrees" type="float" setter="set_max_angle_degrees" getter="get_max_angle_degrees" default="180.0">
+		</member>
+		<member name="max_angle_radian" type="float" setter="set_max_angle_radian" getter="get_max_angle_radian" default="3.14159">
+		</member>
+		<member name="min_angle_degrees" type="float" setter="set_min_angle_degrees" getter="get_min_angle_degrees" default="-180.0">
+		</member>
+		<member name="min_angle_radian" type="float" setter="set_min_angle_radian" getter="get_min_angle_radian" default="-3.14159">
+		</member>
+		<member name="to_vector" type="Vector2" setter="set_to_vector" getter="get_to_vector" default="Vector2(0, 0)">
+		</member>
+	</members>
+</class>

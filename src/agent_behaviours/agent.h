@@ -1,5 +1,5 @@
 #ifndef UTILITYAIAGENT_H_INCLUDED
-#define UTILITYAIAGENT_H_INCLUDED 
+#define UTILITYAIAGENT_H_INCLUDED
 
 #include "utility_ai.h"
 
@@ -20,7 +20,7 @@ class UtilityAIAgent : public UtilityAI {
     GDCLASS(UtilityAIAgent, UtilityAI)
 
 private:
-    RandomNumberGenerator _rng;
+    Ref<RandomNumberGenerator> _rng;
     UtilityAIBehaviourGroup* _current_behaviour_group_node;
     UtilityAIBehaviour* _current_behaviour_node;
     UtilityAIAction*    _current_action_node;
@@ -34,7 +34,7 @@ private:
     float _top_scoring_behaviours_score[UTILITYAIAGENT_MAX_TOP_SCORING_BEHAVIOURS];
     godot::String _top_scoring_behaviour_name;
     godot::String _current_behaviour_name;
-    
+
     float _thinking_delay_in_seconds;
     float _thinking_delay_in_seconds_current_timer;
 
@@ -59,15 +59,15 @@ protected:
 public:
     UtilityAIAgent();
     ~UtilityAIAgent();
-    
-    
+
+
     // Getters and setters for attributes.
 
     #ifdef DEBUG_ENABLED
     inline uint64_t get_last_visited_timestamp() const {return _last_visited_timestamp;};
     inline uint64_t get_last_evaluated_timestamp() const {return _last_evaluated_timestamp;};
     #endif
-    
+
     void set_thinking_delay_in_seconds( float thinking_delay_in_seconds );
     float get_thinking_delay_in_seconds() const;
 
@@ -82,10 +82,10 @@ public:
 
     void          set_current_behaviour_name( godot::String current_behaviour_name );
     godot::String get_current_behaviour_name() const;
-    
+
     void set_num_behaviours_to_select( int num_behaviours_to_select );
     int  get_num_behaviours_to_select() const;
-    
+
     void set_current_behaviour_bias( float current_behaviour_bias );
     float get_current_behaviour_bias() const;
 
@@ -124,4 +124,4 @@ public:
 }
 
 
-#endif 
+#endif

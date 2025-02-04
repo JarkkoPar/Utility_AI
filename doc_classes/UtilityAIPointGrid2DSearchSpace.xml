@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="UtilityAIPointGrid2DSearchSpace" inherits="UtilityAINQSSearchSpaces" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/godotengine/godot/master/doc/class.xsd">
+	<brief_description>
+	</brief_description>
+	<description>
+	</description>
+	<tutorials>
+	</tutorials>
+	<members>
+		<member name="grid_size" type="Vector2" setter="set_grid_size" getter="get_grid_size" default="Vector2(150, 150)">
+		</member>
+		<member name="navigation_map_rid" type="RID" setter="set_navigation_map_rid" getter="get_navigation_map_rid" default="RID()">
+		</member>
+		<member name="offset_vector" type="Vector2" setter="set_offset_vector" getter="get_offset_vector" default="Vector2(0, 0)">
+		</member>
+		<member name="point_grid" type="Node2D[]" setter="set_point_grid" getter="get_point_grid" default="[]">
+		</member>
+		<member name="point_grid_base_spacing_vector" type="Vector2" setter="set_point_grid_base_spacing_vector" getter="get_point_grid_base_spacing_vector" default="Vector2(20, 10)">
+		</member>
+		<member name="point_grid_lattice_type" type="int" setter="set_point_grid_lattice_type" getter="get_point_grid_lattice_type" default="0">
+		</member>
+		<member name="point_grid_lattice_vector" type="Vector2" setter="set_point_grid_lattice_vector" getter="get_point_grid_lattice_vector" default="Vector2(10, 0)">
+		</member>
+		<member name="point_grid_parent_node" type="Node2D" setter="set_point_grid_parent_node" getter="get_point_grid_parent_node">
+		</member>
+		<member name="point_grid_type" type="int" setter="set_point_grid_type" getter="get_point_grid_type" default="0">
+		</member>
+		<member name="use_navigation_mesh_positions" type="bool" setter="set_use_navigation_mesh_positions" getter="get_use_navigation_mesh_positions" default="true">
+		</member>
+	</members>
+</class>

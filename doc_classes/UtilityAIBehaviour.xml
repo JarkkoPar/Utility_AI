@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="UtilityAIBehaviour" inherits="UtilityAIBehaviours" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/godotengine/godot/master/doc/class.xsd">
+	<brief_description>
+	</brief_description>
+	<description>
+	</description>
+	<tutorials>
+	</tutorials>
+	<members>
+		<member name="behaviour_id" type="int" setter="set_behaviour_id" getter="get_behaviour_id" default="0">
+		</member>
+		<member name="can_be_interrupted" type="bool" setter="set_can_be_interrupted" getter="get_can_be_interrupted" default="true">
+		</member>
+		<member name="considerations" type="UtilityAIConsiderationResources[]" setter="set_considerations" getter="get_considerations" default="[]">
+		</member>
+		<member name="cooldown_seconds" type="float" setter="set_cooldown_seconds" getter="get_cooldown_seconds" default="0.0">
+		</member>
+		<member name="cooldown_turns" type="int" setter="set_cooldown_turns" getter="get_cooldown_turns" default="0">
+		</member>
+		<member name="current_action_index" type="int" setter="set_current_action_index" getter="get_current_action_index" default="0">
+		</member>
+	</members>
+	<signals>
+		<signal name="behaviour_entered">
+			<description>
+			</description>
+		</signal>
+		<signal name="behaviour_exited">
+			<description>
+			</description>
+		</signal>
+		<signal name="idle_frame_tick">
+			<param index="0" name="delta" type="float" />
+			<description>
+			</description>
+		</signal>
+		<signal name="physics_frame_tick">
+			<param index="0" name="delta" type="float" />
+			<description>
+			</description>
+		</signal>
+	</signals>
+</class>

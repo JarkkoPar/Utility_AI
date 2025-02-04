@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="UtilityAIBehaviourTreeNodes" inherits="UtilityAI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/godotengine/godot/master/doc/class.xsd">
+	<brief_description>
+	</brief_description>
+	<description>
+	</description>
+	<tutorials>
+	</tutorials>
+	<members>
+		<member name="considerations" type="UtilityAIConsiderationResources[]" setter="set_considerations" getter="get_considerations" default="[]">
+		</member>
+		<member name="evaluation_method" type="int" setter="set_evaluation_method" getter="get_evaluation_method" default="4">
+		</member>
+		<member name="internal_status" type="int" setter="set_internal_status" getter="get_internal_status" default="0">
+		</member>
+		<member name="reset_rule" type="int" setter="set_reset_rule" getter="get_reset_rule" default="2">
+		</member>
+		<member name="score" type="float" setter="set_score" getter="get_score" default="0.0">
+		</member>
+		<member name="tick_result" type="int" setter="set_tick_result" getter="get_tick_result" default="1">
+		</member>
+	</members>
+</class>

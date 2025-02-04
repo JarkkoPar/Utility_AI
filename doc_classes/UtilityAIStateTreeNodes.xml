@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="UtilityAIStateTreeNodes" inherits="UtilityAI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/godotengine/godot/master/doc/class.xsd">
+	<brief_description>
+	</brief_description>
+	<description>
+	</description>
+	<tutorials>
+	</tutorials>
+	<methods>
+		<method name="get_on_entered_condition" qualifiers="const">
+			<return type="bool" />
+			<description>
+			</description>
+		</method>
+		<method name="set_on_entered_condition">
+			<return type="void" />
+			<param index="0" name="is_entered" type="bool" />
+			<description>
+			</description>
+		</method>
+		<method name="transition_to">
+			<return type="void" />
+			<param index="0" name="new_state_nodepath" type="NodePath" />
+			<param index="1" name="user_data" type="Variant" />
+			<param index="2" name="delta" type="float" />
+			<description>
+			</description>
+		</method>
+		<method name="transition_to_np">
+			<return type="void" />
+			<param index="0" name="new_state_nodepath" type="NodePath" />
+			<description>
+			</description>
+		</method>
+	</methods>
+	<members>
+		<member name="child_state_selection_rule" type="int" setter="set_child_state_selection_rule" getter="get_child_state_selection_rule" default="0">
+		</member>
+		<member name="considerations" type="UtilityAIConsiderationResources[]" setter="set_considerations" getter="get_considerations" default="[]">
+		</member>
+		<member name="evaluation_method" type="int" setter="set_evaluation_method" getter="get_evaluation_method" default="4">
+		</member>
+		<member name="score" type="float" setter="set_score" getter="get_score" default="0.0">
+		</member>
+	</members>
+	<signals>
+		<signal name="state_check_enter_condition">
+			<param index="0" name="user_data" type="Object" />
+			<param index="1" name="delta" type="float" />
+			<description>
+			</description>
+		</signal>
+		<signal name="state_check_enter_condition_np">
+			<description>
+			</description>
+		</signal>
+		<signal name="state_entered">
+			<param index="0" name="user_data" type="Object" />
+			<param index="1" name="delta" type="float" />
+			<description>
+			</description>
+		</signal>
+		<signal name="state_entered_np">
+			<description>
+			</description>
+		</signal>
+		<signal name="state_exited">
+			<param index="0" name="user_data" type="Object" />
+			<param index="1" name="delta" type="float" />
+			<description>
+			</description>
+		</signal>
+		<signal name="state_exited_np">
+			<description>
+			</description>
+		</signal>
+		<signal name="state_ticked">
+			<param index="0" name="user_data" type="Object" />
+			<param index="1" name="delta" type="float" />
+			<description>
+			</description>
+		</signal>
+		<signal name="state_ticked_np">
+			<description>
+			</description>
+		</signal>
+	</signals>
+</class>

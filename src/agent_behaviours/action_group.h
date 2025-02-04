@@ -1,5 +1,5 @@
 #ifndef UtilityAIActionGroup_H_INCLUDED
-#define UtilityAIActionGroup_H_INCLUDED 
+#define UtilityAIActionGroup_H_INCLUDED
 
 
 #include "actions.h"
@@ -19,16 +19,16 @@ private:
     int _current_action_index;
     bool _if_else_boolean_value;
 
-    RandomNumberGenerator _rnd;
-            
+    Ref<RandomNumberGenerator> _rnd;
+
 protected:
     static void _bind_methods();
 
 public:
     UtilityAIActionGroup();
     ~UtilityAIActionGroup();
-    
-    
+
+
     // Getters and setters for attributes.
 
     void set_action_execution_rule( int action_execution_rule );
@@ -58,7 +58,7 @@ public:
 
     // Handling functions.
 
-    virtual bool start_action() override; 
+    virtual bool start_action() override;
     virtual bool end_action() override;
     virtual Node* step_actions() override;
 };
@@ -66,4 +66,4 @@ public:
 }
 
 
-#endif 
+#endif

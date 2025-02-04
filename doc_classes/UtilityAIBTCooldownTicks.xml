@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="UtilityAIBTCooldownTicks" inherits="UtilityAIBTDecoratorNodes" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/godotengine/godot/master/doc/class.xsd">
+	<brief_description>
+	</brief_description>
+	<description>
+	</description>
+	<tutorials>
+	</tutorials>
+	<members>
+		<member name="cooldown_return_value" type="int" setter="set_cooldown_return_value" getter="get_cooldown_return_value" default="-1">
+		</member>
+		<member name="cooldown_ticks" type="int" setter="set_cooldown_ticks" getter="get_cooldown_ticks" default="0">
+		</member>
+		<member name="current_cooldown_ticks" type="int" setter="set_current_cooldown_ticks" getter="get_current_cooldown_ticks" default="0">
+		</member>
+	</members>
+</class>

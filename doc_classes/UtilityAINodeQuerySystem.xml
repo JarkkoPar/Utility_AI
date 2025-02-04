@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="UtilityAINodeQuerySystem" inherits="UtilityAI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/godotengine/godot/master/doc/class.xsd">
+	<brief_description>
+	</brief_description>
+	<description>
+	</description>
+	<tutorials>
+	</tutorials>
+	<methods>
+		<method name="clear_queries">
+			<return type="void" />
+			<description>
+			</description>
+		</method>
+		<method name="get_post_queries_time_elapsed_usec" qualifiers="const">
+			<return type="int" />
+			<description>
+			</description>
+		</method>
+		<method name="get_run_queries_time_elapsed_usec" qualifiers="const">
+			<return type="int" />
+			<description>
+			</description>
+		</method>
+		<method name="initialize_performance_counters">
+			<return type="void" />
+			<description>
+			</description>
+		</method>
+		<method name="post_query">
+			<return type="int" />
+			<param index="0" name="search_space" type="UtilityAINQSSearchSpaces" />
+			<param index="1" name="is_high_priority" type="bool" />
+			<description>
+			</description>
+		</method>
+		<method name="run_queries">
+			<return type="void" />
+			<description>
+			</description>
+		</method>
+		<method name="stop_query">
+			<return type="bool" />
+			<param index="0" name="search_space" type="UtilityAINQSSearchSpaces" />
+			<description>
+			</description>
+		</method>
+	</methods>
+	<members>
+		<member name="high_priority_query_per_frame_execute_query_time_budget_usec" type="int" setter="set_high_priority_query_per_frame_execute_query_time_budget_usec" getter="get_high_priority_query_per_frame_execute_query_time_budget_usec" default="20">
+		</member>
+		<member name="regular_query_per_frame_execute_query_time_budget_usec" type="int" setter="set_regular_query_per_frame_execute_query_time_budget_usec" getter="get_regular_query_per_frame_execute_query_time_budget_usec" default="10">
+		</member>
+		<member name="run_queries_time_budget_per_frame_usec" type="int" setter="set_run_queries_time_budget_per_frame" getter="get_run_queries_time_budget_per_frame" default="1000">
+		</member>
+		<member name="time_allocation_pct_to_high_priority_queries" type="float" setter="set_time_allocation_pct_to_high_priority_queries" getter="get_time_allocation_pct_to_high_priority_queries" default="0.8">
+		</member>
+	</members>
+</class>

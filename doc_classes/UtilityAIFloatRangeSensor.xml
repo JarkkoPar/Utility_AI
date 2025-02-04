@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="UtilityAIFloatRangeSensor" inherits="UtilityAISensor" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/godotengine/godot/master/doc/class.xsd">
+	<brief_description>
+	</brief_description>
+	<description>
+	</description>
+	<tutorials>
+	</tutorials>
+	<members>
+		<member name="range_max_value" type="float" setter="set_range_max_value" getter="get_range_max_value" default="100.0">
+		</member>
+		<member name="range_min_value" type="float" setter="set_range_min_value" getter="get_range_min_value" default="0.0">
+		</member>
+		<member name="range_value" type="float" setter="set_range_value" getter="get_range_value" default="0.0">
+		</member>
+	</members>
+</class>

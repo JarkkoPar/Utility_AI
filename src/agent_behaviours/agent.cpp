@@ -73,13 +73,15 @@ void UtilityAIAgent::_bind_methods() {
 
     ADD_SIGNAL(MethodInfo("action_changed", PropertyInfo(Variant::OBJECT, "action_node")));
     ADD_SIGNAL(MethodInfo("action_exited", PropertyInfo(Variant::OBJECT, "action_node")));
-    
+
 }
 
 
 // Constructor and destructor.
 
 UtilityAIAgent::UtilityAIAgent() {
+    _rng.instantiate();
+
     _current_behaviour_group_node = nullptr;
     _current_behaviour_node = nullptr;
     _num_behaviours_to_select = 1;
@@ -91,14 +93,14 @@ UtilityAIAgent::UtilityAIAgent() {
         _top_scoring_behaviours_group_nodes[i] = nullptr;
     }
     _top_scoring_behaviour_name = "";
-    
+
     _current_action_node = nullptr;
 
     _thinking_delay_in_seconds = 1.0f; // One second delay in thinking of options.
-    _thinking_delay_in_seconds_current_timer = 0.0f; 
+    _thinking_delay_in_seconds_current_timer = 0.0f;
     _current_behaviour_bias = 0.1f;
 
-    _rng.set_seed(time(0));
+    _rng->set_seed(time(0));
 
     #ifdef DEBUG_ENABLED
     _total_evaluate_options_usec = 0;
@@ -120,7 +122,7 @@ UtilityAIAgent::~UtilityAIAgent() {
 
 // Handling functions.
 
-void UtilityAIAgent::evaluate_options(float delta) { 
+void UtilityAIAgent::evaluate_options(float delta) {
     uint64_t method_start_time_usec = godot::Time::get_singleton()->get_ticks_usec();
     #ifdef DEBUG_ENABLED
     _last_evaluated_timestamp = method_start_time_usec;
@@ -139,7 +141,7 @@ void UtilityAIAgent::evaluate_options(float delta) {
             UtilityAIPerformanceMonitorSingleton::get_singleton()->increment_total_time_elapsed_ai_agents_usec(_total_evaluate_options_usec);
             #endif
             return;
-        } 
+        }
         _thinking_delay_in_seconds_current_timer = _thinking_delay_in_seconds;
 
         // If the current behaviour cannot be interrupted, don't evaluate.
@@ -182,7 +184,7 @@ void UtilityAIAgent::evaluate_options(float delta) {
         if( !behavioursNode->get_is_active() ) {
             continue;
         }
-        
+
         float score = behavioursNode->evaluate();
 
         if( behavioursNode->is_behaviour_group() ) {
@@ -228,7 +230,7 @@ void UtilityAIAgent::evaluate_options(float delta) {
             }
             continue;
         }
-        
+
         // If it is a behaviour group, see if it evaluates so that it should be used.
         if( UtilityAIBehaviourGroup* behaviourGroupNode = godot::Object::cast_to<UtilityAIBehaviourGroup>(node) ) {
             if( behaviourGroupNode->evaluate() ) {
@@ -289,7 +291,7 @@ void UtilityAIAgent::evaluate_options(float delta) {
     }
 
     // Set the top scoring behaviour name.
-    
+
     if( _top_scoring_behaviours_nodes[0] != nullptr ) {
         _top_scoring_behaviour_name = _top_scoring_behaviours_nodes[0]->get_name();
     }
@@ -297,10 +299,10 @@ void UtilityAIAgent::evaluate_options(float delta) {
     // Select a random behaviour from the top n behaviours.
     int chosen_behaviour_index = 0;
     if( _num_possible_behaviours > 1 ) {
-        int random_behaviour = _rng.randi_range(0, _num_possible_behaviours-1);
+        int random_behaviour = _rng->randi_range(0, _num_possible_behaviours-1);
         chosen_behaviour_index = random_behaviour;
     }
-    
+
 
     //new_behaviour = godot::Object::cast_to<UtilityAIBehaviour>(_top_scoring_behaviours_nodes[chosen_behaviour_index]);
     //UtilityAIBehaviourGroup* new_behaviour_group = godot::Object::cast_to<UtilityAIBehaviourGroup>(_top_scoring_behaviours_group_nodes[chosen_behaviour_index]);
@@ -316,16 +318,16 @@ void UtilityAIAgent::evaluate_options(float delta) {
         _total_evaluate_options_usec = godot::Time::get_singleton()->get_ticks_usec() - method_start_time_usec;
         UtilityAIPerformanceMonitorSingleton::get_singleton()->increment_total_time_elapsed_ai_agents_usec(_total_evaluate_options_usec);
         #endif
-        return; // No change.      
-    } 
+        return; // No change.
+    }
     if( _current_action_node != nullptr ) {
-        //(godot::Object::cast_to<UtilityAIActions>(_current_action_node))->end_action();   
+        //(godot::Object::cast_to<UtilityAIActions>(_current_action_node))->end_action();
         _current_action_node->end_action();
         emit_signal("action_exited", _current_action_node);
         _current_action_node = nullptr;
     }
     if( _current_behaviour_node != nullptr ) {
-        //(godot::Object::cast_to<UtilityAIBehaviour>(_current_behaviour_node))->end_behaviour();   
+        //(godot::Object::cast_to<UtilityAIBehaviour>(_current_behaviour_node))->end_behaviour();
         _current_behaviour_node->end_behaviour();
         emit_signal("behaviour_exited", _current_behaviour_node);
         _current_behaviour_node = nullptr;
@@ -344,13 +346,13 @@ void UtilityAIAgent::evaluate_options(float delta) {
     _current_behaviour_name = new_behaviour->get_name();
     _current_behaviour_node = new_behaviour;//::Object::cast_to<Node>(new_behaviour);
     new_behaviour->start_behaviour();
-    _current_action_node = nullptr; 
+    _current_action_node = nullptr;
     emit_signal("behaviour_group_changed", _current_behaviour_group_node);
     emit_signal("behaviour_changed", _current_behaviour_node);
     //emit_signal("action_changed", _current_action_node);
 
     _thinking_delay_in_seconds_current_timer = _thinking_delay_in_seconds;
-    
+
     #ifdef DEBUG_ENABLED
     _total_evaluate_options_usec = godot::Time::get_singleton()->get_ticks_usec() - method_start_time_usec;
     UtilityAIPerformanceMonitorSingleton::get_singleton()->increment_total_time_elapsed_ai_agents_usec(_total_evaluate_options_usec);
@@ -359,7 +361,7 @@ void UtilityAIAgent::evaluate_options(float delta) {
 
 
 void UtilityAIAgent::place_into_top_n_behaviour_list( UtilityAIBehaviourGroup* behaviour_group, UtilityAIBehaviour* behaviour, float score ) {
-    
+
     // First on the list.
     if( _num_possible_behaviours == 0 ) {
         _top_scoring_behaviours_group_nodes[0] = behaviour_group;
@@ -379,7 +381,7 @@ void UtilityAIAgent::place_into_top_n_behaviour_list( UtilityAIBehaviourGroup* b
     }
     if( place_in_behaviour_list < 0 ) return; // Not better than anything else on the list.
 
-    
+
     // Last on the list.
     if( place_in_behaviour_list == _num_behaviours_to_select-1 ) {
         _top_scoring_behaviours_group_nodes[_num_behaviours_to_select-1] = behaviour_group;
@@ -416,14 +418,14 @@ void UtilityAIAgent::update_current_behaviour() {
                 _current_action_node->end_action();
             }
             _current_action_node = nullptr;
-            emit_signal("action_changed", _current_action_node );    
+            emit_signal("action_changed", _current_action_node );
         }
         #ifdef DEBUG_ENABLED
         _total_update_behaviour_usec = godot::Time::get_singleton()->get_ticks_usec() - method_start_time_usec;
         UtilityAIPerformanceMonitorSingleton::get_singleton()->increment_total_time_elapsed_ai_agents_update_behaviour_usec(_total_update_behaviour_usec);
         #endif
         return;
-    } 
+    }
     UtilityAIAction* new_action_node = _current_behaviour_node->update_behaviour();
     //godot::Object::cast_to<Node>((godot::Object::cast_to<UtilityAIBehaviour>(_current_behaviour_node))->update_behaviour());
     if( _current_action_node != new_action_node ) {
@@ -460,7 +462,7 @@ void UtilityAIAgent::abort_current_behaviour() {
     _current_behaviour_node->end_behaviour();
     _current_behaviour_name = "";
     _current_behaviour_node = nullptr;
-    _current_action_node = nullptr;    
+    _current_action_node = nullptr;
     emit_signal("behaviour_changed", _current_behaviour_node);
     emit_signal("action_changed", _current_action_node );
 }

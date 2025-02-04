@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="UtilityAIMetadataSearchCriterion" inherits="UtilityAINQSSearchCriteria" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/godotengine/godot/master/doc/class.xsd">
+	<brief_description>
+	</brief_description>
+	<description>
+	</description>
+	<tutorials>
+	</tutorials>
+	<members>
+		<member name="metadata_name" type="StringName" setter="set_metadata_name" getter="get_metadata_name" default="&amp;&quot;&quot;">
+		</member>
+		<member name="metadata_value" type="Variant" setter="set_metadata_value" getter="get_metadata_value" default="null">
+		</member>
+	</members>
+</class>
