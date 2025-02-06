@@ -1,8 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <class name="UtilityAINQSSearchSpaces" inherits="UtilityAI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/godotengine/godot/master/doc/class.xsd">
 	<brief_description>
+		Defines the set of nodes that will be included in the search when a query is executed.
 	</brief_description>
 	<description>
+		The search space nodes are used to define the set of nodes that will be included in the search when a query is executed.
+		The search space nodes need to have the [UtilityAISearchCriteria] nodes as their children. When the query finishes, the search spaces emit the [signal query_completed] signal. The search spaces fill in a TypedArray [member _query_results] and a PackedFloat64Array [member _query_result_scores]. These are sorted by the score in a descending order. This means that the first node in the [member _query_results] array is also the one with the highest score.
+		The [method execute_query] method average runtime and other metrics (see below) are available for debugging and finetuning your queries.
+		Each search space can be run by itself, by calling its [method execute_query] method until it returns [code]true[/code] (completed), or by using the NodeQuerySystem singleton. If the singleton is used, you should not use the [method execute_query] method at all, but simply post the query using NodeQuerySystem.post_query()-method instead. The NodeQuerySystem singleton is the recommended way of executing the queries for search spaces, as it allows the use of time budgeting.
 	</description>
 	<tutorials>
 	</tutorials>
@@ -11,42 +16,55 @@
 			<return type="bool" />
 			<param index="0" name="time_budget_usec" type="int" />
 			<description>
+				The [method execute_query] method fetches the search space nodes based on its configuration and then applies the search criteria in top-down order. A time_budget_usec, which is the time budget in microseconds, must be set to limit the time the method uses for the query. Returns [code]false[/code] if the query hasn't finished (time has run out) and [code]true[/code] otherwise.
 			</description>
 		</method>
 		<method name="initialize_search_space">
 			<return type="void" />
 			<description>
+				If you override the _ready() method, you have to call initialize_search_space() in your overridden _ready() method.
 			</description>
 		</method>
 	</methods>
 	<members>
 		<member name="average_call_runtime_usec" type="int" setter="set_average_call_runtime_usec" getter="get_average_call_runtime_usec" default="0">
+			Used for debugging and tuning, the average time a single call to [method execute_query] method takes.
 		</member>
 		<member name="completed_signal_time_usec" type="int" setter="set_completed_signal_time_usec" getter="get_completed_signal_time_usec" default="0">
+			The time it takes to handle the [signal query_completed] signal (i.e. your result handling code).
 		</member>
 		<member name="is_query_still_running" type="bool" setter="set_is_query_still_running" getter="get_is_query_still_running" default="false">
 		</member>
 		<member name="is_run_in_debug_mode" type="bool" setter="set_is_run_in_debug_mode" getter="get_is_run_in_debug_mode" default="false">
+			If [code]true[/code], the search spaces add two variables in to the nodes they process: [member UtilityAINQSSearchCriteria.is_filtered] and [member UtilityAINQSSearchCriteria.score] and set their values based on the criteria.
 		</member>
 		<member name="query_result_scores" type="PackedFloat64Array" setter="set_query_result_scores" getter="get_query_result_scores" default="PackedFloat64Array()">
+			The resulting array of node scores.
 		</member>
 		<member name="query_results" type="Node[]" setter="set_query_results" getter="get_query_results" default="[]">
+			The resulting array of nodes, sorted in descending order based on the score.
 		</member>
 		<member name="search_space_fetch_time_usec" type="int" setter="set_search_space_fetch_time_usec" getter="get_search_space_fetch_time_usec" default="0">
+			The time it takes to fetch all the nodes that will be filtered and scored in the query.
 		</member>
 		<member name="top_n_to_find" type="int" setter="set_top_n_to_find" getter="get_top_n_to_find" default="1">
+			The number of nodes to return (at maximum)
 		</member>
 		<member name="total_query_call_count" type="int" setter="set_total_query_call_count" getter="get_total_query_call_count" default="0">
+			The number of times the [method execute_query] method was called to finish the query.
 		</member>
 		<member name="total_query_node_visits" type="int" setter="set_total_query_node_visits" getter="get_total_query_node_visits" default="0">
+			The total number of node visits done when running the query.
 		</member>
 		<member name="total_query_runtime_usec" type="int" setter="set_total_query_runtime_usec" getter="get_total_query_runtime_usec" default="0">
+			The total time to complete the query. Note that this calculates the time from starting the query to finishing it, which means that for queries that take several frames this includes processing time used outside of the [method execute_query] method (i.e. all your other code you run per frame).
 		</member>
 	</members>
 	<signals>
 		<signal name="query_completed">
 			<param index="0" name="search_space" type="Object" />
 			<description>
+				Emitted when the query execution is completed.
 			</description>
 		</signal>
 	</signals>

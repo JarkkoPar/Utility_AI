@@ -1,17 +1,22 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <class name="UtilityAIDistanceToVector3SearchCriterion" inherits="UtilityAINQSSearchCriteria" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/godotengine/godot/master/doc/class.xsd">
 	<brief_description>
+		Scores and filters based on minimum and maximum distance to the set [member distance_to] vector.
 	</brief_description>
 	<description>
+		The [Vector3] distance search criterion can be used to score and filter based on minimum and maximum distance to the set [member distance_to] vector.
 	</description>
 	<tutorials>
 	</tutorials>
 	<members>
 		<member name="distance_to_vector" type="Vector3" setter="set_distance_to_vector" getter="get_distance_to_vector" default="Vector3(0, 0, 0)">
+			The global position to compare the search space node distance to.
 		</member>
 		<member name="max_distance" type="float" setter="set_max_distance" getter="get_max_distance" default="100.0">
+			Maximum distance. If the distance is more than this and filtering is applied, the tested node is filtered out.
 		</member>
 		<member name="min_distance" type="float" setter="set_min_distance" getter="get_min_distance" default="0.0">
+			Minimum distance. If the distance is less than this and filtering is applied, the tested node is filtered out.
 		</member>
 	</members>
 </class>

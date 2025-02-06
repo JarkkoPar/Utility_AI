@@ -1,13 +1,16 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <class name="UtilityAINodeChildrenSearchSpace" inherits="UtilityAINQSSearchSpaces" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/godotengine/godot/master/doc/class.xsd">
 	<brief_description>
+		Returns the direct children of the given node as a search space.
 	</brief_description>
 	<description>
+		This node uses the children of a node to construct the search space. The direct children of the given node are returned as the search space.
 	</description>
 	<tutorials>
 	</tutorials>
 	<members>
 		<member name="parent_node" type="Node" setter="set_parent_node" getter="get_parent_node">
+			The parent node to use in the search.
 		</member>
 	</members>
 </class>

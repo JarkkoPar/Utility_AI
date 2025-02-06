@@ -3,11 +3,13 @@
 	<brief_description>
 	</brief_description>
 	<description>
+		The Repeater node ticks its child until [member max_repeat_times] is reached. If [member max_repeat_times] is set to -1 the child will be ticked indefinitely.
 	</description>
 	<tutorials>
 	</tutorials>
 	<members>
 		<member name="repeat_times" type="int" setter="set_repeat_times" getter="get_repeat_times" default="-1">
+			The maximum times the limiter node can be ticked.
 		</member>
 	</members>
 </class>

@@ -3,6 +3,23 @@
 	<brief_description>
 	</brief_description>
 	<description>
+		These two node types should be added as child nodes of the UtilityAIBehaviour node. They are used when a behaviour is being scored by the AI agent.
+		Each consideration node can contain an activation curve that can be defined in the node properties. The [member activation_input_value] property is used as the x-axis value to find the y-value on the activation curve. The y-value is then the resulting score for the consideration. If no curve has been set, the [member activation_input_value] will be used as the consideration score as-is.
+		If a sensor or a sensor group is used as the input value for a consideration, the [member activation_input_value] for the consideration will be the sensor_value property of the sensor node. Otherwise the value of the consideration's [member activation_input_value] property will be used. In simple terms: sensors are optional, you can use considerations without them if you set the [member activation_input_value] directly in your code.
+		A custom evaluation method can be defined for the [UtilityAIConsideration] node by extending the node with a script and defining a method named eval:
+		[gdscript]
+		func eval() -&gt; void:
+		    # Your code here.
+		    score = 0.0
+		[/gdscript]
+		In your custom eval method you should set the [member UtilityAIConsiderations.score] property to a value between [code]0[/code] and [code]1[/code]. You can sample the activation_curve using the method [code]sample_activation_curve(double input_value)[/code]. Also, you can set the [member UtilityAIConsiderations.has_vetoed] property by using your custom function. If [member UtilityAIConsiderations.has_vetoed] property is [code]true[/code], it causes the Behaviour to receive a [member UtilityAIConsiderations.score] of 0.0 and the behaviour immediately ends evaluating other considerations. Note that the [member UtilityAIConsiderations.has_vetoed] property will not be reset back to [code]false[/code] automatically, so if you set it to [code]true[/code] in your custom evaluation method, you will also need to set it to [code]false[/code] when you want the veto-state to end.
+		If you need to override the [member Node._ready] method for your custom consideration, you need to add the [code]initialize_consideration()[/code] method call to your [member Node._ready] method:
+		[gdscript]
+		func _ready():
+		    initialize_consideration()
+		    # Your code here.
+		[/gdscript]
+		Since version 1.5 the consideration nodes only calculate their [member UtilityAIConsiderations.score] if the input value has been changed, or a custom eval-method has been defined.
 	</description>
 	<tutorials>
 	</tutorials>
@@ -16,8 +33,10 @@
 	</methods>
 	<members>
 		<member name="activation_curve" type="Curve" setter="set_activation_curve" getter="get_activation_curve">
+			A godot curve property that defines how the [member activation_input_value] will be translated to a score.
 		</member>
 		<member name="activation_input_value" type="float" setter="set_activation_input_value" getter="get_activation_input_value" default="0.0001">
+			A floating point value in the range of 0..1.
 		</member>
 		<member name="input_sensor" type="UtilityAISensors" setter="set_input_sensor" getter="get_input_sensor">
 		</member>

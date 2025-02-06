@@ -1,13 +1,17 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <class name="UtilityAIBTNodeReference" inherits="UtilityAIBTTaskNodes" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/godotengine/godot/master/doc/class.xsd">
 	<brief_description>
+		Reference any behaviour tree node type anywhere in your scene.
 	</brief_description>
 	<description>
+		The node reference node can be used to reference any behaviour tree node type anywhere in your scene. This gives a lot of flexibility when designing your AI behaviours.
+		For instance, you can have an AI agent that has a node reference in its behaviour tree for any items it picks up. Each item can then contain a sub behaviour tree that describes how the item can be used by the AI. When the AI picks up an item, the node reference is set to point to the sub-tree within the item node, and immediately the AI agent can use the item.
 	</description>
 	<tutorials>
 	</tutorials>
 	<members>
 		<member name="node_reference" type="UtilityAIBehaviourTreeNodes" setter="set_node_reference" getter="get_node_reference">
+			A behaviour tree node.
 		</member>
 	</members>
 </class>

@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <class name="UtilityAIBTSequence" inherits="UtilityAIBTCompositeNodes" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/godotengine/godot/master/doc/class.xsd">
 	<brief_description>
+		Executes its child nodes from top-to-bottom order until either all of the succeed (returning [code]1[/code]) or one of them fails (returning [code]-1[/code]).
 	</brief_description>
 	<description>
+		This node type is used to create sequences.
+		The [UtilityAIBTSequence] node executes its child nodes from top-to-bottom order until either all of the succeed (returning [code]1[/code]) or one of them fails (returning [code]-1[/code]). If a child returns running (0) the sequence will return running to its parent.
 	</description>
 	<tutorials>
 	</tutorials>

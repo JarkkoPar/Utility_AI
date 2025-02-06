@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <class name="UtilityAIBTParallel" inherits="UtilityAIBTCompositeNodes" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/godotengine/godot/master/doc/class.xsd">
 	<brief_description>
+		Ticks all its child nodes. If any of the nodes returns failure (-1) or running (0), the parallel node returns it back to its parent.
 	</brief_description>
 	<description>
+		The parallel node ticks all its child nodes. If any of the nodes returns failure (-1) or running (0), the parallel node returns it back to its parent. If the child nodes return both failure and running statuses, the running status is returned to the parent node.
 	</description>
 	<tutorials>
 	</tutorials>
