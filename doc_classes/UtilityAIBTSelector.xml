@@ -1,8 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <class name="UtilityAIBTSelector" inherits="UtilityAIBTCompositeNodes" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/godotengine/godot/master/doc/class.xsd">
 	<brief_description>
+		Executes its child nodes from top-to-bottom order until one of them succeeds (returning 1) or all of them fail (returning -1).
 	</brief_description>
 	<description>
+		This node type is used to create fallbacks.
+		The [UtilityAIBTSelector] node executes its child nodes from top-to-bottom order until one of them succeeds (returning 1) or all of them fail (returning -1). If a child returns running (0) the selector will return running to its parent.
+		The UtilityAIBTRandomSelector works similarly, it just shuffles the nodes into a random order before ticking them.
 	</description>
 	<tutorials>
 	</tutorials>

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <class name="UtilityAIBehaviours" inherits="UtilityAI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/godotengine/godot/master/doc/class.xsd">
 	<brief_description>
+		Base node for [UtilityAIBehaviour] and [UtilityAIBehaviourGroup].
 	</brief_description>
 	<description>
 	</description>
@@ -23,6 +24,7 @@
 		<member name="evaluation_method" type="int" setter="set_evaluation_method" getter="get_evaluation_method" default="0">
 		</member>
 		<member name="score" type="float" setter="set_score" getter="get_score" default="0.0">
+			The score for the behaviour after the behaviour has evaluated its considerations.
 		</member>
 	</members>
 </class>

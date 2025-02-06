@@ -3,13 +3,16 @@
 	<brief_description>
 	</brief_description>
 	<description>
+		The RepeatUntil node ticks its child either until the expected_tick_result is returned by its child or [member max_repeat_times]. If [member max_repeat_times] is set to -1, only the expected_tick_result will end the loop.
 	</description>
 	<tutorials>
 	</tutorials>
 	<members>
 		<member name="expected_tick_result" type="int" setter="set_expected_tick_result" getter="get_expected_tick_result" default="1">
+			The result that the child node should return to end the loop. Can be either -1=Failure, 0=Running or 1=Success.
 		</member>
 		<member name="max_repeat_times" type="int" setter="set_max_repeat_times" getter="get_max_repeat_times" default="-1">
+			The maximum times the limiter node can be ticked.
 		</member>
 		<member name="reset_rule" type="int" setter="set_reset_rule" getter="get_reset_rule" overrides="UtilityAIBehaviourTreeNodes" default="3" />
 	</members>

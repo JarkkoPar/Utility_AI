@@ -1,17 +1,24 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <class name="UtilityAIActionGroup" inherits="UtilityAIActions" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/godotengine/godot/master/doc/class.xsd">
 	<brief_description>
+		Creates sequences of actions, or picks one random action from several choices.
 	</brief_description>
 	<description>
+		This node type should be added as child nodes of the [UtilityAIBehaviour] node. They are used when a behaviour is being executed by the AI agent.
+
+		Action groups can be used create sequences of actions, or to pick one random action from several choices. This allows for more complex actions to be performed by a behaviour. You can nest as many action groups as you need, and they can contain any number and combination of actions or action groups.
 	</description>
 	<tutorials>
 	</tutorials>
 	<members>
 		<member name="action_execution_rule" type="int" setter="set_action_execution_rule" getter="get_action_execution_rule" default="0">
+			A choice of how the actions that are child nodes are executed: Sequence:0,PickOneAtRandom:1,IfElse:2,CustomRule:3. The Sequence choice will execute the actions from top to bottom, the Pick One At Random does what it says it will, the IfElse rule uses the [member if_else_boolean_value] property to decide if the first or the second child node of the [UtilityAIActionGroup] will be chosen. Finally, the CustomRule choice allows you to write your own [code]eval[/code] method that is responsible for setting the [member current_action_index] property to choose what action should be executed.
 		</member>
 		<member name="current_action_index" type="int" setter="set_current_action_index" getter="get_current_action_index" default="0">
+			Exposed for the use with a custom eval method to choose a child action/action group node to execute.
 		</member>
 		<member name="error_handling_rule" type="int" setter="set_error_handling_rule" getter="get_error_handling_rule" default="0">
+			A choice of how the has_failed property of the child nodes is handled: EndExecution:0,ContinueExecution:1.
 		</member>
 		<member name="if_else_boolean_value" type="bool" setter="set_if_else_boolean_value" getter="get_if_else_boolean_value" default="true">
 		</member>

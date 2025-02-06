@@ -1,32 +1,43 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <class name="UtilityAIAction" inherits="UtilityAIActions" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/godotengine/godot/master/doc/class.xsd">
 	<brief_description>
+		Used when a behaviour is being executed by the AI agent.
 	</brief_description>
 	<description>
+		This node type should be added as child nodes of the [UtilityAIBehaviour] node. They are used when a behaviour is being executed by the AI agent.
+
+		Action groups can be used create sequences of actions, or to pick one random action from several choices. This allows for more complex actions to be performed by a behaviour. You can nest as many action groups as you need, and they can contain any number and combination of actions or action groups.
+
+		[b]Note:[/b] When the AI agent has chosen a behaviour, the action step function is called to find the first action to execute. The action that is being executed must be set as finished for the AI agent step function to be able to go to the next action. The action logic itself can be implemented anywhere else.
 	</description>
 	<tutorials>
 	</tutorials>
 	<members>
 		<member name="action_id" type="int" setter="set_action_id" getter="get_action_id" default="0">
+			A user-definable numeric ID for the action. Provided as an alternative to using action node names for identifying which is the current action the AI agent is currently executing.
 		</member>
 	</members>
 	<signals>
 		<signal name="action_entered">
 			<description>
+				Emitted when the action gets selected during the [UtilityAIAgent] [member UtilityAIAgent.update_current_behaviour] call.
 			</description>
 		</signal>
 		<signal name="action_exited">
 			<description>
+				Emitted for the current action when some other action gets selected during the [UtilityAIAgent] [member UtilityAIAgent.update_current_behaviour] call.
 			</description>
 		</signal>
 		<signal name="idle_frame_tick">
 			<param index="0" name="delta" type="float" />
 			<description>
+				Called when the node gets the process tick notification. Can be used to handle action update logic.
 			</description>
 		</signal>
 		<signal name="physics_frame_tick">
 			<param index="0" name="delta" type="float" />
 			<description>
+				Called when the node gets the physics_process tick notification. Can be used to handle action update logic.
 			</description>
 		</signal>
 	</signals>

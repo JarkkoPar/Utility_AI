@@ -1,15 +1,19 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <class name="UtilityAIConsiderationGroup" inherits="UtilityAIConsiderations" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/godotengine/godot/master/doc/class.xsd">
 	<brief_description>
+		Aggregates the input from several considerations or consideration groups to create more complex consideration logic.
 	</brief_description>
 	<description>
+		Consideration groups can be used to aggregate the input from several considerations or consideration groups to create more complex consideration logic. You can nest as many consideration groups as you like, and each consideration group may contain any number and combination of child consideration groups or child considerations.
 	</description>
 	<tutorials>
 	</tutorials>
 	<members>
 		<member name="evaluation_method" type="int" setter="set_evaluation_method" getter="get_evaluation_method" default="4">
+			A choice of how the considerations and consideration groups that are childs of the node are aggregated. Can be one of the following: Sum:0,Min:1,Max:2,Mean:3,Multiply:4,FirstNonZero:5.
 		</member>
 		<member name="invert_score" type="bool" setter="set_invert_score" getter="get_invert_score" default="false">
+			This inverts the group score by calculating: [code]score = 1.0 - score[/code]. It is applied after all the child nodes have been evaluated.
 		</member>
 	</members>
 </class>

@@ -1,8 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <class name="UtilityAIBehaviourTreeNodes" inherits="UtilityAI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/godotengine/godot/master/doc/class.xsd">
 	<brief_description>
+		Base class for all UtilityAI behaviour tree nodes.
 	</brief_description>
 	<description>
+		Behaviour Trees are a commonly used structure that can be used to create artificial intelligence in games for the non-playable characters. A behaviour tree has a root node and under it a tree structure, where the branches of the tree define the behaviour for the AI.
+		The utility enabled Behaviour Trees in Utility AI GDExtension extend the traditional Behaviour Tree with utility functions. The Behaviour Tree nodes can be used as a regular behaviour tree, but the extended utility features allow you to add utility-based branch selection and execution of the Node Query System queries within your trees.
+		The Behaviour Tree in Utility AI GDExtension allows you to tick the tree by giving user_data as input. This user_data can be a dictionary that you want to use as the blackboard or the AI actor node itself. Or any other type of Variant. Or just null.
 	</description>
 	<tutorials>
 	</tutorials>
@@ -10,14 +14,19 @@
 		<member name="considerations" type="UtilityAIConsiderationResources[]" setter="set_considerations" getter="get_considerations" default="[]">
 		</member>
 		<member name="evaluation_method" type="int" setter="set_evaluation_method" getter="get_evaluation_method" default="4">
+			Used with Utility-based Behaviour Tree nodes. This defines how the [UtilityAIConsideration] nodes (assigned as child nodes of the behaviour tree node) are evaluated to calculate the score for the node.
 		</member>
 		<member name="internal_status" type="int" setter="set_internal_status" getter="get_internal_status" default="0">
+			The current internal status of the node, useful for debugging and seeing how the execution progresses. The following choices are possible: "Unticked:0,Ticked:1,Completed:2".
 		</member>
 		<member name="reset_rule" type="int" setter="set_reset_rule" getter="get_reset_rule" default="2">
+			Defines how the Behaviour Tree node is reset. The following choices are possible: "WhenTicked:0,WhenCompleted:1,WhenTickedAfterBeingCompleted:2,Never:3".
 		</member>
 		<member name="score" type="float" setter="set_score" getter="get_score" default="0.0">
+			The score this node received from the Utility-based evaluation.
 		</member>
 		<member name="tick_result" type="int" setter="set_tick_result" getter="get_tick_result" default="1">
+			Result after the tick. The following choices are possible: "Running:0,Success:1,Failure:-1,Skip:-2".
 		</member>
 	</members>
 </class>

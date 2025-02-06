@@ -1,13 +1,16 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <class name="UtilityAIBTFixedResult" inherits="UtilityAIBTDecoratorNodes" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/godotengine/godot/master/doc/class.xsd">
 	<brief_description>
+		Ticks the first behaviour tree child node it has and returns its [member fixed_result] property back to its parent.
 	</brief_description>
 	<description>
+		The fixed result node ticks the first behaviour tree child node it has and regardless of what the child returns, the fixed result node returns what ever value you have set as its [member fixed_result] property back to its parent. This node can also be used as a leaf-node.
 	</description>
 	<tutorials>
 	</tutorials>
 	<members>
 		<member name="fixed_result" type="int" setter="set_fixed_result" getter="get_fixed_result" default="1">
+			The result that should always be returned. Can be either -1=Failure, 0=Running or 1=Success.
 		</member>
 	</members>
 </class>

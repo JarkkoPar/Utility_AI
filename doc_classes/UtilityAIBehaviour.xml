@@ -1,21 +1,30 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <class name="UtilityAIBehaviour" inherits="UtilityAIBehaviours" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/godotengine/godot/master/doc/class.xsd">
 	<brief_description>
+		Defines what the AI agent will do based on different inputs given using the sensor nodes.
 	</brief_description>
 	<description>
+		This node type should be added as child node of the [UtilityAIAgent] node or the [UtilityAIBehaviourGroup], preferably after any sensor and sensor group nodes. There can be several behaviour nodes as childs of the [UtilityAIAgent] or the [UtilityAIBehaviourGroup] node.
+		The purpose of the behaviour nodes is to define what the AI agent will do based on different inputs given using the sensor nodes. To accomplish this each behaviour node must have one or more consideration or consideration group nodes as its childs, and also one or more action or action group nodes.
+		The behaviour node will use the consideration nodes that are its childs to determine a score for itself. Basically it just sums up the scores from the considerations. When the behaviour is chosen by the AI agent as the one to execute, the action nodes are stepped through.
+		The behaviour has also two "cooldown" properties: [member cooldown_seconds] and [member cooldown_turns]. These can be used to temporarily exclude some behaviours from subsequent AI agent's [member UtilityAIAgent.evaluate_options] calls once they have been chosen. The [member cooldown_seconds] is meant to be used with real-time games and the [member cooldown_turns] with turn based games but both can be used even at the same time. The difference in the cooldown countdown is that the [member cooldown_seconds] counts down regardless of how many times the AI agent's [member UtilityAIAgent.evaluate_options] method is called, and the [member cooldown_turns] counts down only when the [member UtilityAIAgent.evaluate_options] method is called.
 	</description>
 	<tutorials>
 	</tutorials>
 	<members>
 		<member name="behaviour_id" type="int" setter="set_behaviour_id" getter="get_behaviour_id" default="0">
+			A user-definable ID for the behaviour. Useful for identifying which behaviour is currently running.
 		</member>
 		<member name="can_be_interrupted" type="bool" setter="set_can_be_interrupted" getter="get_can_be_interrupted" default="true">
+			A boolean value to determine if the behaviour can be interrupted or not. If a behaviour cannot be interrupted, the [member UtilityAIAgent.evaluate_options] method of the UtilityAIAgent will not execute until the behaviour has completed all its actions. As of version 1.5 the default value for this property is true.
 		</member>
 		<member name="considerations" type="UtilityAIConsiderationResources[]" setter="set_considerations" getter="get_considerations" default="[]">
 		</member>
 		<member name="cooldown_seconds" type="float" setter="set_cooldown_seconds" getter="get_cooldown_seconds" default="0.0">
+			If > 0.0, after the behaviour is chosen it will a score of 0.0 during the [member UtilityAIAgent.evaluate_options] until the time has passed.
 		</member>
 		<member name="cooldown_turns" type="int" setter="set_cooldown_turns" getter="get_cooldown_turns" default="0">
+			If > 0, after the behaviour is chosen it will a score of 0 during the [member UtilityAIAgent.evaluate_options] until the given number of calls to the evaluation function has been done.
 		</member>
 		<member name="current_action_index" type="int" setter="set_current_action_index" getter="get_current_action_index" default="0">
 		</member>
@@ -23,20 +32,24 @@
 	<signals>
 		<signal name="behaviour_entered">
 			<description>
+				Emitted when the behaviour gets selected during the UtilityAIAgent [member UtilityAIAgent.evaluate_options] call.
 			</description>
 		</signal>
 		<signal name="behaviour_exited">
 			<description>
+				Emitted for the current behaviour when some other behaviour gets selected during the UtilityAIAgent [member UtilityAIAgent.evaluate_options] call.
 			</description>
 		</signal>
 		<signal name="idle_frame_tick">
 			<param index="0" name="delta" type="float" />
 			<description>
+				Called when the node gets the process tick notification. Can be used to handle behaviour update logic.
 			</description>
 		</signal>
 		<signal name="physics_frame_tick">
 			<param index="0" name="delta" type="float" />
 			<description>
+				Called when the node gets the physics_process tick notification. Can be used to handle behaviour update logic.
 			</description>
 		</signal>
 	</signals>

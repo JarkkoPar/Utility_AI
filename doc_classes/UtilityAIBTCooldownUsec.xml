@@ -1,17 +1,21 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <class name="UtilityAIBTCooldownUsec" inherits="UtilityAIBTDecoratorNodes" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/godotengine/godot/master/doc/class.xsd">
 	<brief_description>
+		Sets a branch of the behaviour tree into an x microsecond cooldown after it has been ticked.
 	</brief_description>
 	<description>
+		The cooldown nodes can be used to set a branch of the behaviour tree into a cooldown after it has been ticked. When the cooldown node is ticked, it ticks its child node, starts the cooldown and returns what ever the child node returned. It will return the set [member cooldown_return_value] until the cooldown expires.
 	</description>
 	<tutorials>
 	</tutorials>
 	<members>
 		<member name="cooldown_return_value" type="int" setter="set_cooldown_return_value" getter="get_cooldown_return_value" default="-1">
+			The result that is returned during cooldown. Can be either -1=Failure, 0=Running or 1=Success.
 		</member>
 		<member name="cooldown_start_timestamp" type="int" setter="set_cooldown_start_timestamp" getter="get_cooldown_start_timestamp" default="0">
 		</member>
 		<member name="cooldown_usec" type="int" setter="set_cooldown_usec" getter="get_cooldown_usec" default="0">
+			The cooldown period in microseconds after the cooldown node is ticked.
 		</member>
 	</members>
 </class>
