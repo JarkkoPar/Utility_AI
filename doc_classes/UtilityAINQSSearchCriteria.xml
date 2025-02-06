@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <class name="UtilityAINQSSearchCriteria" inherits="UtilityAI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/godotengine/godot/master/doc/class.xsd">
 	<brief_description>
+		Filter and score the nodes fetched using the search spaces.
 	</brief_description>
 	<description>
+		The search criteria nodes are used to filter and score the nodes fetched using the search spaces. There are general criterias that can be used with any Godot node and specific criteria for 2D and 3D related search spaces.
+		Each criterion has an internal [code]apply_criterion()[/code] method that is applied to the node passed to it. This method updates the [member is_filtered] and score properties of the criterion and the results are visible in the Godot Engine editor inspector.
 	</description>
 	<tutorials>
 	</tutorials>
@@ -10,12 +13,16 @@
 		<member name="activation_curve" type="Curve" setter="set_activation_curve" getter="get_activation_curve">
 		</member>
 		<member name="is_filtered" type="bool" setter="set_is_filtered" getter="get_is_filtered" default="true">
+			Used in [code]apply_criterion()[/code]. If set to true, the will be filtered out.
 		</member>
 		<member name="score" type="float" setter="set_score" getter="get_score" default="0.0">
+			Used in [code]apply_criterion()[/code]. The score calculated by [code]apply_criterion()[/code]. Default value: 1.0.
 		</member>
 		<member name="use_for_filtering" type="bool" setter="set_use_for_filtering" getter="get_use_for_filtering" default="false">
+			If [code]true[/code], the criterion will be used for filtering.
 		</member>
 		<member name="use_for_scoring" type="bool" setter="set_use_for_scoring" getter="get_use_for_scoring" default="true">
+			If [code]true[/code], the criterion will be used for scoring.
 		</member>
 	</members>
 </class>

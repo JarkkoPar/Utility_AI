@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <class name="UtilityAIBTRunNQSQuery" inherits="UtilityAIBTTaskNodes" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/godotengine/godot/master/doc/class.xsd">
 	<brief_description>
+		Initialites Node Query System queries. They return running until the query has completed.
 	</brief_description>
 	<description>
+		The Run NQS Query node can be used to initialite Node Query System queries. They return running until the query has completed.
 	</description>
 	<tutorials>
 	</tutorials>
@@ -10,8 +12,10 @@
 		<member name="is_high_priority" type="bool" setter="set_is_high_priority" getter="get_is_high_priority" default="true">
 		</member>
 		<member name="nqs_search_space" type="UtilityAINQSSearchSpaces" setter="set_nqs_search_space" getter="get_nqs_search_space">
+			A node reference to a NQS Search Space node. (Changed from v1.4 node path).
 		</member>
 		<member name="top_n_to_find" type="int" setter="set_top_n_to_find" getter="get_top_n_to_find" default="1">
+			The number of results the search should return. Overrides the setting on the search space.
 		</member>
 	</members>
 </class>

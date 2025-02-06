@@ -1,8 +1,19 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <class name="UtilityAIBTLeaf" inherits="UtilityAIBTTaskNodes" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/godotengine/godot/master/doc/class.xsd">
 	<brief_description>
+		Used for conditions and actions. You should define your own [code]on_tick()[/code] method where you do your logic.
 	</brief_description>
 	<description>
+		The leaf node is used for conditions and actions. You should define your own [code]on_tick()[/code] method where you do your logic. You can also define the method with the name [code]tick()[/code] but this is only available for backwards compatibility to version 1.4.
+		You can either return the tick result or set the [member UtilityAIBehaviourTreeNodes.tick_result] property. Examples:
+		[gdscript]
+		func on_tick(blackboard, delta) -> int:
+		    return 1
+		[/gdscript]
+		[gdscript]
+		func on_tick(blackboard, delta):
+		    tick_result = 1
+		[/gdscript]
 	</description>
 	<tutorials>
 	</tutorials>

@@ -1,8 +1,18 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <class name="UtilityAIStateTreeNodes" inherits="UtilityAI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/godotengine/godot/master/doc/class.xsd">
 	<brief_description>
+		A state management structure that is a hybrid of a behaviour tree and a hierarchical state machine.
 	</brief_description>
 	<description>
+		A StateTree is a state management structure that is a hybrid of a behaviour tree and a hierarchical state machine.
+		The Utility AI GDExtensions State Tree is just two nodes: UtilityAISTRoot and UtilityAISTNode. The State Tree nodes are utility-enabled, which means that if desired, the node selection for a state can be done by using UtilityAIConsideration nodes or resources. Alternatively a on_enter_condition() method can be defined for the State Tree nodes to define the selection logic.
+		When the tree is ticked for the first time, a set of active states is selected by evaluating the child nodes of the root node, and the childs of the child nodes, until a leaf node is found that can be activated (i.e. its on_enter_condition() method returns true or utility-based evaluation selects it as the highest-scoring node). All the State Tree nodes from the root node all the way down to the found leaf node are then considered as "active". On subsequent calls to the root node tick() method, all the active nodes are ticked in top-to-down order from the root to the leaf node. This allows you to create a hierarchy of states with shared logic on the top-level nodes and more specific logic on the leaf nodes. You can select the child node evaluation method for each State Tree node by setting the child_state_selection_rule property.
+		User-defined methods [code]on_enter_condition(user_data, delta) -> bool[/code], [code]on_enter_state(user_data, delta)[/code], [code]on_exit_state(user_data, delta)[/code] and [code]on_tick(user_data, delta)[/code] can be defined to create your custom state activation and handling logic. Alternatively, you can also use the signals [signal state_check_enter_condition], [signal state_entered], [signal state_exited] and [signal state_ticked].
+		The states are changed by calling the [method transition_to] method and by providing a [NodePath] to a child node of the State Tree root node as a target state. The child nodes of the target node are evaluated, all the way down the tree, until a leaf State Tree node is activated. If no active leaf node is found, the state transition fails and the State Tree remains in the existing state.
+		[b]Note:[/b] When a scene with a State Tree is first run, during the first call to the tick() method the State Tree will automatically transition to the root node to find the initial set of active states.
+		When the state changes, the [code]on_exit_state()[/code] method is called for existing state nodes that are not included in the new state set. Similarly, for new state nodes that were not included in the existing state set, the [code]on_enter_state()[/code] method is called.
+		During a tick, the [code]on_tick()[/code] method is called for all the active states.
+		You construct a State Tree by first adding a [UtilityAISTRoot] node to your scene. Under the root node you add [UtilityAISTNodes], and you can keep adding further [UtilityAISTNodes] until you have the state structure you need.
 	</description>
 	<tutorials>
 	</tutorials>
@@ -24,6 +34,7 @@
 			<param index="1" name="user_data" type="Variant" />
 			<param index="2" name="delta" type="float" />
 			<description>
+				This method is used to transition between states in the Stae Tree. You must provide the NodePath (relative to the State Tree root node) for the target state and you can provide any Godot variant type as a parameter (usually a node used as an actor or a dictionary used as a blackboard), along with a delta-time. User_data and delta are passed to the [code]on_enter_condition[/code] method when selecting the active states.
 			</description>
 		</method>
 		<method name="transition_to_np">
@@ -35,10 +46,13 @@
 	</methods>
 	<members>
 		<member name="child_state_selection_rule" type="int" setter="set_child_state_selection_rule" getter="get_child_state_selection_rule" default="0">
+			Defines how the child state is chosen. Can be one of the following: "OnEnterConditionMethod:0,UtilityScoring:1", where "OnEnterConditionMethod" means that the user-defined on_enter_condition() method is called and if it returns true, the state is selected. "UtilityScoring" option uses the considerations set in the properties of the state and/or as child nodes. The highest-scoring state will be chosen.
 		</member>
 		<member name="considerations" type="UtilityAIConsiderationResources[]" setter="set_considerations" getter="get_considerations" default="[]">
+			Considerations set as a property of the state. These are used if the "UtilityScoring" option is selected for the child_state_selection_rule.
 		</member>
 		<member name="evaluation_method" type="int" setter="set_evaluation_method" getter="get_evaluation_method" default="4">
+			Defines how the considerations are aggregated. Can be one of the following: "Sum:0,Min:1,Max:2,Mean:3,Multiply:4,FirstNonZero:5".
 		</member>
 		<member name="score" type="float" setter="set_score" getter="get_score" default="0.0">
 		</member>
@@ -48,6 +62,7 @@
 			<param index="0" name="user_data" type="Object" />
 			<param index="1" name="delta" type="float" />
 			<description>
+				Emitted when the the on_enter_condition() check needs to be done. The signal must call the [method set_on_entered_condition] method with either true or false as the parameter to indicate if the state should be entered or not.
 			</description>
 		</signal>
 		<signal name="state_check_enter_condition_np">
@@ -58,6 +73,7 @@
 			<param index="0" name="user_data" type="Object" />
 			<param index="1" name="delta" type="float" />
 			<description>
+				Emitted when the state is entered. Add any state initialization to this signal handler.
 			</description>
 		</signal>
 		<signal name="state_entered_np">
@@ -68,6 +84,7 @@
 			<param index="0" name="user_data" type="Object" />
 			<param index="1" name="delta" type="float" />
 			<description>
+				Emitted when the state is exited. Add any state deinitialization to this signal handler.
 			</description>
 		</signal>
 		<signal name="state_exited_np">
@@ -78,6 +95,7 @@
 			<param index="0" name="user_data" type="Object" />
 			<param index="1" name="delta" type="float" />
 			<description>
+				Emitted when the state is ticked. Add state update logic to this signal handler.
 			</description>
 		</signal>
 		<signal name="state_ticked_np">

@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <class name="UtilityAIBTPassBy" inherits="UtilityAIBTTaskNodes" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/godotengine/godot/master/doc/class.xsd">
 	<brief_description>
+		Runs a user-defined [code]tick()[/code] method without returning any result value.
 	</brief_description>
 	<description>
+		The PassBy node can be used to run a user-defined [code]tick()[/code] method without returning any result value. The purpose of this node is to allow running any additional logic during a [code]tick()[/code] without affecting the flow of the Behaviour Tree. In essence, the functionality is similar to the [UtilityAIPassThrough] node, but this node can be placed within a sequence, for example.
 	</description>
 	<tutorials>
 	</tutorials>
