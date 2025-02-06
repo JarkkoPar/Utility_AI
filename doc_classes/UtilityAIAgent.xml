@@ -1,8 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <class name="UtilityAIAgent" inherits="UtilityAI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/godotengine/godot/master/doc/class.xsd">
 	<brief_description>
+		Main node that is used to manage the UtilityAI.
 	</brief_description>
 	<description>
+		This is the main node that is used to manage the UtilityAI. A [UtilityAIAgent] node represents an AI entity that can reason based in sensor input and then choose behaviours to react to the sensor input based on scores that are calculated with considerations. Behaviours can contain optional actions that allow reuse of action logic.
+		There are two methods that are used to update the AI Agent:
+		- [method evaluate_options] is used to choose a behaviour
+		- update_current_behaviour() is used to step actions of a behaviour
+		Utility AI systems can be susceptile to oscillation, which means that two or more evaluated options get the highest score and the system ends up switching several times between the options. The [member current_behaviour_bias] property in the AI Agent can be used to add some bias towards the currently selected behaviour, which will decrease the chances of oscillation. In a sense the AI Agent is "more determined" to continue with the currently selected behaviour.
 	</description>
 	<tutorials>
 	</tutorials>
@@ -10,12 +16,14 @@
 		<method name="abort_current_behaviour">
 			<return type="void" />
 			<description>
+				Immediately stops the currently selected behaviour and action. Used for stopping behaviours that have Can Be Interrupted property as [code]false[/code].
 			</description>
 		</method>
 		<method name="evaluate_options">
 			<return type="void" />
 			<param index="0" name="delta" type="float" />
 			<description>
+				Gathers input from sensors and evaluates all the available behaviours by calculating a score for each of them and then choosing a random behaviour from the top [member num_behaviours_to_select] behaviours.
 			</description>
 		</method>
 		<method name="get_current_action_node" qualifiers="const">
@@ -54,21 +62,28 @@
 		<method name="update_current_behaviour">
 			<return type="void" />
 			<description>
+				Updates the currently selected behaviour and if the current action has been marked as finished, returns the next action. If no actions are left or no actions have been defined for the current behaviour, ends the behaviour.
 			</description>
 		</method>
 	</methods>
 	<members>
 		<member name="current_behaviour_bias" type="float" setter="set_current_behaviour_bias" getter="get_current_behaviour_bias" default="0.1">
+			This property can be used to set a bias to the current behaviour score. This can be useful to reduce or eliminate oscillation between Behaviours. The bias gets added after the actual consideration-based score has been calculated.
 		</member>
 		<member name="current_behaviour_name" type="String" setter="set_current_behaviour_name" getter="get_current_behaviour_name" default="&quot;&quot;">
+			This property shows what was the selected behaviour after the latest [method evaluate_options] method call.
 		</member>
 		<member name="num_behaviours_to_select" type="int" setter="set_num_behaviours_to_select" getter="get_num_behaviours_to_select" default="1">
+			Pick a behaviour out of top [member num_behaviours_to_select] behaviours found after reasoning.
 		</member>
 		<member name="thinking_delay_in_seconds" type="float" setter="set_thinking_delay_in_seconds" getter="get_thinking_delay_in_seconds" default="1.0">
+			Delay time forced between calls to the method [method evaluate_options].
 		</member>
 		<member name="top_scoring_behaviour_name" type="String" setter="set_top_scoring_behaviour_name" getter="get_top_scoring_behaviour_name" default="&quot;&quot;">
+			This property shows what was the top scoring behaviour after the latest [method evaluate_options] method call.
 		</member>
 		<member name="total_evaluate_options_usec" type="int" setter="set_total_evaluate_options_usec" getter="get_total_evaluate_options_usec" default="0">
+			This property shows how many microseconds (usec) the latest [method evaluate_options] method call required to complete.
 		</member>
 		<member name="total_update_behaviour_usec" type="int" setter="set_total_update_behaviour_usec" getter="get_total_update_behaviour_usec" default="0">
 		</member>
@@ -77,31 +92,37 @@
 		<signal name="action_changed">
 			<param index="0" name="action_node" type="Object" />
 			<description>
+				Emitted when the current action changes during a update_current_behaviour call.
 			</description>
 		</signal>
 		<signal name="action_exited">
 			<param index="0" name="action_node" type="Object" />
 			<description>
+				Emitted when the current action exits during a update_current_behaviour call.
 			</description>
 		</signal>
 		<signal name="behaviour_changed">
 			<param index="0" name="behaviour_node" type="Object" />
 			<description>
+				Emitted when the behaviour changes during [method evaluate_options] or after a behaviour has completed during the update_current_behaviour call.
 			</description>
 		</signal>
 		<signal name="behaviour_exited">
 			<param index="0" name="behaviour_node" type="Object" />
 			<description>
+				Emitted when exits during [method evaluate_options] or after a behaviour has completed during the update_current_behaviour call.
 			</description>
 		</signal>
 		<signal name="behaviour_group_changed">
 			<param index="0" name="behaviour_group_node" type="Object" />
 			<description>
+				Emitted when the behaviour group changes during [method evaluate_options] or after a behaviour has completed during the update_current_behaviour call.
 			</description>
 		</signal>
 		<signal name="behaviour_group_exited">
 			<param index="0" name="behaviour_group_node" type="Object" />
 			<description>
+				Emitted when the behaviour group exits during [method evaluate_options] or after a behaviour has completed during the update_current_behaviour call.
 			</description>
 		</signal>
 	</signals>

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <class name="UtilityAIAngleVector3Sensor" inherits="UtilityAISensor" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/godotengine/godot/master/doc/class.xsd">
 	<brief_description>
+		Accepts two vectors, calculates the angle between them and scales it to [code]0..1[/code] range.
 	</brief_description>
 	<description>
 	</description>
@@ -12,12 +13,16 @@
 		<member name="angle_radian" type="float" setter="set_angle_radian" getter="get_angle_radian" default="0.0">
 		</member>
 		<member name="from_vector" type="Vector3" setter="set_from_vector" getter="get_from_vector" default="Vector3(0, 0, 0)">
+			Input value for the sensor. Base value for the angle calculation, for example the direction of an AI entity.
 		</member>
 		<member name="max_angle_degrees" type="float" setter="set_max_angle_degrees" getter="get_max_angle_degrees" default="360.0">
+			The maximum value for the angle between from and to in degrees, this corresponds to 1.0 for the sensor_value. Updates the euler angle automatically.
 		</member>
 		<member name="max_angle_radian" type="float" setter="set_max_angle_radian" getter="get_max_angle_radian" default="6.28319">
+			The maximum value for the angle between from and to in radians, this corresponds to 1.0 for the sensor_value. Updates the euler angle automatically.
 		</member>
 		<member name="to_vector" type="Vector3" setter="set_to_vector" getter="get_to_vector" default="Vector3(0, 0, 0)">
+			Input value for the sensor. The other vector to compare from-vector to, for example direction to closest enemy entity.
 		</member>
 	</members>
 </class>
