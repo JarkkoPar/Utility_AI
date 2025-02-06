@@ -118,7 +118,7 @@ void UtilityAIArea2DVisibilitySensor::_bind_methods() {
 
     ClassDB::bind_method(D_METHOD("set_squared_distances_to_unoccluded_bodies", "squared_distances_to_unoccluded_bodies"), &UtilityAIArea2DVisibilitySensor::set_squared_distances_to_unoccluded_bodies);
     ClassDB::bind_method(D_METHOD("get_squared_distances_to_unoccluded_bodies"), &UtilityAIArea2DVisibilitySensor::get_squared_distances_to_unoccluded_bodies);
-    ADD_PROPERTY(PropertyInfo(Variant::ARRAY, "squared_distances_to_unoccluded_bodies", PROPERTY_HINT_ARRAY_TYPE, vformat("%s/%s:%s", Variant::OBJECT, PROPERTY_HINT_RESOURCE_TYPE, "float")), "set_squared_distances_to_unoccluded_bodies","get_squared_distances_to_unoccluded_areas");
+    ADD_PROPERTY(PropertyInfo(Variant::ARRAY, "squared_distances_to_unoccluded_bodies", PROPERTY_HINT_ARRAY_TYPE, vformat("%s/%s:%s", Variant::OBJECT, PROPERTY_HINT_RESOURCE_TYPE, "float")), "set_squared_distances_to_unoccluded_bodies","get_squared_distances_to_unoccluded_bodies");
 }
 
 
