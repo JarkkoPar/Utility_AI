@@ -1,0 +1,10 @@
+name: Builds
+
+on:
+  workflow_dispatch:
+  pull_request:
+  push:
+
+jobs:
+  lint:
+    uses: ./.github/workflows/lint.yml

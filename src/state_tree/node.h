@@ -4,26 +4,20 @@
 #include "nodes.h"
 //#include <godot_cpp/classes/node.hpp>
 
-
-
 namespace godot {
 
 class UtilityAISTNode : public UtilityAIStateTreeNodes {
-    GDCLASS(UtilityAISTNode, UtilityAIStateTreeNodes)
+	GDCLASS(UtilityAISTNode, UtilityAIStateTreeNodes)
 
 private:
-
-
 protected:
-    static void _bind_methods();
+	static void _bind_methods();
 
 public:
-    UtilityAISTNode();
-    ~UtilityAISTNode();
-
+	UtilityAISTNode();
+	~UtilityAISTNode();
 };
 
-}
-
+} //namespace godot
 
 #endif
