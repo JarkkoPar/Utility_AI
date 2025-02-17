@@ -1,0 +1,32 @@
+name: Build Linux
+on:
+  workflow_dispatch:
+  workflow_call:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          submodules: true
+          fetch-depth: 0
+
+      - name: Download Build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path:  ${{ github.workspace }}/demo/addons/utility_ai/bin/
+          merge-multiple: true
+
+      - name: Delete Build artifacts
+        uses: geekyeggo/delete-artifact@v5
+        with:
+          name: libutilityai-*
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: utility_ai_demo_project
+          path: ${{ github.workspace }}/demo/
+          if-no-files-found: error
