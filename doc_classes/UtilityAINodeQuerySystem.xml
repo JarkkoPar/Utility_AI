@@ -1,8 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <class name="UtilityAINodeQuerySystem" inherits="UtilityAI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/godotengine/godot/master/doc/class.xsd">
 	<brief_description>
+		A singleton that allows time budgeting for the NQS queries.
 	</brief_description>
 	<description>
+		A singleton has been added that allows time budgeting for the NQS queries. As of version 1.4 the singleton is the recommended way of executing the queries. It is still possible to execute them directly as well, if needed.
+		To use the NodeQuerySystem singleton to execute queries, you call the [method post_query] method. The queries can be posted with a regular priority or a high priority. The high priority queries are always updated first, and by default they are also allocated more time per physics frame. The remaining time is used to update the regular priority queries.
+		Utility AI GDExtension targets currently the version 4.1 of the Godot Engine to offer the widest compatibility for Godot 4.X releases. Unfortunately, in version 4.1 of Godot a singleton cannot have a [code]_physics_process()[/code] method, and therefore updating the singleton requires one line of code to be added to your game. Specifically, the [code]NodeQuerySystem.run_queries()[/code] method needs to be called once per physics frame to allow the queries to execute.
 	</description>
 	<tutorials>
 	</tutorials>
@@ -10,6 +14,7 @@
 		<method name="clear_queries">
 			<return type="void" />
 			<description>
+				Empties the list of queries to run per frame. Call this when you need to clean up, i.e. in the [member Node._ready] and [member Node._exit_tree] methods.
 			</description>
 		</method>
 		<method name="get_post_queries_time_elapsed_usec" qualifiers="const">
@@ -25,6 +30,7 @@
 		<method name="initialize_performance_counters">
 			<return type="void" />
 			<description>
+				Initializes the counters that can then be seen in the Debug/Monitors tab in the editor.
 			</description>
 		</method>
 		<method name="post_query">
@@ -32,28 +38,35 @@
 			<param index="0" name="search_space" type="UtilityAINQSSearchSpaces" />
 			<param index="1" name="is_high_priority" type="bool" />
 			<description>
+				This adds the given search space to the list of queries to be executed when the method [method run_queries] is called.
 			</description>
 		</method>
 		<method name="run_queries">
 			<return type="void" />
 			<description>
+				Runs the posted queries. Call this once per frame in your main scene.
 			</description>
 		</method>
 		<method name="stop_query">
 			<return type="bool" />
 			<param index="0" name="search_space" type="UtilityAINQSSearchSpaces" />
 			<description>
+				This stops the search_space query by removing it from the list of queries to be executed when the method [method run_queries] is called.
 			</description>
 		</method>
 	</methods>
 	<members>
 		<member name="high_priority_query_per_frame_execute_query_time_budget_usec" type="int" setter="set_high_priority_query_per_frame_execute_query_time_budget_usec" getter="get_high_priority_query_per_frame_execute_query_time_budget_usec" default="20">
+			This how much time the [method run_queries] method uses to make progress for each high priority query at a time. If you have 5 high priority queries posted, for example, and this is set to 20 microseconds, [method run_queries] loops through the 5 queries and uses approximately 20 microseconds for each query during each loop iteration until the time budget for high priority queries runs out. Default value: 20 usec (microseconds).
 		</member>
 		<member name="regular_query_per_frame_execute_query_time_budget_usec" type="int" setter="set_regular_query_per_frame_execute_query_time_budget_usec" getter="get_regular_query_per_frame_execute_query_time_budget_usec" default="10">
+			This is the time used by [method run_queries] method for each regular query it has time to update per update iteration. Default value: 10 usec (microseconds).
 		</member>
 		<member name="run_queries_time_budget_per_frame_usec" type="int" setter="set_run_queries_time_budget_per_frame" getter="get_run_queries_time_budget_per_frame" default="1000">
+			This is the time the [method run_queries] method is allowed to run per frame, in usec (microseconds). When the time runs out, they will resume from where they left off on the next physics frame.
 		</member>
 		<member name="time_allocation_pct_to_high_priority_queries" type="float" setter="set_time_allocation_pct_to_high_priority_queries" getter="get_time_allocation_pct_to_high_priority_queries" default="0.8">
+			Value between 0..1, determines how much of the [member run_queries_time_budget_per_frame] is used for high-priority queries. The time left over is used for the regular priority queries.
 		</member>
 	</members>
 </class>

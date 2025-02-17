@@ -1,13 +1,16 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <class name="UtilityAIBTLimiter" inherits="UtilityAIBTDecoratorNodes" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/godotengine/godot/master/doc/class.xsd">
 	<brief_description>
+		Ticks its child for [member max_repeat_times] and then returns -1 (failure) until the node is reset.
 	</brief_description>
 	<description>
+		The limiter node ticks its child for [member max_repeat_times] and then returns -1 (failure) until the node is reset.
 	</description>
 	<tutorials>
 	</tutorials>
 	<members>
 		<member name="max_repeat_times" type="int" setter="set_max_repeat_times" getter="get_max_repeat_times" default="3">
+			The maximum times the limiter node can be ticked.
 		</member>
 	</members>
 </class>

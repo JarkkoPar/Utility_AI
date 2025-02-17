@@ -1,15 +1,19 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <class name="UtilityAIMetadataSearchCriterion" inherits="UtilityAINQSSearchCriteria" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/godotengine/godot/master/doc/class.xsd">
 	<brief_description>
+		Filters nodes based on their metadata.
 	</brief_description>
 	<description>
+		The metadata search criterion can be used to filter nodes based on their metadata. Currently only metadata with type [String] is supported. Both the [param name] and [param value] of the metadata must match, otherwise the node will be filtered out.
 	</description>
 	<tutorials>
 	</tutorials>
 	<members>
 		<member name="metadata_name" type="StringName" setter="set_metadata_name" getter="get_metadata_name" default="&amp;&quot;&quot;">
+			The name of the metadata field to find.
 		</member>
 		<member name="metadata_value" type="Variant" setter="set_metadata_value" getter="get_metadata_value" default="null">
+			The value of the named metadata field.
 		</member>
 	</members>
 </class>

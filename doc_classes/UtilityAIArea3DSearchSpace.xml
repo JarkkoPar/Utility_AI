@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <class name="UtilityAIArea3DSearchSpace" inherits="UtilityAINQSSearchSpaces" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/godotengine/godot/master/doc/class.xsd">
 	<brief_description>
+		Returns all nodes within an [Area3D] as a search space.
 	</brief_description>
 	<description>
+		This node uses an [Area3D] to define the search space. All the nodes that are within or intersecting with the [Area3D] are returned as the search space. The search space uses the [signal Area3D.on_area_entered] and [signal Area3D.on_area_exited] signals to determine which other [Area3D] nodes are intersecting with the set area.
 	</description>
 	<tutorials>
 	</tutorials>
@@ -22,8 +24,10 @@
 	</methods>
 	<members>
 		<member name="area3d" type="Area3D" setter="set_area3d" getter="get_area3d">
+			[Area3D] node to use.
 		</member>
 		<member name="intersecting_areas" type="Area3D[]" setter="set_intersecting_areas" getter="get_intersecting_areas" default="[]">
+			The areas intersecting or within the set area. Useful when debugging the search space.
 		</member>
 	</members>
 </class>

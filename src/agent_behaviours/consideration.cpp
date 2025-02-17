@@ -34,7 +34,7 @@ UtilityAIConsideration::UtilityAIConsideration() {
     _input_sensor = nullptr;
     _has_custom_evaluation_method = false;
     _has_activation_input_changed = true;
-    
+
 }
 
 
@@ -78,7 +78,7 @@ float UtilityAIConsideration::get_activation_input_value() const {
 void UtilityAIConsideration::_notification(int p_what) {
 	switch (p_what) {
         case NOTIFICATION_ENTER_TREE: {
-            // Entered the tree. 
+            // Entered the tree.
         } break;
 		case NOTIFICATION_EXIT_TREE: {
 			//_clear_monitoring();
@@ -89,7 +89,7 @@ void UtilityAIConsideration::_notification(int p_what) {
 
 // Handling methods.
 
-float UtilityAIConsideration::evaluate() { 
+float UtilityAIConsideration::evaluate() {
     #ifdef DEBUG_ENABLED
     _last_evaluated_timestamp = godot::Time::get_singleton()->get_ticks_usec();
     #endif
@@ -134,10 +134,18 @@ void UtilityAIConsideration::_evaluate_consideration() {
         call("eval");
         return;
     }
-    
+
     if(_activation_curve.is_valid()) {
 		_score = _activation_curve->sample( _activation_input_value );
 	} else {
         _score = _activation_input_value;
     }
+}
+
+void UtilityAIConsideration::_notification(int p_what) {
+    if( p_what != NOTIFICATION_POST_ENTER_TREE ) {
+        return;
+    }
+
+    _has_custom_evaluation_method = has_method("eval");
 }

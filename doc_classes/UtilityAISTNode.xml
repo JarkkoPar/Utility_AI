@@ -3,6 +3,29 @@
 	<brief_description>
 	</brief_description>
 	<description>
+		This is the workhorse of the State Tree. It acts as all the other levels of the state tree other than the tree root. If a [UtilityAISTNode] has no child nodes, it is considered a leaf node. If it has child nodes, it is considered like a selector in a behaviour tree: it will evaluate its child nodes to find a leaf node to activate.
+		To make use of the [UtilityAISTNode], define the following methods for all the nodes:
+		[gdscript]
+		extends UtilityAISTNode
+
+		func on_enter_condition(user_data: Variant, delta: float) -&gt; bool:
+		    # Do your logic here to decide when this node should be activated.
+		    # Return true or false based on your logic.
+		    return true
+
+		func on_enter_state(user_data: Variant, delta: float) -&gt; void:
+		    # Initialize your state here.
+		    pass
+
+		func on_exit_state(user_data: Variant, delta: float) -&gt; void:
+		    # Clean up before exiting the state here.
+		    pass
+
+		func on_tick(user_data: Variant, delta: float) -&gt; void:
+		    # Do what ever the state needs to do here.
+		    pass
+		[/gdscript]
+		[b]Note:[/b] You can rename the [param user_data] parameter what ever you want. Most common ones would be blackboard if you are using a dictionary to share variables between your states, and actor if you just pass the root node of your AI entity scene.
 	</description>
 	<tutorials>
 	</tutorials>

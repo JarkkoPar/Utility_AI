@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <class name="UtilityAIBTInverter" inherits="UtilityAIBTDecoratorNodes" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/godotengine/godot/master/doc/class.xsd">
 	<brief_description>
+		Ticks the first behaviour tree child node it has and returns back to its parent the result of the child node, inverted.
 	</brief_description>
 	<description>
+		The inverter node ticks the first behaviour tree child node it has and returns back to its parent the result of the child node, inverted. So success becomes failure, a failure a success. If Running is returned, the inverter returns running back to its parent.
 	</description>
 	<tutorials>
 	</tutorials>

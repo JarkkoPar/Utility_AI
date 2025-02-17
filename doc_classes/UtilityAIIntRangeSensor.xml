@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <class name="UtilityAIIntRangeSensor" inherits="UtilityAISensor" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/godotengine/godot/master/doc/class.xsd">
 	<brief_description>
+		Accepts a minimum and maximum value that defines a value range. The input value given is scaled to 0..1 range within the given min and max values.
 	</brief_description>
 	<description>
 	</description>
@@ -8,10 +9,13 @@
 	</tutorials>
 	<members>
 		<member name="range_max_value" type="int" setter="set_range_max_value" getter="get_range_max_value" default="100">
+			The maximum value for the range.
 		</member>
 		<member name="range_min_value" type="int" setter="set_range_min_value" getter="get_range_min_value" default="0">
+			The minimum value for the range.
 		</member>
 		<member name="range_value" type="int" setter="set_range_value" getter="get_range_value" default="0">
+			Input value for the sensor.
 		</member>
 	</members>
 </class>

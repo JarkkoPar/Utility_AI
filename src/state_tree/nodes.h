@@ -1,5 +1,5 @@
 #ifndef UtilityAIStateTreeNodes_H_INCLUDED
-#define UtilityAIStateTreeNodes_H_INCLUDED 
+#define UtilityAIStateTreeNodes_H_INCLUDED
 
 #include "utility_ai.h"
 #include <godot_cpp/classes/node.hpp>
@@ -31,7 +31,7 @@ private:
 
 
 protected:
-    
+
 
     static void _bind_methods();
 
@@ -42,8 +42,8 @@ protected:
 public:
     UtilityAIStateTreeNodes();
     ~UtilityAIStateTreeNodes();
-    
-    
+
+
     // Getters and setters for attributes.
 
     #ifdef DEBUG_ENABLED
@@ -53,7 +53,7 @@ public:
 
     void set_considerations( TypedArray<UtilityAIConsiderationResources> considerations );
     TypedArray<UtilityAIConsiderationResources> get_considerations() const;
-    
+
     void set_is_on_entered_condition_true( bool is_on_entered_condition_true );
     bool get_is_on_entered_condition_true() const;
 
@@ -69,9 +69,11 @@ public:
         FirstNonZero=5,
         //OneMinusScore=6
     };
-    
+
     void set_score( float score );
     float get_score() const;
+
+    UtilityAIStateTreeNodes* get_tree_root() const;
 
     void set_child_state_selection_rule( int child_state_selection_rule );
     int  get_child_state_selection_rule() const;
@@ -80,14 +82,14 @@ public:
     //Dictionary get_child_nodes_as_dictionary(UtilityAIStateTreeNodes* tree_root_node );
 
     //inline virtual bool get_is_leaf() const { return false; };
-    
+
     enum UtilityAIStateTreeNodeChildStateSelectionRule {
         ON_ENTER_CONDITION_METHOD = 0,
         UTILITY_SCORING = 1,
     };
 
     // Handling functions.
-    
+
     virtual float evaluate();
     virtual bool   on_enter_condition( Variant user_data, float delta );
     virtual void   on_enter_state( Variant user_data, float delta );
@@ -105,7 +107,7 @@ public:
     virtual UtilityAIStateTreeNodes* evaluate_state_activation_no_params();
 
     // Godot virtuals.
-    
+
     //void _enter_tree();
     void _notification(int p_what);
 };
@@ -113,4 +115,4 @@ public:
 }
 
 
-#endif 
+#endif

@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <class name="UtilityAIDotProductVector2SearchCriterion" inherits="UtilityAINQSSearchCriteria" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/godotengine/godot/master/doc/class.xsd">
 	<brief_description>
+		Scores and filters based the angle the set [member dot_product_vector] has compared to the search space node direction.
 	</brief_description>
 	<description>
+		The [Vector2] dot product search criterion can be used to score and filter based the angle the set [member dot_product_vector] has compared to the search space node direction ([code]Vector2(1,0)[/code] rotated by rotation).
 	</description>
 	<tutorials>
 	</tutorials>

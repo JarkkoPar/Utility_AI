@@ -1,13 +1,20 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <class name="UtilityAIBehaviourGroup" inherits="UtilityAIBehaviours" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/godotengine/godot/master/doc/class.xsd">
 	<brief_description>
+		Allows logical grouping of behaviours and allows group-based activation and deactivation of Behaviour nodes.
 	</brief_description>
 	<description>
+		The [UtilityAIBehaviourGroup] node type should be added as child node of the [UtilityAIAgent] node, preferably after any sensor and sensor group nodes. There can only be one level of child nodes for the Behaviour Groups, which means you cannot have nested Behaviour Group nodes.
+		The purpose of the behaviour group nodes is to allow logical grouping of behaviours and allows group-based activation and deactivation of Behaviour nodes.
+		The behaviour group node will use the consideration nodes that are its childs to determine a score for itself. If this score is greater or equal to the set activation score or if there are no considerations added to the behaviour group, the child behaviours will be evaluated during the AI Agent's evaluate_options call.
+		As an example, you can have an enemy AI with the behaviour groups "on foot combat" and "vehicle combat" which contain the relevant behaviours for each group. By default the "on foot combat" would be active and the "vehicle combat" inactive. The "vehicle combat" behaviour group would be set as active when the enemy AI enters a vehicle, adding the vehicle-related behaviours to the enemy AI's list of options.
+		You can group your behaviours any way you want but it can make sense to do the grouping based on the goal the behaviours will achieve.
 	</description>
 	<tutorials>
 	</tutorials>
 	<members>
 		<member name="activation_score" type="float" setter="set_activation_score" getter="get_activation_score" default="0.0">
+			The score must be greater or equal to the activation score for the behaviour group to allow for evaluation of the behaviour nodes that are its children.
 		</member>
 		<member name="considerations" type="UtilityAIConsiderationResources[]" setter="set_considerations" getter="get_considerations" default="[]">
 		</member>
@@ -15,20 +22,24 @@
 	<signals>
 		<signal name="behaviour_group_entered">
 			<description>
+				Emitted when a behaviour within the behaviour group gets selected during the [UtilityAIAgent] evaluate_options call.
 			</description>
 		</signal>
 		<signal name="behaviour_group_exited">
 			<description>
+				Emitted for the current behaviour group when some behaviour in some other behaviour group gets selected during the [UtilityAIAgent] evaluate_options call.
 			</description>
 		</signal>
 		<signal name="idle_frame_tick">
 			<param index="0" name="delta" type="float" />
 			<description>
+				Called when the node gets the process tick notification. Can be used to handle behaviour group related update logic.
 			</description>
 		</signal>
 		<signal name="physics_frame_tick">
 			<param index="0" name="delta" type="float" />
 			<description>
+				Called when the node gets the physics_process tick notification. Can be used to handle behaviour group related update logic.
 			</description>
 		</signal>
 	</signals>
