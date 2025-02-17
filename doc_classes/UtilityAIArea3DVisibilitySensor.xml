@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <class name="UtilityAIArea3DVisibilitySensor" inherits="UtilityAISensor" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/godotengine/godot/master/doc/class.xsd">
 	<brief_description>
+		Provides a visibility query based on [Area3D]s.
 	</brief_description>
 	<description>
+		This sensor is used for visibility queries based on [Area3D]s. It returns the number of entities seen by the AI Agent and the sensor value is scaled to 0..1 by comparing the number of seen entities to a defined, expected, maximum number.
+		The sensor will store a list of the found [Area3D]s that are within the defined visibility volume and a separate list with only those that are not occluded by other geometry.
 	</description>
 	<tutorials>
 	</tutorials>
@@ -34,46 +37,65 @@
 	</methods>
 	<members>
 		<member name="closest_intersecting_area_index" type="int" setter="set_closest_intersecting_area_index" getter="get_closest_intersecting_area_index" default="-1">
+			Index of the closest area to [member from_vector] within the [member intersecting_areas] array.
 		</member>
 		<member name="closest_intersecting_body_index" type="int" setter="set_closest_intersecting_body_index" getter="get_closest_intersecting_body_index" default="-1">
+			Index of the closest body to [member from_vector] within the [member intersecting_bodies] array.
 		</member>
 		<member name="closest_unoccluded_area_index" type="int" setter="set_closest_unoccluded_area_index" getter="get_closest_unoccluded_area_index" default="-1">
+			Index of the closest area to [member from_vector] within the [member unoccluded_areas] array.
 		</member>
 		<member name="closest_unoccluded_body_index" type="int" setter="set_closest_unoccluded_body_index" getter="get_closest_unoccluded_body_index" default="-1">
+			Index of the closest body to [member from_vector] within the [member unoccluded_areas] array.
 		</member>
 		<member name="collision_mask" type="int" setter="set_collision_mask" getter="get_collision_mask" default="1">
+			The collision mask used for occlusion. Usually this is set to match the layers for your level geometry and props.
 		</member>
 		<member name="do_occlusion_test" type="bool" setter="set_do_occlusion_test" getter="get_do_occlusion_test" default="true">
 		</member>
 		<member name="from_vector" type="Vector3" setter="set_from_vector" getter="get_from_vector" default="Vector3(0, 0, 0)">
+			Input value for the sensor. The location of the AI entity's eyes in global coordinates (global_position).
 		</member>
 		<member name="intersecting_areas" type="Area3D[]" setter="set_intersecting_areas" getter="get_intersecting_areas" default="[]">
+			[Area3D]s that are within or intersect with the [member visibility_volume].
 		</member>
 		<member name="intersecting_bodies" type="Node3D[]" setter="set_intersecting_bodies" getter="get_intersecting_bodies" default="[]">
+			Bodies that are within or intersect with the [member visibility_volume].
 		</member>
 		<member name="max_expected_entities_found" type="int" setter="set_max_expected_entities_found" getter="get_max_expected_entities_found" default="16">
+			The maximum number of entities expected to be found using the visibility volume. Scales the sensor value.
 		</member>
 		<member name="num_entities_found" type="int" setter="set_num_entities_found" getter="get_num_entities_found" default="0">
+			Number of entities found within the visibility volume. If do_occlusion_test is set to [code]true[/code], this will be the number of unoccluded entities within the [member visibility_volume].
 		</member>
 		<member name="occlusion_test_exclusion_list" type="RID[]" setter="set_occlusion_test_exclusion_list" getter="get_occlusion_test_exclusion_list" default="[]">
+			Used during occlusion testing to exclude listed nodes from the raycast collision test.
 		</member>
 		<member name="offset_vector" type="Vector3" setter="set_offset_vector" getter="get_offset_vector" default="Vector3(0, 0, 0)">
 		</member>
 		<member name="squared_distances_to_intersecting_areas" type="float[]" setter="set_squared_distances_to_intersecting_areas" getter="get_squared_distances_to_intersecting_areas" default="[]">
+			Squared distances from the [member from_vector] to an areas [member Node3D.global_position] within or intersecting with the [member visibility_volume].
 		</member>
 		<member name="squared_distances_to_intersecting_bodies" type="float[]" setter="set_squared_distances_to_intersecting_bodies" getter="get_squared_distances_to_intersecting_bodies" default="[]">
+			Squared distances from the [member from_vector] to a bodies [member Node3D.global_position] within or intersecting with the [member visibility_volume].
 		</member>
 		<member name="squared_distances_to_unoccluded_areas" type="float[]" setter="set_squared_distances_to_unoccluded_areas" getter="get_squared_distances_to_unoccluded_areas" default="[]">
+			Squared distances from the [member from_vector] to an areas [member Node3D.global_position] within or intersecting with the [member visibility_volume] and that are not blocked by any geometry that is set to the layer(s) defined in [member collision_mask].
 		</member>
 		<member name="squared_distances_to_unoccluded_bodies" type="float[]" setter="set_squared_distances_to_unoccluded_bodies" getter="get_squared_distances_to_unoccluded_bodies" default="[]">
+			Squared distances from the [member from_vector] to an bodies [member Node3D.global_position] within or intersecting with the [member visibility_volume] and that are not blocked by any geometry that is set to the layer(s) defined in [member collision_mask].
 		</member>
 		<member name="unoccluded_areas" type="Area3D[]" setter="set_unoccluded_areas" getter="get_unoccluded_areas" default="[null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null]">
+			Populated if [member do_occlusion_test] is set to [code]true[/code]. Areas that are within or intersect with the [member visibility_volume] and that are not blocked by any geometry that is set to the layer(s) defined in [member collision_mask].
 		</member>
 		<member name="unoccluded_bodies" type="Node3D[]" setter="set_unoccluded_bodies" getter="get_unoccluded_bodies" default="[null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null]">
+			Populated if [member do_occlusion_test] is set to [code]true[/code]. Bodies that are within or intersect with the [member visibility_volume] and that are not blocked by any geometry that is set to the layer(s) defined in [member collision_mask].
 		</member>
 		<member name="use_owner_global_position" type="bool" setter="set_use_owner_global_position" getter="get_use_owner_global_position" default="false">
+			If set, the [member Node.owner] node's global position is used. [b]IMPORTANT![/b] The scene root node must in that case be a node that has the global_position property.
 		</member>
 		<member name="visibility_volume" type="Area3D" setter="set_visibility_volume" getter="get_visibility_volume">
+			An [Area3D] node defining the visibility volume for the sensor.
 		</member>
 	</members>
 </class>

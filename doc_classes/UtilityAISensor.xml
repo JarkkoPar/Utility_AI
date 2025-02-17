@@ -1,8 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <class name="UtilityAISensor" inherits="UtilityAISensors" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/godotengine/godot/master/doc/class.xsd">
 	<brief_description>
+		Provides input data to consideration nodes.
 	</brief_description>
 	<description>
+		This node type should be added as child nodes of the [UtilityAIAgent] node. It is used to give input data to consideration nodes. A sensor is used by one or more consideration nodes. A sensor group is a node that can be used to aggregate input from several sensors (or sensor groups) for a higher-level input to the consideration nodes.
+		Why use sensors in the first place?
+		Consider the situation where you have several behaviours that use the "IsPlayerClose" consideration and maybe different variations, such as "IsPlayerAboutMidDistanceFromMe" or what ever. With the sensor nodes you can calculate the distance once and set it to a sensor, and then all the various considerations can make use of the distance in a relatively easy way and the distance only needs to be calculated once.
+		The specialized sensors also have the added benefit that their logic is done on C++ instead of gdscript. This gives them a performance boost compared to writing similar logic in gdscript.
 	</description>
 	<tutorials>
 	</tutorials>

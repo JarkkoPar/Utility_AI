@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <class name="UtilityAIBTScoreBasedPicker" inherits="UtilityAIBTCompositeNodes" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/godotengine/godot/master/doc/class.xsd">
 	<brief_description>
+		Evaluates its direct child nodes and calculates a score for each of them based on [UtilityAIConsideration] and [UtilityAIConsiderationGroup] nodes that are set as the childs of them.
 	</brief_description>
 	<description>
+		The score based picker node evaluates its direct child nodes and calculates a score for each of them based on [UtilityAIConsideration] and [UtilityAIConsiderationGroup] nodes that are set as the childs of them. The direct child node with the highest score is chosen and then ticked.
 	</description>
 	<tutorials>
 	</tutorials>

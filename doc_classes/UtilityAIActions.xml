@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <class name="UtilityAIActions" inherits="UtilityAI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/godotengine/godot/master/doc/class.xsd">
 	<brief_description>
+		Base node for [UtilityAIAction] and [UtilityAIActionGroup].
 	</brief_description>
 	<description>
 	</description>
@@ -8,8 +9,10 @@
 	</tutorials>
 	<members>
 		<member name="has_failed" type="bool" setter="set_has_failed" getter="get_has_failed" default="false">
+			Use this property only to let the AI agent know when the chosen action has failed. You will also need to set the [member is_finished] property! The stepper function will immediately set it back to [code]false[/code] once it has handled the failed event.
 		</member>
 		<member name="is_finished" type="bool" setter="set_is_finished" getter="get_is_finished" default="false">
+			Use this property only to let the AI agent know when the chosen action is finished. The stepper function will immediately set it back to [code]false[/code] once it has moved on to the next action.
 		</member>
 	</members>
 </class>

@@ -1,13 +1,16 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <class name="UtilityAINodeGroupSearchSpace" inherits="UtilityAINQSSearchSpaces" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/godotengine/godot/master/doc/class.xsd">
 	<brief_description>
+		Constructs a search space from a [member group_name] and returns all matching nodes in the group.
 	</brief_description>
 	<description>
+		This node uses the node grouping property of the Godot Engine to construct the search space. All the nodes in the given group are returned as the search space.
 	</description>
 	<tutorials>
 	</tutorials>
 	<members>
 		<member name="group_name" type="StringName" setter="set_group_name" getter="get_group_name" default="&amp;&quot;&quot;">
+			The group name to use in the search.
 		</member>
 	</members>
 </class>

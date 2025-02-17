@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <class name="UtilityAIDistanceVector2Sensor" inherits="UtilityAISensor" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/godotengine/godot/master/doc/class.xsd">
 	<brief_description>
+		Distance sensor. Uses the squared distance when scaling the values to 0..1 range.
 	</brief_description>
 	<description>
 	</description>
@@ -8,22 +9,30 @@
 	</tutorials>
 	<members>
 		<member name="direction_vector" type="Vector2" setter="set_direction_vector" getter="get_direction_vector" default="Vector2(0, 0)">
+			Optionally calculated direction vector. Requires [member is_direction_vector_calculated] to be [code]true[/code]
 		</member>
 		<member name="distance" type="float" setter="set_distance" getter="get_distance" default="0.0">
+			Optionally calculated non-squared distance. Requires [member is_distance_calculated] to be [code]true[/code]
 		</member>
 		<member name="distance_squared" type="float" setter="set_distance_squared" getter="get_distance_squared" default="0.0">
+			Squared distance.
 		</member>
 		<member name="from_to_vector" type="Vector2" setter="set_from_to_vector" getter="get_from_to_vector" default="Vector2(0, 0)">
+			Vector obtained by calculating [code]to_vector - from_vector[/code].
 		</member>
 		<member name="from_vector" type="Vector2" setter="set_from_vector" getter="get_from_vector" default="Vector2(0, 0)">
+			The start point of the distance vector.
 		</member>
 		<member name="is_direction_vector_calculated" type="bool" setter="set_is_direction_vector_calculated" getter="get_is_direction_vector_calculated" default="false">
+			Optionally calculated direction vector.
 		</member>
 		<member name="is_distance_calculated" type="bool" setter="set_is_distance_calculated" getter="get_is_distance_calculated" default="false">
+			If [code]true[/code], the non-squared distance is calculated.
 		</member>
 		<member name="max_distance" type="float" setter="set_max_distance" getter="get_max_distance" default="100.0">
 		</member>
 		<member name="to_vector" type="Vector2" setter="set_to_vector" getter="get_to_vector" default="Vector2(0, 0)">
+			The end point of the distance vector.
 		</member>
 	</members>
 </class>

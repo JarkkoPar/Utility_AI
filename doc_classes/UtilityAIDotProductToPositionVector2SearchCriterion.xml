@@ -1,17 +1,22 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <class name="UtilityAIDotProductToPositionVector2SearchCriterion" inherits="UtilityAINQSSearchCriteria" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/godotengine/godot/master/doc/class.xsd">
 	<brief_description>
+		Checks if a specific position is in front of or behind a search space node.
 	</brief_description>
 	<description>
+		The [Vector2] dot product to position search criterion can be used to check if a specific position is in front of or behind a search space node. It calculates a direction vector using the [member dot_product_position] and the node global position. Then, it calculates a dot product using the direction vector and the search space node direction ([code]Vector2(1,0)[/code] rotated by rotation).
 	</description>
 	<tutorials>
 	</tutorials>
 	<members>
 		<member name="dot_product_position" type="Vector2" setter="set_dot_product_position_vector" getter="get_dot_product_position_vector" default="Vector2(1, 0)">
+			The global position to use in the dot product calculation.
 		</member>
 		<member name="filtering_rule" type="int" setter="set_filtering_rule" getter="get_filtering_rule" default="1">
+			If filtering is in use, the result given by the dot product is compared to this value for filtering.
 		</member>
 		<member name="filtering_value" type="float" setter="set_filtering_value" getter="get_filtering_value" default="0.0">
+			If filtering is in use, this is the comparison that is done to decide on the filtering. The choices are: "LessThan:0,LessOrEqual:1,Equal:2,MoreOrEqual:3,MoreThan:4". For instance, if LessThan is chosen then any node that gets a dot product value of less than the value of filtering_value will be filtered out.
 		</member>
 	</members>
 </class>

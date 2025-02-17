@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <class name="UtilityAIBTPassThrough" inherits="UtilityAIBTDecoratorNodes" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/godotengine/godot/master/doc/class.xsd">
 	<brief_description>
+		Calls the user-defined tick-method and then calls the tick-method of its child node, returning what ever the child node tick result is.
 	</brief_description>
 	<description>
+		The passthrough node calls the user-defined tick-method and then calls the tick-method of its child node, returning what ever the child node tick result is. If no child node has been defined, it returns what ever you choose for the tick-result.
+		You can use this node to do preparations for a behaviour tree branch, for instance calculate some angles or distances that all the nodes within a branch will be using and putting them to user_data.
 	</description>
 	<tutorials>
 	</tutorials>
