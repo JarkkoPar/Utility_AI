@@ -130,3 +130,4 @@ compile_commands.json
 # Visual Studio code config files
 utility_ai.code-workspace
 .vscode/settings.json
+src/gen/*
