@@ -21030,4 +21030,3 @@ static const unsigned char _doc_data_compressed[] = {
 };
 
 static godot::internal::DocDataRegistration _doc_data_registration(_doc_data_hash, _doc_data_uncompressed_size, _doc_data_compressed_size, _doc_data_compressed);
-
