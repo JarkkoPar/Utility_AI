@@ -1,50 +1,44 @@
 #ifndef UtilityAIBTCooldownUsec_H_INCLUDED
-#define UtilityAIBTCooldownUsec_H_INCLUDED 
+#define UtilityAIBTCooldownUsec_H_INCLUDED
 
 #include "decorator_nodes.h"
 #include <godot_cpp/classes/node.hpp>
 
-
-
 namespace godot {
 
 class UtilityAIBTCooldownUsec : public UtilityAIBTDecoratorNodes {
-    GDCLASS(UtilityAIBTCooldownUsec, UtilityAIBTDecoratorNodes)
+	GDCLASS(UtilityAIBTCooldownUsec, UtilityAIBTDecoratorNodes)
 
 private:
-    
-    
-    uint64_t _cooldown_usec;
-    uint64_t _cooldown_start_timestamp;
+	uint64_t _cooldown_usec;
+	uint64_t _cooldown_start_timestamp;
 
-    int _cooldown_return_value;
-    bool     _is_in_cooldown;
-    
+	int _cooldown_return_value;
+	bool _is_in_cooldown;
+
 protected:
-    static void _bind_methods();
+	static void _bind_methods();
 
 public:
-    UtilityAIBTCooldownUsec();
-    ~UtilityAIBTCooldownUsec();
-    
-    
-    // Getters and setters for attributes.
-        
-    void set_cooldown_usec( int cooldown_usec );
-    int  get_cooldown_usec() const;
+	UtilityAIBTCooldownUsec();
+	~UtilityAIBTCooldownUsec();
 
-    void set_cooldown_start_timestamp( int cooldown_Usec );
-    int  get_cooldown_start_timestamp() const;
+	// Getters and setters for attributes.
 
-    void set_cooldown_return_value( int cooldown_return_value );
-    int  get_cooldown_return_value() const;
+	void set_cooldown_usec(int cooldown_usec);
+	int get_cooldown_usec() const;
 
-    // Handling functions.
+	void set_cooldown_start_timestamp(int cooldown_Usec);
+	int get_cooldown_start_timestamp() const;
 
-    virtual int tick(Variant user_data, float delta) override;
+	void set_cooldown_return_value(int cooldown_return_value);
+	int get_cooldown_return_value() const;
+
+	// Handling functions.
+
+	virtual int tick(Variant user_data, float delta) override;
 };
 
-}
+} //namespace godot
 
-
-#endif 
+#endif

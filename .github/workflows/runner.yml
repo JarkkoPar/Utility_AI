@@ -6,15 +6,22 @@ on:
   push:
 
 jobs:
+    lint:
+        uses: ./.github/workflows/lint.yml
     build_android:
+        needs: [lint]
         uses: ./.github/workflows/build_android.yml
     # build_ios:
+    #     needs: [lint]
     #     uses: ./.github/workflows/build_ios.yml
     build_linux:
+        needs: [lint]
         uses: ./.github/workflows/build_linux.yml
     build_windows:
+        needs: [lint]
         uses: ./.github/workflows/build_windows.yml
     build_web:
+        needs: [lint]
         uses: ./.github/workflows/build_web.yml
     group_builds:
         needs: [build_android, build_linux, build_windows, build_web]

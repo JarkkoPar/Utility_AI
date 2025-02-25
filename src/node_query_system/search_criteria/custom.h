@@ -6,28 +6,23 @@
 namespace godot {
 
 class UtilityAICustomSearchCriterion : public UtilityAINQSSearchCriteria {
-    GDCLASS(UtilityAICustomSearchCriterion, UtilityAINQSSearchCriteria)
+	GDCLASS(UtilityAICustomSearchCriterion, UtilityAINQSSearchCriteria)
 
 private:
-
 protected:
-    static void _bind_methods();
+	static void _bind_methods();
 
 public:
-    UtilityAICustomSearchCriterion();
-    ~UtilityAICustomSearchCriterion();
+	UtilityAICustomSearchCriterion();
+	~UtilityAICustomSearchCriterion();
 
+	// Getters and setters for attributes.
 
-    // Getters and setters for attributes.
+	// Handling methods.
 
-
-    // Handling methods.
-
-    virtual void apply_criterion( Node* node, bool& filter_out, float& score ) override;
-
+	virtual void apply_criterion(Node *node, bool &filter_out, float &score) override;
 };
 
-}
-
+} //namespace godot
 
 #endif
